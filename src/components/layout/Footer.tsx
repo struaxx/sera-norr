@@ -13,7 +13,7 @@ export function Footer() {
               SERA NORR
             </Link>
             <p className="mt-6 max-w-md text-muted-foreground text-body-md leading-relaxed">
-              {t('footer.objects')}
+              {t('footer.tagline')}
             </p>
           </div>
 

@@ -1,22 +1,44 @@
 {
   "nav": {
     "collections": "Collecties",
-    "bespoke": "Op Maat",
+    "bespoke": "Maatwerk",
     "about": "Over Ons",
     "contact": "Contact"
   },
-  "hero": {
-    "subtitle": "Atelier voor Sculpturaal Meubilair",
-    "title": "VANTA",
-    "description": "Gebeeldhouwd in Calacatta Viola marmer. De VANTA Collectie belichaamt elegantie en kracht, gedefinieerd door opvallende violette aders en natuurlijke diepte.",
-    "cta_collections": "Ontdek Collecties",
-    "cta_project": "Begin Uw Project",
-    "scroll": "Ontdek"
-  },
-  "philosophy": {
-    "subtitle": "Onze Filosofie",
-    "title": "Objecten gevormd door materiaal, proportie en stilte.",
-    "description": "Elk Sera Norr stuk begint met steen—zijn gewicht, zijn geschiedenis, zijn potentieel. Wij werken samen met zeldzame materialen om stukken te creëren die bestaan op het snijvlak van sculptuur en functie."
+  "home": {
+    "hero": {
+      "title": "SERA NORR presenteert verfijnde stenen meubels.",
+      "subtitle": "Travertin, Calacatta Viola en andere steensoorten gevormd tot sculpturale, heldere ontwerpen. Maatwerk vanuit materiaal, vorm en maat.",
+      "cta": "Betreed het atelier"
+    },
+    "scroll": "Ontdek",
+    "intro": {
+      "text": "SERA NORR is een online atelier voor stenen meubels. We werken met natuurlijke materialen en rustige vormen. Elk stuk is ontworpen rond verhouding, detail en het karakter van het steen zelf."
+    },
+    "collections": {
+      "title": "Collecties",
+      "description": "Onze collecties zijn materiaalgedreven en vormen de basis voor maatwerk.",
+      "terra_material": "Travertin",
+      "vanta_material": "Calacatta Viola",
+      "other": "Selectie andere steensoorten — op aanvraag",
+      "cta": "Bekijk de collecties"
+    },
+    "materials": {
+      "title": "Natuurlijke steensoorten.",
+      "description": "We selecteren op kleur, tekening en structuur. Variatie hoort bij het materiaal en blijft zichtbaar in het ontwerp.",
+      "cta": "Materialen bekijken"
+    },
+    "configurator": {
+      "title": "Stel uw stuk samen.",
+      "description": "Gebruik de configurator om materiaal, vorm en afmetingen te bepalen. Wij vertalen dit naar een concreet voorstel.",
+      "cta": "Start in de configurator"
+    },
+    "statement": "Rustige vormen. Sterke materialen. Heldere keuzes.",
+    "closing": {
+      "title": "Ontvang een voorstel.",
+      "description": "Deel uw voorkeuren en afmetingen. U ontvangt een voorstel op basis van uw gekozen materiaal en ontwerp.",
+      "cta": "Ontvang een voorstel"
+    }
   },
   "collections": {
     "subtitle": "Ontdek",
@@ -24,9 +46,9 @@
     "viewAll": "Bekijk Alles",
     "terra": {
       "name": "TERRA",
-      "subtitle": "Travertijn Vormen",
-      "description": "Warme, organische vormen uit Italiaans travertijn. Elk stuk viert de natuurlijke schoonheid van versteend materiaal.",
-      "longDescription": "De TERRA collectie put uit de oeroude warmte van Italiaans travertijn—steen gevormd over millennia uit minerale bronnen, met in zich de herinnering aan water. Elk stuk onthult de karakteristieke putjes en honingkleurige tinten die travertijn tot een van de meest expressieve materialen van de natuur maken."
+      "subtitle": "Travertin Vormen",
+      "description": "Warme, organische vormen uit Italiaans travertin. Elk stuk viert de natuurlijke schoonheid van versteend materiaal.",
+      "longDescription": "De TERRA collectie put uit de oeroude warmte van Italiaans travertin—steen gevormd over millennia uit minerale bronnen, met in zich de herinnering aan water. Elk stuk onthult de karakteristieke putjes en honingkleurige tinten die travertin tot een van de meest expressieve materialen van de natuur maken."
     },
     "vanta": {
       "name": "VANTA",
@@ -68,7 +90,7 @@
     "materialsTitle": "Zeldzaam & Verfijnd",
     "materialsDescription": "Ons atelier werkt met een steeds evoluerende bibliotheek van uitzonderlijke materialen. Van zeldzame marmers gewonnen in beperkte hoeveelheden tot op maat gemaakte betonformuleringen, we zoeken materialen die uw stuk boven het gewone verheffen.",
     "naturalStone": "Natuursteen",
-    "naturalStoneList": "Travertijn, Calacatta Viola, Verde Alpi, Nero Marquina",
+    "naturalStoneList": "Travertin, Calacatta Viola, Verde Alpi, Nero Marquina",
     "mineralComposites": "Minerale Composieten",
     "mineralCompositesList": "Architecturaal beton, terrazzo, aangepaste aggregaten",
     "metalAccents": "Metalen Accenten",
@@ -152,7 +174,7 @@
     "collections": "Collecties",
     "atelier": "Atelier",
     "copyright": "Alle rechten voorbehouden.",
-    "objects": "Objecten gevormd door materiaal, proportie en stilte."
+    "tagline": "Online atelier voor maatwerk stenen meubels."
   },
   "configurator": {
     "title": "Stel Uw Stuk Samen",
@@ -166,7 +188,7 @@
     "rotateHint": "Sleep om te roteren • Scroll om te zoomen",
     "requestQuote": "Ontvang een voorstel op maat",
     "materials": {
-      "travertine": "Italiaans Travertijn",
+      "travertine": "Italiaans Travertin",
       "calacattaViola": "Calacatta Viola",
       "verdeAlpi": "Verde Alpi",
       "neroMarquina": "Nero Marquina",
