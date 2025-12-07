@@ -6,17 +6,17 @@
     "contact": "Contact"
   },
   "hero": {
-    "subtitle": "Atelier voor Maatwerk Meubilair",
+    "subtitle": "Atelier voor Sculpturaal Meubilair",
     "title": "VANTA",
-    "description": "Gebeeldhouwd in Calacatta Viola marmer, belichaamt de VANTA Collectie elegantie en kracht, gedefinieerd door opvallende violette aders en natuurlijke diepte.",
+    "description": "Gebeeldhouwd in Calacatta Viola marmer. De VANTA Collectie belichaamt elegantie en kracht, gedefinieerd door opvallende violette aders en natuurlijke diepte.",
     "cta_collections": "Ontdek Collecties",
-    "cta_project": "Start Uw Project",
-    "scroll": "Scroll"
+    "cta_project": "Begin Uw Project",
+    "scroll": "Ontdek"
   },
   "philosophy": {
     "subtitle": "Onze Filosofie",
     "title": "Objecten gevormd door materiaal, proportie en stilte.",
-    "description": "Elk Sera Norr stuk begint met steen—zijn gewicht, zijn geschiedenis, zijn potentieel. Wij werken samen met zeldzame materialen om meubels te creëren die bestaan op het snijvlak van sculptuur en functie."
+    "description": "Elk Sera Norr stuk begint met steen—zijn gewicht, zijn geschiedenis, zijn potentieel. Wij werken samen met zeldzame materialen om stukken te creëren die bestaan op het snijvlak van sculptuur en functie."
   },
   "collections": {
     "subtitle": "Ontdek",
@@ -32,7 +32,7 @@
       "name": "VANTA",
       "subtitle": "Calacatta Viola Sculpturen",
       "description": "Gedurfde violette aders tegen smetteloos wit. Sculpturale statements in het zeldzaamste marmer.",
-      "longDescription": "VANTA viert Calacatta Viola—een van de zeldzaamste en meest dramatische marmersoorten gewonnen uit de Apuaanse Alpen. De gedurfde violette aders tegen lichtgevend wit creëren stukken die evenzeer sculptuur als meubel zijn."
+      "longDescription": "VANTA viert Calacatta Viola—een van de zeldzaamste en meest dramatische marmersoorten gewonnen uit de Apuaanse Alpen. De gedurfde violette aders tegen lichtgevend wit creëren stukken die evenzeer sculptuur als meubilair zijn."
     },
     "nord": {
       "name": "NORD",
@@ -43,16 +43,16 @@
     "notFound": "Collectie Niet Gevonden",
     "viewAllButton": "Bekijk Alle Collecties",
     "pieces": "Stukken",
-    "requestQuote": "Offerte Aanvragen",
-    "customTitle": "Aangepaste Afmetingen of Materialen?",
+    "requestQuote": "Ontvang een voorstel op maat",
+    "customTitle": "Aangepaste afmetingen of materialen?",
     "customDescription": "Elk stuk kan worden aangepast. Bespreek uw visie met ons atelier.",
-    "startBespoke": "Start Maatwerk Project"
+    "startBespoke": "Begin uw maatwerktraject"
   },
   "bespoke": {
     "subtitle": "Maatwerk Atelier",
     "title": "Uw Visie, Gerealiseerd",
-    "description": "Elke ruimte heeft zijn eigen taal. Onze maatwerkservice vertaalt uw visie naar sculpturale permanentie—meubels ontworpen voor één ruimte alleen, vervaardigd met materialen gekozen voor u, en gebouwd om generaties mee te gaan.",
-    "journeySubtitle": "De Reis",
+    "description": "Elke ruimte heeft zijn eigen taal. Onze maatwerkservice vertaalt uw visie naar sculpturale permanentie—stukken ontworpen voor één ruimte alleen, vervaardigd met materialen gekozen voor u, en gebouwd om generaties mee te gaan.",
+    "journeySubtitle": "Het Traject",
     "journeyTitle": "Van Concept tot Creatie",
     "step1Title": "Consultatie",
     "step1Description": "We beginnen met een gesprek over uw ruimte, uw behoeften en uw esthetische visie. Deel inspiratie, afmetingen en dromen.",
@@ -63,7 +63,7 @@
     "step4Title": "Vakmanschap",
     "step4Description": "Uw stuk wordt vervaardigd door onze Europese ambachtslieden. We documenteren het proces, waardoor u verbonden blijft met de creatie van uw object.",
     "step5Title": "Levering & Installatie",
-    "step5Description": "White-glove levering en professionele installatie. Uw maatwerkstuk vindt zijn thuis.",
+    "step5Description": "White-glove levering en professionele installatie. Uw stuk vindt zijn thuis.",
     "materialsSubtitle": "Materiaalpalet",
     "materialsTitle": "Zeldzaam & Verfijnd",
     "materialsDescription": "Ons atelier werkt met een steeds evoluerende bibliotheek van uitzonderlijke materialen. Van zeldzame marmers gewonnen in beperkte hoeveelheden tot op maat gemaakte betonformuleringen, we zoeken materialen die uw stuk boven het gewone verheffen.",
@@ -77,21 +77,21 @@
     "craftsmanshipTitle": "Europees Erfgoed",
     "craftsmanshipDescription": "Elk Sera Norr stuk wordt vervaardigd door meester-ambachtslieden in onze Europese werkplaats. We combineren traditionele steenbewerkingstechnieken met hedendaagse precisie, zodat elk stuk voldoet aan onze veeleisende normen.",
     "leadTimeDescription": "Levertijden voor maatwerkopdrachten variëren doorgaans van 12 tot 20 weken, afhankelijk van materiaalbronnen en complexiteit. Wij geloven in vakmanschap dat niet kan worden gehaast.",
-    "formSubtitle": "Begin Uw Project",
-    "formTitle": "Opdracht Aanvraag",
+    "formSubtitle": "Begin Uw Traject",
+    "formTitle": "Uw Opdracht",
     "formName": "Naam",
     "formNamePlaceholder": "Uw naam",
     "formEmail": "E-mail",
     "formEmailPlaceholder": "uw@email.com",
     "formLocation": "Locatie",
     "formLocationPlaceholder": "Stad, Land",
-    "formProjectType": "Project Type",
-    "formProjectTypePlaceholder": "Eettafel, console, maatwerk...",
+    "formProjectType": "Type Stuk",
+    "formProjectTypePlaceholder": "Eettafel, console, salontafel...",
     "formTimeline": "Gewenste Tijdlijn",
     "formTimelinePlaceholder": "Wanneer stelt u voltooiing voor?",
     "formVision": "Vertel Ons Over Uw Visie",
     "formVisionPlaceholder": "Beschrijf uw ruimte, inspiratie, materialen die u aanspreken...",
-    "formSubmit": "Aanvraag Versturen",
+    "formSubmit": "Ontvang een voorstel op maat",
     "formSuccess": "Aanvraag Ontvangen",
     "formSuccessDescription": "Bedankt voor uw interesse. Ons atelier neemt binnen 48 uur contact met u op."
   },
@@ -108,7 +108,7 @@
     "value1Title": "Materiaal Obsessie",
     "value1Description": "We zoeken 's werelds zeldzaamste stenen, maanden besteedend aan het vinden van de perfecte plaat.",
     "value2Title": "Sculpturale Intentie",
-    "value2Description": "Elk stuk bestaat op het snijvlak van meubel en kunstobject.",
+    "value2Description": "Elk stuk bestaat op het snijvlak van meubilair en kunstobject.",
     "value3Title": "Europees Vakmanschap",
     "value3Description": "Traditionele technieken verfijnd over generaties, uitgevoerd met precisie.",
     "value4Title": "Permanentie",
@@ -121,12 +121,12 @@
     "studioTitle": "Bezoek het Atelier",
     "studioDescription": "Onze studio in Amsterdam dient als zowel werkplaats als showroom. Bezoeken zijn alleen op afspraak, zodat we onverdeelde aandacht kunnen bieden aan elke klant.",
     "studioAddress": "Prinsengracht 263\n1016 GV Amsterdam\nNederland",
-    "scheduleVisit": "Plan een Bezoek"
+    "scheduleVisit": "Maak een afspraak"
   },
   "contact": {
     "subtitle": "Contact",
     "title": "Begin het Gesprek",
-    "description": "Of u nu klaar bent om een maatwerkstuk te bestellen of simpelweg meer wilt weten over ons werk, we verwelkomen uw aanvraag.",
+    "description": "Of u nu klaar bent om een maatwerkstuk te bespreken of simpelweg meer wilt weten over ons werk, we verwelkomen uw bericht.",
     "visitSubtitle": "Bezoek",
     "addressTitle": "Atelier Adres",
     "address": "Prinsengracht 263\n1016 GV Amsterdam\nNederland",
@@ -134,7 +134,7 @@
     "email": "atelier@seranorr.com",
     "hoursTitle": "Bezoekuren",
     "hours": "Alleen op afspraak\nMaandag – Vrijdag",
-    "formSubtitle": "Informeren",
+    "formSubtitle": "Neem Contact Op",
     "formTitle": "Stuur een Bericht",
     "formName": "Naam",
     "formNamePlaceholder": "Uw naam",
@@ -143,8 +143,8 @@
     "formSubject": "Onderwerp",
     "formSubjectPlaceholder": "Hoe kunnen we helpen?",
     "formMessage": "Bericht",
-    "formMessagePlaceholder": "Vertel ons over uw aanvraag...",
-    "formSubmit": "Verstuur Bericht",
+    "formMessagePlaceholder": "Vertel ons over uw vraag...",
+    "formSubmit": "Verstuur uw bericht",
     "formSuccess": "Bericht Verzonden",
     "formSuccessDescription": "Bedankt voor het contact opnemen. We reageren binnen 48 uur."
   },
@@ -155,7 +155,7 @@
     "objects": "Objecten gevormd door materiaal, proportie en stilte."
   },
   "configurator": {
-    "title": "Configureer Uw Stuk",
+    "title": "Stel Uw Stuk Samen",
     "material": "Materiaal",
     "finish": "Afwerking",
     "dimensions": "Afmetingen",
@@ -164,7 +164,7 @@
     "height": "Hoogte",
     "cm": "cm",
     "rotateHint": "Sleep om te roteren • Scroll om te zoomen",
-    "requestQuote": "Vraag Offerte Aan",
+    "requestQuote": "Ontvang een voorstel op maat",
     "materials": {
       "travertine": "Italiaans Travertijn",
       "calacattaViola": "Calacatta Viola",
@@ -182,10 +182,10 @@
   "common": {
     "viewShowroom": "Bezoek Onze Showroom",
     "showroomDescription": "Ervaar onze collecties persoonlijk. Alleen op afspraak.",
-    "scheduleVisit": "Plan een Bezoek",
+    "scheduleVisit": "Maak een afspraak",
     "bespokeSubtitle": "Maatwerk Atelier",
     "bespokeTitle": "Uw Visie, Ons Vakmanschap",
     "bespokeDescription": "Elke ruimte verdient een object dat alleen voor haar is gemaakt. Onze maatwerkservice transformeert uw visie naar sculpturale permanentie—van eerste schets tot uiteindelijke installatie.",
-    "beginProject": "Begin Uw Project"
+    "beginProject": "Begin uw traject"
   }
 }

@@ -104,7 +104,7 @@ const Index = () => {
               {t('configurator.title')}
             </p>
             <h2 className="font-serif text-display-sm text-foreground">
-              TERRA Coffee Table
+              TERRA Salontafel
             </h2>
           </div>
           <ProductConfigurator />
