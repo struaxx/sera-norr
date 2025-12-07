@@ -1,0 +1,128 @@
+import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const navLinks = [
+  { name: "Collections", path: "/collections" },
+  { name: "Bespoke", path: "/bespoke" },
+  { name: "About", path: "/about" },
+  { name: "Contact", path: "/contact" },
+];
+
+export function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
+  return (
+    <>
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          isScrolled
+            ? "bg-background/95 backdrop-blur-sm py-4"
+            : "bg-transparent py-6 lg:py-8"
+        )}
+      >
+        <nav className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
+          {/* Left Navigation */}
+          <div className="hidden lg:flex items-center gap-10">
+            {navLinks.slice(0, 2).map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={cn(
+                  "font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300 link-underline",
+                  location.pathname === link.path
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Logo */}
+          <Link
+            to="/"
+            className="font-serif text-xl lg:text-2xl tracking-[0.15em] text-foreground"
+          >
+            SERA NORR
+          </Link>
+
+          {/* Right Navigation */}
+          <div className="hidden lg:flex items-center gap-10">
+            {navLinks.slice(2).map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={cn(
+                  "font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300 link-underline",
+                  location.pathname === link.path
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 -mr-2 text-foreground"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      <div
+        className={cn(
+          "fixed inset-0 z-40 bg-background transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden",
+          isMobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
+        <nav className="flex flex-col items-center justify-center h-full gap-8">
+          {navLinks.map((link, index) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={cn(
+                "font-serif text-3xl tracking-wide transition-all duration-500",
+                isMobileMenuOpen
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4",
+                location.pathname === link.path
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+              style={{ transitionDelay: `${index * 100 + 200}ms` }}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </>
+  );
+}
