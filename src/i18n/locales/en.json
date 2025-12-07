@@ -6,17 +6,17 @@
     "contact": "Contact"
   },
   "hero": {
-    "subtitle": "Bespoke Furniture Atelier",
+    "subtitle": "Sculptural Furniture Atelier",
     "title": "VANTA",
-    "description": "Sculpted in Calacatta Viola marble, the VANTA Collection embodies elegance and strength, defined by striking violet veins and natural depth.",
+    "description": "Sculpted in Calacatta Viola marble. The VANTA Collection embodies elegance and strength, defined by striking violet veins and natural depth.",
     "cta_collections": "Discover Collections",
-    "cta_project": "Start Your Project",
-    "scroll": "Scroll"
+    "cta_project": "Begin Your Project",
+    "scroll": "Discover"
   },
   "philosophy": {
     "subtitle": "Our Philosophy",
     "title": "Objects shaped by material, proportion, and silence.",
-    "description": "Every Sera Norr piece begins with stone—its weight, its history, its potential. We collaborate with rare materials to create furniture that exists at the intersection of sculpture and function."
+    "description": "Every Sera Norr piece begins with stone—its weight, its history, its potential. We collaborate with rare materials to create pieces that exist at the intersection of sculpture and function."
   },
   "collections": {
     "subtitle": "Explore",
@@ -43,15 +43,15 @@
     "notFound": "Collection Not Found",
     "viewAllButton": "View All Collections",
     "pieces": "Pieces",
-    "requestQuote": "Request Quote",
-    "customTitle": "Custom Dimensions or Materials?",
+    "requestQuote": "Receive a tailored proposal",
+    "customTitle": "Custom dimensions or materials?",
     "customDescription": "Every piece can be customized. Discuss your vision with our atelier.",
-    "startBespoke": "Start Bespoke Project"
+    "startBespoke": "Begin your bespoke journey"
   },
   "bespoke": {
     "subtitle": "Bespoke Atelier",
     "title": "Your Vision, Realized",
-    "description": "Every space has its own language. Our bespoke service translates your vision into sculptural permanence—furniture designed for one space alone, crafted with materials chosen for you, and built to last generations.",
+    "description": "Every space has its own language. Our bespoke service translates your vision into sculptural permanence—pieces designed for one space alone, crafted with materials chosen for you, and built to last generations.",
     "journeySubtitle": "The Journey",
     "journeyTitle": "From Concept to Creation",
     "step1Title": "Consultation",
@@ -63,7 +63,7 @@
     "step4Title": "Craftsmanship",
     "step4Description": "Your piece is crafted by our European artisans. We document the process, keeping you connected to your object's creation.",
     "step5Title": "Delivery & Installation",
-    "step5Description": "White-glove delivery and professional installation. Your bespoke piece finds its home.",
+    "step5Description": "White-glove delivery and professional installation. Your piece finds its home.",
     "materialsSubtitle": "Material Palette",
     "materialsTitle": "Rare & Refined",
     "materialsDescription": "Our atelier works with an ever-evolving library of exceptional materials. From rare marbles quarried in limited quantities to bespoke concrete formulations, we source materials that elevate your piece beyond the ordinary.",
@@ -77,21 +77,21 @@
     "craftsmanshipTitle": "European Heritage",
     "craftsmanshipDescription": "Every Sera Norr piece is crafted by master artisans in our European workshop. We combine traditional stone-working techniques with contemporary precision, ensuring each piece meets our exacting standards.",
     "leadTimeDescription": "Lead times for bespoke commissions typically range from 12 to 20 weeks, depending on material sourcing and complexity. We believe in craftsmanship that cannot be rushed.",
-    "formSubtitle": "Begin Your Project",
-    "formTitle": "Commission Inquiry",
+    "formSubtitle": "Begin Your Journey",
+    "formTitle": "Your Commission",
     "formName": "Name",
     "formNamePlaceholder": "Your name",
     "formEmail": "Email",
     "formEmailPlaceholder": "your@email.com",
     "formLocation": "Location",
     "formLocationPlaceholder": "City, Country",
-    "formProjectType": "Project Type",
-    "formProjectTypePlaceholder": "Dining table, console, custom...",
+    "formProjectType": "Type of Piece",
+    "formProjectTypePlaceholder": "Dining table, console, coffee table...",
     "formTimeline": "Desired Timeline",
     "formTimelinePlaceholder": "When do you envision completion?",
     "formVision": "Tell Us About Your Vision",
     "formVisionPlaceholder": "Describe your space, inspiration, materials you're drawn to...",
-    "formSubmit": "Submit Inquiry",
+    "formSubmit": "Receive a tailored proposal",
     "formSuccess": "Inquiry Received",
     "formSuccessDescription": "Thank you for your interest. Our atelier will be in touch within 48 hours."
   },
@@ -121,12 +121,12 @@
     "studioTitle": "Visit the Atelier",
     "studioDescription": "Our studio in Amsterdam serves as both workshop and showroom. Visits are by appointment only, allowing us to offer undivided attention to each client.",
     "studioAddress": "Prinsengracht 263\n1016 GV Amsterdam\nThe Netherlands",
-    "scheduleVisit": "Schedule a Visit"
+    "scheduleVisit": "Schedule a visit"
   },
   "contact": {
     "subtitle": "Contact",
     "title": "Begin the Conversation",
-    "description": "Whether you're ready to commission a bespoke piece or simply wish to learn more about our work, we welcome your inquiry.",
+    "description": "Whether you're ready to discuss a bespoke piece or simply wish to learn more about our work, we welcome your message.",
     "visitSubtitle": "Visit",
     "addressTitle": "Atelier Address",
     "address": "Prinsengracht 263\n1016 GV Amsterdam\nThe Netherlands",
@@ -134,7 +134,7 @@
     "email": "atelier@seranorr.com",
     "hoursTitle": "Visiting Hours",
     "hours": "By appointment only\nMonday – Friday",
-    "formSubtitle": "Inquire",
+    "formSubtitle": "Get in Touch",
     "formTitle": "Send a Message",
     "formName": "Name",
     "formNamePlaceholder": "Your name",
@@ -144,7 +144,7 @@
     "formSubjectPlaceholder": "How can we help?",
     "formMessage": "Message",
     "formMessagePlaceholder": "Tell us about your inquiry...",
-    "formSubmit": "Send Message",
+    "formSubmit": "Send your message",
     "formSuccess": "Message Sent",
     "formSuccessDescription": "Thank you for reaching out. We'll respond within 48 hours."
   },
@@ -155,7 +155,7 @@
     "objects": "Objects shaped by material, proportion, and silence."
   },
   "configurator": {
-    "title": "Configure Your Piece",
+    "title": "Compose Your Piece",
     "material": "Material",
     "finish": "Finish",
     "dimensions": "Dimensions",
@@ -164,7 +164,7 @@
     "height": "Height",
     "cm": "cm",
     "rotateHint": "Drag to rotate • Scroll to zoom",
-    "requestQuote": "Request Custom Quote",
+    "requestQuote": "Receive a tailored proposal",
     "materials": {
       "travertine": "Italian Travertine",
       "calacattaViola": "Calacatta Viola",
@@ -182,10 +182,10 @@
   "common": {
     "viewShowroom": "Visit Our Showroom",
     "showroomDescription": "Experience our collections in person. By appointment only.",
-    "scheduleVisit": "Schedule a Visit",
+    "scheduleVisit": "Schedule a visit",
     "bespokeSubtitle": "Bespoke Atelier",
     "bespokeTitle": "Your Vision, Our Craft",
     "bespokeDescription": "Every space deserves an object made for it alone. Our bespoke service transforms your vision into sculptural permanence—from initial sketch to final installation.",
-    "beginProject": "Begin Your Project"
+    "beginProject": "Begin your journey"
   }
 }

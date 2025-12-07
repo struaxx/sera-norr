@@ -1,39 +1,13 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-const processSteps = [
-  {
-    number: "01",
-    title: "Consultation",
-    description: "We begin with a conversation about your space, your needs, and your aesthetic vision. Share inspiration, dimensions, and dreams.",
-  },
-  {
-    number: "02",
-    title: "Concept & Materials",
-    description: "Our atelier develops initial sketches and material proposals. We source rare stones and present options tailored to your project.",
-  },
-  {
-    number: "03",
-    title: "Design Development",
-    description: "Refined drawings, 3D visualizations, and material samples. Every proportion is considered, every detail refined.",
-  },
-  {
-    number: "04",
-    title: "Craftsmanship",
-    description: "Your piece is crafted by our European artisans. We document the process, keeping you connected to your object's creation.",
-  },
-  {
-    number: "05",
-    title: "Delivery & Installation",
-    description: "White-glove delivery and professional installation. Your bespoke piece finds its home.",
-  },
-];
-
 const Bespoke = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -44,11 +18,39 @@ const Bespoke = () => {
     message: "",
   });
 
+  const processSteps = [
+    {
+      number: "01",
+      title: t('bespoke.step1Title'),
+      description: t('bespoke.step1Description'),
+    },
+    {
+      number: "02",
+      title: t('bespoke.step2Title'),
+      description: t('bespoke.step2Description'),
+    },
+    {
+      number: "03",
+      title: t('bespoke.step3Title'),
+      description: t('bespoke.step3Description'),
+    },
+    {
+      number: "04",
+      title: t('bespoke.step4Title'),
+      description: t('bespoke.step4Description'),
+    },
+    {
+      number: "05",
+      title: t('bespoke.step5Title'),
+      description: t('bespoke.step5Description'),
+    },
+  ];
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Inquiry Received",
-      description: "Thank you for your interest. Our atelier will be in touch within 48 hours.",
+      title: t('bespoke.formSuccess'),
+      description: t('bespoke.formSuccessDescription'),
     });
     setFormData({ name: "", email: "", location: "", projectType: "", timeline: "", message: "" });
   };
@@ -60,15 +62,13 @@ const Bespoke = () => {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-3xl">
             <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
-              Bespoke Atelier
+              {t('bespoke.subtitle')}
             </p>
             <h1 className="font-serif text-display-lg text-foreground mb-8">
-              Your Vision, Realized
+              {t('bespoke.title')}
             </h1>
             <p className="text-muted-foreground text-body-lg leading-relaxed">
-              Every space has its own language. Our bespoke service translates your vision 
-              into sculptural permanence—furniture designed for one space alone, crafted 
-              with materials chosen for you, and built to last generations.
+              {t('bespoke.description')}
             </p>
           </div>
         </div>
@@ -79,10 +79,10 @@ const Bespoke = () => {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="mb-16">
             <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-              The Journey
+              {t('bespoke.journeySubtitle')}
             </p>
             <h2 className="font-serif text-display-sm text-foreground">
-              From Concept to Creation
+              {t('bespoke.journeyTitle')}
             </h2>
           </div>
 
@@ -113,47 +113,53 @@ const Bespoke = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
             <div>
               <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-                Material Palette
+                {t('bespoke.materialsSubtitle')}
               </p>
               <h2 className="font-serif text-display-sm text-foreground mb-8">
-                Rare & Refined
+                {t('bespoke.materialsTitle')}
               </h2>
               <p className="text-muted-foreground text-body-md leading-relaxed mb-8">
-                Our atelier works with an ever-evolving library of exceptional materials. 
-                From rare marbles quarried in limited quantities to bespoke concrete 
-                formulations, we source materials that elevate your piece beyond the ordinary.
+                {t('bespoke.materialsDescription')}
               </p>
               <div className="space-y-4">
                 <div className="border-l-2 border-brass pl-6">
-                  <h4 className="font-sans text-sm uppercase tracking-wider text-foreground mb-1">Natural Stone</h4>
-                  <p className="text-muted-foreground text-sm">Travertine, Calacatta Viola, Verde Alpi, Nero Marquina</p>
+                  <h4 className="font-sans text-sm uppercase tracking-wider text-foreground mb-1">
+                    {t('bespoke.naturalStone')}
+                  </h4>
+                  <p className="text-muted-foreground text-sm">
+                    {t('bespoke.naturalStoneList')}
+                  </p>
                 </div>
                 <div className="border-l-2 border-stone pl-6">
-                  <h4 className="font-sans text-sm uppercase tracking-wider text-foreground mb-1">Mineral Composites</h4>
-                  <p className="text-muted-foreground text-sm">Architectural concrete, terrazzo, custom aggregates</p>
+                  <h4 className="font-sans text-sm uppercase tracking-wider text-foreground mb-1">
+                    {t('bespoke.mineralComposites')}
+                  </h4>
+                  <p className="text-muted-foreground text-sm">
+                    {t('bespoke.mineralCompositesList')}
+                  </p>
                 </div>
                 <div className="border-l-2 border-muted-foreground pl-6">
-                  <h4 className="font-sans text-sm uppercase tracking-wider text-foreground mb-1">Metal Accents</h4>
-                  <p className="text-muted-foreground text-sm">Brushed brass, blackened steel, bronze patina</p>
+                  <h4 className="font-sans text-sm uppercase tracking-wider text-foreground mb-1">
+                    {t('bespoke.metalAccents')}
+                  </h4>
+                  <p className="text-muted-foreground text-sm">
+                    {t('bespoke.metalAccentsList')}
+                  </p>
                 </div>
               </div>
             </div>
             <div>
               <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-                Craftsmanship
+                {t('bespoke.craftsmanshipSubtitle')}
               </p>
               <h2 className="font-serif text-display-sm text-foreground mb-8">
-                European Heritage
+                {t('bespoke.craftsmanshipTitle')}
               </h2>
               <p className="text-muted-foreground text-body-md leading-relaxed mb-6">
-                Every Sera Norr piece is crafted by master artisans in our European 
-                workshop. We combine traditional stone-working techniques with 
-                contemporary precision, ensuring each piece meets our exacting standards.
+                {t('bespoke.craftsmanshipDescription')}
               </p>
               <p className="text-muted-foreground text-body-md leading-relaxed">
-                Lead times for bespoke commissions typically range from 12 to 20 weeks, 
-                depending on material sourcing and complexity. We believe in craftsmanship 
-                that cannot be rushed.
+                {t('bespoke.leadTimeDescription')}
               </p>
             </div>
           </div>
@@ -166,10 +172,10 @@ const Bespoke = () => {
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-12">
               <p className="font-sans text-xs uppercase tracking-[0.3em] text-background/60 mb-4">
-                Begin Your Project
+                {t('bespoke.formSubtitle')}
               </p>
               <h2 className="font-serif text-display-sm">
-                Commission Inquiry
+                {t('bespoke.formTitle')}
               </h2>
             </div>
 
@@ -177,7 +183,7 @@ const Bespoke = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    Name
+                    {t('bespoke.formName')}
                   </label>
                   <Input
                     type="text"
@@ -185,12 +191,12 @@ const Bespoke = () => {
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
                     className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder="Your name"
+                    placeholder={t('bespoke.formNamePlaceholder')}
                   />
                 </div>
                 <div>
                   <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    Email
+                    {t('bespoke.formEmail')}
                   </label>
                   <Input
                     type="email"
@@ -198,7 +204,7 @@ const Bespoke = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
                     className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder="your@email.com"
+                    placeholder={t('bespoke.formEmailPlaceholder')}
                   />
                 </div>
               </div>
@@ -206,46 +212,46 @@ const Bespoke = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    Location
+                    {t('bespoke.formLocation')}
                   </label>
                   <Input
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder="City, Country"
+                    placeholder={t('bespoke.formLocationPlaceholder')}
                   />
                 </div>
                 <div>
                   <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    Project Type
+                    {t('bespoke.formProjectType')}
                   </label>
                   <Input
                     type="text"
                     value={formData.projectType}
                     onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                     className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder="Dining table, console, custom..."
+                    placeholder={t('bespoke.formProjectTypePlaceholder')}
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                  Desired Timeline
+                  {t('bespoke.formTimeline')}
                 </label>
                 <Input
                   type="text"
                   value={formData.timeline}
                   onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
                   className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                  placeholder="When do you envision completion?"
+                  placeholder={t('bespoke.formTimelinePlaceholder')}
                 />
               </div>
 
               <div>
                 <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                  Tell Us About Your Vision
+                  {t('bespoke.formVision')}
                 </label>
                 <Textarea
                   value={formData.message}
@@ -253,13 +259,13 @@ const Bespoke = () => {
                   required
                   rows={5}
                   className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60 resize-none"
-                  placeholder="Describe your space, inspiration, materials you're drawn to..."
+                  placeholder={t('bespoke.formVisionPlaceholder')}
                 />
               </div>
 
               <div className="pt-4">
                 <Button type="submit" variant="outline" size="lg" className="w-full border-background/40 text-background hover:bg-background hover:text-foreground">
-                  Submit Inquiry
+                  {t('bespoke.formSubmit')}
                 </Button>
               </div>
             </form>
