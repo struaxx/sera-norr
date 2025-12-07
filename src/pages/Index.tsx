@@ -1,37 +1,41 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { ProductConfigurator } from "@/components/ProductConfigurator";
 import heroImage from "@/assets/hero-vanta.jpg";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
 import nordImage from "@/assets/nord-collection.jpg";
 
-const collections = [
-  {
-    id: "terra",
-    name: "TERRA",
-    subtitle: "Travertine Forms",
-    description: "Warm, organic shapes carved from Italian travertine. Each piece celebrates the natural beauty of fossilized stone.",
-    image: terraImage,
-  },
-  {
-    id: "vanta",
-    name: "VANTA",
-    subtitle: "Calacatta Viola Sculptures",
-    description: "Bold violet veining against pristine white. Sculptural statements in the rarest marble.",
-    image: vantaImage,
-  },
-  {
-    id: "nord",
-    name: "NORD",
-    subtitle: "Mineral Composites",
-    description: "Raw concrete meets refined mineral aggregates. Brutalist elegance for the modern interior.",
-    image: nordImage,
-  },
-];
-
 const Index = () => {
+  const { t } = useTranslation();
+
+  const collections = [
+    {
+      id: "terra",
+      name: t('collections.terra.name'),
+      subtitle: t('collections.terra.subtitle'),
+      description: t('collections.terra.description'),
+      image: terraImage,
+    },
+    {
+      id: "vanta",
+      name: t('collections.vanta.name'),
+      subtitle: t('collections.vanta.subtitle'),
+      description: t('collections.vanta.description'),
+      image: vantaImage,
+    },
+    {
+      id: "nord",
+      name: t('collections.nord.name'),
+      subtitle: t('collections.nord.subtitle'),
+      description: t('collections.nord.description'),
+      image: nordImage,
+    },
+  ];
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -47,22 +51,21 @@ const Index = () => {
         
         <div className="relative z-10 text-center px-6 max-w-4xl stagger-children">
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-background/80 mb-6">
-            Bespoke Furniture Atelier
+            {t('hero.subtitle')}
           </p>
           <h1 className="font-serif text-display-xl text-background mb-8 text-balance">
-            VANTA
+            {t('hero.title')}
           </h1>
           <p className="font-serif text-xl lg:text-2xl text-background/90 max-w-2xl mx-auto mb-12 leading-relaxed">
-            Sculpted in Calacatta Viola marble, the VANTA Collection embodies elegance 
-            and strength, defined by striking violet veins and natural depth.
+            {t('hero.description')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
-              <Link to="/collections">Discover Collections</Link>
+              <Link to="/collections">{t('hero.cta_collections')}</Link>
             </Button>
             <Button asChild variant="ghost" size="lg" className="text-background hover:bg-background/10">
               <Link to="/bespoke">
-                Start Your Project
+                {t('hero.cta_project')}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -71,7 +74,7 @@ const Index = () => {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background/60">
-          <span className="font-sans text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+          <span className="font-sans text-[10px] uppercase tracking-[0.3em]">{t('hero.scroll')}</span>
           <div className="w-px h-12 bg-background/30" />
         </div>
       </section>
@@ -81,17 +84,30 @@ const Index = () => {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-4xl mx-auto text-center">
             <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
-              Our Philosophy
+              {t('philosophy.subtitle')}
             </p>
             <h2 className="font-serif text-display-md text-foreground mb-8">
-              Objects shaped by material, proportion, and silence.
+              {t('philosophy.title')}
             </h2>
             <p className="text-muted-foreground text-body-lg leading-relaxed max-w-2xl mx-auto">
-              Every Sera Norr piece begins with stone—its weight, its history, its potential. 
-              We collaborate with rare materials to create furniture that exists at the 
-              intersection of sculpture and function.
+              {t('philosophy.description')}
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* 3D Configurator Section */}
+      <section className="section-padding bg-background border-t border-border/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="mb-12 lg:mb-16">
+            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+              {t('configurator.title')}
+            </p>
+            <h2 className="font-serif text-display-sm text-foreground">
+              TERRA Coffee Table
+            </h2>
+          </div>
+          <ProductConfigurator />
         </div>
       </section>
 
@@ -101,15 +117,15 @@ const Index = () => {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16">
             <div>
               <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-                Explore
+                {t('collections.subtitle')}
               </p>
               <h2 className="font-serif text-display-sm text-foreground">
-                Collections
+                {t('collections.title')}
               </h2>
             </div>
             <Button asChild variant="link" className="mt-4 lg:mt-0 text-muted-foreground hover:text-foreground">
               <Link to="/collections">
-                View All
+                {t('collections.viewAll')}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -149,18 +165,16 @@ const Index = () => {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-4xl mx-auto text-center">
             <p className="font-sans text-xs uppercase tracking-[0.3em] text-background/60 mb-6">
-              Bespoke Atelier
+              {t('common.bespokeSubtitle')}
             </p>
             <h2 className="font-serif text-display-md mb-8">
-              Your Vision, Our Craft
+              {t('common.bespokeTitle')}
             </h2>
             <p className="text-background/80 text-body-lg leading-relaxed max-w-2xl mx-auto mb-12">
-              Every space deserves an object made for it alone. Our bespoke service 
-              transforms your vision into sculptural permanence—from initial sketch 
-              to final installation.
+              {t('common.bespokeDescription')}
             </p>
             <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
-              <Link to="/bespoke">Begin Your Project</Link>
+              <Link to="/bespoke">{t('common.beginProject')}</Link>
             </Button>
           </div>
         </div>
@@ -172,14 +186,14 @@ const Index = () => {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
             <div>
               <h2 className="font-serif text-display-sm text-foreground mb-4">
-                Visit Our Showroom
+                {t('common.viewShowroom')}
               </h2>
               <p className="text-muted-foreground text-body-md">
-                Experience our collections in person. By appointment only.
+                {t('common.showroomDescription')}
               </p>
             </div>
             <Button asChild variant="atelier" size="lg">
-              <Link to="/contact">Schedule a Visit</Link>
+              <Link to="/contact">{t('common.scheduleVisit')}</Link>
             </Button>
           </div>
         </div>
