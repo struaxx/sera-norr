@@ -61,13 +61,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Custom brand colors
+        // SERA NORR brand colors
+        bone: "hsl(var(--bone))",
+        ivory: "hsl(var(--ivory))",
+        sand: "hsl(var(--sand))",
+        umber: "hsl(var(--umber))",
+        forest: "hsl(var(--forest))",
         stone: "hsl(var(--stone))",
         cream: "hsl(var(--cream))",
         charcoal: "hsl(var(--charcoal))",
-        sand: "hsl(var(--sand))",
         brass: "hsl(var(--brass))",
         marble: "hsl(var(--marble))",
+      },
+      boxShadow: {
+        "soft": "var(--shadow-soft)",
+        "medium": "var(--shadow-medium)",
+        "elevated": "var(--shadow-elevated)",
       },
       borderRadius: {
         lg: "var(--radius)",
