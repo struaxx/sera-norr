@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { CartDrawer } from "@/components/shop";
 
 export function Header() {
   const { t } = useTranslation();
@@ -83,11 +84,12 @@ export function Header() {
                 {link.name}
               </Link>
             ))}
+            <CartDrawer />
             <LanguageSwitcher />
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <div className="lg:hidden flex items-center gap-4">
+          <div className="lg:hidden flex items-center gap-3">
+            <CartDrawer />
             <LanguageSwitcher />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

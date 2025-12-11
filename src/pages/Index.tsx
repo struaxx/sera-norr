@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { ProductGrid } from "@/components/shop";
 import heroImage from "@/assets/hero-vanta.jpg";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
@@ -122,8 +123,24 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Materials Section */}
+      {/* Shop Section */}
       <section className="section-padding bg-background border-t border-border/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl mb-12 lg:mb-16">
+            <h2 className="font-serif text-display-sm text-foreground mb-4">
+              {t('home.shop.title')}
+            </h2>
+            <p className="text-muted-foreground text-body-md leading-relaxed">
+              {t('home.shop.description')}
+            </p>
+          </div>
+
+          <ProductGrid limit={6} />
+        </div>
+      </section>
+
+      {/* Materials Section */}
+      <section className="section-padding bg-secondary/20">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-3xl">
             <h2 className="font-serif text-display-sm text-foreground mb-6">

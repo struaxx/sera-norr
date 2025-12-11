@@ -34,6 +34,10 @@
       "cta": "Start in the configurator"
     },
     "statement": "Calm forms. Strong materials. Clear choices.",
+    "shop": {
+      "title": "Available pieces",
+      "description": "A selection of pieces from our collections, ready for delivery or customisable to measure."
+    },
     "closing": {
       "title": "Receive a proposal.",
       "description": "Share your preferences and dimensions. You will receive a proposal based on your chosen material and design.",
