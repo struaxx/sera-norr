@@ -9,6 +9,7 @@ import CollectionDetail from "./pages/CollectionDetail";
 import Bespoke from "./pages/Bespoke";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/collections" element={<Collections />} />
           <Route path="/collections/:collectionId" element={<CollectionDetail />} />
+          <Route path="/product/:handle" element={<ProductDetail />} />
           <Route path="/bespoke" element={<Bespoke />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

@@ -34,6 +34,10 @@
       "cta": "Start in de configurator"
     },
     "statement": "Rustige vormen. Sterke materialen. Heldere keuzes.",
+    "shop": {
+      "title": "Beschikbare stukken",
+      "description": "Een selectie stukken uit onze collecties, gereed voor levering of aan te passen op maat."
+    },
     "closing": {
       "title": "Ontvang een voorstel.",
       "description": "Deel uw voorkeuren en afmetingen. U ontvangt een voorstel op basis van uw gekozen materiaal en ontwerp.",
