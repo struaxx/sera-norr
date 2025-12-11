@@ -41,26 +41,38 @@
     }
   },
   "collections": {
-    "subtitle": "Ontdek",
-    "title": "Collecties",
-    "viewAll": "Bekijk Alles",
+    "intro": {
+      "line1": "SERA NORR presenteert verfijnde collecties in travertin, Calacatta Viola en andere steensoorten.",
+      "line2": "Natuurlijke materialen gevormd tot sculpturale, heldere ontwerpen. Een basis voor maatwerk in vorm, maat en detail."
+    },
     "terra": {
       "name": "TERRA",
-      "subtitle": "Travertin Vormen",
-      "description": "Warme, organische vormen uit Italiaans travertin. Elk stuk viert de natuurlijke schoonheid van versteend materiaal.",
+      "subtitle": "Travertin",
+      "description": "Travertin met rustige tinten en natuurlijke gelaagdheid. Ontwerpen met zachte kracht, duidelijke lijnen en een kalme aanwezigheid.",
+      "cta": "Bekijk TERRA",
       "longDescription": "De TERRA collectie put uit de oeroude warmte van Italiaans travertin—steen gevormd over millennia uit minerale bronnen, met in zich de herinnering aan water. Elk stuk onthult de karakteristieke putjes en honingkleurige tinten die travertin tot een van de meest expressieve materialen van de natuur maken."
     },
     "vanta": {
       "name": "VANTA",
-      "subtitle": "Calacatta Viola Sculpturen",
-      "description": "Gedurfde violette aders tegen smetteloos wit. Sculpturale statements in het zeldzaamste marmer.",
+      "subtitle": "Calacatta Viola",
+      "description": "Calacatta Viola met rijke aders en uitgesproken contrast. Strakke vormen die het materiaal laten spreken zonder overdaad.",
+      "cta": "Bekijk VANTA",
       "longDescription": "VANTA viert Calacatta Viola—een van de zeldzaamste en meest dramatische marmersoorten gewonnen uit de Apuaanse Alpen. De gedurfde violette aders tegen lichtgevend wit creëren stukken die evenzeer sculptuur als meubilair zijn."
     },
-    "nord": {
-      "name": "NORD",
-      "subtitle": "Minerale Composieten",
-      "description": "Ruw beton ontmoet verfijnde minerale aggregaten. Brutalistische elegantie voor het moderne interieur.",
-      "longDescription": "NORD verkent het architecturale potentieel van minerale composieten—beton verrijkt met zorgvuldig geselecteerde aggregaten die zichzelf door het oppervlak onthullen. Geïnspireerd door Scandinavisch brutalisme en Japans minimalisme."
+    "other": {
+      "name": "OTHER STONES",
+      "subtitle": "Selectie op aanvraag",
+      "description": "Voor projecten met een specifieke steensoort of kleurtoon werken we met een geselecteerde materiaalkeuze buiten de vaste collecties.",
+      "cta": "Vraag materiaalopties aan"
+    },
+    "optional": {
+      "line1": "Elke collectie is een uitgangspunt.",
+      "line2": "U kiest het materiaal en een basisvorm; wij passen maat en details aan op uw wensen."
+    },
+    "endCta": {
+      "title": "Stel uw stuk samen.",
+      "description": "Gebruik de configurator om materiaal, vorm en afmetingen te bepalen.",
+      "button": "Start in de configurator"
     },
     "notFound": "Collectie Niet Gevonden",
     "viewAllButton": "Bekijk Alle Collecties",

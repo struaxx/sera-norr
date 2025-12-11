@@ -41,26 +41,38 @@
     }
   },
   "collections": {
-    "subtitle": "Explore",
-    "title": "Collections",
-    "viewAll": "View All",
+    "intro": {
+      "line1": "SERA NORR presents refined collections in travertine, Calacatta Viola and other stone types.",
+      "line2": "Natural materials shaped into sculptural, clear designs. A foundation for custom work in form, size and detail."
+    },
     "terra": {
       "name": "TERRA",
-      "subtitle": "Travertine Forms",
-      "description": "Warm, organic shapes carved from Italian travertine. Each piece celebrates the natural beauty of fossilized stone.",
+      "subtitle": "Travertine",
+      "description": "Travertine with calm tones and natural layering. Designs with gentle strength, clear lines and a calm presence.",
+      "cta": "View TERRA",
       "longDescription": "The TERRA collection draws from the ancient warmth of Italian travertine—stone formed over millennia from mineral springs, carrying within it the memory of water. Each piece reveals the characteristic pitting and honeyed tones that make travertine one of nature's most expressive materials."
     },
     "vanta": {
       "name": "VANTA",
-      "subtitle": "Calacatta Viola Sculptures",
-      "description": "Bold violet veining against pristine white. Sculptural statements in the rarest marble.",
+      "subtitle": "Calacatta Viola",
+      "description": "Calacatta Viola with rich veins and pronounced contrast. Clean forms that let the material speak without excess.",
+      "cta": "View VANTA",
       "longDescription": "VANTA celebrates Calacatta Viola—among the rarest and most dramatic marbles quarried from the Apuan Alps. Its bold violet veining against luminous white creates pieces that are as much sculpture as furniture."
     },
-    "nord": {
-      "name": "NORD",
-      "subtitle": "Mineral Composites",
-      "description": "Raw concrete meets refined mineral aggregates. Brutalist elegance for the modern interior.",
-      "longDescription": "NORD explores the architectural potential of mineral composites—concrete enhanced with carefully selected aggregates that reveal themselves through the surface. Drawing inspiration from Nordic brutalism and Japanese minimalism."
+    "other": {
+      "name": "OTHER STONES",
+      "subtitle": "Selection on request",
+      "description": "For projects with a specific stone type or colour tone, we work with a selected material choice outside the fixed collections.",
+      "cta": "Request material options"
+    },
+    "optional": {
+      "line1": "Each collection is a starting point.",
+      "line2": "You choose the material and a base form; we adjust size and details to your wishes."
+    },
+    "endCta": {
+      "title": "Compose your piece.",
+      "description": "Use the configurator to determine material, form and dimensions.",
+      "button": "Start in the configurator"
     },
     "notFound": "Collection Not Found",
     "viewAllButton": "View All Collections",
