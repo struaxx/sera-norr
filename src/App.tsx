@@ -10,6 +10,9 @@ import Bespoke from "./pages/Bespoke";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
+import Journal from "./pages/Journal";
+import Materials from "./pages/Materials";
+import MaterialDetail from "./pages/MaterialDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +31,9 @@ const App = () => (
           <Route path="/bespoke" element={<Bespoke />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/materials" element={<Materials />} />
+          <Route path="/materials/:materialId" element={<MaterialDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

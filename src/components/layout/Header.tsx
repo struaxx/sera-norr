@@ -14,7 +14,9 @@ export function Header() {
 
   const navLinks = [
     { name: t('nav.collections'), path: "/collections" },
+    { name: t('nav.materials'), path: "/materials" },
     { name: t('nav.bespoke'), path: "/bespoke" },
+    { name: t('nav.journal'), path: "/journal" },
     { name: t('nav.about'), path: "/about" },
     { name: t('nav.contact'), path: "/contact" },
   ];
