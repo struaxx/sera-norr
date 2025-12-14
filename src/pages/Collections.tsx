@@ -286,7 +286,7 @@ const Collections = () => {
       </section>
 
       {/* Other Stones - Service Block */}
-      <section id="andere-steensoorten" className="py-10 lg:py-14 bg-background">
+      <section id="andere-steensoorten" className="py-8 lg:py-12 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Image with overlay caption */}
@@ -298,9 +298,9 @@ const Collections = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              {/* Overlay caption */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-foreground/60 to-transparent">
-                <p className="text-xs uppercase tracking-[0.2em] text-background/90">
+              {/* Overlay caption - refined */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-foreground/50 to-transparent">
+                <p className="text-[11px] uppercase tracking-[0.25em] text-background/70">
                   Verde Alpi · Nero Marquina · {isNL ? "Selectie op aanvraag" : "Selection on request"}
                 </p>
               </div>
@@ -311,27 +311,27 @@ const Collections = () => {
               <h2 className="font-serif text-display-sm text-foreground mb-1">
                 {t("collections.other.name")}
               </h2>
-              <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-5">
+              <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground/80 mb-4">
                 {t("collections.other.subtitle")}
               </p>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-6 max-w-lg">
+              <p className="text-muted-foreground text-body-md leading-relaxed mb-5 max-w-lg">
                 {t("collections.other.description")}
               </p>
 
-              {/* Info bullets */}
-              <div className="mb-6 space-y-2">
-                <div className="flex items-center gap-3 text-sm text-foreground">
-                  <span className="w-1 h-1 bg-foreground rounded-full" />
-                  <span>{t("collections.other.bullet1")}</span>
+              {/* Info bullets - refined */}
+              <div className="mb-5 space-y-2.5">
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground/60">•</span>
+                  <span className="text-sm text-muted-foreground leading-relaxed">{t("collections.other.bullet1")}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-foreground">
-                  <span className="w-1 h-1 bg-foreground rounded-full" />
-                  <span>{t("collections.other.bullet2")}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground/60">•</span>
+                  <span className="text-sm text-muted-foreground leading-relaxed">{t("collections.other.bullet2")}</span>
                 </div>
               </div>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-4">
+              {/* CTAs - refined */}
+              <div className="flex flex-wrap items-baseline gap-5">
                 <Button asChild variant="atelier">
                   <Link to="/materials">
                     {t("collections.other.cta")}
@@ -340,7 +340,7 @@ const Collections = () => {
                 </Button>
                 <Link 
                   to="/bespoke" 
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-xs uppercase tracking-[0.15em] text-muted-foreground/70 hover:text-foreground hover:underline underline-offset-4 transition-colors"
                 >
                   {t("collections.cta.requestProposal")}
                 </Link>
