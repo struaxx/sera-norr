@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Instagram, Linkedin, Mail, Phone } from "lucide-react";
+import { Instagram, Linkedin, Mail } from "lucide-react";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -23,10 +23,6 @@ export function Footer() {
               <a href="mailto:atelier@seranorr.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
                 <Mail className="h-4 w-4" />
                 atelier@seranorr.com
-              </a>
-              <a href="tel:+31201234567" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
-                <Phone className="h-4 w-4" />
-                +31 20 123 4567
               </a>
             </div>
 
@@ -70,7 +66,6 @@ export function Footer() {
             <ul className="space-y-3">
               <li><Link to="/bespoke" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.bespoke')}</Link></li>
               <li><Link to="/materials" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.materials')}</Link></li>
-              <li><Link to="/journal" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.journal')}</Link></li>
               <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.about')}</Link></li>
               <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.contact')}</Link></li>
             </ul>

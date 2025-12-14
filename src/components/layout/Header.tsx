@@ -4,7 +4,6 @@ import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { CartDrawer } from "@/components/shop";
 
 export function Header() {
   const { t } = useTranslation();
@@ -12,12 +11,11 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
+  // Simplified navigation: 5 items max
   const navLinks = [
     { name: t('nav.collections'), path: "/collections" },
-    { name: t('nav.materials'), path: "/materials" },
     { name: t('nav.bespoke'), path: "/bespoke" },
-    { name: t('nav.journal'), path: "/journal" },
-    { name: t('nav.about'), path: "/about" },
+    { name: t('nav.materials'), path: "/materials" },
     { name: t('nav.contact'), path: "/contact" },
   ];
 
@@ -86,12 +84,10 @@ export function Header() {
                 {link.name}
               </Link>
             ))}
-            <CartDrawer />
             <LanguageSwitcher />
           </div>
 
           <div className="lg:hidden flex items-center gap-3">
-            <CartDrawer />
             <LanguageSwitcher />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

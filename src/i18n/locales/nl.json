@@ -3,7 +3,6 @@
     "collections": "Collecties",
     "materials": "Materialen",
     "bespoke": "Maatwerk",
-    "journal": "Journal",
     "about": "Over Ons",
     "contact": "Contact"
   },
@@ -11,8 +10,8 @@
     "hero": {
       "title": "Luxe stenen meubels — op maat gemaakt in ons atelier.",
       "subtitle": "Travertin, marmer en andere steensoorten. Voor interieurs die rust en karakter vragen.",
-      "ctaPrimary": "Bekijk collecties",
-      "ctaSecondary": "Vraag maatwerk aan",
+      "ctaPrimary": "Vraag voorstel aan",
+      "ctaSecondary": "Bekijk collecties",
       "trust": {
         "craftsmanship": "Europees vakmanschap",
         "warranty": "5 jaar garantie",
@@ -21,78 +20,73 @@
     },
     "scroll": "Ontdek",
     "routes": {
-      "title": "Kies uw route",
-      "subtitle": "Of u nu direct wilt kopen, op maat laat maken, of eerst wilt verkennen — wij begeleiden u.",
-      "available": {
-        "title": "Beschikbaar nu",
-        "description": "Stukken uit onze collecties, gereed voor levering binnen 2-4 weken.",
-        "cta": "Bekijk collecties"
-      },
+      "title": "Hoe kunnen wij helpen?",
+      "subtitle": "Begin uw traject naar een uniek stuk op maat.",
       "bespoke": {
         "title": "Maatwerk",
         "description": "Een stuk ontworpen voor uw ruimte. Materiaal, afmetingen en details naar wens.",
-        "cta": "Start maatwerktraject"
+        "cta": "Start ontwerp"
       },
       "configurator": {
-        "title": "Configurator",
-        "description": "Verken mogelijkheden in materiaal en vorm. Ontvang binnen 24-48 uur een voorstel.",
-        "cta": "Open configurator"
+        "title": "Verken mogelijkheden",
+        "description": "Selecteer materiaal en vorm. Ontvang binnen 24-48 uur een voorstel.",
+        "cta": "Vraag voorstel aan"
       }
     },
     "collections": {
       "title": "Collecties",
       "description": "Onze collecties zijn materiaalgedreven en vormen de basis voor maatwerk.",
       "terra_material": "Travertin",
+      "terra_description": "Warme tinten en natuurlijke gelaagdheid. Tijdloos en rustig.",
       "vanta_material": "Calacatta Viola",
-      "other": "Selectie andere steensoorten — op aanvraag",
+      "vanta_description": "Rijke aders en uitgesproken contrast. Sculpturaal en krachtig.",
+      "startingFrom": "Vanaf",
+      "viewCollection": "Bekijk collectie",
+      "other": "Andere steensoorten beschikbaar op aanvraag.",
       "cta": "Bekijk alle collecties"
     },
-    "shop": {
-      "title": "Beschikbare stukken",
-      "description": "Vanafprijs getoond — maatwerk mogelijk. Elk stuk leverbaar binnen 2-4 weken of op maat te bestellen."
-    },
-    "configurator": {
-      "title": "Stel uw stuk samen",
-      "description": "In drie stappen naar een voorstel op maat. Geen verplichtingen, wel duidelijkheid.",
+    "process": {
+      "title": "Van idee naar realisatie",
+      "description": "In drie stappen naar een voorstel op maat.",
       "step1": {
-        "title": "Kies materiaal",
-        "description": "Travertin, marmer of een andere steensoort uit ons assortiment."
+        "title": "Deel uw wensen",
+        "description": "Type meubel, afmetingen en materiaalvoorkeur."
       },
       "step2": {
-        "title": "Bepaal afmetingen",
-        "description": "Lengte, breedte en hoogte passend bij uw ruimte."
+        "title": "Ontvang voorstel",
+        "description": "Tekening, specificaties en prijsindicatie."
       },
       "step3": {
-        "title": "Ontvang voorstel",
-        "description": "Een helder prijsvoorstel met tekening en specificaties."
+        "title": "Start realisatie",
+        "description": "Na akkoord begint de productie in ons atelier."
       },
-      "cta": "Start configurator",
       "promise": "Binnen 24–48 uur een eerste reactie van ons atelier."
     },
     "why": {
       "title": "Waarom SERA NORR",
       "craftsmanship": {
         "title": "Europees vakmanschap",
-        "description": "Elk stuk wordt vervaardigd door ervaren ambachtslieden in onze Europese werkplaats."
+        "description": "Vervaardigd door ervaren ambachtslieden."
       },
       "warranty": {
         "title": "5 jaar garantie",
-        "description": "Vol vertrouwen in kwaliteit. Structurele garantie op al onze stukken."
+        "description": "Structurele garantie op al onze stukken."
       },
       "delivery": {
         "title": "White-glove levering",
-        "description": "Professionele bezorging en installatie tot in uw ruimte."
+        "description": "Professionele bezorging en installatie."
       },
       "materials": {
         "title": "Geselecteerde materialen",
-        "description": "Uitsluitend natuursteen van hoge kwaliteit, zorgvuldig geselecteerd op kleur en tekening."
+        "description": "Uitsluitend hoogwaardige natuursteen."
       }
     },
     "statement": "Rustige vormen. Sterke materialen. Heldere keuzes.",
     "closing": {
       "title": "Ontvang een voorstel",
-      "description": "Deel uw voorkeuren en afmetingen. U ontvangt een voorstel op basis van uw gekozen materiaal en ontwerp.",
-      "cta": "Vraag offerte aan"
+      "description": "Deel uw voorkeuren en afmetingen. Wij maken een voorstel op maat.",
+      "deliverables": "U ontvangt: tekening, specificaties en prijsindicatie.",
+      "cta": "Vraag voorstel aan"
     }
   },
   "collections": {
@@ -127,15 +121,15 @@
     "endCta": {
       "title": "Stel uw stuk samen.",
       "description": "Gebruik de configurator om materiaal, vorm en afmetingen te bepalen.",
-      "button": "Start in de configurator"
+      "button": "Vraag voorstel aan"
     },
     "notFound": "Collectie Niet Gevonden",
     "viewAllButton": "Bekijk Alle Collecties",
     "pieces": "Stukken",
-    "requestQuote": "Vraag offerte aan",
+    "requestQuote": "Vraag voorstel aan",
     "customTitle": "Aangepaste afmetingen of materialen?",
     "customDescription": "Elk stuk kan worden aangepast. Bespreek uw visie met ons atelier.",
-    "startBespoke": "Vraag maatwerk offerte aan"
+    "startBespoke": "Vraag voorstel aan"
   },
   "bespoke": {
     "subtitle": "Maatwerk Atelier",
@@ -160,8 +154,6 @@
     "naturalStoneList": "Travertin, Calacatta Viola, Verde Alpi, Nero Marquina",
     "metalAccents": "Metalen Accenten",
     "metalAccentsList": "Geborsteld messing, gezwart staal, bronzen patina",
-    "metalAccents": "Metalen Accenten",
-    "metalAccentsList": "Geborsteld messing, gezwart staal, bronzen patina",
     "craftsmanshipSubtitle": "Vakmanschap",
     "craftsmanshipTitle": "Europees Erfgoed",
     "craftsmanshipDescription": "Elk Sera Norr stuk wordt vervaardigd door meester-ambachtslieden in onze Europese werkplaats. We combineren traditionele steenbewerkingstechnieken met hedendaagse precisie, zodat elk stuk voldoet aan onze veeleisende normen.",
@@ -180,7 +172,7 @@
     "formTimelinePlaceholder": "Wanneer stelt u voltooiing voor?",
     "formVision": "Beschrijf uw project",
     "formVisionPlaceholder": "Beschrijf uw wensen: type meubel, afmetingen, materiaalvoorkeuren...",
-    "formSubmit": "Verstuur aanvraag",
+    "formSubmit": "Vraag voorstel aan",
     "formSuccess": "Aanvraag Ontvangen",
     "formSuccessDescription": "Bedankt voor uw interesse. Ons atelier neemt binnen 48 uur contact met u op."
   },
@@ -261,12 +253,11 @@
     "height": "Hoogte",
     "cm": "cm",
     "rotateHint": "Sleep om te roteren • Scroll om te zoomen",
-    "requestQuote": "Vraag offerte aan",
+    "requestQuote": "Vraag voorstel aan",
     "materials": {
       "travertine": "Italiaans Travertin",
       "calacattaViola": "Calacatta Viola",
       "verdeAlpi": "Verde Alpi",
-      "neroMarquina": "Nero Marquina",
       "neroMarquina": "Nero Marquina"
     },
     "finishes": {
@@ -283,7 +274,7 @@
     "bespokeSubtitle": "Maatwerk Atelier",
     "bespokeTitle": "Uw Visie, Ons Vakmanschap",
     "bespokeDescription": "Elke ruimte verdient een object dat alleen voor haar is gemaakt. Onze maatwerkservice transformeert uw visie naar sculpturale permanentie—van eerste schets tot uiteindelijke installatie.",
-    "beginProject": "Begin uw traject"
+    "beginProject": "Vraag voorstel aan"
   },
   "journal": {
     "seo": {
@@ -330,7 +321,7 @@
     "cta": {
       "title": "Stel uw stuk samen",
       "description": "Laat u inspireren en begin uw eigen maatwerkproject.",
-      "button": "Vraag offerte aan"
+      "button": "Vraag voorstel aan"
     }
   },
   "materials": {
@@ -367,81 +358,85 @@
     },
     "philosophy": {
       "title": "Materiaal als uitgangspunt",
-      "description1": "Bij SERA NORR begint elk ontwerp met het materiaal zelf. We selecteren stenen op kleur, ader en structuur, en laten deze eigenschappen het ontwerp leiden.",
-      "description2": "Variatie is geen fout maar een kenmerk. Elke plaat is uniek, en dat maakt elk stuk dat ons atelier verlaat een origineel."
+      "description1": "Bij SERA NORR begint elk ontwerp met het materiaal zelf. We selecteren stenen op kleur, adering en structuur, en laten deze eigenschappen het ontwerp sturen.",
+      "description2": "Variatie is geen fout maar een kenmerk. Elke plaat is uniek, waardoor elk stuk dat ons atelier verlaat een origineel is."
     },
     "cta": {
       "title": "Op zoek naar een specifiek materiaal?",
       "description": "We werken ook met andere steensoorten op aanvraag. Neem contact op om de mogelijkheden te bespreken.",
-      "button": "Vraag offerte aan"
+      "button": "Vraag voorstel aan"
     },
     "types": {
       "travertine": {
         "name": "Travertin",
-        "shortDescription": "Warm, gelaagd natuursteen met karakteristieke putjes en honingtinten. Gevormd uit thermale bronnen over millennia.",
-        "seo": {
-          "title": "Travertin — Herkomst, Eigenschappen & Onderhoud | SERA NORR",
-          "description": "Italiaans travertin: thermale oorsprong, unieke textuur, warme tinten. Hoe SERA NORR dit materiaal verwerkt tot sculpturaal meubilair."
+        "subtitle": "Italiaans Travertin",
+        "intro": "Travertin is een sedimentair gesteente dat ontstaat uit thermale bronnen. De karakteristieke putjes en warme tinten maken het een van de meest expressieve natuurstenen.",
+        "description": "Italiaans travertin wordt al millennia gebruikt in architectuur en design. Het materiaal heeft een natuurlijke warmte en textuur die perfect past bij hedendaagse interieurs.",
+        "specs": {
+          "origin": "Tivoli, Italië",
+          "hardness": "Medium (3-4 Mohs)",
+          "porosity": "Medium tot hoog",
+          "finish": "Gepolijst, geslepen, gevuld"
         },
-        "introduction": "Travertin is een sedimentair gesteente dat ontstaat uit calciumcarbonaat-afzettingen rond thermale bronnen. Het materiaal draagt de herinnering aan water in zich—zichtbaar in de karakteristieke putjes en gelaagde structuur.",
-        "originTitle": "Herkomst & Winning",
-        "originText1": "Het travertin dat wij gebruiken komt uit de groeves rondom Tivoli in Italië, waar dit materiaal al sinds de Romeinse tijd wordt gewonnen. Het Colosseum in Rome is grotendeels van travertin gebouwd.",
-        "originText2": "De winning gebeurt in blokken die vervolgens worden gezaagd tot platen. Elke plaat onthult een uniek patroon van natuurlijke gelaagdheid en minerale afzettingen.",
-        "propertiesTitle": "Eigenschappen",
-        "propertiesText1": "Travertin heeft een warme, gelaagde uitstraling met tinten die variëren van crèmewit tot honingkleurig. De karakteristieke putjes ontstaan door gasvorming tijdens het vormingsproces.",
-        "propertiesText2": "Het materiaal is zachter dan graniet maar harder dan de meeste houtsoorten. Dit maakt het geschikt voor meubilair dat dagelijks wordt gebruikt.",
-        "origin": "Tivoli, Italië",
-        "hardness": "3-4 Mohs",
-        "porosity": "Matig poreus",
-        "finishOptions": "Gepolijst, geslepen, natuurlijk",
-        "careTitle": "Onderhoud",
-        "careIntro": "Travertin vraagt om regelmatig maar eenvoudig onderhoud om zijn schoonheid te behouden.",
-        "careTip1": "Reinig dagelijks met een vochtige doek en pH-neutrale zeep.",
-        "careTip2": "Vermijd zure vloeistoffen direct op het oppervlak—gebruik onderzetters.",
-        "careTip3": "Behandel jaarlijks met een steenimpregneer voor optimale bescherming.",
-        "applicationsTitle": "Toepassingen",
-        "faq": {
-          "q1": "Is travertin geschikt voor eettafels?",
-          "a1": "Ja, travertin is uitstekend geschikt voor eettafels. Met de juiste afwerking en onderhoud is het materiaal bestand tegen dagelijks gebruik.",
-          "q2": "Hoe ga ik om met de putjes in travertin?",
-          "a2": "De putjes kunnen open blijven voor een natuurlijke look of worden gevuld voor een gladder oppervlak. Wij adviseren op basis van uw voorkeur en gebruik.",
-          "q3": "Verkleurt travertin na verloop van tijd?",
-          "a3": "Travertin kan subtiel patineren, wat door velen als een verfraaiing wordt ervaren. Regelmatige impregnatie houdt het materiaal stabiel."
-        }
+        "care": {
+          "title": "Onderhoud",
+          "description": "Travertin vraagt om regelmatige verzegeling en voorzichtige reiniging. Vermijd zure producten en gebruik pH-neutrale reinigingsmiddelen."
+        },
+        "faq": [
+          {
+            "question": "Is travertin geschikt voor dagelijks gebruik?",
+            "answer": "Ja, mits goed verzegeld is travertin uitstekend geschikt voor dagelijks gebruik. De natuurlijke patina die ontstaat voegt karakter toe."
+          },
+          {
+            "question": "Hoe onderhoud ik travertin?",
+            "answer": "Wekelijkse reiniging met pH-neutrale zeep en jaarlijkse verzegeling houden uw travertin in optimale conditie."
+          },
+          {
+            "question": "Kunnen vlekken worden verwijderd?",
+            "answer": "De meeste vlekken kunnen met de juiste behandeling worden verwijderd. Wij adviseren bij hardnekkige vlekken contact op te nemen."
+          }
+        ]
       },
-      "calacattaViola": {
+      "calacatta-viola": {
         "name": "Calacatta Viola",
-        "shortDescription": "Zeldzaam marmer met dramatische violette aders tegen lichtgevend wit. Gewonnen uit de Apuaanse Alpen.",
-        "seo": {
-          "title": "Calacatta Viola — Zeldzaam Apuaans Marmer | SERA NORR",
-          "description": "Calacatta Viola: een van de zeldzaamste marmersoorten. Violette aders, toepassingen in maatwerk meubilair en onderhoudstips."
+        "subtitle": "Zeldzaam Italiaans Marmer",
+        "intro": "Calacatta Viola is een van de zeldzaamste en meest dramatische marmersoorten ter wereld, gewonnen uit de Apuaanse Alpen in Italië.",
+        "description": "De gedurfde violette aders tegen een lichtgevende witte achtergrond maken dit marmer tot een ware kunstwerk. Elk stuk is uniek door de natuurlijke variatie in adering.",
+        "specs": {
+          "origin": "Apuaanse Alpen, Italië",
+          "hardness": "Medium (3-4 Mohs)",
+          "porosity": "Laag tot medium",
+          "finish": "Gepolijst, geslepen"
         },
-        "introduction": "Calacatta Viola is een van de zeldzaamste en meest dramatische marmersoorten ter wereld. De gedurfde violette aders tegen een lichtgevende witte achtergrond maken elk stuk tot een sculptuur.",
-        "originTitle": "Herkomst & Winning",
-        "originText1": "Dit bijzondere marmer wordt gewonnen uit de Apuaanse Alpen in Toscane, Italië. De groeves zijn beperkt en de winning is arbeidsintensief, wat de exclusiviteit van het materiaal bepaalt.",
-        "originText2": "Elke plaat is uniek—de loop van de aders varieert van subtiel tot dramatisch. We selecteren persoonlijk op basis van aderpatroon en kleurintensiteit.",
-        "propertiesTitle": "Eigenschappen",
-        "propertiesText1": "Calacatta Viola onderscheidt zich door de karakteristieke violette tot grijze aders die door een helder wit grondvlak lopen. Het materiaal heeft een natuurlijke diepte en luminositeit.",
-        "propertiesText2": "Als marmer is het iets zachter dan travertin maar biedt het een ongeëvenaarde visuele impact. Het vraagt om zorgvuldig gebruik en onderhoud.",
-        "origin": "Apuaanse Alpen, Italië",
-        "hardness": "3 Mohs",
-        "porosity": "Laag poreus",
-        "finishOptions": "Gepolijst, geslepen",
-        "careTitle": "Onderhoud",
-        "careIntro": "Marmer vraagt om aandachtige verzorging. Met de juiste behandeling blijft Calacatta Viola generaties mooi.",
-        "careTip1": "Gebruik alleen pH-neutrale reinigingsmiddelen—vermijd azijn en citrus.",
-        "careTip2": "Wis gemorste vloeistoffen direct op om vlekvorming te voorkomen.",
-        "careTip3": "Laat het oppervlak jaarlijks professioneel polijsten indien nodig.",
-        "applicationsTitle": "Toepassingen",
-        "faq": {
-          "q1": "Is Calacatta Viola geschikt voor dagelijks gebruik?",
-          "a1": "Met de juiste voorzorgsmaatregelen wel. We adviseren onderzetters en placemats, en directe blootstelling aan zure stoffen te vermijden.",
-          "q2": "Hoe zeldzaam is Calacatta Viola?",
-          "a2": "Zeer zeldzaam. Er zijn slechts enkele actieve groeves en de jaarlijkse opbrengst is beperkt. Dit maakt elk stuk bijzonder waardevol.",
-          "q3": "Kan ik krassen of etsvlekken laten herstellen?",
-          "a3": "Ja, marmer kan worden gepolijst om oppervlakkige beschadigingen te herstellen. Wij bieden onderhoud- en restauratieservices aan."
-        }
+        "care": {
+          "title": "Onderhoud",
+          "description": "Calacatta Viola vraagt om zorgvuldige behandeling. Regelmatige verzegeling en directe reiniging van vloeistoffen behouden de schoonheid."
+        },
+        "faq": [
+          {
+            "question": "Waarom is Calacatta Viola zo zeldzaam?",
+            "answer": "Het marmer komt uit slechts één groeve in de Apuaanse Alpen. De winning is beperkt en de vraag wereldwijd hoog."
+          },
+          {
+            "question": "Is elke plaat anders?",
+            "answer": "Ja, elke plaat heeft een uniek aderpatroon. Wij selecteren zorgvuldig platen die bij elkaar passen voor grotere projecten."
+          },
+          {
+            "question": "Hoe bescherm ik het oppervlak?",
+            "answer": "Professionele verzegeling bij installatie en jaarlijkse behandeling beschermen het oppervlak tegen vlekken en slijtage."
+          }
+        ]
       }
     }
+  },
+  "product": {
+    "addToBag": "Vraag voorstel aan",
+    "requestBespoke": "Start maatwerktraject",
+    "details": "Details",
+    "specifications": "Specificaties",
+    "selectSize": "Selecteer maat",
+    "selectFinish": "Selecteer afwerking",
+    "notFound": "Product niet gevonden",
+    "backToCollections": "Terug naar collecties"
   }
 }
