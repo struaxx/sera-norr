@@ -12,13 +12,13 @@ export function ServicePromises({ className, variant = 'default' }: ServicePromi
   const isNL = i18n.language === 'nl';
 
   const promises = isNL ? [
-    'Handgemaakt in Europa door meester-ambachtslieden',
+    'Ontworpen in Nederland',
     '5 jaar garantie op alle stenen meubels',
     'Professionele levering en plaatsing inbegrepen',
     'Maatwerk mogelijk op aanvraag',
-    'Persoonlijk advies in onze Amsterdam showroom',
+    'Persoonlijk advies vanuit onze studio',
   ] : [
-    'Handcrafted in Europe by master artisans',
+    'Designed in the Netherlands',
     '5-year warranty on all stone furniture',
     'Professional delivery and installation included',
     'Bespoke customization available on request',

@@ -14,8 +14,8 @@ const About = () => {
     : "About SERA NORR | Stone Furniture Atelier Amsterdam";
 
   const seoDescription = isNL
-    ? "SERA NORR is een maatwerk atelier voor sculpturale stenen meubels. Handgemaakt in Europa uit travertin, Calacatta Viola en andere zeldzame steensoorten."
-    : "SERA NORR is a bespoke atelier for sculptural stone furniture. Handcrafted in Europe from travertine, Calacatta Viola and other rare stones.";
+    ? "SERA NORR is een maatwerk atelier voor sculpturale stenen meubels. Ontworpen in Nederland uit travertin, Calacatta Viola en andere zeldzame steensoorten."
+    : "SERA NORR is a bespoke atelier for sculptural stone furniture. Designed in the Netherlands from travertine, Calacatta Viola and other rare stones.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -32,8 +32,8 @@ const About = () => {
       description: "Elk stuk bestaat op het snijvlak van meubilair en kunstobject. We beschouwen negatieve ruimte even zorgvuldig als vorm, zodat elk stuk ademt binnen zijn omgeving.",
     },
     {
-      title: "Europees Vakmanschap",
-      description: "Traditionele steenbewerkingstechnieken verfijnd over generaties, uitgevoerd met hedendaagse precisie in onze Europese werkplaats.",
+      title: "Ontworpen in Nederland",
+      description: "Elk ontwerp ontstaat in onze Nederlandse studio. Met oog voor detail en vakkennis werken we samen met ambachtslieden wereldwijd.",
     },
     {
       title: "Permanentie",
@@ -57,8 +57,8 @@ const About = () => {
       description: "Our furniture is designed to command space, to create moments of pause. We consider negative space as carefully as form, allowing each piece to breathe within its environment.",
     },
     {
-      title: "European Craft",
-      description: "Every piece is crafted by master artisans in our European workshop. We combine centuries-old stone-working traditions with contemporary precision.",
+      title: "Designed in the Netherlands",
+      description: "Every design originates from our Dutch studio. With attention to detail and expertise, we collaborate with artisans worldwide.",
     },
     {
       title: "Permanence",

@@ -127,7 +127,7 @@ export const organizationSchema = {
   name: 'SERA NORR',
   url: 'https://sera-norr.com',
   logo: 'https://sera-norr.com/logo.png',
-  description: 'Sculpturale stenen meubels vervaardigd in Europa. Travertin, Calacatta Viola en andere zeldzame steensoorten.',
+  description: 'Sculpturale stenen meubels ontworpen in Nederland. Travertin, Calacatta Viola en andere zeldzame steensoorten.',
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Keizersgracht 585',

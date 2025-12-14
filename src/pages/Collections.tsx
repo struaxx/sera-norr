@@ -34,8 +34,8 @@ const Collections = () => {
     : "Collections | Travertine & Calacatta Viola Furniture | SERA NORR";
 
   const seoDescription = isNL
-    ? "Ontdek onze collecties stenen meubels. TERRA collectie in travertin en VANTA collectie in Calacatta Viola marmer. Handgemaakt in Europa."
-    : "Discover our stone furniture collections. TERRA collection in travertine and VANTA collection in Calacatta Viola marble. Handcrafted in Europe.";
+    ? "Ontdek onze collecties stenen meubels. TERRA collectie in travertin en VANTA collectie in Calacatta Viola marmer. Ontworpen in Nederland."
+    : "Discover our stone furniture collections. TERRA collection in travertine and VANTA collection in Calacatta Viola marble. Designed in the Netherlands.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },

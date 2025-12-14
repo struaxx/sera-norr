@@ -45,8 +45,8 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
       title: isNL ? 'Productie' : 'Production',
       duration: isNL ? '6-12 weken' : '6-12 weeks',
       description: isNL 
-        ? 'Vakkundige productie in onze Europese werkplaats.' 
-        : 'Expert production in our European workshop.',
+        ? 'Vakkundige productie door geselecteerde ambachtslieden.' 
+        : 'Expert production by selected artisans.',
     },
     {
       icon: Home,
