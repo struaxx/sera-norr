@@ -7,7 +7,7 @@ import { ArrowRight, Shield, Truck, Award, Settings } from "lucide-react";
 import { SEOHead, organizationSchema } from "@/components/seo";
 import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
-import heroImage from "@/assets/hero-vanta.jpg";
+import heroImage from "@/assets/hero-homepage.png";
 
 const Index = () => {
   const { t, i18n } = useTranslation();
