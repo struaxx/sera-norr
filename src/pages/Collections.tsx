@@ -143,8 +143,13 @@ const Collections = () => {
             </Button>
           </div>
 
-          {/* Section Navigation Tabs */}
-          <nav className="flex gap-6 lg:gap-8 border-t border-border/30 pt-4">
+        </div>
+      </section>
+
+      {/* Sticky Section Navigation Tabs */}
+      <nav className="sticky top-16 lg:top-20 z-40 bg-background/95 backdrop-blur-sm border-b border-border/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex gap-6 lg:gap-8 py-3">
             <TabButton 
               onClick={() => scrollToSection('vanta')}
               label="VANTA"
@@ -157,9 +162,9 @@ const Collections = () => {
               onClick={() => scrollToSection('andere-steensoorten')}
               label={isNL ? 'ANDERE STEENSOORTEN' : 'OTHER STONES'}
             />
-          </nav>
+          </div>
         </div>
-      </section>
+      </nav>
 
       {/* VANTA Collection */}
       <section id="vanta" className="py-10 lg:py-14 bg-background">
