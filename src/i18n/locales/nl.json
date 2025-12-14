@@ -1,7 +1,9 @@
 {
   "nav": {
     "collections": "Collecties",
+    "materials": "Materialen",
     "bespoke": "Maatwerk",
+    "journal": "Journal",
     "about": "Over Ons",
     "contact": "Contact"
   },
@@ -225,5 +227,164 @@
     "bespokeTitle": "Uw Visie, Ons Vakmanschap",
     "bespokeDescription": "Elke ruimte verdient een object dat alleen voor haar is gemaakt. Onze maatwerkservice transformeert uw visie naar sculpturale permanentie—van eerste schets tot uiteindelijke installatie.",
     "beginProject": "Begin uw traject"
+  },
+  "journal": {
+    "seo": {
+      "title": "Journal — Inzichten over Stenen Meubels | SERA NORR",
+      "description": "Artikelen over natuursteen, onderhoud, interieurs en Europees vakmanschap. Verdiep u in travertin, Calacatta Viola en het maakproces."
+    },
+    "title": "Journal",
+    "subtitle": "Inzichten & Expertise",
+    "description": "Verdieping in materialen, vakmanschap en interieurprojecten. Lees over de herkomst van onze stenen, onderhoudstips en hoe we samenwerken met klanten.",
+    "allArticles": "Alle artikelen",
+    "minRead": "min leestijd",
+    "categories": {
+      "materials": "Materialen",
+      "care": "Onderhoud",
+      "interiors": "Interieurs",
+      "craftsmanship": "Vakmanschap"
+    },
+    "articles": {
+      "travertine-origins": {
+        "title": "De oorsprong van travertin",
+        "excerpt": "Travertin ontstaat uit thermale bronnen over duizenden jaren. Een verkenning van dit oeroude materiaal en zijn toepassing in hedendaags design."
+      },
+      "stone-care-guide": {
+        "title": "Onderhoud van natuursteen",
+        "excerpt": "Praktische tips voor het behoud van uw stenen meubels. Van dagelijkse reiniging tot jaarlijkse behandeling."
+      },
+      "calacatta-viola-rare": {
+        "title": "Calacatta Viola: zeldzaam marmer",
+        "excerpt": "Een van de zeldzaamste marmersoorten ter wereld, gewonnen uit de Apuaanse Alpen. Waarom dit materiaal zo bijzonder is."
+      },
+      "amsterdam-residence": {
+        "title": "Project: Amsterdamse grachtenwoning",
+        "excerpt": "Een kijkje in de realisatie van een maatwerk eettafel voor een monumentaal grachtenpand in Amsterdam."
+      },
+      "european-craftsmanship": {
+        "title": "Europees vakmanschap",
+        "excerpt": "Hoe traditionele steenbewerkingstechnieken samenkomen met moderne precisie in ons atelier."
+      },
+      "choosing-stone-dining": {
+        "title": "De juiste steen voor uw eettafel",
+        "excerpt": "Travertin of marmer? Overwegingen bij het kiezen van het perfecte materiaal voor uw eettafel."
+      }
+    },
+    "cta": {
+      "title": "Stel uw stuk samen",
+      "description": "Laat u inspireren en begin uw eigen maatwerkproject.",
+      "button": "Vraag offerte aan"
+    }
+  },
+  "materials": {
+    "seo": {
+      "title": "Materialen — Travertin & Marmer | SERA NORR",
+      "description": "Ontdek onze geselecteerde natuurstenen: Italiaans travertin en Calacatta Viola marmer. Herkomst, eigenschappen en onderhoud."
+    },
+    "title": "Materialen",
+    "subtitle": "Natuursteen Selectie",
+    "description": "We werken met een zorgvuldig geselecteerd materiaalpalet. Elk type steen heeft unieke eigenschappen die het karakter van het eindproduct bepalen.",
+    "learnMore": "Meer informatie",
+    "viewCollection": "Bekijk collectie",
+    "faqTitle": "Veelgestelde vragen",
+    "specifications": "Specificaties",
+    "specs": {
+      "origin": "Herkomst",
+      "hardness": "Hardheid",
+      "porosity": "Porositeit",
+      "finish": "Afwerkingsopties"
+    },
+    "applications": {
+      "dining": {
+        "title": "Eettafels",
+        "description": "Centrale stukken voor dagelijks gebruik en bijzondere momenten."
+      },
+      "coffee": {
+        "title": "Salontafels",
+        "description": "Sculpturale elementen die de ruimte verankeren."
+      },
+      "console": {
+        "title": "Consoles",
+        "description": "Verfijnde accenten voor entree of woonkamer."
+      }
+    },
+    "philosophy": {
+      "title": "Materiaal als uitgangspunt",
+      "description1": "Bij SERA NORR begint elk ontwerp met het materiaal zelf. We selecteren stenen op kleur, ader en structuur, en laten deze eigenschappen het ontwerp leiden.",
+      "description2": "Variatie is geen fout maar een kenmerk. Elke plaat is uniek, en dat maakt elk stuk dat ons atelier verlaat een origineel."
+    },
+    "cta": {
+      "title": "Op zoek naar een specifiek materiaal?",
+      "description": "We werken ook met andere steensoorten op aanvraag. Neem contact op om de mogelijkheden te bespreken.",
+      "button": "Vraag offerte aan"
+    },
+    "types": {
+      "travertine": {
+        "name": "Travertin",
+        "shortDescription": "Warm, gelaagd natuursteen met karakteristieke putjes en honingtinten. Gevormd uit thermale bronnen over millennia.",
+        "seo": {
+          "title": "Travertin — Herkomst, Eigenschappen & Onderhoud | SERA NORR",
+          "description": "Italiaans travertin: thermale oorsprong, unieke textuur, warme tinten. Hoe SERA NORR dit materiaal verwerkt tot sculpturaal meubilair."
+        },
+        "introduction": "Travertin is een sedimentair gesteente dat ontstaat uit calciumcarbonaat-afzettingen rond thermale bronnen. Het materiaal draagt de herinnering aan water in zich—zichtbaar in de karakteristieke putjes en gelaagde structuur.",
+        "originTitle": "Herkomst & Winning",
+        "originText1": "Het travertin dat wij gebruiken komt uit de groeves rondom Tivoli in Italië, waar dit materiaal al sinds de Romeinse tijd wordt gewonnen. Het Colosseum in Rome is grotendeels van travertin gebouwd.",
+        "originText2": "De winning gebeurt in blokken die vervolgens worden gezaagd tot platen. Elke plaat onthult een uniek patroon van natuurlijke gelaagdheid en minerale afzettingen.",
+        "propertiesTitle": "Eigenschappen",
+        "propertiesText1": "Travertin heeft een warme, gelaagde uitstraling met tinten die variëren van crèmewit tot honingkleurig. De karakteristieke putjes ontstaan door gasvorming tijdens het vormingsproces.",
+        "propertiesText2": "Het materiaal is zachter dan graniet maar harder dan de meeste houtsoorten. Dit maakt het geschikt voor meubilair dat dagelijks wordt gebruikt.",
+        "origin": "Tivoli, Italië",
+        "hardness": "3-4 Mohs",
+        "porosity": "Matig poreus",
+        "finishOptions": "Gepolijst, geslepen, natuurlijk",
+        "careTitle": "Onderhoud",
+        "careIntro": "Travertin vraagt om regelmatig maar eenvoudig onderhoud om zijn schoonheid te behouden.",
+        "careTip1": "Reinig dagelijks met een vochtige doek en pH-neutrale zeep.",
+        "careTip2": "Vermijd zure vloeistoffen direct op het oppervlak—gebruik onderzetters.",
+        "careTip3": "Behandel jaarlijks met een steenimpregneer voor optimale bescherming.",
+        "applicationsTitle": "Toepassingen",
+        "faq": {
+          "q1": "Is travertin geschikt voor eettafels?",
+          "a1": "Ja, travertin is uitstekend geschikt voor eettafels. Met de juiste afwerking en onderhoud is het materiaal bestand tegen dagelijks gebruik.",
+          "q2": "Hoe ga ik om met de putjes in travertin?",
+          "a2": "De putjes kunnen open blijven voor een natuurlijke look of worden gevuld voor een gladder oppervlak. Wij adviseren op basis van uw voorkeur en gebruik.",
+          "q3": "Verkleurt travertin na verloop van tijd?",
+          "a3": "Travertin kan subtiel patineren, wat door velen als een verfraaiing wordt ervaren. Regelmatige impregnatie houdt het materiaal stabiel."
+        }
+      },
+      "calacattaViola": {
+        "name": "Calacatta Viola",
+        "shortDescription": "Zeldzaam marmer met dramatische violette aders tegen lichtgevend wit. Gewonnen uit de Apuaanse Alpen.",
+        "seo": {
+          "title": "Calacatta Viola — Zeldzaam Apuaans Marmer | SERA NORR",
+          "description": "Calacatta Viola: een van de zeldzaamste marmersoorten. Violette aders, toepassingen in maatwerk meubilair en onderhoudstips."
+        },
+        "introduction": "Calacatta Viola is een van de zeldzaamste en meest dramatische marmersoorten ter wereld. De gedurfde violette aders tegen een lichtgevende witte achtergrond maken elk stuk tot een sculptuur.",
+        "originTitle": "Herkomst & Winning",
+        "originText1": "Dit bijzondere marmer wordt gewonnen uit de Apuaanse Alpen in Toscane, Italië. De groeves zijn beperkt en de winning is arbeidsintensief, wat de exclusiviteit van het materiaal bepaalt.",
+        "originText2": "Elke plaat is uniek—de loop van de aders varieert van subtiel tot dramatisch. We selecteren persoonlijk op basis van aderpatroon en kleurintensiteit.",
+        "propertiesTitle": "Eigenschappen",
+        "propertiesText1": "Calacatta Viola onderscheidt zich door de karakteristieke violette tot grijze aders die door een helder wit grondvlak lopen. Het materiaal heeft een natuurlijke diepte en luminositeit.",
+        "propertiesText2": "Als marmer is het iets zachter dan travertin maar biedt het een ongeëvenaarde visuele impact. Het vraagt om zorgvuldig gebruik en onderhoud.",
+        "origin": "Apuaanse Alpen, Italië",
+        "hardness": "3 Mohs",
+        "porosity": "Laag poreus",
+        "finishOptions": "Gepolijst, geslepen",
+        "careTitle": "Onderhoud",
+        "careIntro": "Marmer vraagt om aandachtige verzorging. Met de juiste behandeling blijft Calacatta Viola generaties mooi.",
+        "careTip1": "Gebruik alleen pH-neutrale reinigingsmiddelen—vermijd azijn en citrus.",
+        "careTip2": "Wis gemorste vloeistoffen direct op om vlekvorming te voorkomen.",
+        "careTip3": "Laat het oppervlak jaarlijks professioneel polijsten indien nodig.",
+        "applicationsTitle": "Toepassingen",
+        "faq": {
+          "q1": "Is Calacatta Viola geschikt voor dagelijks gebruik?",
+          "a1": "Met de juiste voorzorgsmaatregelen wel. We adviseren onderzetters en placemats, en directe blootstelling aan zure stoffen te vermijden.",
+          "q2": "Hoe zeldzaam is Calacatta Viola?",
+          "a2": "Zeer zeldzaam. Er zijn slechts enkele actieve groeves en de jaarlijkse opbrengst is beperkt. Dit maakt elk stuk bijzonder waardevol.",
+          "q3": "Kan ik krassen of etsvlekken laten herstellen?",
+          "a3": "Ja, marmer kan worden gepolijst om oppervlakkige beschadigingen te herstellen. Wij bieden onderhoud- en restauratieservices aan."
+        }
+      }
+    }
   }
 }

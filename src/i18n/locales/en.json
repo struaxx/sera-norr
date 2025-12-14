@@ -1,7 +1,9 @@
 {
   "nav": {
     "collections": "Collections",
+    "materials": "Materials",
     "bespoke": "Bespoke",
+    "journal": "Journal",
     "about": "About",
     "contact": "Contact"
   },
@@ -225,5 +227,164 @@
     "bespokeTitle": "Your Vision, Our Craft",
     "bespokeDescription": "Every space deserves an object made for it alone. Our bespoke service transforms your vision into sculptural permanence—from initial sketch to final installation.",
     "beginProject": "Begin your journey"
+  },
+  "journal": {
+    "seo": {
+      "title": "Journal — Stone Furniture Insights | SERA NORR",
+      "description": "Articles on natural stone materials, care guides, interior cases, and European craftsmanship from SERA NORR atelier."
+    },
+    "title": "Journal",
+    "subtitle": "Insights & Expertise",
+    "description": "Deep dives into materials, craftsmanship and interior projects. Read about stone origins, care tips and client collaborations.",
+    "allArticles": "All articles",
+    "minRead": "min read",
+    "categories": {
+      "materials": "Materials",
+      "care": "Care",
+      "interiors": "Interiors",
+      "craftsmanship": "Craftsmanship"
+    },
+    "articles": {
+      "travertine-origins": {
+        "title": "The origins of travertine",
+        "excerpt": "Travertine forms from thermal springs over thousands of years. An exploration of this ancient material and its use in contemporary design."
+      },
+      "stone-care-guide": {
+        "title": "Natural stone care guide",
+        "excerpt": "Practical tips for maintaining your stone furniture. From daily cleaning to annual treatment."
+      },
+      "calacatta-viola-rare": {
+        "title": "Calacatta Viola: rare marble",
+        "excerpt": "One of the rarest marbles in the world, quarried from the Apuan Alps. Why this material is so special."
+      },
+      "amsterdam-residence": {
+        "title": "Project: Amsterdam canal house",
+        "excerpt": "A look at the creation of a bespoke dining table for a monumental canal house in Amsterdam."
+      },
+      "european-craftsmanship": {
+        "title": "European craftsmanship",
+        "excerpt": "How traditional stone-working techniques meet modern precision in our atelier."
+      },
+      "choosing-stone-dining": {
+        "title": "Choosing stone for your dining table",
+        "excerpt": "Travertine or marble? Considerations when selecting the perfect material for your dining table."
+      }
+    },
+    "cta": {
+      "title": "Compose your piece",
+      "description": "Get inspired and start your own bespoke project.",
+      "button": "Request a quote"
+    }
+  },
+  "materials": {
+    "seo": {
+      "title": "Materials — Travertine & Marble | SERA NORR",
+      "description": "Discover our curated natural stones: Italian travertine and Calacatta Viola marble. Origin, properties and care."
+    },
+    "title": "Materials",
+    "subtitle": "Natural Stone Selection",
+    "description": "We work with a carefully curated material palette. Each stone type has unique properties that define the character of the final piece.",
+    "learnMore": "Learn more",
+    "viewCollection": "View collection",
+    "faqTitle": "Frequently asked questions",
+    "specifications": "Specifications",
+    "specs": {
+      "origin": "Origin",
+      "hardness": "Hardness",
+      "porosity": "Porosity",
+      "finish": "Finish options"
+    },
+    "applications": {
+      "dining": {
+        "title": "Dining tables",
+        "description": "Central pieces for daily use and special moments."
+      },
+      "coffee": {
+        "title": "Coffee tables",
+        "description": "Sculptural elements that anchor the space."
+      },
+      "console": {
+        "title": "Consoles",
+        "description": "Refined accents for entryway or living room."
+      }
+    },
+    "philosophy": {
+      "title": "Material as starting point",
+      "description1": "At SERA NORR, every design begins with the material itself. We select stones for colour, veining and structure, letting these properties guide the design.",
+      "description2": "Variation is not a flaw but a feature. Each slab is unique, making every piece that leaves our atelier an original."
+    },
+    "cta": {
+      "title": "Looking for a specific material?",
+      "description": "We also work with other stone types on request. Contact us to discuss possibilities.",
+      "button": "Request a quote"
+    },
+    "types": {
+      "travertine": {
+        "name": "Travertine",
+        "shortDescription": "Warm, layered natural stone with characteristic pitting and honey tones. Formed from thermal springs over millennia.",
+        "seo": {
+          "title": "Travertine — Origin, Properties & Care | SERA NORR",
+          "description": "Italian travertine: thermal origins, unique texture, warm tones. How SERA NORR crafts this material into sculptural furniture."
+        },
+        "introduction": "Travertine is a sedimentary rock formed from calcium carbonate deposits around thermal springs. The material carries the memory of water—visible in its characteristic pitting and layered structure.",
+        "originTitle": "Origin & Quarrying",
+        "originText1": "The travertine we use comes from quarries around Tivoli in Italy, where this material has been extracted since Roman times. The Colosseum in Rome is largely built from travertine.",
+        "originText2": "Extraction happens in blocks that are then sawn into slabs. Each slab reveals a unique pattern of natural layering and mineral deposits.",
+        "propertiesTitle": "Properties",
+        "propertiesText1": "Travertine has a warm, layered appearance with tones ranging from cream white to honey. The characteristic pitting results from gas formation during the forming process.",
+        "propertiesText2": "The material is softer than granite but harder than most woods. This makes it suitable for furniture used daily.",
+        "origin": "Tivoli, Italy",
+        "hardness": "3-4 Mohs",
+        "porosity": "Moderately porous",
+        "finishOptions": "Polished, honed, natural",
+        "careTitle": "Care",
+        "careIntro": "Travertine requires regular but simple maintenance to preserve its beauty.",
+        "careTip1": "Clean daily with a damp cloth and pH-neutral soap.",
+        "careTip2": "Avoid acidic liquids directly on the surface—use coasters.",
+        "careTip3": "Treat annually with a stone sealant for optimal protection.",
+        "applicationsTitle": "Applications",
+        "faq": {
+          "q1": "Is travertine suitable for dining tables?",
+          "a1": "Yes, travertine is excellent for dining tables. With proper finishing and maintenance, the material withstands daily use.",
+          "q2": "How do I handle the pitting in travertine?",
+          "a2": "The pitting can remain open for a natural look or be filled for a smoother surface. We advise based on your preference and use.",
+          "q3": "Does travertine discolour over time?",
+          "a3": "Travertine may develop a subtle patina, which many consider an enhancement. Regular sealing keeps the material stable."
+        }
+      },
+      "calacattaViola": {
+        "name": "Calacatta Viola",
+        "shortDescription": "Rare marble with dramatic violet veins against luminous white. Quarried from the Apuan Alps.",
+        "seo": {
+          "title": "Calacatta Viola — Rare Apuan Marble | SERA NORR",
+          "description": "Calacatta Viola: one of the rarest marbles. Violet veining, applications in bespoke furniture and care tips."
+        },
+        "introduction": "Calacatta Viola is one of the rarest and most dramatic marbles in the world. The bold violet veins against a luminous white background make each piece a sculpture.",
+        "originTitle": "Origin & Quarrying",
+        "originText1": "This exceptional marble is quarried from the Apuan Alps in Tuscany, Italy. The quarries are limited and extraction is labour-intensive, determining the material's exclusivity.",
+        "originText2": "Each slab is unique—the vein patterns vary from subtle to dramatic. We personally select based on vein pattern and colour intensity.",
+        "propertiesTitle": "Properties",
+        "propertiesText1": "Calacatta Viola distinguishes itself through characteristic violet to grey veins running through a bright white base. The material has natural depth and luminosity.",
+        "propertiesText2": "As marble, it is slightly softer than travertine but offers unparalleled visual impact. It requires careful use and maintenance.",
+        "origin": "Apuan Alps, Italy",
+        "hardness": "3 Mohs",
+        "porosity": "Low porosity",
+        "finishOptions": "Polished, honed",
+        "careTitle": "Care",
+        "careIntro": "Marble requires attentive care. With proper treatment, Calacatta Viola remains beautiful for generations.",
+        "careTip1": "Use only pH-neutral cleaners—avoid vinegar and citrus.",
+        "careTip2": "Wipe spilled liquids immediately to prevent staining.",
+        "careTip3": "Have the surface professionally polished annually if needed.",
+        "applicationsTitle": "Applications",
+        "faq": {
+          "q1": "Is Calacatta Viola suitable for daily use?",
+          "a1": "With proper precautions, yes. We recommend coasters and placemats, and avoiding direct exposure to acidic substances.",
+          "q2": "How rare is Calacatta Viola?",
+          "a2": "Very rare. There are only a few active quarries and annual yield is limited. This makes each piece particularly valuable.",
+          "q3": "Can scratches or etch marks be repaired?",
+          "a3": "Yes, marble can be polished to repair surface damage. We offer maintenance and restoration services."
+        }
+      }
+    }
   }
 }
