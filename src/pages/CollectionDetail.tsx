@@ -226,21 +226,17 @@ const CollectionDetail = () => {
         type="website"
       />
 
-      {/* Breadcrumbs */}
+      {/* Breadcrumbs & Back Link */}
       <div className="pt-24 pb-4 bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
+        <div className="container mx-auto px-6 lg:px-12 space-y-4">
           <Breadcrumbs items={breadcrumbItems} />
+          <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground -ml-4">
+            <Link to="/collections">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              {t('collections.viewAllButton')}
+            </Link>
+          </Button>
         </div>
-      </div>
-
-      {/* Back Link */}
-      <div className="fixed top-24 left-6 lg:left-12 z-30">
-        <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-          <Link to="/collections">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            {t('collections.viewAllButton')}
-          </Link>
-        </Button>
       </div>
 
       {/* Hero */}
