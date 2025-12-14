@@ -8,8 +8,8 @@ import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
-import vantaImage from "@/assets/vanta-collection.jpg";
-import terraImage from "@/assets/terra-collection.jpg";
+import vantaFallback from "@/assets/vanta-collection.jpg";
+import terraFallback from "@/assets/terra-collection.jpg";
 
 const Collections = () => {
   const { t, i18n } = useTranslation();
@@ -31,10 +31,15 @@ const Collections = () => {
     loadCollections();
   }, []);
 
-  // Map collections to get images
+  // Get collection image from Shopify or fallback
   const getCollectionImage = (handle: string) => {
-    if (handle === 'frontpage' || handle === 'vanta') return vantaImage;
-    if (handle === 'terra') return terraImage;
+    const collection = collections.find(c => c.node.handle === handle);
+    if (collection?.node.image?.url) {
+      return collection.node.image.url;
+    }
+    // Fallback to local images
+    if (handle === 'vanta') return vantaFallback;
+    if (handle === 'terra') return terraFallback;
     return null;
   };
 
@@ -132,11 +137,15 @@ const Collections = () => {
             <div className="image-reveal">
               <Link to="/collections/vanta">
                 <div className="aspect-[4/5] bg-muted overflow-hidden">
-                  <img
-                    src={vantaImage}
-                    alt={isNL ? "VANTA collectie - Calacatta Viola marmer meubels" : "VANTA collection - Calacatta Viola marble furniture"}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                  />
+                  {loading ? (
+                    <Skeleton className="w-full h-full" />
+                  ) : (
+                    <img
+                      src={getCollectionImage('vanta') || vantaFallback}
+                      alt={isNL ? "VANTA collectie - Calacatta Viola marmer meubels" : "VANTA collection - Calacatta Viola marble furniture"}
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                    />
+                  )}
                 </div>
               </Link>
             </div>
@@ -195,11 +204,15 @@ const Collections = () => {
             <div className="image-reveal lg:col-start-2">
               <Link to="/collections/terra">
                 <div className="aspect-[4/5] bg-muted overflow-hidden">
-                  <img
-                    src={terraImage}
-                    alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                  />
+                  {loading ? (
+                    <Skeleton className="w-full h-full" />
+                  ) : (
+                    <img
+                      src={getCollectionImage('terra') || terraFallback}
+                      alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                    />
+                  )}
                 </div>
               </Link>
             </div>
