@@ -41,7 +41,7 @@
     "closing": {
       "title": "Receive a proposal.",
       "description": "Share your preferences and dimensions. You will receive a proposal based on your chosen material and design.",
-      "cta": "Receive a proposal"
+      "cta": "Request a quote"
     }
   },
   "collections": {
@@ -81,10 +81,10 @@
     "notFound": "Collection Not Found",
     "viewAllButton": "View All Collections",
     "pieces": "Pieces",
-    "requestQuote": "Receive a tailored proposal",
+    "requestQuote": "Request a quote",
     "customTitle": "Custom dimensions or materials?",
     "customDescription": "Every piece can be customized. Discuss your vision with our atelier.",
-    "startBespoke": "Begin your bespoke journey"
+    "startBespoke": "Request bespoke quote"
   },
   "bespoke": {
     "subtitle": "Bespoke Atelier",
@@ -127,9 +127,9 @@
     "formProjectTypePlaceholder": "Dining table, console, coffee table...",
     "formTimeline": "Desired Timeline",
     "formTimelinePlaceholder": "When do you envision completion?",
-    "formVision": "Tell Us About Your Vision",
-    "formVisionPlaceholder": "Describe your space, inspiration, materials you're drawn to...",
-    "formSubmit": "Receive a tailored proposal",
+    "formVision": "Describe your project",
+    "formVisionPlaceholder": "Describe your wishes: type of furniture, dimensions, material preferences...",
+    "formSubmit": "Submit request",
     "formSuccess": "Inquiry Received",
     "formSuccessDescription": "Thank you for your interest. Our atelier will be in touch within 48 hours."
   },
@@ -202,7 +202,7 @@
     "height": "Height",
     "cm": "cm",
     "rotateHint": "Drag to rotate • Scroll to zoom",
-    "requestQuote": "Receive a tailored proposal",
+    "requestQuote": "Request a quote",
     "materials": {
       "travertine": "Italian Travertine",
       "calacattaViola": "Calacatta Viola",
