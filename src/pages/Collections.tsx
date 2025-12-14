@@ -13,20 +13,16 @@ import terraFallback from "@/assets/terra-collection.jpg";
 import otherStonesImage from "@/assets/other-stones-materials.png";
 
 // Tab button component for section navigation
-const TabButton = ({ onClick, label }: { onClick: () => void; label: string }) => {
-  const [isActive, setIsActive] = useState(false);
-  
+const TabButton = ({ onClick, label, isActive }: { onClick: () => void; label: string; isActive: boolean }) => {
   return (
     <button 
       onClick={onClick}
-      onMouseEnter={() => setIsActive(true)}
-      onMouseLeave={() => setIsActive(false)}
       className={`
         text-[11px] uppercase tracking-[0.15em] font-medium
-        transition-all duration-200 pb-2 border-b
+        transition-all duration-200 py-3 border-b-2 -mb-px
         ${isActive 
           ? 'text-foreground border-foreground' 
-          : 'text-muted-foreground/60 border-transparent hover:text-foreground hover:border-foreground/50'
+          : 'text-muted-foreground/60 border-transparent hover:text-foreground hover:border-foreground/30'
         }
       `}
     >
@@ -41,6 +37,29 @@ const Collections = () => {
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState<string>('vanta');
+
+  // Scroll spy to track active section
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['vanta', 'terra', 'andere-steensoorten'];
+      const scrollPos = window.scrollY + 150; // Offset for sticky header + tabs
+      
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPos >= offsetTop && scrollPos < offsetTop + offsetHeight) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -147,27 +166,30 @@ const Collections = () => {
       </section>
 
       {/* Sticky Section Navigation Tabs */}
-      <nav className="sticky top-16 lg:top-20 z-[100] bg-[hsl(var(--background))] border-b border-border/20 shadow-sm isolate">
+      <nav className="sticky top-16 lg:top-20 z-[100] bg-background border-b border-border/30">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex gap-6 lg:gap-8 py-3">
+          <div className="flex gap-6 lg:gap-8">
             <TabButton 
               onClick={() => scrollToSection('vanta')}
               label="VANTA"
+              isActive={activeSection === 'vanta'}
             />
             <TabButton 
               onClick={() => scrollToSection('terra')}
               label="TERRA"
+              isActive={activeSection === 'terra'}
             />
             <TabButton 
               onClick={() => scrollToSection('andere-steensoorten')}
               label={isNL ? 'ANDERE STEENSOORTEN' : 'OTHER STONES'}
+              isActive={activeSection === 'andere-steensoorten'}
             />
           </div>
         </div>
       </nav>
 
       {/* VANTA Collection */}
-      <section id="vanta" className="py-10 lg:py-14 bg-background">
+      <section id="vanta" className="scroll-mt-28 lg:scroll-mt-32 py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Image */}
@@ -234,7 +256,7 @@ const Collections = () => {
       </section>
 
       {/* TERRA Collection */}
-      <section id="terra" className="py-10 lg:py-14 bg-background">
+      <section id="terra" className="scroll-mt-28 lg:scroll-mt-32 py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center lg:grid-flow-dense">
             {/* Image */}
@@ -301,7 +323,7 @@ const Collections = () => {
       </section>
 
       {/* Other Stones - Service Block */}
-      <section id="andere-steensoorten" className="py-8 lg:py-12 bg-background">
+      <section id="andere-steensoorten" className="scroll-mt-28 lg:scroll-mt-32 py-8 lg:py-12 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Image */}
