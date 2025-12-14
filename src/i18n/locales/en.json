@@ -9,13 +9,35 @@
   },
   "home": {
     "hero": {
-      "title": "SERA NORR presents refined stone furniture.",
-      "subtitle": "Travertine, Calacatta Viola and other stone types shaped into sculptural, clear designs. Custom made from material, form and size.",
-      "cta": "Enter the atelier"
+      "title": "Luxury stone furniture — bespoke crafted in our atelier.",
+      "subtitle": "Travertine, marble and other stone types. For interiors that demand calm and character.",
+      "ctaPrimary": "View collections",
+      "ctaSecondary": "Request bespoke",
+      "trust": {
+        "craftsmanship": "European craftsmanship",
+        "warranty": "5-year warranty",
+        "delivery": "White-glove delivery"
+      }
     },
     "scroll": "Discover",
-    "intro": {
-      "text": "SERA NORR is an online atelier for stone furniture. We work with natural materials and calm forms. Each piece is designed around proportion, detail and the character of the stone itself."
+    "routes": {
+      "title": "Choose your route",
+      "subtitle": "Whether you want to buy directly, commission bespoke, or explore first — we guide you.",
+      "available": {
+        "title": "Available now",
+        "description": "Pieces from our collections, ready for delivery within 2-4 weeks.",
+        "cta": "View collections"
+      },
+      "bespoke": {
+        "title": "Bespoke",
+        "description": "A piece designed for your space. Material, dimensions and details to your wishes.",
+        "cta": "Start bespoke journey"
+      },
+      "configurator": {
+        "title": "Configurator",
+        "description": "Explore possibilities in material and form. Receive a proposal within 24-48 hours.",
+        "cta": "Open configurator"
+      }
     },
     "collections": {
       "title": "Collections",
@@ -23,25 +45,52 @@
       "terra_material": "Travertine",
       "vanta_material": "Calacatta Viola",
       "other": "Selection of other stone types — on request",
-      "cta": "View the collections"
+      "cta": "View all collections"
     },
-    "materials": {
-      "title": "Natural stone types.",
-      "description": "We select on colour, pattern and structure. Variation belongs to the material and remains visible in the design.",
-      "cta": "View materials"
-    },
-    "configurator": {
-      "title": "Compose your piece.",
-      "description": "Use the configurator to determine material, form and dimensions. We translate this into a concrete proposal.",
-      "cta": "Start in the configurator"
-    },
-    "statement": "Calm forms. Strong materials. Clear choices.",
     "shop": {
       "title": "Available pieces",
-      "description": "A selection of pieces from our collections, ready for delivery or customisable to measure."
+      "description": "Starting price shown — bespoke possible. Each piece deliverable within 2-4 weeks or available to order bespoke."
     },
+    "configurator": {
+      "title": "Compose your piece",
+      "description": "Three steps to a bespoke proposal. No obligations, just clarity.",
+      "step1": {
+        "title": "Choose material",
+        "description": "Travertine, marble or another stone type from our selection."
+      },
+      "step2": {
+        "title": "Set dimensions",
+        "description": "Length, width and height suited to your space."
+      },
+      "step3": {
+        "title": "Receive proposal",
+        "description": "A clear price proposal with drawing and specifications."
+      },
+      "cta": "Start configurator",
+      "promise": "First response from our atelier within 24–48 hours."
+    },
+    "why": {
+      "title": "Why SERA NORR",
+      "craftsmanship": {
+        "title": "European craftsmanship",
+        "description": "Each piece is crafted by experienced artisans in our European workshop."
+      },
+      "warranty": {
+        "title": "5-year warranty",
+        "description": "Confidence in quality. Structural warranty on all our pieces."
+      },
+      "delivery": {
+        "title": "White-glove delivery",
+        "description": "Professional delivery and installation into your space."
+      },
+      "materials": {
+        "title": "Curated materials",
+        "description": "Only high-quality natural stone, carefully selected for colour and veining."
+      }
+    },
+    "statement": "Calm forms. Strong materials. Clear choices.",
     "closing": {
-      "title": "Receive a proposal.",
+      "title": "Receive a proposal",
       "description": "Share your preferences and dimensions. You will receive a proposal based on your chosen material and design.",
       "cta": "Request a quote"
     }
@@ -190,9 +239,17 @@
   },
   "footer": {
     "collections": "Collections",
+    "allCollections": "All collections",
     "atelier": "Atelier",
+    "service": "Service & Info",
+    "shipping": "Shipping & Delivery",
+    "returns": "Returns & Warranty",
+    "care": "Care & Maintenance",
+    "privacy": "Privacy",
+    "terms": "Terms & Conditions",
     "copyright": "All rights reserved.",
-    "tagline": "Online atelier for bespoke stone furniture."
+    "tagline": "Online atelier for bespoke stone furniture.",
+    "crafted": "Crafted in Europe"
   },
   "configurator": {
     "title": "Compose Your Piece",

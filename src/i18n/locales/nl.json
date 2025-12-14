@@ -9,13 +9,35 @@
   },
   "home": {
     "hero": {
-      "title": "SERA NORR presenteert verfijnde stenen meubels.",
-      "subtitle": "Travertin, Calacatta Viola en andere steensoorten gevormd tot sculpturale, heldere ontwerpen. Maatwerk vanuit materiaal, vorm en maat.",
-      "cta": "Betreed het atelier"
+      "title": "Luxe stenen meubels — op maat gemaakt in ons atelier.",
+      "subtitle": "Travertin, marmer en andere steensoorten. Voor interieurs die rust en karakter vragen.",
+      "ctaPrimary": "Bekijk collecties",
+      "ctaSecondary": "Vraag maatwerk aan",
+      "trust": {
+        "craftsmanship": "Europees vakmanschap",
+        "warranty": "5 jaar garantie",
+        "delivery": "White-glove levering"
+      }
     },
     "scroll": "Ontdek",
-    "intro": {
-      "text": "SERA NORR is een online atelier voor stenen meubels. We werken met natuurlijke materialen en rustige vormen. Elk stuk is ontworpen rond verhouding, detail en het karakter van het steen zelf."
+    "routes": {
+      "title": "Kies uw route",
+      "subtitle": "Of u nu direct wilt kopen, op maat laat maken, of eerst wilt verkennen — wij begeleiden u.",
+      "available": {
+        "title": "Beschikbaar nu",
+        "description": "Stukken uit onze collecties, gereed voor levering binnen 2-4 weken.",
+        "cta": "Bekijk collecties"
+      },
+      "bespoke": {
+        "title": "Maatwerk",
+        "description": "Een stuk ontworpen voor uw ruimte. Materiaal, afmetingen en details naar wens.",
+        "cta": "Start maatwerktraject"
+      },
+      "configurator": {
+        "title": "Configurator",
+        "description": "Verken mogelijkheden in materiaal en vorm. Ontvang binnen 24-48 uur een voorstel.",
+        "cta": "Open configurator"
+      }
     },
     "collections": {
       "title": "Collecties",
@@ -23,25 +45,52 @@
       "terra_material": "Travertin",
       "vanta_material": "Calacatta Viola",
       "other": "Selectie andere steensoorten — op aanvraag",
-      "cta": "Bekijk de collecties"
+      "cta": "Bekijk alle collecties"
     },
-    "materials": {
-      "title": "Natuurlijke steensoorten.",
-      "description": "We selecteren op kleur, tekening en structuur. Variatie hoort bij het materiaal en blijft zichtbaar in het ontwerp.",
-      "cta": "Materialen bekijken"
-    },
-    "configurator": {
-      "title": "Stel uw stuk samen.",
-      "description": "Gebruik de configurator om materiaal, vorm en afmetingen te bepalen. Wij vertalen dit naar een concreet voorstel.",
-      "cta": "Start in de configurator"
-    },
-    "statement": "Rustige vormen. Sterke materialen. Heldere keuzes.",
     "shop": {
       "title": "Beschikbare stukken",
-      "description": "Een selectie stukken uit onze collecties, gereed voor levering of aan te passen op maat."
+      "description": "Vanafprijs getoond — maatwerk mogelijk. Elk stuk leverbaar binnen 2-4 weken of op maat te bestellen."
     },
+    "configurator": {
+      "title": "Stel uw stuk samen",
+      "description": "In drie stappen naar een voorstel op maat. Geen verplichtingen, wel duidelijkheid.",
+      "step1": {
+        "title": "Kies materiaal",
+        "description": "Travertin, marmer of een andere steensoort uit ons assortiment."
+      },
+      "step2": {
+        "title": "Bepaal afmetingen",
+        "description": "Lengte, breedte en hoogte passend bij uw ruimte."
+      },
+      "step3": {
+        "title": "Ontvang voorstel",
+        "description": "Een helder prijsvoorstel met tekening en specificaties."
+      },
+      "cta": "Start configurator",
+      "promise": "Binnen 24–48 uur een eerste reactie van ons atelier."
+    },
+    "why": {
+      "title": "Waarom SERA NORR",
+      "craftsmanship": {
+        "title": "Europees vakmanschap",
+        "description": "Elk stuk wordt vervaardigd door ervaren ambachtslieden in onze Europese werkplaats."
+      },
+      "warranty": {
+        "title": "5 jaar garantie",
+        "description": "Vol vertrouwen in kwaliteit. Structurele garantie op al onze stukken."
+      },
+      "delivery": {
+        "title": "White-glove levering",
+        "description": "Professionele bezorging en installatie tot in uw ruimte."
+      },
+      "materials": {
+        "title": "Geselecteerde materialen",
+        "description": "Uitsluitend natuursteen van hoge kwaliteit, zorgvuldig geselecteerd op kleur en tekening."
+      }
+    },
+    "statement": "Rustige vormen. Sterke materialen. Heldere keuzes.",
     "closing": {
-      "title": "Ontvang een voorstel.",
+      "title": "Ontvang een voorstel",
       "description": "Deel uw voorkeuren en afmetingen. U ontvangt een voorstel op basis van uw gekozen materiaal en ontwerp.",
       "cta": "Vraag offerte aan"
     }
@@ -190,9 +239,17 @@
   },
   "footer": {
     "collections": "Collecties",
+    "allCollections": "Alle collecties",
     "atelier": "Atelier",
+    "service": "Service & Info",
+    "shipping": "Verzending & Levering",
+    "returns": "Retour & Garantie",
+    "care": "Onderhoud",
+    "privacy": "Privacy",
+    "terms": "Algemene voorwaarden",
     "copyright": "Alle rechten voorbehouden.",
-    "tagline": "Online atelier voor maatwerk stenen meubels."
+    "tagline": "Online atelier voor maatwerk stenen meubels.",
+    "crafted": "Vervaardigd in Europa"
   },
   "configurator": {
     "title": "Stel Uw Stuk Samen",
