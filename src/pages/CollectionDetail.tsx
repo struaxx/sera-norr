@@ -106,6 +106,12 @@ interface CollectionData {
   };
 }
 
+// Map URL slugs to Shopify collection handles
+const urlToShopifyHandle: Record<string, string> = {
+  'vanta': 'frontpage', // VANTA collection has handle "frontpage" in Shopify
+  'terra': 'terra',
+};
+
 const CollectionDetail = () => {
   const { collectionId } = useParams();
   const { t, i18n } = useTranslation();
@@ -121,7 +127,9 @@ const CollectionDetail = () => {
       if (!collectionId) return;
       setLoading(true);
       try {
-        const data = await fetchCollectionByHandle(collectionId.toLowerCase(), 20);
+        // Convert URL slug to Shopify handle
+        const shopifyHandle = urlToShopifyHandle[collectionId.toLowerCase()] || collectionId.toLowerCase();
+        const data = await fetchCollectionByHandle(shopifyHandle, 20);
         setCollection(data);
       } catch (error) {
         console.error("Failed to fetch collection:", error);

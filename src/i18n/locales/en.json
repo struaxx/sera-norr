@@ -144,7 +144,7 @@
     "step3Title": "Design Development",
     "step3Description": "Refined drawings, 3D visualizations, and material samples. Every proportion is considered, every detail refined.",
     "step4Title": "Craftsmanship",
-    "step4Description": "Your piece is crafted by our European artisans. We document the process, keeping you connected to your object's creation.",
+    "step4Description": "Your piece is crafted by selected artisans. We document the process, keeping you connected to your object's creation.",
     "step5Title": "Delivery & Installation",
     "step5Description": "White-glove delivery and professional installation. Your piece finds its home.",
     "materialsSubtitle": "Material Palette",
@@ -155,8 +155,8 @@
     "metalAccents": "Metal Accents",
     "metalAccentsList": "Brushed brass, blackened steel, bronze patina",
     "craftsmanshipSubtitle": "Craftsmanship",
-    "craftsmanshipTitle": "European Heritage",
-    "craftsmanshipDescription": "Every Sera Norr piece is crafted by master artisans in our European workshop. We combine traditional stone-working techniques with contemporary precision, ensuring each piece meets our exacting standards.",
+    "craftsmanshipTitle": "Dutch Design",
+    "craftsmanshipDescription": "Every Sera Norr piece is designed in our Dutch studio. We combine traditional stone-working techniques with contemporary precision, collaborating with selected artisans worldwide.",
     "leadTimeDescription": "Lead times for bespoke commissions typically range from 12 to 20 weeks, depending on material sourcing and complexity. We believe in craftsmanship that cannot be rushed.",
     "formSubtitle": "Begin Your Journey",
     "formTitle": "Your Commission",
@@ -190,8 +190,8 @@
     "value1Description": "We source the world's rarest stones, spending months finding the perfect slab.",
     "value2Title": "Sculptural Intent",
     "value2Description": "Every piece exists at the intersection of furniture and art object.",
-    "value3Title": "European Craft",
-    "value3Description": "Traditional techniques refined over generations, executed with precision.",
+      "value3Title": "Dutch Design",
+      "value3Description": "Designed in the Netherlands, executed with selected artisans worldwide.",
     "value4Title": "Permanence",
     "value4Description": "Objects designed to outlast trends, meant for generational inheritance.",
     "value5Title": "Restraint",
@@ -241,7 +241,7 @@
     "terms": "Terms & Conditions",
     "copyright": "All rights reserved.",
     "tagline": "Online atelier for bespoke stone furniture.",
-    "crafted": "Crafted in Europe"
+    "crafted": "Designed in the Netherlands"
   },
   "configurator": {
     "title": "Compose Your Piece",
@@ -310,8 +310,8 @@
         "excerpt": "A look at the creation of a bespoke dining table for a monumental canal house in Amsterdam."
       },
       "european-craftsmanship": {
-        "title": "European craftsmanship",
-        "excerpt": "How traditional stone-working techniques meet modern precision in our atelier."
+        "title": "Craftsmanship and design",
+        "excerpt": "How traditional stone-working techniques meet modern Dutch design in our studio."
       },
       "choosing-stone-dining": {
         "title": "Choosing stone for your dining table",

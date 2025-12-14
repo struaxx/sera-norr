@@ -80,8 +80,8 @@ const About = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "over SERA NORR, atelier Amsterdam, stenen meubels, Europees vakmanschap, maatwerk" 
-          : "about SERA NORR, atelier Amsterdam, stone furniture, European craftsmanship, bespoke"}
+          ? "over SERA NORR, atelier Amsterdam, stenen meubels, ontworpen in Nederland, maatwerk" 
+          : "about SERA NORR, atelier Amsterdam, stone furniture, designed in the Netherlands, bespoke"}
         structuredData={breadcrumbSchema}
       />
 
@@ -168,12 +168,12 @@ const About = () => {
               {isNL ? 'De Studio' : 'The Studio'}
             </p>
             <h2 className="font-serif text-display-sm mb-8">
-              {isNL ? 'Vervaardigd in Europa' : 'Crafted in Europe'}
+              {isNL ? 'Ontworpen in Nederland' : 'Designed in the Netherlands'}
             </h2>
             <p className="text-background/80 text-body-lg leading-relaxed mb-12">
               {isNL
-                ? 'Ons atelier is zowel werkplaats als toevluchtsoord—een ruimte waar zeldzame materialen worden getransformeerd tot objecten van permanentie. Bezoekers zijn welkom op afspraak om ons vakmanschap van dichtbij te ervaren.'
-                : 'Our atelier is both workshop and sanctuary—a space where rare materials are transformed into objects of permanence. Visitors are welcome by appointment to experience our craft firsthand.'}
+                ? 'Onze studio is zowel werkplaats als creatieve ruimte—waar zeldzame materialen worden getransformeerd tot objecten van permanentie. Bezoekers zijn welkom op afspraak om ons ontwerpproces van dichtbij te ervaren.'
+                : 'Our studio is both workshop and creative space—where rare materials are transformed into objects of permanence. Visitors are welcome by appointment to experience our design process firsthand.'}
             </p>
             <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
               <Link to="/contact">{isNL ? 'Maak een Afspraak' : 'Arrange a Visit'}</Link>
