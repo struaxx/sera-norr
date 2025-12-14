@@ -104,11 +104,11 @@
     "step5Description": "White-glove delivery and professional installation. Your piece finds its home.",
     "materialsSubtitle": "Material Palette",
     "materialsTitle": "Rare & Refined",
-    "materialsDescription": "Our atelier works with an ever-evolving library of exceptional materials. From rare marbles quarried in limited quantities to bespoke concrete formulations, we source materials that elevate your piece beyond the ordinary.",
+    "materialsDescription": "Our atelier works with an ever-evolving library of exceptional natural stones. From rare marbles quarried in limited quantities to classic travertine, we source materials that elevate your piece beyond the ordinary.",
     "naturalStone": "Natural Stone",
     "naturalStoneList": "Travertine, Calacatta Viola, Verde Alpi, Nero Marquina",
-    "mineralComposites": "Mineral Composites",
-    "mineralCompositesList": "Architectural concrete, terrazzo, custom aggregates",
+    "metalAccents": "Metal Accents",
+    "metalAccentsList": "Brushed brass, blackened steel, bronze patina",
     "metalAccents": "Metal Accents",
     "metalAccentsList": "Brushed brass, blackened steel, bronze patina",
     "craftsmanshipSubtitle": "Craftsmanship",
@@ -208,7 +208,7 @@
       "calacattaViola": "Calacatta Viola",
       "verdeAlpi": "Verde Alpi",
       "neroMarquina": "Nero Marquina",
-      "concrete": "Architectural Concrete"
+      "neroMarquina": "Nero Marquina"
     },
     "finishes": {
       "polished": "Polished",

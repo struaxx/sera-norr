@@ -104,11 +104,11 @@
     "step5Description": "White-glove levering en professionele installatie. Uw stuk vindt zijn thuis.",
     "materialsSubtitle": "Materiaalpalet",
     "materialsTitle": "Zeldzaam & Verfijnd",
-    "materialsDescription": "Ons atelier werkt met een steeds evoluerende bibliotheek van uitzonderlijke materialen. Van zeldzame marmers gewonnen in beperkte hoeveelheden tot op maat gemaakte betonformuleringen, we zoeken materialen die uw stuk boven het gewone verheffen.",
+    "materialsDescription": "Ons atelier werkt met een steeds evoluerende bibliotheek van uitzonderlijke natuurstenen. Van zeldzame marmers gewonnen in beperkte hoeveelheden tot klassiek travertin, we zoeken materialen die uw stuk boven het gewone verheffen.",
     "naturalStone": "Natuursteen",
     "naturalStoneList": "Travertin, Calacatta Viola, Verde Alpi, Nero Marquina",
-    "mineralComposites": "Minerale Composieten",
-    "mineralCompositesList": "Architecturaal beton, terrazzo, aangepaste aggregaten",
+    "metalAccents": "Metalen Accenten",
+    "metalAccentsList": "Geborsteld messing, gezwart staal, bronzen patina",
     "metalAccents": "Metalen Accenten",
     "metalAccentsList": "Geborsteld messing, gezwart staal, bronzen patina",
     "craftsmanshipSubtitle": "Vakmanschap",
@@ -208,7 +208,7 @@
       "calacattaViola": "Calacatta Viola",
       "verdeAlpi": "Verde Alpi",
       "neroMarquina": "Nero Marquina",
-      "concrete": "Architecturaal Beton"
+      "neroMarquina": "Nero Marquina"
     },
     "finishes": {
       "polished": "Gepolijst",

@@ -22,7 +22,7 @@ export function Footer() {
               {t('footer.collections')}
             </h4>
             <ul className="space-y-3">
-              {['terra', 'vanta', 'nord'].map((id) => (
+              {['terra', 'vanta'].map((id) => (
                 <li key={id}>
                   <Link to={`/collections/${id}`} className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">
                     {id.toUpperCase()}

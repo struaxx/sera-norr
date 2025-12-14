@@ -30,7 +30,6 @@ export function Breadcrumbs({ items, className, showHome = true }: BreadcrumbsPr
       product: 'Product',
       terra: 'TERRA',
       vanta: 'VANTA',
-      nord: 'NORD',
     };
 
     return pathParts.map((part, index) => ({

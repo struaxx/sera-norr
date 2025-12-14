@@ -17,7 +17,7 @@ const materialConfigs: Record<string, { color: string; roughness: number; metaln
   calacattaViola: { color: '#F5F0F5', roughness: 0.3, metalness: 0.05 },
   verdeAlpi: { color: '#2D4A3E', roughness: 0.4, metalness: 0.02 },
   neroMarquina: { color: '#1A1A1A', roughness: 0.35, metalness: 0.05 },
-  concrete: { color: '#8C8C8C', roughness: 0.9, metalness: 0 },
+  
 };
 
 const finishModifiers: Record<string, { roughnessMultiplier: number }> = {
