@@ -7,7 +7,6 @@ import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
-import nordImage from "@/assets/nord-collection.jpg";
 
 const Collections = () => {
   const { t, i18n } = useTranslation();
@@ -124,12 +123,15 @@ const Collections = () => {
             <article className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
               {/* Placeholder Image */}
               <div className="image-reveal">
-                <div className="aspect-[4/5] bg-sand/30 overflow-hidden flex items-center justify-center">
-                  <img
-                    src={nordImage}
-                    alt={isNL ? "Overige steensoorten - zeldzame materialen op aanvraag" : "Other stone types - rare materials on request"}
-                    className="w-full h-full object-cover opacity-80"
-                  />
+                <div className="aspect-[4/5] bg-sand/30 overflow-hidden flex items-center justify-center border border-border/30">
+                  <div className="text-center p-12">
+                    <p className="font-serif text-lg text-muted-foreground mb-2">
+                      {isNL ? 'Verde Alpi • Nero Marquina' : 'Verde Alpi • Nero Marquina'}
+                    </p>
+                    <p className="text-sm text-muted-foreground/70">
+                      {isNL ? '& andere zeldzame steensoorten' : '& other rare stone types'}
+                    </p>
+                  </div>
                 </div>
               </div>
 

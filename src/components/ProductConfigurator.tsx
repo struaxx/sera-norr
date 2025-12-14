@@ -12,7 +12,7 @@ const materials = [
   { id: 'calacattaViola', color: '#F5F0F5' },
   { id: 'verdeAlpi', color: '#2D4A3E' },
   { id: 'neroMarquina', color: '#1A1A1A' },
-  { id: 'concrete', color: '#8C8C8C' },
+  
 ];
 
 const finishes = ['polished', 'honed', 'matte', 'natural'];

@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SEOHead, Breadcrumbs, FAQSection, generateCollectionSchema, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
-import nordImage from "@/assets/nord-collection.jpg";
+
 
 const collectionsData = {
   terra: {
@@ -101,53 +101,6 @@ All VANTA furniture is crafted with the highest precision. The material demands 
       { question: "How are the veins in the marble matched?", answer: "For larger surfaces we apply 'bookmatching': two slabs are placed side by side like an opened book, so the veins mirror each other. This creates a symmetrical, spectacular pattern. The exact matching is determined in consultation with you." },
       { question: "Is Calacatta Viola suitable for daily use?", answer: "Yes, if properly maintained. Calacatta Viola is a dense marble that withstands daily use well. We apply a professional sealant that protects the surface from stains. Regular maintenance extends the lifespan." },
       { question: "Can I select a specific piece of marble for my furniture?", answer: "Absolutely. For VANTA projects we invite clients to select the material in person, or we send detailed photos of available slabs. This gives you full control over the end result." },
-    ],
-  },
-  nord: {
-    name: "NORD",
-    subtitle: "Minerale Composieten",
-    subtitleEn: "Mineral Composites",
-    metaTitle: "NORD Collectie — Architecturaal Beton & Minerale Composieten",
-    metaTitleEn: "NORD Collection — Architectural Concrete & Mineral Composites",
-    metaDescription: "Ontdek de NORD collectie: brutalistische meubels in architecturaal beton en minerale composieten. Eettafels, banken en plinten met ruwe elegantie.",
-    metaDescriptionEn: "Discover the NORD collection: brutalist furniture in architectural concrete and mineral composites. Dining tables, benches and plinths with raw elegance.",
-    keywords: "betonnen meubels, architecturaal beton, brutalistische meubels, NORD collectie, minerale composieten, moderne eettafel",
-    description: "Ruw beton ontmoet verfijnde minerale aggregaten. Brutalistische elegantie voor het moderne interieur.",
-    descriptionEn: "Raw concrete meets refined mineral aggregates. Brutalist elegance for the modern interior.",
-    longDescription: `NORD verkent het architecturale potentieel van minerale composieten—beton verrijkt met zorgvuldig geselecteerde aggregaten die zich door het oppervlak onthullen. De collectie put uit Scandinavisch brutalisme en Japans minimalisme.
-
-Elk NORD stuk balanceert ruwe textuur met verfijnde verhoudingen. De collectie spreekt tot wie schoonheid vindt in terughoudendheid, gewicht en eerlijke materiaalexpressie.
-
-Het beton dat wij gebruiken is niet het beton van bouwplaatsen. Het is een gecontroleerde formulering met premium aggregaten, uitgehard onder optimale omstandigheden voor maximale sterkte en een uniform oppervlak. De kleur varieert van antraciet tot licht grijs, afhankelijk van de gekozen mix.
-
-NORD meubels zijn verrassend licht voor hun uiterlijk, dankzij holle constructies en geavanceerde giettechnieken. Maatwerk is standaard—afmetingen en afwerkingen worden aangepast aan uw project.`,
-    longDescriptionEn: `NORD explores the architectural potential of mineral composites—concrete enhanced with carefully selected aggregates that reveal themselves through the surface. The collection draws from Nordic brutalism and Japanese minimalism.
-
-Each NORD piece balances raw texture with refined proportions. The collection speaks to those who find beauty in restraint, weight, and honest material expression.
-
-The concrete we use is not construction site concrete. It is a controlled formulation with premium aggregates, cured under optimal conditions for maximum strength and a uniform surface. The colour varies from anthracite to light grey, depending on the chosen mix.
-
-NORD furniture is surprisingly light for its appearance, thanks to hollow constructions and advanced casting techniques. Custom work is standard—dimensions and finishes are adapted to your project.`,
-    image: nordImage,
-    materials: ["Minerale Composiet", "Natuurlijke Aggregaten", "Matte Afwerking"],
-    materialsEn: ["Mineral Composite", "Natural Aggregates", "Matte Finish"],
-    products: [
-      { id: 1, name: "NORD Eettafel — Block", nameEn: "NORD Dining Table — Block", price: "Vanaf €4.200", priceEn: "From €4,200", dimensions: "L200 × B100 × H75 cm" },
-      { id: 2, name: "NORD Bijzettafel — Sculpturaal", nameEn: "NORD Side Table — Sculptural", price: "Vanaf €1.600", priceEn: "From €1,600", dimensions: "Ø40 × H50 cm" },
-      { id: 3, name: "NORD Bank — Monolithisch", nameEn: "NORD Bench — Monolithic", price: "Vanaf €2.800", priceEn: "From €2,800", dimensions: "L160 × B40 × H45 cm" },
-      { id: 4, name: "NORD Plint — Display", nameEn: "NORD Plinth — Display", price: "Vanaf €1.200", priceEn: "From €1,200", dimensions: "B40 × D40 × H100 cm" },
-    ],
-    faqs: [
-      { question: "Zijn betonnen meubels niet erg zwaar?", answer: "NORD meubels zijn verrassend lichter dan ze eruitzien. We gebruiken holle constructies en geavanceerde giettechnieken waardoor het gewicht beheersbaar blijft. Een NORD salontafel is vergelijkbaar in gewicht met een houten variant." },
-      { question: "Kan beton kraken of scheuren?", answer: "Ons architecturaal beton is versterkt met glasvezel en uitgehard onder gecontroleerde omstandigheden, wat scheuren minimaliseert. Kleine haarscheurtjes kunnen na verloop van tijd ontstaan—dit is normaal en draagt bij aan het karakter van het materiaal." },
-      { question: "Welke kleuren en afwerkingen zijn beschikbaar?", answer: "NORD beton is beschikbaar in antraciet, natuurlijk grijs en licht grijs. Afwerkingen variëren van ruw tot glad gepolijst. Op verzoek kunnen we aangepaste kleurmengsels ontwikkelen met pigmenten of speciale aggregaten." },
-      { question: "Hoe onderhoud ik betonnen meubels?", answer: "Beton vereist minimaal onderhoud. Regelmatig afstoffen en af en toe reinigen met een vochtige doek volstaat. Wij brengen een sealant aan die het oppervlak beschermt. Vermijd langdurig contact met vloeistoffen." },
-    ],
-    faqsEn: [
-      { question: "Aren't concrete furniture pieces very heavy?", answer: "NORD furniture is surprisingly lighter than it looks. We use hollow constructions and advanced casting techniques that keep the weight manageable. A NORD coffee table is comparable in weight to a wooden variant." },
-      { question: "Can concrete crack or break?", answer: "Our architectural concrete is reinforced with glass fibre and cured under controlled conditions, which minimises cracking. Small hairline cracks may develop over time—this is normal and adds to the character of the material." },
-      { question: "What colours and finishes are available?", answer: "NORD concrete is available in anthracite, natural grey and light grey. Finishes range from rough to smooth polished. On request we can develop custom colour mixes with pigments or special aggregates." },
-      { question: "How do I maintain concrete furniture?", answer: "Concrete requires minimal maintenance. Regular dusting and occasional cleaning with a damp cloth is sufficient. We apply a sealant that protects the surface. Avoid prolonged contact with liquids." },
     ],
   },
 };
