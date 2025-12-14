@@ -330,20 +330,14 @@ const Collections = () => {
                 </div>
               </div>
 
-              {/* CTAs - refined */}
-              <div className="flex flex-wrap items-baseline gap-5">
+              {/* CTA */}
+              <div>
                 <Button asChild variant="atelier">
                   <Link to="/materials">
                     {t("collections.other.cta")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Link 
-                  to="/bespoke" 
-                  className="text-xs uppercase tracking-[0.15em] text-muted-foreground/70 hover:text-foreground hover:underline underline-offset-4 transition-colors"
-                >
-                  {t("collections.cta.requestProposal")}
-                </Link>
               </div>
             </div>
           </div>
