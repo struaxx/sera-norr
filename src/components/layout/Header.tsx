@@ -11,6 +11,9 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
+  // Check if on homepage (transparent header with hero)
+  const isHomePage = location.pathname === "/";
+
   // Simplified navigation: 5 items max
   const navLinks = [
     { name: t('nav.collections'), path: "/collections" },
@@ -29,7 +32,10 @@ export function Header() {
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
-  }, [location]);
+  }, []);
+
+  // Determine text color: white on homepage hero (not scrolled), dark otherwise
+  const isLightText = isHomePage && !isScrolled;
 
   return (
     <>
@@ -50,9 +56,11 @@ export function Header() {
                 to={link.path}
                 className={cn(
                   "font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300 link-underline",
-                  location.pathname === link.path
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                  isLightText
+                    ? "text-white/80 hover:text-white"
+                    : location.pathname === link.path
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {link.name}
@@ -63,7 +71,10 @@ export function Header() {
           {/* Logo */}
           <Link
             to="/"
-            className="font-serif text-xl lg:text-2xl tracking-[0.15em] text-foreground"
+            className={cn(
+              "font-serif text-xl lg:text-2xl tracking-[0.15em] transition-colors duration-300",
+              isLightText ? "text-white" : "text-foreground"
+            )}
           >
             SERA NORR
           </Link>
@@ -76,22 +87,27 @@ export function Header() {
                 to={link.path}
                 className={cn(
                   "font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300 link-underline",
-                  location.pathname === link.path
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                  isLightText
+                    ? "text-white/80 hover:text-white"
+                    : location.pathname === link.path
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {link.name}
               </Link>
             ))}
-            <LanguageSwitcher />
+            <LanguageSwitcher isLight={isLightText} />
           </div>
 
           <div className="lg:hidden flex items-center gap-3">
-            <LanguageSwitcher />
+            <LanguageSwitcher isLight={isLightText} />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 -mr-2 text-foreground"
+              className={cn(
+                "p-2 -mr-2 transition-colors duration-300",
+                isLightText ? "text-white" : "text-foreground"
+              )}
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
