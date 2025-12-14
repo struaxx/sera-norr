@@ -4,15 +4,13 @@ import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { fetchProductByHandle } from "@/lib/shopify";
-import { useCartStore, CartItem } from "@/stores/cartStore";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SEOHead, generateProductSchema, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { USPBullets, ServicePromises, BespokeTimeline } from "@/components/trust";
 import { OptimizedImage } from "@/components/ui/optimized-image";
-import { trackViewItem, trackAddToCart } from "@/lib/analytics";
+import { trackViewItem } from "@/lib/analytics";
 
 interface ProductData {
   id: string;
@@ -62,9 +60,7 @@ const ProductDetail = () => {
   const isNL = i18n.language === 'nl';
   const [product, setProduct] = useState<ProductData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
-  const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -73,9 +69,6 @@ const ProductDetail = () => {
       try {
         const data = await fetchProductByHandle(handle);
         setProduct(data);
-        if (data?.variants.edges.length > 0) {
-          setSelectedVariant(data.variants.edges[0].node.id);
-        }
         // Track view_item event
         if (data) {
           trackViewItem({
@@ -94,44 +87,6 @@ const ProductDetail = () => {
 
     loadProduct();
   }, [handle]);
-
-  const handleAddToCart = () => {
-    if (!product || !selectedVariant) return;
-
-    const variant = product.variants.edges.find(
-      (v) => v.node.id === selectedVariant
-    )?.node;
-
-    if (!variant) return;
-
-    const cartItem: CartItem = {
-      product: {
-        node: product,
-      },
-      variantId: variant.id,
-      variantTitle: variant.title,
-      price: variant.price,
-      quantity: 1,
-      selectedOptions: variant.selectedOptions,
-    };
-
-    addItem(cartItem);
-
-    // Track add_to_cart event
-    trackAddToCart({
-      id: product.id,
-      name: product.title,
-      price: parseFloat(variant.price.amount),
-      currency: variant.price.currencyCode,
-      quantity: 1,
-      variant: variant.title,
-    });
-
-    toast.success(isNL ? "Toegevoegd aan winkeltas" : "Added to bag", {
-      description: product.title,
-      position: "top-center",
-    });
-  };
 
   if (loading) {
     return (
@@ -181,7 +136,6 @@ const ProductDetail = () => {
   const images = product.images.edges;
   const currentImage = images[selectedImage]?.node;
   const price = product.priceRange.minVariantPrice;
-  const hasMultipleVariants = product.variants.edges.length > 1;
 
   // SEO structured data
   const productSchema = generateProductSchema({
@@ -274,8 +228,11 @@ const ProductDetail = () => {
               <h1 className="font-serif text-display-sm text-foreground mb-4">
                 {product.title}
               </h1>
-              <p className="text-xl text-foreground mb-4">
-                {price.currencyCode} {parseFloat(price.amount).toFixed(0)}
+              <p className="text-lg text-muted-foreground mb-2">
+                {isNL ? 'Vanaf' : 'From'} {price.currencyCode} {parseFloat(price.amount).toFixed(0)}
+              </p>
+              <p className="text-sm text-muted-foreground mb-6">
+                {isNL ? 'Maatwerk mogelijk — op aanvraag' : 'Custom sizes available — on request'}
               </p>
 
               {/* USP Bullets - Above the fold */}
@@ -289,40 +246,17 @@ const ProductDetail = () => {
                 </p>
               )}
 
-              {/* Variant Selector */}
-              {hasMultipleVariants && (
-                <div className="mb-6">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {isNL ? 'Variant' : 'Variant'}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {product.variants.edges.map((variant) => (
-                      <button
-                        key={variant.node.id}
-                        onClick={() => setSelectedVariant(variant.node.id)}
-                        disabled={!variant.node.availableForSale}
-                        className={`px-4 py-2 text-sm border transition-colors ${
-                          selectedVariant === variant.node.id
-                            ? "border-foreground bg-foreground text-background"
-                            : variant.node.availableForSale
-                            ? "border-border hover:border-foreground"
-                            : "border-border opacity-50 cursor-not-allowed"
-                        }`}
-                      >
-                        {variant.node.title}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
+              {/* Primary CTA - Request Proposal */}
               <Button
-                onClick={handleAddToCart}
+                asChild
                 variant="atelier-filled"
                 size="lg"
                 className="w-full mb-4"
               >
-                {isNL ? 'Toevoegen aan winkeltas' : 'Add to bag'}
+                <Link to="/bespoke">
+                  {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
 
               {/* Service Promises / Trust Elements */}
@@ -330,24 +264,19 @@ const ProductDetail = () => {
                 <ServicePromises variant="compact" />
               </div>
 
-              {/* Bespoke CTA - Improved */}
+              {/* Bespoke Info */}
               <div className="mt-8 p-6 bg-secondary/30 border border-border/50">
                 <p className="font-serif text-lg text-foreground mb-2">
-                  {isNL ? 'Andere afmetingen of materiaal?' : 'Different dimensions or material?'}
+                  {isNL ? 'Hoe werkt het?' : 'How does it work?'}
                 </p>
                 <p className="text-sm text-muted-foreground mb-4">
                   {isNL 
-                    ? 'Elk stuk kan op maat worden gemaakt. Ontvang binnen 48 uur een vrijblijvend voorstel.' 
-                    : 'Every piece can be made to measure. Receive a no-obligation proposal within 48 hours.'}
+                    ? 'Elk stuk wordt op maat gemaakt. Ontvang binnen 48 uur een voorstel met tekening, specificaties en prijsindicatie.' 
+                    : 'Every piece is made to measure. Receive a proposal within 48 hours including drawing, specifications and price indication.'}
                 </p>
                 <div className="mb-4">
                   <BespokeTimeline compact />
                 </div>
-                <Button asChild variant="atelier" size="sm" className="w-full">
-                  <Link to="/bespoke">
-                    {isNL ? 'Vraag maatwerk offerte aan' : 'Request bespoke quote'}
-                  </Link>
-                </Button>
               </div>
             </div>
           </div>
