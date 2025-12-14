@@ -90,14 +90,17 @@
     }
   },
   "collections": {
-    "intro": {
-      "line1": "SERA NORR presenteert verfijnde collecties in travertin, Calacatta Viola en andere steensoorten.",
-      "line2": "Natuurlijke materialen gevormd tot sculpturale, heldere ontwerpen. Een basis voor maatwerk in vorm, maat en detail."
+    "hero": {
+      "title": "Collecties",
+      "intro": "SERA NORR toont collecties in travertin, Calacatta Viola en geselecteerde steensoorten. Elke collectie is een vertrekpunt — wij maken elk stuk op maat, in vorm, maat en detail.",
+      "ctaPrimary": "Vraag voorstel aan",
+      "ctaSecondary": "Ontdek VANTA"
     },
     "terra": {
       "name": "TERRA",
       "subtitle": "Travertin",
       "description": "Travertin met rustige tinten en natuurlijke gelaagdheid. Ontwerpen met zachte kracht, duidelijke lijnen en een kalme aanwezigheid.",
+      "editorialCopy": "Travertin gevormd over millennia, met de herinnering aan water in elke laag. Warme, honingkleurige tinten en karakteristieke textuur. Geschikt voor wie rust en verfijning zoekt.",
       "cta": "Bekijk TERRA",
       "longDescription": "De TERRA collectie put uit de oeroude warmte van Italiaans travertin—steen gevormd over millennia uit minerale bronnen, met in zich de herinnering aan water. Elk stuk onthult de karakteristieke putjes en honingkleurige tinten die travertin tot een van de meest expressieve materialen van de natuur maken."
     },
@@ -105,23 +108,43 @@
       "name": "VANTA",
       "subtitle": "Calacatta Viola",
       "description": "Calacatta Viola met rijke aders en uitgesproken contrast. Strakke vormen die het materiaal laten spreken zonder overdaad.",
+      "editorialCopy": "Calacatta Viola uit de Apuaanse Alpen — een van de zeldzaamste marmersoorten ter wereld. Gedurfde violette aders tegen een lichtgevend wit. Voor interieurs die een krachtig statement vragen.",
       "cta": "Bekijk VANTA",
       "longDescription": "VANTA viert Calacatta Viola—een van de zeldzaamste en meest dramatische marmersoorten gewonnen uit de Apuaanse Alpen. De gedurfde violette aders tegen lichtgevend wit creëren stukken die evenzeer sculptuur als meubilair zijn."
     },
     "other": {
-      "name": "OTHER STONES",
+      "name": "Andere steensoorten",
       "subtitle": "Selectie op aanvraag",
-      "description": "Voor projecten met een specifieke steensoort of kleurtoon werken we met een geselecteerde materiaalkeuze buiten de vaste collecties.",
+      "description": "Voor projecten met een specifieke kleurtoon of steensoort werken we buiten de vaste collecties. Verde Alpi, Nero Marquina, en andere zeldzame steensoorten — wij zoeken het juiste materiaal voor uw project.",
       "cta": "Vraag materiaalopties aan"
     },
-    "optional": {
-      "line1": "Elke collectie is een uitgangspunt.",
-      "line2": "U kiest het materiaal en een basisvorm; wij passen maat en details aan op uw wensen."
+    "pricing": {
+      "title": "Vanafprijzen",
+      "diningTables": "Eettafels",
+      "coffeeTables": "Salontafels",
+      "consoles": "Consoles",
+      "onRequest": "Op aanvraag"
     },
-    "endCta": {
-      "title": "Stel uw stuk samen.",
-      "description": "Gebruik de configurator om materiaal, vorm en afmetingen te bepalen.",
-      "button": "Vraag voorstel aan"
+    "cta": {
+      "discover": "Ontdek collectie",
+      "requestProposal": "Vraag voorstel aan"
+    },
+    "process": {
+      "title": "Van collectie naar voorstel",
+      "step1": {
+        "title": "Kies collectie + basisvorm",
+        "description": "Selecteer materiaal en type meubel als vertrekpunt."
+      },
+      "step2": {
+        "title": "Bepaal maat + afwerking",
+        "description": "Deel uw gewenste afmetingen en afwerkingsvoorkeuren."
+      },
+      "step3": {
+        "title": "Ontvang voorstel",
+        "description": "Tekening, specificaties en prijsindicatie op maat."
+      },
+      "cta": "Vraag voorstel aan",
+      "microcopy": "Binnen 24–48 uur een eerste reactie van het atelier."
     },
     "notFound": "Collectie Niet Gevonden",
     "viewAllButton": "Bekijk Alle Collecties",
