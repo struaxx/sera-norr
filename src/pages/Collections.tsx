@@ -8,6 +8,8 @@ import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
+import vantaImage from "@/assets/vanta-collection.jpg";
+import terraImage from "@/assets/terra-collection.jpg";
 
 const Collections = () => {
   const { t, i18n } = useTranslation();
@@ -29,18 +31,32 @@ const Collections = () => {
     loadCollections();
   }, []);
 
+  // Map collections to get images
+  const getCollectionImage = (handle: string) => {
+    if (handle === 'frontpage' || handle === 'vanta') return vantaImage;
+    if (handle === 'terra') return terraImage;
+    return null;
+  };
+
   const seoTitle = isNL 
     ? "Collecties | Travertin & Calacatta Viola Meubels | SERA NORR"
     : "Collections | Travertine & Calacatta Viola Furniture | SERA NORR";
 
   const seoDescription = isNL
-    ? "Ontdek onze collecties stenen meubels. TERRA collectie in travertin en VANTA collectie in Calacatta Viola marmer. Ontworpen in Nederland."
-    : "Discover our stone furniture collections. TERRA collection in travertine and VANTA collection in Calacatta Viola marble. Designed in the Netherlands.";
+    ? "SERA NORR toont collecties in travertin, Calacatta Viola en geselecteerde steensoorten. Elk stuk op maat, in vorm, maat en detail."
+    : "SERA NORR presents collections in travertine, Calacatta Viola and selected stone types. Every piece made to measure, in form, size and detail.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: isNL ? 'Collecties' : 'Collections', url: '/collections' },
   ]);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <Layout>
@@ -48,164 +64,301 @@ const Collections = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "collecties, travertin meubels, Calacatta Viola, stenen tafels, marmeren meubels, luxe design" 
-          : "collections, travertine furniture, Calacatta Viola, stone tables, marble furniture, luxury design"}
+          ? "collecties, travertin meubels, Calacatta Viola, stenen tafels, marmeren meubels, maatwerk" 
+          : "collections, travertine furniture, Calacatta Viola, stone tables, marble furniture, bespoke"}
         structuredData={breadcrumbSchema}
       />
 
-      {/* Intro Block */}
-      <section className="pt-32 lg:pt-40 pb-16 lg:pb-24 bg-background">
+      {/* Hero Section */}
+      <section className="pt-32 lg:pt-40 pb-12 lg:pb-16 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <Breadcrumbs className="mb-8" />
+          <Breadcrumbs className="mb-6" />
           
-          <header className="max-w-3xl">
-            <h1 className="sr-only">{isNL ? 'Collecties' : 'Collections'}</h1>
-            <p className="text-muted-foreground text-body-lg leading-relaxed animate-fade-in">
-              {t("collections.intro.line1")}
-            </p>
-            <p className="text-muted-foreground text-body-lg leading-relaxed mt-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              {t("collections.intro.line2")}
+          <header className="max-w-3xl mb-8">
+            <h1 className="font-serif text-display-md text-foreground mb-6">
+              {t("collections.hero.title")}
+            </h1>
+            <p className="text-muted-foreground text-body-lg leading-relaxed">
+              {t("collections.hero.intro")}
             </p>
           </header>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap gap-4 mb-10">
+            <Button asChild variant="atelier-filled">
+              <Link to="/bespoke">
+                {t("collections.hero.ctaPrimary")}
+              </Link>
+            </Button>
+            <Button asChild variant="atelier">
+              <Link to="/collections/vanta">
+                {t("collections.hero.ctaSecondary")}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+
+          {/* Anchor Links */}
+          <nav className="flex flex-wrap gap-6 border-t border-border pt-6">
+            <button 
+              onClick={() => scrollToSection('vanta')}
+              className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+            >
+              VANTA
+            </button>
+            <button 
+              onClick={() => scrollToSection('terra')}
+              className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+            >
+              TERRA
+            </button>
+            <button 
+              onClick={() => scrollToSection('andere-steensoorten')}
+              className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {isNL ? 'Andere steensoorten' : 'Other stones'}
+            </button>
+          </nav>
         </div>
       </section>
 
-      {/* Collections List */}
-      <section className="pb-section bg-background">
+      {/* VANTA Collection */}
+      <section id="vanta" className="py-12 lg:py-16 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="space-y-24 lg:space-y-32">
-            {loading ? (
-              // Loading skeletons
-              [1, 2].map((i) => (
-                <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                  <Skeleton className="aspect-[4/5] w-full" />
-                  <div className="space-y-4">
-                    <Skeleton className="h-10 w-1/2" />
-                    <Skeleton className="h-4 w-1/4" />
-                    <Skeleton className="h-24 w-full" />
-                    <Skeleton className="h-10 w-32" />
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Image */}
+            <div className="image-reveal">
+              <Link to="/collections/vanta">
+                <div className="aspect-[4/5] bg-muted overflow-hidden">
+                  <img
+                    src={vantaImage}
+                    alt={isNL ? "VANTA collectie - Calacatta Viola marmer meubels" : "VANTA collection - Calacatta Viola marble furniture"}
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  />
                 </div>
-              ))
-            ) : collections.length > 0 ? (
-              collections.map((collection, index) => (
-                <article
-                  key={collection.node.id}
-                  className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center ${
-                    index % 2 === 1 ? "lg:grid-flow-dense" : ""
-                  }`}
-                >
-                  {/* Image */}
-                  <div className={`image-reveal ${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
-                    <Link to={`/collections/${collection.node.handle}`}>
-                      <div className="aspect-[4/5] bg-muted overflow-hidden">
-                        {collection.node.image ? (
-                          <img
-                            src={collection.node.image.url}
-                            alt={collection.node.image.altText || `${collection.node.title} ${isNL ? 'collectie' : 'collection'}`}
-                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-secondary/50 flex items-center justify-center">
-                            <span className="text-muted-foreground font-serif text-3xl">{collection.node.title}</span>
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-                  </div>
+              </Link>
+            </div>
 
-                  {/* Content */}
-                  <div className={`flex flex-col justify-center ${index % 2 === 1 ? "lg:col-start-1" : ""}`}>
-                    <h2 className="font-serif text-display-sm text-foreground mb-2">
-                      {collection.node.title}
-                    </h2>
-                    {collection.node.description && (
-                      <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
-                        {collection.node.description}
-                      </p>
-                    )}
-                    <div>
-                      <Button asChild variant="atelier">
-                        <Link to={`/collections/${collection.node.handle}`}>
-                          {isNL ? 'Bekijk collectie' : 'View collection'}
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                </article>
-              ))
-            ) : (
-              <p className="text-muted-foreground text-center py-12">
-                {isNL ? 'Geen collecties gevonden.' : 'No collections found.'}
+            {/* Content */}
+            <div className="flex flex-col justify-center">
+              <h2 className="font-serif text-display-sm text-foreground mb-2">
+                {t("collections.vanta.name")}
+              </h2>
+              <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
+                {t("collections.vanta.subtitle")}
               </p>
-            )}
+              <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
+                {t("collections.vanta.editorialCopy")}
+              </p>
 
-            {/* Other Stones - Special Block */}
-            <article className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-              {/* Placeholder Image */}
-              <div className="image-reveal">
-                <div className="aspect-[4/5] bg-sand/30 overflow-hidden flex items-center justify-center border border-border/30">
-                  <div className="text-center p-12">
-                    <p className="font-serif text-lg text-muted-foreground mb-2">
-                      {isNL ? 'Verde Alpi • Nero Marquina' : 'Verde Alpi • Nero Marquina'}
-                    </p>
-                    <p className="text-sm text-muted-foreground/70">
-                      {isNL ? '& andere zeldzame steensoorten' : '& other rare stone types'}
-                    </p>
-                  </div>
+              {/* Pricing Block */}
+              <div className="bg-ivory/50 p-6 mb-8 border border-border/30">
+                <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground mb-4">
+                  {t("collections.pricing.title")}
+                </p>
+                <div className="space-y-2 text-foreground">
+                  <p className="flex justify-between">
+                    <span>{t("collections.pricing.diningTables")}</span>
+                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span>{t("collections.pricing.coffeeTables")}</span>
+                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span>{t("collections.pricing.consoles")}</span>
+                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
+                  </p>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="flex flex-col justify-center">
-                <h2 className="font-serif text-display-sm text-foreground mb-2">
-                  {t("collections.other.name")}
-                </h2>
-                <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
-                  {t("collections.other.subtitle")}
-                </p>
-                <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
-                  {t("collections.other.description")}
-                </p>
-                <div>
-                  <Button asChild variant="atelier">
-                    <Link to="/contact">
-                      {t("collections.other.cta")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-4">
+                <Button asChild variant="atelier">
+                  <Link to="/collections/vanta">
+                    {t("collections.cta.discover")}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link to="/bespoke">
+                    {t("collections.cta.requestProposal")}
+                  </Link>
+                </Button>
               </div>
-            </article>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Optional Block */}
-      <section className="py-16 lg:py-24 bg-ivory/50">
-        <div className="container mx-auto px-6 lg:px-12 text-center">
-          <p className="text-muted-foreground text-body-lg max-w-2xl mx-auto leading-relaxed">
-            {t("collections.optional.line1")}
-          </p>
-          <p className="text-muted-foreground text-body-md max-w-xl mx-auto mt-4">
-            {t("collections.optional.line2")}
-          </p>
+      {/* TERRA Collection */}
+      <section id="terra" className="py-12 lg:py-16 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center lg:grid-flow-dense">
+            {/* Image */}
+            <div className="image-reveal lg:col-start-2">
+              <Link to="/collections/terra">
+                <div className="aspect-[4/5] bg-muted overflow-hidden">
+                  <img
+                    src={terraImage}
+                    alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  />
+                </div>
+              </Link>
+            </div>
+
+            {/* Content */}
+            <div className="flex flex-col justify-center lg:col-start-1">
+              <h2 className="font-serif text-display-sm text-foreground mb-2">
+                {t("collections.terra.name")}
+              </h2>
+              <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
+                {t("collections.terra.subtitle")}
+              </p>
+              <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
+                {t("collections.terra.editorialCopy")}
+              </p>
+
+              {/* Pricing Block */}
+              <div className="bg-ivory/50 p-6 mb-8 border border-border/30">
+                <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground mb-4">
+                  {t("collections.pricing.title")}
+                </p>
+                <div className="space-y-2 text-foreground">
+                  <p className="flex justify-between">
+                    <span>{t("collections.pricing.diningTables")}</span>
+                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span>{t("collections.pricing.coffeeTables")}</span>
+                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span>{t("collections.pricing.consoles")}</span>
+                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-4">
+                <Button asChild variant="atelier">
+                  <Link to="/collections/terra">
+                    {t("collections.cta.discover")}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link to="/bespoke">
+                    {t("collections.cta.requestProposal")}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* End CTA */}
-      <section className="section-padding bg-background">
-        <div className="container mx-auto px-6 lg:px-12 text-center">
-          <h2 className="font-serif text-display-sm text-foreground mb-4">
-            {t("collections.endCta.title")}
-          </h2>
-          <p className="text-muted-foreground text-body-md max-w-xl mx-auto mb-8">
-            {t("collections.endCta.description")}
-          </p>
-          <Button asChild variant="atelier-filled">
-            <Link to="/bespoke">{t("collections.endCta.button")}</Link>
-          </Button>
+      {/* Other Stones */}
+      <section id="andere-steensoorten" className="py-12 lg:py-16 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Placeholder Image */}
+            <div className="image-reveal">
+              <div className="aspect-[4/5] bg-sand/30 overflow-hidden flex items-center justify-center border border-border/30">
+                <div className="text-center p-12">
+                  <p className="font-serif text-lg text-muted-foreground mb-2">
+                    Verde Alpi • Nero Marquina
+                  </p>
+                  <p className="text-sm text-muted-foreground/70">
+                    {isNL ? '& andere steensoorten' : '& other stone types'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex flex-col justify-center">
+              <h2 className="font-serif text-display-sm text-foreground mb-2">
+                {t("collections.other.name")}
+              </h2>
+              <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
+                {t("collections.other.subtitle")}
+              </p>
+              <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
+                {t("collections.other.description")}
+              </p>
+              <div>
+                <Button asChild variant="atelier">
+                  <Link to="/materials">
+                    {t("collections.other.cta")}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section - Van collectie naar voorstel */}
+      <section className="py-16 lg:py-20 bg-ivory/50">
+        <div className="container mx-auto px-6 lg:px-12">
+          <header className="text-center mb-12">
+            <h2 className="font-serif text-display-sm text-foreground mb-4">
+              {t("collections.process.title")}
+            </h2>
+          </header>
+
+          {/* Steps */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-12">
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-4 font-serif text-lg">
+                1
+              </div>
+              <h3 className="font-serif text-lg text-foreground mb-2">
+                {t("collections.process.step1.title")}
+              </h3>
+              <p className="text-muted-foreground text-sm">
+                {t("collections.process.step1.description")}
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-4 font-serif text-lg">
+                2
+              </div>
+              <h3 className="font-serif text-lg text-foreground mb-2">
+                {t("collections.process.step2.title")}
+              </h3>
+              <p className="text-muted-foreground text-sm">
+                {t("collections.process.step2.description")}
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-4 font-serif text-lg">
+                3
+              </div>
+              <h3 className="font-serif text-lg text-foreground mb-2">
+                {t("collections.process.step3.title")}
+              </h3>
+              <p className="text-muted-foreground text-sm">
+                {t("collections.process.step3.description")}
+              </p>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <Button asChild variant="atelier-filled" size="lg">
+              <Link to="/bespoke">
+                {t("collections.process.cta")}
+              </Link>
+            </Button>
+            <p className="text-muted-foreground text-sm mt-4">
+              {t("collections.process.microcopy")}
+            </p>
+          </div>
         </div>
       </section>
     </Layout>
