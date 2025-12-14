@@ -69,9 +69,20 @@ const Index = () => {
   const getStartingPrice = (handle: string) => {
     const prices: Record<string, string> = {
       'terra': '€4.200',
-      'vanta': '€6.800',
+      'vanta': '€4.000',
     };
     return prices[handle.toLowerCase()] || '€4.000';
+  };
+
+  // Get Dutch description for collections
+  const getCollectionDescription = (handle: string, originalDescription: string) => {
+    if (!isNL) return originalDescription;
+    
+    const dutchDescriptions: Record<string, string> = {
+      'vanta': 'De VANTA Collectie is vervaardigd uit Calacatta Viola marmer, een zeldzame steen bekend om zijn rijke paarse adering en luxueuze uitstraling. Elk stuk is uniek in kleur en karakter.',
+      'terra': 'De TERRA Collectie is vervaardigd uit natuurlijk travertin, een steen gewaardeerd om zijn warme beigetinten en tijdloze karakter. Elke tafel toont unieke lagen en texturen gevormd door eeuwen.',
+    };
+    return dutchDescriptions[handle.toLowerCase()] || originalDescription;
   };
 
   return (
@@ -203,7 +214,7 @@ const Index = () => {
                     </h3>
                     {collection.node.description && (
                       <p className="font-sans text-sm text-muted-foreground line-clamp-2">
-                        {collection.node.description}
+                        {getCollectionDescription(collection.node.handle, collection.node.description)}
                       </p>
                     )}
                     <p className="font-sans text-sm text-foreground">
