@@ -147,7 +147,7 @@ const Collections = () => {
       </section>
 
       {/* Sticky Section Navigation Tabs */}
-      <nav className="sticky top-16 lg:top-20 z-50 bg-background border-b border-border/20 shadow-sm">
+      <nav className="sticky top-16 lg:top-20 z-[100] bg-[hsl(var(--background))] border-b border-border/20 shadow-sm isolate">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex gap-6 lg:gap-8 py-3">
             <TabButton 
