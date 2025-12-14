@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingBag, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
+import { trackViewCart, trackBeginCheckout, trackRemoveFromCart } from "@/lib/analytics";
 
 export const CartDrawer = () => {
   const { t } = useTranslation();
@@ -28,7 +29,47 @@ export const CartDrawer = () => {
   const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
   const currencyCode = items[0]?.price.currencyCode || 'EUR';
 
+  // Track view_cart when drawer opens
+  useEffect(() => {
+    if (isOpen && items.length > 0) {
+      trackViewCart(
+        items.map(item => ({
+          id: item.product.node.id,
+          name: item.product.node.title,
+          price: parseFloat(item.price.amount),
+          currency: item.price.currencyCode,
+          quantity: item.quantity,
+        }))
+      );
+    }
+  }, [isOpen, items]);
+
+  const handleRemoveItem = (variantId: string) => {
+    const item = items.find(i => i.variantId === variantId);
+    if (item) {
+      trackRemoveFromCart({
+        id: item.product.node.id,
+        name: item.product.node.title,
+        price: parseFloat(item.price.amount),
+        currency: item.price.currencyCode,
+        quantity: item.quantity,
+      });
+    }
+    removeItem(variantId);
+  };
+
   const handleCheckout = async () => {
+    // Track begin_checkout event
+    trackBeginCheckout(
+      items.map(item => ({
+        id: item.product.node.id,
+        name: item.product.node.title,
+        price: parseFloat(item.price.amount),
+        currency: item.price.currencyCode,
+        quantity: item.quantity,
+      }))
+    );
+
     try {
       const checkoutUrl = await createCheckout();
       if (checkoutUrl) {
@@ -120,7 +161,7 @@ export const CartDrawer = () => {
                             variant="ghost"
                             size="icon"
                             className="h-7 w-7 ml-auto"
-                            onClick={() => removeItem(item.variantId)}
+                            onClick={() => handleRemoveItem(item.variantId)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>

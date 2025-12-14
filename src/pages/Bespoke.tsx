@@ -12,6 +12,7 @@ import { TrustBadges, BespokeTimeline, USPBullets } from "@/components/trust";
 import { ArrowRight, Calendar, FileText, MessageSquare } from "lucide-react";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
+import { trackLeadSubmit } from "@/lib/analytics";
 
 const Bespoke = () => {
   const { t, i18n } = useTranslation();
@@ -28,6 +29,12 @@ const Bespoke = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Track lead submission
+    trackLeadSubmit('bespoke', {
+      productType: formData.projectType,
+    });
+
     toast({
       title: t('bespoke.formSuccess'),
       description: t('bespoke.formSuccessDescription'),

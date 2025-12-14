@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import { SEOHead, generateProductSchema, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { USPBullets, ServicePromises, BespokeTimeline } from "@/components/trust";
+import { OptimizedImage } from "@/components/ui/optimized-image";
+import { trackViewItem, trackAddToCart } from "@/lib/analytics";
 
 interface ProductData {
   id: string;
@@ -74,6 +76,15 @@ const ProductDetail = () => {
         if (data?.variants.edges.length > 0) {
           setSelectedVariant(data.variants.edges[0].node.id);
         }
+        // Track view_item event
+        if (data) {
+          trackViewItem({
+            id: data.id,
+            name: data.title,
+            price: parseFloat(data.priceRange.minVariantPrice.amount),
+            currency: data.priceRange.minVariantPrice.currencyCode,
+          });
+        }
       } catch (error) {
         console.error("Failed to fetch product:", error);
       } finally {
@@ -105,6 +116,17 @@ const ProductDetail = () => {
     };
 
     addItem(cartItem);
+
+    // Track add_to_cart event
+    trackAddToCart({
+      id: product.id,
+      name: product.title,
+      price: parseFloat(variant.price.amount),
+      currency: variant.price.currencyCode,
+      quantity: 1,
+      variant: variant.title,
+    });
+
     toast.success(isNL ? "Toegevoegd aan winkeltas" : "Added to bag", {
       description: product.title,
       position: "top-center",
@@ -212,12 +234,16 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Images */}
             <div className="space-y-4">
-              <div className="aspect-[4/5] bg-ivory/50 overflow-hidden">
+              <div className="aspect-[4/5] overflow-hidden">
                 {currentImage && (
-                  <img
+                  <OptimizedImage
                     src={currentImage.url}
                     alt={currentImage.altText || `${product.title} - ${isNL ? 'SERA NORR stenen meubel' : 'SERA NORR stone furniture'}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
+                    width={800}
+                    height={1000}
+                    priority
+                    placeholder="blur"
                   />
                 )}
               </div>
