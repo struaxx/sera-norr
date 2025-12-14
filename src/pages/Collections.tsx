@@ -289,20 +289,14 @@ const Collections = () => {
       <section id="andere-steensoorten" className="py-8 lg:py-12 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-            {/* Image with overlay caption */}
-            <div className="image-reveal relative">
+            {/* Image */}
+            <div className="image-reveal">
               <div className="aspect-[4/5] bg-muted overflow-hidden">
                 <img
                   src={otherStonesImage}
                   alt={isNL ? "Materiaalmonsters en ontwerptekening voor maatwerk steenmeubels" : "Material samples and design drawing for bespoke stone furniture"}
                   className="w-full h-full object-cover"
                 />
-              </div>
-              {/* Overlay caption - refined */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-foreground/50 to-transparent">
-                <p className="text-[11px] uppercase tracking-[0.25em] text-background/70">
-                  Verde Alpi · Nero Marquina · {isNL ? "Selectie op aanvraag" : "Selection on request"}
-                </p>
               </div>
             </div>
 
