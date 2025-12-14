@@ -153,7 +153,7 @@ const Collections = () => {
           </header>
 
           {/* CTA Button */}
-          <div>
+          <div className="mb-8">
             <Button asChild variant="atelier-filled" size="sm" className="text-xs px-5 py-2.5">
               <Link to="/bespoke">
                 {t("collections.hero.ctaPrimary")}
@@ -161,13 +161,9 @@ const Collections = () => {
               </Link>
             </Button>
           </div>
-        </div>
-      </section>
 
-      {/* Fixed Section Navigation Tabs - positioned directly under header */}
-      <div className="fixed top-[64px] lg:top-[72px] left-0 right-0 z-[100] bg-background border-b border-border/30">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex gap-6 lg:gap-8">
+          {/* Section Navigation Tabs - editorial, non-sticky */}
+          <nav className="flex gap-8 lg:gap-10">
             <TabButton 
               onClick={() => scrollToSection('vanta')}
               label="VANTA"
@@ -183,12 +179,12 @@ const Collections = () => {
               label={isNL ? 'ANDERE STEENSOORTEN' : 'OTHER STONES'}
               isActive={activeSection === 'andere-steensoorten'}
             />
-          </div>
+          </nav>
         </div>
-      </div>
+      </section>
 
-      {/* VANTA Collection - extra top padding for fixed nav */}
-      <section id="vanta" className="scroll-mt-32 lg:scroll-mt-36 pt-20 lg:pt-24 pb-10 lg:pb-14 bg-background">
+      {/* VANTA Collection */}
+      <section id="vanta" className="scroll-mt-20 lg:scroll-mt-24 py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Image */}
@@ -255,7 +251,7 @@ const Collections = () => {
       </section>
 
       {/* TERRA Collection */}
-      <section id="terra" className="scroll-mt-28 lg:scroll-mt-32 py-10 lg:py-14 bg-background">
+      <section id="terra" className="scroll-mt-20 lg:scroll-mt-24 py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center lg:grid-flow-dense">
             {/* Image */}
@@ -322,7 +318,7 @@ const Collections = () => {
       </section>
 
       {/* Other Stones - Service Block */}
-      <section id="andere-steensoorten" className="scroll-mt-28 lg:scroll-mt-32 py-8 lg:py-12 bg-background">
+      <section id="andere-steensoorten" className="scroll-mt-20 lg:scroll-mt-24 py-8 lg:py-12 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Image */}
