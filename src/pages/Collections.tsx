@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
+import { fetchCollections, fetchProducts, ShopifyCollection, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import vantaFallback from "@/assets/vanta-collection.jpg";
 import terraFallback from "@/assets/terra-collection.jpg";
@@ -15,28 +15,49 @@ const Collections = () => {
   const { t, i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadCollections = async () => {
+    const loadData = async () => {
       try {
-        const data = await fetchCollections(10);
-        setCollections(data);
+        const [collectionsData, productsData] = await Promise.all([
+          fetchCollections(10),
+          fetchProducts(20)
+        ]);
+        setCollections(collectionsData);
+        setProducts(productsData);
       } catch (error) {
-        console.error("Failed to fetch collections:", error);
+        console.error("Failed to fetch data:", error);
       } finally {
         setLoading(false);
       }
     };
-    loadCollections();
+    loadData();
   }, []);
 
-  // Get collection image from Shopify or fallback
+  // Get collection image from Shopify collection or product images
   const getCollectionImage = (handle: string) => {
-    const collection = collections.find(c => c.node.handle === handle);
+    // First try to get collection image from Shopify
+    const collection = collections.find(c => 
+      c.node.handle.toLowerCase() === handle.toLowerCase() ||
+      c.node.title.toLowerCase().includes(handle.toLowerCase())
+    );
+    
     if (collection?.node.image?.url) {
       return collection.node.image.url;
     }
+    
+    // If no collection image, try to get from products
+    const matchingProduct = products.find(p => 
+      p.node.title.toLowerCase().includes(handle.toLowerCase()) ||
+      p.node.handle.toLowerCase().includes(handle.toLowerCase())
+    );
+    
+    if (matchingProduct?.node.images?.edges?.[0]?.node?.url) {
+      return matchingProduct.node.images.edges[0].node.url;
+    }
+    
     // Fallback to local images
     if (handle === 'vanta') return vantaFallback;
     if (handle === 'terra') return terraFallback;
