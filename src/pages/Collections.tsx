@@ -12,6 +12,29 @@ import vantaFallback from "@/assets/vanta-collection.jpg";
 import terraFallback from "@/assets/terra-collection.jpg";
 import otherStonesImage from "@/assets/other-stones-materials.png";
 
+// Tab button component for section navigation
+const TabButton = ({ onClick, label }: { onClick: () => void; label: string }) => {
+  const [isActive, setIsActive] = useState(false);
+  
+  return (
+    <button 
+      onClick={onClick}
+      onMouseEnter={() => setIsActive(true)}
+      onMouseLeave={() => setIsActive(false)}
+      className={`
+        text-[11px] uppercase tracking-[0.15em] font-medium
+        transition-all duration-200 pb-2 border-b
+        ${isActive 
+          ? 'text-foreground border-foreground' 
+          : 'text-muted-foreground/60 border-transparent hover:text-foreground hover:border-foreground/50'
+        }
+      `}
+    >
+      {label}
+    </button>
+  );
+};
+
 const Collections = () => {
   const { t, i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
@@ -97,50 +120,43 @@ const Collections = () => {
       />
 
       {/* Hero Section */}
-      <section className="pt-32 lg:pt-40 pb-12 lg:pb-16 bg-background">
+      <section className="pt-28 lg:pt-36 pb-8 lg:pb-10 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <Breadcrumbs className="mb-6" />
+          <Breadcrumbs className="mb-4 opacity-60 text-[10px]" />
           
-          <header className="max-w-3xl mb-8">
-            <h1 className="font-serif text-display-md text-foreground mb-6">
+          <header className="max-w-3xl mb-5">
+            <h1 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
               {t("collections.hero.title")}
             </h1>
-            <p className="text-muted-foreground text-body-lg leading-relaxed">
+            <p className="text-muted-foreground text-body-md leading-relaxed max-w-2xl">
               {t("collections.hero.intro")}
             </p>
           </header>
 
           {/* CTA Button */}
-          <div className="flex flex-wrap gap-4 mb-10">
-            <Button asChild variant="atelier-filled">
+          <div className="mb-6">
+            <Button asChild variant="atelier-filled" size="sm" className="text-xs px-5 py-2.5">
               <Link to="/bespoke">
                 {t("collections.hero.ctaPrimary")}
+                <ArrowRight className="ml-2 h-3.5 w-3.5" />
               </Link>
             </Button>
           </div>
 
-          {/* Anchor Links */}
-          <nav className="flex flex-wrap gap-4 border-t border-border/50 pt-5">
-            <button 
+          {/* Section Navigation Tabs */}
+          <nav className="flex gap-6 lg:gap-8 border-t border-border/30 pt-4">
+            <TabButton 
               onClick={() => scrollToSection('vanta')}
-              className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 hover:text-foreground transition-colors"
-            >
-              VANTA
-            </button>
-            <span className="text-muted-foreground/30">·</span>
-            <button 
+              label="VANTA"
+            />
+            <TabButton 
               onClick={() => scrollToSection('terra')}
-              className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 hover:text-foreground transition-colors"
-            >
-              TERRA
-            </button>
-            <span className="text-muted-foreground/30">·</span>
-            <button 
+              label="TERRA"
+            />
+            <TabButton 
               onClick={() => scrollToSection('andere-steensoorten')}
-              className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 hover:text-foreground transition-colors"
-            >
-              {isNL ? 'ANDERE STEENSOORTEN' : 'OTHER STONES'}
-            </button>
+              label={isNL ? 'ANDERE STEENSOORTEN' : 'OTHER STONES'}
+            />
           </nav>
         </div>
       </section>
