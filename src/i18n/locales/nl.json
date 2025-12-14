@@ -114,11 +114,11 @@
     },
     "other": {
       "name": "Andere steensoorten",
-      "subtitle": "Selectie op aanvraag",
-      "description": "Voor projecten met een specifieke kleurtoon of steensoort werken we buiten de vaste collecties. Verde Alpi, Nero Marquina en andere steensoorten — geselecteerd op tekening en karakter van uw ruimte.",
+      "subtitle": "Materiaalcuratie op aanvraag",
+      "description": "Voor projecten met een specifieke kleurtoon of steensoort selecteren we materialen buiten de vaste collecties. Verde Alpi, Nero Marquina en andere steensoorten — gekozen op tekening en karakter.",
       "cta": "Vraag materiaalopties aan",
-      "selectionTitle": "Selectie op aanvraag",
-      "selectionSubtitle": "Materialen buiten de vaste collecties — geselecteerd op tekening en karakter."
+      "bullet1": "Match op tekening & kleurtoon",
+      "bullet2": "Eerste reactie binnen 24–48 uur"
     },
     "pricing": {
       "title": "Vanafprijzen",

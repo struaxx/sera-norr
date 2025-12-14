@@ -114,11 +114,11 @@
     },
     "other": {
       "name": "Other stone types",
-      "subtitle": "Selection on request",
-      "description": "For projects with a specific colour tone or stone type, we work beyond the fixed collections. Verde Alpi, Nero Marquina and other stone types — selected based on drawing and character of your space.",
+      "subtitle": "Material curation on request",
+      "description": "For projects with a specific colour tone or stone type, we select materials beyond the fixed collections. Verde Alpi, Nero Marquina and other stone types — chosen based on drawing and character.",
       "cta": "Request material options",
-      "selectionTitle": "Selection on request",
-      "selectionSubtitle": "Materials beyond the fixed collections — selected based on drawing and character."
+      "bullet1": "Match on drawing & colour tone",
+      "bullet2": "First response within 24–48 hours"
     },
     "pricing": {
       "title": "Starting prices",

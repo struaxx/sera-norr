@@ -10,6 +10,7 @@ import { fetchCollections, fetchProducts, ShopifyCollection, ShopifyProduct } fr
 import { Skeleton } from "@/components/ui/skeleton";
 import vantaFallback from "@/assets/vanta-collection.jpg";
 import terraFallback from "@/assets/terra-collection.jpg";
+import otherStonesImage from "@/assets/other-stones-materials.png";
 
 const Collections = () => {
   const { t, i18n } = useTranslation();
@@ -284,21 +285,24 @@ const Collections = () => {
         </div>
       </section>
 
-      {/* Other Stones */}
+      {/* Other Stones - Service Block */}
       <section id="andere-steensoorten" className="py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-            {/* Placeholder Image */}
-            <div className="image-reveal">
-              <div className="aspect-[4/5] bg-sand/20 overflow-hidden flex items-center justify-center border border-border/20">
-                <div className="text-center p-12">
-                  <p className="font-serif text-lg text-muted-foreground mb-2">
-                    Verde Alpi · Nero Marquina
-                  </p>
-                  <p className="text-xs text-muted-foreground/60 uppercase tracking-[0.15em]">
-                    {isNL ? '& andere steensoorten' : '& other stone types'}
-                  </p>
-                </div>
+            {/* Image with overlay caption */}
+            <div className="image-reveal relative">
+              <div className="aspect-[4/5] bg-muted overflow-hidden">
+                <img
+                  src={otherStonesImage}
+                  alt={isNL ? "Materiaalmonsters en ontwerptekening voor maatwerk steenmeubels" : "Material samples and design drawing for bespoke stone furniture"}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {/* Overlay caption */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-foreground/60 to-transparent">
+                <p className="text-xs uppercase tracking-[0.2em] text-background/90">
+                  Verde Alpi · Nero Marquina · {isNL ? "Selectie op aanvraag" : "Selection on request"}
+                </p>
               </div>
             </div>
 
@@ -314,29 +318,32 @@ const Collections = () => {
                 {t("collections.other.description")}
               </p>
 
-              {/* Selection Block */}
-              <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
-                <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
-                  {t("collections.other.selectionTitle")}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("collections.other.selectionSubtitle")}
-                </p>
+              {/* Info bullets */}
+              <div className="mb-6 space-y-2">
+                <div className="flex items-center gap-3 text-sm text-foreground">
+                  <span className="w-1 h-1 bg-foreground rounded-full" />
+                  <span>{t("collections.other.bullet1")}</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-foreground">
+                  <span className="w-1 h-1 bg-foreground rounded-full" />
+                  <span>{t("collections.other.bullet2")}</span>
+                </div>
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap items-center gap-4">
                 <Button asChild variant="atelier">
                   <Link to="/materials">
                     {t("collections.other.cta")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild variant="ghost">
-                  <Link to="/bespoke">
-                    {t("collections.cta.requestProposal")}
-                  </Link>
-                </Button>
+                <Link 
+                  to="/bespoke" 
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t("collections.cta.requestProposal")}
+                </Link>
               </div>
             </div>
           </div>
