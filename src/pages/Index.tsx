@@ -1,35 +1,33 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Truck, Award, Settings } from "lucide-react";
 import { SEOHead, organizationSchema } from "@/components/seo";
+import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
+import { Skeleton } from "@/components/ui/skeleton";
 import heroImage from "@/assets/hero-vanta.jpg";
-import terraImage from "@/assets/terra-collection.jpg";
-import vantaImage from "@/assets/vanta-collection.jpg";
 
 const Index = () => {
   const { t, i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
+  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const collections = [
-    {
-      id: "terra",
-      name: "TERRA",
-      material: t('home.collections.terra_material'),
-      description: t('home.collections.terra_description'),
-      startingPrice: "€4.200",
-      image: terraImage,
-    },
-    {
-      id: "vanta",
-      name: "VANTA",
-      material: t('home.collections.vanta_material'),
-      description: t('home.collections.vanta_description'),
-      startingPrice: "€6.800",
-      image: vantaImage,
-    },
-  ];
+  useEffect(() => {
+    const loadCollections = async () => {
+      try {
+        const data = await fetchCollections(10);
+        setCollections(data);
+      } catch (error) {
+        console.error("Failed to fetch collections:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCollections();
+  }, []);
 
   const seoTitle = isNL 
     ? "SERA NORR — Luxe Stenen Meubels op Maat | Atelier" 
@@ -66,6 +64,15 @@ const Index = () => {
     { key: 'delivery', icon: Truck },
     { key: 'materials', icon: Settings }
   ];
+
+  // Get starting price from collection name (mapped values)
+  const getStartingPrice = (handle: string) => {
+    const prices: Record<string, string> = {
+      'terra': '€4.200',
+      'vanta': '€6.800',
+    };
+    return prices[handle.toLowerCase()] || '€4.000';
+  };
 
   return (
     <Layout>
@@ -148,38 +155,62 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6">
-            {collections.map((collection) => (
-              <Link
-                key={collection.id}
-                to={`/collections/${collection.id}`}
-                className="group block"
-              >
-                <article className="aspect-[4/3] bg-muted mb-4 overflow-hidden">
-                  <img
-                    src={collection.image}
-                    alt={isNL ? `${collection.name} Collectie - ${collection.material} stenen meubels` : `${collection.name} Collection - ${collection.material} stone furniture`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </article>
-                <div className="space-y-2">
-                  <h3 className="font-serif text-2xl text-foreground">
-                    {collection.name}
-                  </h3>
-                  <p className="font-sans text-sm text-muted-foreground">
-                    {collection.description}
-                  </p>
-                  <p className="font-sans text-sm text-foreground">
-                    {t('home.collections.startingFrom')} {collection.startingPrice}
-                  </p>
-                  <span className="inline-flex items-center text-foreground text-sm font-medium group-hover:translate-x-1 transition-transform pt-2">
-                    {t('home.collections.viewCollection')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </span>
+          {loading ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6">
+              {[1, 2].map((i) => (
+                <div key={i}>
+                  <Skeleton className="aspect-[4/3] w-full mb-4" />
+                  <Skeleton className="h-6 w-1/3 mb-2" />
+                  <Skeleton className="h-4 w-2/3" />
                 </div>
-              </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : collections.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6">
+              {collections.map((collection) => (
+                <Link
+                  key={collection.node.id}
+                  to={`/collections/${collection.node.handle}`}
+                  className="group block"
+                >
+                  <article className="aspect-[4/3] bg-muted mb-4 overflow-hidden">
+                    {collection.node.image ? (
+                      <img
+                        src={collection.node.image.url}
+                        alt={collection.node.image.altText || `${collection.node.title} ${isNL ? 'collectie' : 'collection'}`}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-secondary/50 flex items-center justify-center">
+                        <span className="text-muted-foreground font-serif text-2xl">{collection.node.title}</span>
+                      </div>
+                    )}
+                  </article>
+                  <div className="space-y-2">
+                    <h3 className="font-serif text-2xl text-foreground">
+                      {collection.node.title}
+                    </h3>
+                    {collection.node.description && (
+                      <p className="font-sans text-sm text-muted-foreground line-clamp-2">
+                        {collection.node.description}
+                      </p>
+                    )}
+                    <p className="font-sans text-sm text-foreground">
+                      {t('home.collections.startingFrom')} {getStartingPrice(collection.node.handle)}
+                    </p>
+                    <span className="inline-flex items-center text-foreground text-sm font-medium group-hover:translate-x-1 transition-transform pt-2">
+                      {t('home.collections.viewCollection')}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground">
+              {isNL ? 'Geen collecties gevonden.' : 'No collections found.'}
+            </p>
+          )}
 
           <p className="text-muted-foreground text-sm">
             {t('home.collections.other')}
