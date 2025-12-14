@@ -14,7 +14,7 @@ export function USPBullets({ className, variant = 'default' }: USPBulletsProps) 
   const usps = [
     {
       icon: Wrench,
-      text: isNL ? 'Handgemaakt in Europa' : 'Handcrafted in Europe',
+      text: isNL ? 'Ontworpen in Nederland' : 'Designed in the Netherlands',
     },
     {
       icon: Clock,

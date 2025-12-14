@@ -15,8 +15,8 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
   const badges = [
     {
       icon: Award,
-      title: isNL ? 'Europees Vakmanschap' : 'European Craftsmanship',
-      description: isNL ? 'Handgemaakt door meester-ambachtslieden' : 'Handcrafted by master artisans',
+      title: isNL ? 'Ontworpen in Nederland' : 'Designed in the Netherlands',
+      description: isNL ? 'Nederlandse studio, wereldwijd vakmanschap' : 'Dutch studio, global craftsmanship',
     },
     {
       icon: Shield,

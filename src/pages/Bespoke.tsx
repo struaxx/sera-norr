@@ -114,8 +114,8 @@ const Bespoke = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "maatwerk meubels, offerte stenen tafel, marmeren tafel op maat, travertin eettafel, Europees vakmanschap" 
-          : "bespoke furniture, stone table quote, custom marble table, travertine dining table, European craftsmanship"}
+          ? "maatwerk meubels, offerte stenen tafel, marmeren tafel op maat, travertin eettafel, ontworpen in Nederland" 
+          : "bespoke furniture, stone table quote, custom marble table, travertine dining table, designed in the Netherlands"}
         structuredData={breadcrumbSchema}
       />
 

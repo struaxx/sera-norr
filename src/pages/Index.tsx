@@ -34,8 +34,8 @@ const Index = () => {
     : "SERA NORR — Luxury Bespoke Stone Furniture | Atelier";
   
   const seoDescription = isNL
-    ? "Luxe stenen meubels op maat gemaakt in ons Europees atelier. Travertin, marmer en andere steensoorten. 5 jaar garantie, white-glove levering."
-    : "Luxury stone furniture custom made in our European atelier. Travertine, marble and other stone types. 5-year warranty, white-glove delivery.";
+    ? "Luxe stenen meubels ontworpen in Nederland. Travertin, marmer en andere steensoorten. 5 jaar garantie, white-glove levering."
+    : "Luxury stone furniture designed in the Netherlands. Travertine, marble and other stone types. 5-year warranty, white-glove delivery.";
 
   const seoKeywords = isNL
     ? "luxe stenen meubels, marmeren tafel op maat, travertin tafel, maatwerk meubels, stenen eettafel, Calacatta Viola, design meubels"
