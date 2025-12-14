@@ -164,8 +164,8 @@ const Collections = () => {
         </div>
       </section>
 
-      {/* Sticky Section Navigation Tabs - positioned directly under header */}
-      <div className="sticky top-[64px] lg:top-[72px] z-[100] bg-background border-b border-border/30 -mt-px">
+      {/* Fixed Section Navigation Tabs - positioned directly under header */}
+      <div className="fixed top-[64px] lg:top-[72px] left-0 right-0 z-[100] bg-background border-b border-border/30">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex gap-6 lg:gap-8">
             <TabButton 
@@ -187,8 +187,8 @@ const Collections = () => {
         </div>
       </div>
 
-      {/* VANTA Collection */}
-      <section id="vanta" className="scroll-mt-28 lg:scroll-mt-32 py-10 lg:py-14 bg-background">
+      {/* VANTA Collection - extra top padding for fixed nav */}
+      <section id="vanta" className="scroll-mt-32 lg:scroll-mt-36 pt-20 lg:pt-24 pb-10 lg:pb-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Image */}
