@@ -41,7 +41,7 @@
     "closing": {
       "title": "Ontvang een voorstel.",
       "description": "Deel uw voorkeuren en afmetingen. U ontvangt een voorstel op basis van uw gekozen materiaal en ontwerp.",
-      "cta": "Ontvang een voorstel"
+      "cta": "Vraag offerte aan"
     }
   },
   "collections": {
@@ -81,10 +81,10 @@
     "notFound": "Collectie Niet Gevonden",
     "viewAllButton": "Bekijk Alle Collecties",
     "pieces": "Stukken",
-    "requestQuote": "Ontvang een voorstel op maat",
+    "requestQuote": "Vraag offerte aan",
     "customTitle": "Aangepaste afmetingen of materialen?",
     "customDescription": "Elk stuk kan worden aangepast. Bespreek uw visie met ons atelier.",
-    "startBespoke": "Begin uw maatwerktraject"
+    "startBespoke": "Vraag maatwerk offerte aan"
   },
   "bespoke": {
     "subtitle": "Maatwerk Atelier",
@@ -127,9 +127,9 @@
     "formProjectTypePlaceholder": "Eettafel, console, salontafel...",
     "formTimeline": "Gewenste Tijdlijn",
     "formTimelinePlaceholder": "Wanneer stelt u voltooiing voor?",
-    "formVision": "Vertel Ons Over Uw Visie",
-    "formVisionPlaceholder": "Beschrijf uw ruimte, inspiratie, materialen die u aanspreken...",
-    "formSubmit": "Ontvang een voorstel op maat",
+    "formVision": "Beschrijf uw project",
+    "formVisionPlaceholder": "Beschrijf uw wensen: type meubel, afmetingen, materiaalvoorkeuren...",
+    "formSubmit": "Verstuur aanvraag",
     "formSuccess": "Aanvraag Ontvangen",
     "formSuccessDescription": "Bedankt voor uw interesse. Ons atelier neemt binnen 48 uur contact met u op."
   },
@@ -202,7 +202,7 @@
     "height": "Hoogte",
     "cm": "cm",
     "rotateHint": "Sleep om te roteren • Scroll om te zoomen",
-    "requestQuote": "Ontvang een voorstel op maat",
+    "requestQuote": "Vraag offerte aan",
     "materials": {
       "travertine": "Italiaans Travertin",
       "calacattaViola": "Calacatta Viola",

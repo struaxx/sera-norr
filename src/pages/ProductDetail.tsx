@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { SEOHead, generateProductSchema, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { ServicePromises } from "@/components/trust";
+import { USPBullets, ServicePromises, BespokeTimeline } from "@/components/trust";
 
 interface ProductData {
   id: string;
@@ -248,19 +248,24 @@ const ProductDetail = () => {
               <h1 className="font-serif text-display-sm text-foreground mb-4">
                 {product.title}
               </h1>
-              <p className="text-xl text-foreground mb-6">
+              <p className="text-xl text-foreground mb-4">
                 {price.currencyCode} {parseFloat(price.amount).toFixed(0)}
               </p>
 
+              {/* USP Bullets - Above the fold */}
+              <div className="mb-6 pb-6 border-b border-border/50">
+                <USPBullets variant="horizontal" className="text-xs" />
+              </div>
+
               {product.description && (
-                <p className="text-muted-foreground text-body-md leading-relaxed mb-8">
+                <p className="text-muted-foreground text-body-md leading-relaxed mb-6">
                   {product.description}
                 </p>
               )}
 
               {/* Variant Selector */}
               {hasMultipleVariants && (
-                <div className="mb-8">
+                <div className="mb-6">
                   <p className="text-sm text-muted-foreground mb-3">
                     {isNL ? 'Variant' : 'Variant'}
                   </p>
@@ -289,29 +294,32 @@ const ProductDetail = () => {
                 onClick={handleAddToCart}
                 variant="atelier-filled"
                 size="lg"
-                className="w-full mb-8"
+                className="w-full mb-4"
               >
                 {isNL ? 'Toevoegen aan winkeltas' : 'Add to bag'}
               </Button>
 
               {/* Service Promises / Trust Elements */}
-              <div className="border-t border-border pt-8">
+              <div className="border-t border-border pt-6">
                 <ServicePromises variant="compact" />
               </div>
 
-              {/* Bespoke CTA */}
+              {/* Bespoke CTA - Improved */}
               <div className="mt-8 p-6 bg-secondary/30 border border-border/50">
                 <p className="font-serif text-lg text-foreground mb-2">
                   {isNL ? 'Andere afmetingen of materiaal?' : 'Different dimensions or material?'}
                 </p>
                 <p className="text-sm text-muted-foreground mb-4">
                   {isNL 
-                    ? 'Elk stuk kan worden aangepast. Vraag een voorstel op maat aan.' 
-                    : 'Every piece can be customized. Request a bespoke proposal.'}
+                    ? 'Elk stuk kan op maat worden gemaakt. Ontvang binnen 48 uur een vrijblijvend voorstel.' 
+                    : 'Every piece can be made to measure. Receive a no-obligation proposal within 48 hours.'}
                 </p>
-                <Button asChild variant="atelier" size="sm">
+                <div className="mb-4">
+                  <BespokeTimeline compact />
+                </div>
+                <Button asChild variant="atelier" size="sm" className="w-full">
                   <Link to="/bespoke">
-                    {isNL ? 'Start maatwerktraject' : 'Start bespoke process'}
+                    {isNL ? 'Vraag maatwerk offerte aan' : 'Request bespoke quote'}
                   </Link>
                 </Button>
               </div>
