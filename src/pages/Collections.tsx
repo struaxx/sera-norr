@@ -110,17 +110,11 @@ const Collections = () => {
             </p>
           </header>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <div className="flex flex-wrap gap-4 mb-10">
             <Button asChild variant="atelier-filled">
               <Link to="/bespoke">
                 {t("collections.hero.ctaPrimary")}
-              </Link>
-            </Button>
-            <Button asChild variant="atelier">
-              <Link to="/collections/vanta">
-                {t("collections.hero.ctaSecondary")}
-                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
