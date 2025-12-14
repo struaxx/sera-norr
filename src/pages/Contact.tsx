@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Clock } from "lucide-react";
 import { SEOHead, localBusinessSchema, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { trackLeadSubmit } from "@/lib/analytics";
 
 const Contact = () => {
   const { t, i18n } = useTranslation();
@@ -22,6 +23,10 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Track lead submission
+    trackLeadSubmit('contact');
+
     toast({
       title: isNL ? "Bericht Verzonden" : "Message Sent",
       description: isNL 
