@@ -3,7 +3,6 @@
     "collections": "Collections",
     "materials": "Materials",
     "bespoke": "Bespoke",
-    "journal": "Journal",
     "about": "About",
     "contact": "Contact"
   },
@@ -11,8 +10,8 @@
     "hero": {
       "title": "Luxury stone furniture — bespoke crafted in our atelier.",
       "subtitle": "Travertine, marble and other stone types. For interiors that demand calm and character.",
-      "ctaPrimary": "View collections",
-      "ctaSecondary": "Request bespoke",
+      "ctaPrimary": "Request proposal",
+      "ctaSecondary": "View collections",
       "trust": {
         "craftsmanship": "European craftsmanship",
         "warranty": "5-year warranty",
@@ -21,78 +20,73 @@
     },
     "scroll": "Discover",
     "routes": {
-      "title": "Choose your route",
-      "subtitle": "Whether you want to buy directly, commission bespoke, or explore first — we guide you.",
-      "available": {
-        "title": "Available now",
-        "description": "Pieces from our collections, ready for delivery within 2-4 weeks.",
-        "cta": "View collections"
-      },
+      "title": "How can we help?",
+      "subtitle": "Begin your journey to a unique bespoke piece.",
       "bespoke": {
         "title": "Bespoke",
         "description": "A piece designed for your space. Material, dimensions and details to your wishes.",
-        "cta": "Start bespoke journey"
+        "cta": "Start design"
       },
       "configurator": {
-        "title": "Configurator",
-        "description": "Explore possibilities in material and form. Receive a proposal within 24-48 hours.",
-        "cta": "Open configurator"
+        "title": "Explore possibilities",
+        "description": "Select material and form. Receive a proposal within 24-48 hours.",
+        "cta": "Request proposal"
       }
     },
     "collections": {
       "title": "Collections",
       "description": "Our collections are material-driven and form the basis for custom work.",
       "terra_material": "Travertine",
+      "terra_description": "Warm tones and natural layering. Timeless and calm.",
       "vanta_material": "Calacatta Viola",
-      "other": "Selection of other stone types — on request",
+      "vanta_description": "Rich veins and pronounced contrast. Sculptural and powerful.",
+      "startingFrom": "From",
+      "viewCollection": "View collection",
+      "other": "Other stone types available on request.",
       "cta": "View all collections"
     },
-    "shop": {
-      "title": "Available pieces",
-      "description": "Starting price shown — bespoke possible. Each piece deliverable within 2-4 weeks or available to order bespoke."
-    },
-    "configurator": {
-      "title": "Compose your piece",
-      "description": "Three steps to a bespoke proposal. No obligations, just clarity.",
+    "process": {
+      "title": "From idea to realisation",
+      "description": "Three steps to a bespoke proposal.",
       "step1": {
-        "title": "Choose material",
-        "description": "Travertine, marble or another stone type from our selection."
+        "title": "Share your wishes",
+        "description": "Type of furniture, dimensions and material preference."
       },
       "step2": {
-        "title": "Set dimensions",
-        "description": "Length, width and height suited to your space."
+        "title": "Receive proposal",
+        "description": "Drawing, specifications and price indication."
       },
       "step3": {
-        "title": "Receive proposal",
-        "description": "A clear price proposal with drawing and specifications."
+        "title": "Start realisation",
+        "description": "After approval, production begins in our atelier."
       },
-      "cta": "Start configurator",
       "promise": "First response from our atelier within 24–48 hours."
     },
     "why": {
       "title": "Why SERA NORR",
       "craftsmanship": {
         "title": "European craftsmanship",
-        "description": "Each piece is crafted by experienced artisans in our European workshop."
+        "description": "Crafted by experienced artisans."
       },
       "warranty": {
         "title": "5-year warranty",
-        "description": "Confidence in quality. Structural warranty on all our pieces."
+        "description": "Structural warranty on all our pieces."
       },
       "delivery": {
         "title": "White-glove delivery",
-        "description": "Professional delivery and installation into your space."
+        "description": "Professional delivery and installation."
       },
       "materials": {
         "title": "Curated materials",
-        "description": "Only high-quality natural stone, carefully selected for colour and veining."
+        "description": "Only high-quality natural stone."
       }
     },
     "statement": "Calm forms. Strong materials. Clear choices.",
     "closing": {
       "title": "Receive a proposal",
-      "description": "Share your preferences and dimensions. You will receive a proposal based on your chosen material and design.",
-      "cta": "Request a quote"
+      "description": "Share your preferences and dimensions. We will create a bespoke proposal.",
+      "deliverables": "You receive: drawing, specifications and price indication.",
+      "cta": "Request proposal"
     }
   },
   "collections": {
@@ -127,15 +121,15 @@
     "endCta": {
       "title": "Compose your piece.",
       "description": "Use the configurator to determine material, form and dimensions.",
-      "button": "Start in the configurator"
+      "button": "Request proposal"
     },
     "notFound": "Collection Not Found",
     "viewAllButton": "View All Collections",
     "pieces": "Pieces",
-    "requestQuote": "Request a quote",
+    "requestQuote": "Request proposal",
     "customTitle": "Custom dimensions or materials?",
     "customDescription": "Every piece can be customized. Discuss your vision with our atelier.",
-    "startBespoke": "Request bespoke quote"
+    "startBespoke": "Request proposal"
   },
   "bespoke": {
     "subtitle": "Bespoke Atelier",
@@ -160,8 +154,6 @@
     "naturalStoneList": "Travertine, Calacatta Viola, Verde Alpi, Nero Marquina",
     "metalAccents": "Metal Accents",
     "metalAccentsList": "Brushed brass, blackened steel, bronze patina",
-    "metalAccents": "Metal Accents",
-    "metalAccentsList": "Brushed brass, blackened steel, bronze patina",
     "craftsmanshipSubtitle": "Craftsmanship",
     "craftsmanshipTitle": "European Heritage",
     "craftsmanshipDescription": "Every Sera Norr piece is crafted by master artisans in our European workshop. We combine traditional stone-working techniques with contemporary precision, ensuring each piece meets our exacting standards.",
@@ -180,7 +172,7 @@
     "formTimelinePlaceholder": "When do you envision completion?",
     "formVision": "Describe your project",
     "formVisionPlaceholder": "Describe your wishes: type of furniture, dimensions, material preferences...",
-    "formSubmit": "Submit request",
+    "formSubmit": "Request proposal",
     "formSuccess": "Inquiry Received",
     "formSuccessDescription": "Thank you for your interest. Our atelier will be in touch within 48 hours."
   },
@@ -261,12 +253,11 @@
     "height": "Height",
     "cm": "cm",
     "rotateHint": "Drag to rotate • Scroll to zoom",
-    "requestQuote": "Request a quote",
+    "requestQuote": "Request proposal",
     "materials": {
       "travertine": "Italian Travertine",
       "calacattaViola": "Calacatta Viola",
       "verdeAlpi": "Verde Alpi",
-      "neroMarquina": "Nero Marquina",
       "neroMarquina": "Nero Marquina"
     },
     "finishes": {
@@ -283,7 +274,7 @@
     "bespokeSubtitle": "Bespoke Atelier",
     "bespokeTitle": "Your Vision, Our Craft",
     "bespokeDescription": "Every space deserves an object made for it alone. Our bespoke service transforms your vision into sculptural permanence—from initial sketch to final installation.",
-    "beginProject": "Begin your journey"
+    "beginProject": "Request proposal"
   },
   "journal": {
     "seo": {
@@ -330,7 +321,7 @@
     "cta": {
       "title": "Compose your piece",
       "description": "Get inspired and start your own bespoke project.",
-      "button": "Request a quote"
+      "button": "Request proposal"
     }
   },
   "materials": {
@@ -373,75 +364,79 @@
     "cta": {
       "title": "Looking for a specific material?",
       "description": "We also work with other stone types on request. Contact us to discuss possibilities.",
-      "button": "Request a quote"
+      "button": "Request proposal"
     },
     "types": {
       "travertine": {
         "name": "Travertine",
-        "shortDescription": "Warm, layered natural stone with characteristic pitting and honey tones. Formed from thermal springs over millennia.",
-        "seo": {
-          "title": "Travertine — Origin, Properties & Care | SERA NORR",
-          "description": "Italian travertine: thermal origins, unique texture, warm tones. How SERA NORR crafts this material into sculptural furniture."
+        "subtitle": "Italian Travertine",
+        "intro": "Travertine is a sedimentary rock formed from thermal springs. Its characteristic pitting and warm tones make it one of nature's most expressive stones.",
+        "description": "Italian travertine has been used in architecture and design for millennia. The material has a natural warmth and texture that perfectly suits contemporary interiors.",
+        "specs": {
+          "origin": "Tivoli, Italy",
+          "hardness": "Medium (3-4 Mohs)",
+          "porosity": "Medium to high",
+          "finish": "Polished, honed, filled"
         },
-        "introduction": "Travertine is a sedimentary rock formed from calcium carbonate deposits around thermal springs. The material carries the memory of water—visible in its characteristic pitting and layered structure.",
-        "originTitle": "Origin & Quarrying",
-        "originText1": "The travertine we use comes from quarries around Tivoli in Italy, where this material has been extracted since Roman times. The Colosseum in Rome is largely built from travertine.",
-        "originText2": "Extraction happens in blocks that are then sawn into slabs. Each slab reveals a unique pattern of natural layering and mineral deposits.",
-        "propertiesTitle": "Properties",
-        "propertiesText1": "Travertine has a warm, layered appearance with tones ranging from cream white to honey. The characteristic pitting results from gas formation during the forming process.",
-        "propertiesText2": "The material is softer than granite but harder than most woods. This makes it suitable for furniture used daily.",
-        "origin": "Tivoli, Italy",
-        "hardness": "3-4 Mohs",
-        "porosity": "Moderately porous",
-        "finishOptions": "Polished, honed, natural",
-        "careTitle": "Care",
-        "careIntro": "Travertine requires regular but simple maintenance to preserve its beauty.",
-        "careTip1": "Clean daily with a damp cloth and pH-neutral soap.",
-        "careTip2": "Avoid acidic liquids directly on the surface—use coasters.",
-        "careTip3": "Treat annually with a stone sealant for optimal protection.",
-        "applicationsTitle": "Applications",
-        "faq": {
-          "q1": "Is travertine suitable for dining tables?",
-          "a1": "Yes, travertine is excellent for dining tables. With proper finishing and maintenance, the material withstands daily use.",
-          "q2": "How do I handle the pitting in travertine?",
-          "a2": "The pitting can remain open for a natural look or be filled for a smoother surface. We advise based on your preference and use.",
-          "q3": "Does travertine discolour over time?",
-          "a3": "Travertine may develop a subtle patina, which many consider an enhancement. Regular sealing keeps the material stable."
-        }
+        "care": {
+          "title": "Care",
+          "description": "Travertine requires regular sealing and careful cleaning. Avoid acidic products and use pH-neutral cleaners."
+        },
+        "faq": [
+          {
+            "question": "Is travertine suitable for daily use?",
+            "answer": "Yes, when properly sealed, travertine is excellent for daily use. The natural patina that develops adds character."
+          },
+          {
+            "question": "How do I maintain travertine?",
+            "answer": "Weekly cleaning with pH-neutral soap and annual sealing keep your travertine in optimal condition."
+          },
+          {
+            "question": "Can stains be removed?",
+            "answer": "Most stains can be removed with proper treatment. We advise contacting us for stubborn stains."
+          }
+        ]
       },
-      "calacattaViola": {
+      "calacatta-viola": {
         "name": "Calacatta Viola",
-        "shortDescription": "Rare marble with dramatic violet veins against luminous white. Quarried from the Apuan Alps.",
-        "seo": {
-          "title": "Calacatta Viola — Rare Apuan Marble | SERA NORR",
-          "description": "Calacatta Viola: one of the rarest marbles. Violet veining, applications in bespoke furniture and care tips."
+        "subtitle": "Rare Italian Marble",
+        "intro": "Calacatta Viola is one of the rarest and most dramatic marbles in the world, quarried from the Apuan Alps in Italy.",
+        "description": "The bold violet veins against a luminous white background make this marble a true work of art. Each piece is unique due to the natural variation in veining.",
+        "specs": {
+          "origin": "Apuan Alps, Italy",
+          "hardness": "Medium (3-4 Mohs)",
+          "porosity": "Low to medium",
+          "finish": "Polished, honed"
         },
-        "introduction": "Calacatta Viola is one of the rarest and most dramatic marbles in the world. The bold violet veins against a luminous white background make each piece a sculpture.",
-        "originTitle": "Origin & Quarrying",
-        "originText1": "This exceptional marble is quarried from the Apuan Alps in Tuscany, Italy. The quarries are limited and extraction is labour-intensive, determining the material's exclusivity.",
-        "originText2": "Each slab is unique—the vein patterns vary from subtle to dramatic. We personally select based on vein pattern and colour intensity.",
-        "propertiesTitle": "Properties",
-        "propertiesText1": "Calacatta Viola distinguishes itself through characteristic violet to grey veins running through a bright white base. The material has natural depth and luminosity.",
-        "propertiesText2": "As marble, it is slightly softer than travertine but offers unparalleled visual impact. It requires careful use and maintenance.",
-        "origin": "Apuan Alps, Italy",
-        "hardness": "3 Mohs",
-        "porosity": "Low porosity",
-        "finishOptions": "Polished, honed",
-        "careTitle": "Care",
-        "careIntro": "Marble requires attentive care. With proper treatment, Calacatta Viola remains beautiful for generations.",
-        "careTip1": "Use only pH-neutral cleaners—avoid vinegar and citrus.",
-        "careTip2": "Wipe spilled liquids immediately to prevent staining.",
-        "careTip3": "Have the surface professionally polished annually if needed.",
-        "applicationsTitle": "Applications",
-        "faq": {
-          "q1": "Is Calacatta Viola suitable for daily use?",
-          "a1": "With proper precautions, yes. We recommend coasters and placemats, and avoiding direct exposure to acidic substances.",
-          "q2": "How rare is Calacatta Viola?",
-          "a2": "Very rare. There are only a few active quarries and annual yield is limited. This makes each piece particularly valuable.",
-          "q3": "Can scratches or etch marks be repaired?",
-          "a3": "Yes, marble can be polished to repair surface damage. We offer maintenance and restoration services."
-        }
+        "care": {
+          "title": "Care",
+          "description": "Calacatta Viola requires careful handling. Regular sealing and immediate cleaning of spills preserve its beauty."
+        },
+        "faq": [
+          {
+            "question": "Why is Calacatta Viola so rare?",
+            "answer": "The marble comes from just one quarry in the Apuan Alps. Extraction is limited and global demand is high."
+          },
+          {
+            "question": "Is every slab different?",
+            "answer": "Yes, each slab has a unique vein pattern. We carefully select slabs that complement each other for larger projects."
+          },
+          {
+            "question": "How do I protect the surface?",
+            "answer": "Professional sealing at installation and annual treatment protect the surface from stains and wear."
+          }
+        ]
       }
     }
+  },
+  "product": {
+    "addToBag": "Request proposal",
+    "requestBespoke": "Start bespoke journey",
+    "details": "Details",
+    "specifications": "Specifications",
+    "selectSize": "Select size",
+    "selectFinish": "Select finish",
+    "notFound": "Product not found",
+    "backToCollections": "Back to collections"
   }
 }
