@@ -144,7 +144,7 @@
     "step3Title": "Ontwerp Ontwikkeling",
     "step3Description": "Verfijnde tekeningen, 3D-visualisaties en materiaalmonsters. Elke proportie wordt overwogen, elk detail verfijnd.",
     "step4Title": "Vakmanschap",
-    "step4Description": "Uw stuk wordt vervaardigd door onze Europese ambachtslieden. We documenteren het proces, waardoor u verbonden blijft met de creatie van uw object.",
+    "step4Description": "Uw stuk wordt vervaardigd door geselecteerde ambachtslieden. We documenteren het proces, waardoor u verbonden blijft met de creatie van uw object.",
     "step5Title": "Levering & Installatie",
     "step5Description": "White-glove levering en professionele installatie. Uw stuk vindt zijn thuis.",
     "materialsSubtitle": "Materiaalpalet",
@@ -155,8 +155,8 @@
     "metalAccents": "Metalen Accenten",
     "metalAccentsList": "Geborsteld messing, gezwart staal, bronzen patina",
     "craftsmanshipSubtitle": "Vakmanschap",
-    "craftsmanshipTitle": "Europees Erfgoed",
-    "craftsmanshipDescription": "Elk Sera Norr stuk wordt vervaardigd door meester-ambachtslieden in onze Europese werkplaats. We combineren traditionele steenbewerkingstechnieken met hedendaagse precisie, zodat elk stuk voldoet aan onze veeleisende normen.",
+    "craftsmanshipTitle": "Nederlands Ontwerp",
+    "craftsmanshipDescription": "Elk Sera Norr stuk wordt ontworpen in onze Nederlandse studio. We combineren traditionele steenbewerkingstechnieken met hedendaagse precisie, en werken samen met geselecteerde ambachtslieden wereldwijd.",
     "leadTimeDescription": "Levertijden voor maatwerkopdrachten variëren doorgaans van 12 tot 20 weken, afhankelijk van materiaalbronnen en complexiteit. Wij geloven in vakmanschap dat niet kan worden gehaast.",
     "formSubtitle": "Begin Uw Traject",
     "formTitle": "Uw Opdracht",
@@ -190,8 +190,8 @@
     "value1Description": "We zoeken 's werelds zeldzaamste stenen, maanden besteedend aan het vinden van de perfecte plaat.",
     "value2Title": "Sculpturale Intentie",
     "value2Description": "Elk stuk bestaat op het snijvlak van meubilair en kunstobject.",
-    "value3Title": "Europees Vakmanschap",
-    "value3Description": "Traditionele technieken verfijnd over generaties, uitgevoerd met precisie.",
+      "value3Title": "Nederlands Ontwerp",
+      "value3Description": "Ontworpen in Nederland, uitgevoerd met geselecteerde ambachtslieden wereldwijd.",
     "value4Title": "Permanentie",
     "value4Description": "Objecten ontworpen om trends te overleven, bedoeld voor erfenis over generaties.",
     "value5Title": "Ingetogenheid",
@@ -241,7 +241,7 @@
     "terms": "Algemene voorwaarden",
     "copyright": "Alle rechten voorbehouden.",
     "tagline": "Online atelier voor maatwerk stenen meubels.",
-    "crafted": "Vervaardigd in Europa"
+    "crafted": "Ontworpen in Nederland"
   },
   "configurator": {
     "title": "Stel Uw Stuk Samen",
@@ -310,8 +310,8 @@
         "excerpt": "Een kijkje in de realisatie van een maatwerk eettafel voor een monumentaal grachtenpand in Amsterdam."
       },
       "european-craftsmanship": {
-        "title": "Europees vakmanschap",
-        "excerpt": "Hoe traditionele steenbewerkingstechnieken samenkomen met moderne precisie in ons atelier."
+        "title": "Vakmanschap en ontwerp",
+        "excerpt": "Hoe traditionele steenbewerkingstechnieken samenkomen met modern Nederlands ontwerp in onze studio."
       },
       "choosing-stone-dining": {
         "title": "De juiste steen voor uw eettafel",
