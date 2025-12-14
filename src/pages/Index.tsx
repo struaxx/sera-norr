@@ -94,28 +94,39 @@ const Index = () => {
           <div className="absolute inset-0 bg-foreground/40" />
         </div>
         
-        <div className="relative z-10 text-center px-6 max-w-4xl stagger-children">
-          <h1 className="font-serif text-display-lg lg:text-display-xl text-background mb-6 text-balance leading-tight">
-            {t('home.hero.title')}
+        <div className="relative z-10 text-center px-6 max-w-3xl stagger-children">
+          <h1 className="font-serif text-display-lg lg:text-display-xl text-background mb-6 leading-[1.1]">
+            {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
           </h1>
-          <p className="font-sans text-base lg:text-lg text-background/90 max-w-2xl mx-auto mb-10 leading-relaxed">
-            {t('home.hero.subtitle')}
+          <p className="font-sans text-base lg:text-lg text-background/85 max-w-xl mx-auto mb-10 leading-relaxed">
+            {isNL 
+              ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt voor uw ruimte." 
+              : "Travertine, marble and selected stone types. Custom made for your space."}
           </p>
           
-          {/* Single Primary CTA + Secondary */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          {/* Primary + Secondary CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
             <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
-              <Link to="/bespoke">
-                {t('home.hero.ctaPrimary')}
+              <Link to="/collections/vanta">
+                {isNL ? "Ontdek VANTA" : "Discover VANTA"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-background/60 text-background hover:bg-background/10">
-              <Link to="/collections">
-                {t('home.hero.ctaSecondary')}
+              <Link to="/bespoke">
+                {isNL ? "Vraag voorstel aan" : "Request proposal"}
               </Link>
             </Button>
           </div>
+
+          {/* Subtle text link to all collections */}
+          <Link 
+            to="/collections" 
+            className="inline-flex items-center text-background/70 hover:text-background text-sm transition-colors mb-12"
+          >
+            {isNL ? "Bekijk alle collecties" : "View all collections"}
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+          </Link>
 
           {/* Trust Strip */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 text-background/80 text-sm">
