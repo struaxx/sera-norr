@@ -99,33 +99,35 @@ const Collections = () => {
           </div>
 
           {/* Anchor Links */}
-          <nav className="flex flex-wrap gap-6 border-t border-border pt-6">
+          <nav className="flex flex-wrap gap-4 border-t border-border/50 pt-5">
             <button 
               onClick={() => scrollToSection('vanta')}
-              className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 hover:text-foreground transition-colors"
             >
               VANTA
             </button>
+            <span className="text-muted-foreground/30">·</span>
             <button 
               onClick={() => scrollToSection('terra')}
-              className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 hover:text-foreground transition-colors"
             >
               TERRA
             </button>
+            <span className="text-muted-foreground/30">·</span>
             <button 
               onClick={() => scrollToSection('andere-steensoorten')}
-              className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 hover:text-foreground transition-colors"
             >
-              {isNL ? 'Andere steensoorten' : 'Other stones'}
+              {isNL ? 'ANDERE STEENSOORTEN' : 'OTHER STONES'}
             </button>
           </nav>
         </div>
       </section>
 
       {/* VANTA Collection */}
-      <section id="vanta" className="py-12 lg:py-16 bg-background">
+      <section id="vanta" className="py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Image */}
             <div className="image-reveal">
               <Link to="/collections/vanta">
@@ -141,42 +143,36 @@ const Collections = () => {
 
             {/* Content */}
             <div className="flex flex-col justify-center">
-              <h2 className="font-serif text-display-sm text-foreground mb-2">
+              <h2 className="font-serif text-display-sm text-foreground mb-1">
                 {t("collections.vanta.name")}
               </h2>
-              <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
+              <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-5">
                 {t("collections.vanta.subtitle")}
               </p>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
+              <p className="text-muted-foreground text-body-md leading-relaxed mb-6 max-w-lg">
                 {t("collections.vanta.editorialCopy")}
               </p>
 
               {/* Pricing Block */}
-              <div className="bg-ivory/50 p-6 mb-8 border border-border/30">
-                <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground mb-4">
+              <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
+                <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
                   {t("collections.pricing.title")}
                 </p>
-                <div className="space-y-2 text-foreground">
-                  <p className="flex justify-between">
-                    <span>{t("collections.pricing.diningTables")}</span>
-                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>{t("collections.pricing.coffeeTables")}</span>
-                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>{t("collections.pricing.consoles")}</span>
-                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
-                  </p>
+                <p className="text-xs text-muted-foreground mb-4">
+                  {t("collections.pricing.subtitle")}
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-foreground">
+                  <span>{t("collections.pricing.diningTables")}</span>
+                  <span>{t("collections.pricing.coffeeTables")}</span>
+                  <span>{t("collections.pricing.consoles")}</span>
                 </div>
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3">
                 <Button asChild variant="atelier">
                   <Link to="/collections/vanta">
-                    {t("collections.cta.discover")}
+                    {isNL ? "Ontdek VANTA" : "Discover VANTA"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -192,9 +188,9 @@ const Collections = () => {
       </section>
 
       {/* TERRA Collection */}
-      <section id="terra" className="py-12 lg:py-16 bg-background">
+      <section id="terra" className="py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center lg:grid-flow-dense">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center lg:grid-flow-dense">
             {/* Image */}
             <div className="image-reveal lg:col-start-2">
               <Link to="/collections/terra">
@@ -210,42 +206,36 @@ const Collections = () => {
 
             {/* Content */}
             <div className="flex flex-col justify-center lg:col-start-1">
-              <h2 className="font-serif text-display-sm text-foreground mb-2">
+              <h2 className="font-serif text-display-sm text-foreground mb-1">
                 {t("collections.terra.name")}
               </h2>
-              <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
+              <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-5">
                 {t("collections.terra.subtitle")}
               </p>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
+              <p className="text-muted-foreground text-body-md leading-relaxed mb-6 max-w-lg">
                 {t("collections.terra.editorialCopy")}
               </p>
 
               {/* Pricing Block */}
-              <div className="bg-ivory/50 p-6 mb-8 border border-border/30">
-                <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground mb-4">
+              <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
+                <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
                   {t("collections.pricing.title")}
                 </p>
-                <div className="space-y-2 text-foreground">
-                  <p className="flex justify-between">
-                    <span>{t("collections.pricing.diningTables")}</span>
-                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>{t("collections.pricing.coffeeTables")}</span>
-                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>{t("collections.pricing.consoles")}</span>
-                    <span className="text-muted-foreground">{t("collections.pricing.onRequest")}</span>
-                  </p>
+                <p className="text-xs text-muted-foreground mb-4">
+                  {t("collections.pricing.subtitle")}
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-foreground">
+                  <span>{t("collections.pricing.diningTables")}</span>
+                  <span>{t("collections.pricing.coffeeTables")}</span>
+                  <span>{t("collections.pricing.consoles")}</span>
                 </div>
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3">
                 <Button asChild variant="atelier">
                   <Link to="/collections/terra">
-                    {t("collections.cta.discover")}
+                    {isNL ? "Ontdek TERRA" : "Discover TERRA"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -261,17 +251,17 @@ const Collections = () => {
       </section>
 
       {/* Other Stones */}
-      <section id="andere-steensoorten" className="py-12 lg:py-16 bg-background">
+      <section id="andere-steensoorten" className="py-10 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             {/* Placeholder Image */}
             <div className="image-reveal">
-              <div className="aspect-[4/5] bg-sand/30 overflow-hidden flex items-center justify-center border border-border/30">
+              <div className="aspect-[4/5] bg-sand/20 overflow-hidden flex items-center justify-center border border-border/20">
                 <div className="text-center p-12">
                   <p className="font-serif text-lg text-muted-foreground mb-2">
-                    Verde Alpi • Nero Marquina
+                    Verde Alpi · Nero Marquina
                   </p>
-                  <p className="text-sm text-muted-foreground/70">
+                  <p className="text-xs text-muted-foreground/60 uppercase tracking-[0.15em]">
                     {isNL ? '& andere steensoorten' : '& other stone types'}
                   </p>
                 </div>
@@ -280,20 +270,37 @@ const Collections = () => {
 
             {/* Content */}
             <div className="flex flex-col justify-center">
-              <h2 className="font-serif text-display-sm text-foreground mb-2">
+              <h2 className="font-serif text-display-sm text-foreground mb-1">
                 {t("collections.other.name")}
               </h2>
-              <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
+              <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-5">
                 {t("collections.other.subtitle")}
               </p>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
+              <p className="text-muted-foreground text-body-md leading-relaxed mb-6 max-w-lg">
                 {t("collections.other.description")}
               </p>
-              <div>
+
+              {/* Selection Block */}
+              <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
+                <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
+                  {t("collections.other.selectionTitle")}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t("collections.other.selectionSubtitle")}
+                </p>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-3">
                 <Button asChild variant="atelier">
                   <Link to="/materials">
                     {t("collections.other.cta")}
                     <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link to="/bespoke">
+                    {t("collections.cta.requestProposal")}
                   </Link>
                 </Button>
               </div>
@@ -303,21 +310,21 @@ const Collections = () => {
       </section>
 
       {/* Process Section - Van collectie naar voorstel */}
-      <section className="py-16 lg:py-20 bg-ivory/50">
+      <section className="py-12 lg:py-16 bg-ivory/50">
         <div className="container mx-auto px-6 lg:px-12">
-          <header className="text-center mb-12">
-            <h2 className="font-serif text-display-sm text-foreground mb-4">
+          <header className="text-center mb-10">
+            <h2 className="font-serif text-display-sm text-foreground mb-3">
               {t("collections.process.title")}
             </h2>
           </header>
 
           {/* Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 mb-10">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-4 font-serif text-lg">
+              <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-3 font-serif text-base">
                 1
               </div>
-              <h3 className="font-serif text-lg text-foreground mb-2">
+              <h3 className="font-serif text-base text-foreground mb-1">
                 {t("collections.process.step1.title")}
               </h3>
               <p className="text-muted-foreground text-sm">
@@ -325,10 +332,10 @@ const Collections = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-4 font-serif text-lg">
+              <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-3 font-serif text-base">
                 2
               </div>
-              <h3 className="font-serif text-lg text-foreground mb-2">
+              <h3 className="font-serif text-base text-foreground mb-1">
                 {t("collections.process.step2.title")}
               </h3>
               <p className="text-muted-foreground text-sm">
@@ -336,10 +343,10 @@ const Collections = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-4 font-serif text-lg">
+              <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-3 font-serif text-base">
                 3
               </div>
-              <h3 className="font-serif text-lg text-foreground mb-2">
+              <h3 className="font-serif text-base text-foreground mb-1">
                 {t("collections.process.step3.title")}
               </h3>
               <p className="text-muted-foreground text-sm">
@@ -355,7 +362,7 @@ const Collections = () => {
                 {t("collections.process.cta")}
               </Link>
             </Button>
-            <p className="text-muted-foreground text-sm mt-4">
+            <p className="text-muted-foreground text-xs mt-3">
               {t("collections.process.microcopy")}
             </p>
           </div>
