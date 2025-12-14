@@ -139,7 +139,7 @@ const Collections = () => {
       />
 
       {/* Hero Section */}
-      <section className="pt-28 lg:pt-36 pb-0 bg-background">
+      <section className="pt-28 lg:pt-36 pb-6 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <Breadcrumbs className="mb-4 opacity-60 text-[10px]" />
           
@@ -164,8 +164,8 @@ const Collections = () => {
         </div>
       </section>
 
-      {/* Sticky Section Navigation Tabs */}
-      <nav className="sticky top-16 lg:top-20 z-[100] bg-background border-b border-border/30 mt-6">
+      {/* Sticky Section Navigation Tabs - positioned directly under header */}
+      <div className="sticky top-[64px] lg:top-[72px] z-[100] bg-background border-b border-border/30 -mt-px">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex gap-6 lg:gap-8">
             <TabButton 
@@ -185,7 +185,7 @@ const Collections = () => {
             />
           </div>
         </div>
-      </nav>
+      </div>
 
       {/* VANTA Collection */}
       <section id="vanta" className="scroll-mt-28 lg:scroll-mt-32 py-10 lg:py-14 bg-background">
