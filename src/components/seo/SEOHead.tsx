@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface SEOHeadProps {
   title: string;
@@ -9,6 +10,8 @@ interface SEOHeadProps {
   image?: string;
   noindex?: boolean;
   structuredData?: object;
+  titleEn?: string;
+  descriptionEn?: string;
 }
 
 export function SEOHead({
@@ -19,8 +22,12 @@ export function SEOHead({
   image = 'https://sera-norr.com/og-image.jpg',
   noindex = false,
   structuredData,
+  titleEn,
+  descriptionEn,
 }: SEOHeadProps) {
   const location = useLocation();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language || 'nl';
   const canonicalUrl = `https://sera-norr.com${location.pathname}`;
   const fullTitle = title.includes('SERA NORR') ? title : `${title} | SERA NORR`;
 
@@ -45,6 +52,26 @@ export function SEOHead({
     if (keywords) updateMeta('keywords', keywords);
     if (noindex) updateMeta('robots', 'noindex,nofollow');
 
+    // Update html lang attribute
+    document.documentElement.lang = currentLang;
+
+    // Hreflang links
+    const updateHreflang = (hreflang: string, href: string) => {
+      let link = document.querySelector(`link[hreflang="${hreflang}"]`) as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'alternate';
+        link.hreflang = hreflang;
+        document.head.appendChild(link);
+      }
+      link.href = href;
+    };
+
+    const langParam = currentLang === 'en' ? '?lang=en' : '';
+    updateHreflang('nl', canonicalUrl);
+    updateHreflang('en', `${canonicalUrl}${canonicalUrl.includes('?') ? '&' : '?'}lang=en`);
+    updateHreflang('x-default', canonicalUrl);
+
     // Open Graph
     updateMeta('og:title', fullTitle, true);
     updateMeta('og:description', description, true);
@@ -52,7 +79,8 @@ export function SEOHead({
     updateMeta('og:url', canonicalUrl, true);
     updateMeta('og:image', image, true);
     updateMeta('og:site_name', 'SERA NORR', true);
-    updateMeta('og:locale', 'nl_NL', true);
+    updateMeta('og:locale', currentLang === 'nl' ? 'nl_NL' : 'en_GB', true);
+    updateMeta('og:locale:alternate', currentLang === 'nl' ? 'en_GB' : 'nl_NL', true);
 
     // Twitter
     updateMeta('twitter:card', 'summary_large_image');
@@ -87,7 +115,7 @@ export function SEOHead({
       const existingScript = document.querySelector('script[data-seo="structured-data"]');
       if (existingScript) existingScript.remove();
     };
-  }, [fullTitle, description, keywords, type, image, canonicalUrl, noindex, structuredData]);
+  }, [fullTitle, description, keywords, type, image, canonicalUrl, noindex, structuredData, currentLang]);
 
   return null;
 }
@@ -194,3 +222,46 @@ export const localBusinessSchema = {
   },
   priceRange: '€€€€',
 };
+
+// FAQ structured data generator
+export function generateFAQSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+// Collection/Category structured data generator
+export function generateCollectionSchema(collection: {
+  name: string;
+  description: string;
+  image: string;
+  url: string;
+  products?: { name: string; url: string; image?: string }[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: collection.name,
+    description: collection.description,
+    image: collection.image,
+    url: collection.url,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: collection.products?.map((product, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: product.name,
+        url: product.url,
+      })),
+    },
+  };
+}
