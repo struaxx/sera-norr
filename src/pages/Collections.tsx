@@ -3,12 +3,15 @@ import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
 import nordImage from "@/assets/nord-collection.jpg";
 
 const Collections = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isNL = i18n.language === 'nl';
 
   const collections = [
     {
@@ -29,19 +32,44 @@ const Collections = () => {
     },
   ];
 
+  const seoTitle = isNL 
+    ? "Collecties | Travertin & Calacatta Viola Meubels | SERA NORR"
+    : "Collections | Travertine & Calacatta Viola Furniture | SERA NORR";
+
+  const seoDescription = isNL
+    ? "Ontdek onze collecties stenen meubels. TERRA collectie in travertin en VANTA collectie in Calacatta Viola marmer. Handgemaakt in Europa."
+    : "Discover our stone furniture collections. TERRA collection in travertine and VANTA collection in Calacatta Viola marble. Handcrafted in Europe.";
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: isNL ? 'Collecties' : 'Collections', url: '/collections' },
+  ]);
+
   return (
     <Layout>
+      <SEOHead 
+        title={seoTitle}
+        description={seoDescription}
+        keywords={isNL 
+          ? "collecties, travertin meubels, Calacatta Viola, stenen tafels, marmeren meubels, luxe design" 
+          : "collections, travertine furniture, Calacatta Viola, stone tables, marble furniture, luxury design"}
+        structuredData={breadcrumbSchema}
+      />
+
       {/* Intro Block */}
       <section className="pt-32 lg:pt-40 pb-16 lg:pb-24 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl">
+          <Breadcrumbs className="mb-8" />
+          
+          <header className="max-w-3xl">
+            <h1 className="sr-only">{isNL ? 'Collecties' : 'Collections'}</h1>
             <p className="text-muted-foreground text-body-lg leading-relaxed animate-fade-in">
               {t("collections.intro.line1")}
             </p>
             <p className="text-muted-foreground text-body-lg leading-relaxed mt-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
               {t("collections.intro.line2")}
             </p>
-          </div>
+          </header>
         </div>
       </section>
 
@@ -62,7 +90,7 @@ const Collections = () => {
                     <div className="aspect-[4/5] bg-muted overflow-hidden">
                       <img
                         src={collection.image}
-                        alt={`${collection.name} Collection`}
+                        alt={`${collection.name} ${isNL ? 'Collectie' : 'Collection'} - ${collection.subtitle} ${isNL ? 'stenen meubels' : 'stone furniture'}`}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -99,7 +127,7 @@ const Collections = () => {
                 <div className="aspect-[4/5] bg-sand/30 overflow-hidden flex items-center justify-center">
                   <img
                     src={nordImage}
-                    alt="Other Stones"
+                    alt={isNL ? "Overige steensoorten - zeldzame materialen op aanvraag" : "Other stone types - rare materials on request"}
                     className="w-full h-full object-cover opacity-80"
                   />
                 </div>

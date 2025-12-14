@@ -1,12 +1,17 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Clock } from "lucide-react";
+import { SEOHead, localBusinessSchema, generateBreadcrumbSchema } from "@/components/seo";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
 const Contact = () => {
+  const { t, i18n } = useTranslation();
+  const isNL = i18n.language === 'nl';
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -18,29 +23,61 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Message Sent",
-      description: "Thank you for reaching out. We will respond within 24-48 hours.",
+      title: isNL ? "Bericht Verzonden" : "Message Sent",
+      description: isNL 
+        ? "Bedankt voor uw bericht. We reageren binnen 24-48 uur."
+        : "Thank you for reaching out. We will respond within 24-48 hours.",
     });
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
+  const seoTitle = isNL 
+    ? "Contact | SERA NORR Showroom Amsterdam"
+    : "Contact | SERA NORR Showroom Amsterdam";
+
+  const seoDescription = isNL
+    ? "Neem contact op met SERA NORR. Bezoek onze showroom in Amsterdam op afspraak. Vraag een voorstel aan voor maatwerk stenen meubels."
+    : "Contact SERA NORR. Visit our Amsterdam showroom by appointment. Request a proposal for bespoke stone furniture.";
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Contact', url: '/contact' },
+  ]);
+
+  const combinedSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [localBusinessSchema, breadcrumbSchema],
+  };
+
   return (
     <Layout>
+      <SEOHead 
+        title={seoTitle}
+        description={seoDescription}
+        keywords={isNL 
+          ? "contact SERA NORR, showroom Amsterdam, afspraak maken, maatwerk aanvraag" 
+          : "contact SERA NORR, showroom Amsterdam, schedule appointment, bespoke inquiry"}
+        structuredData={combinedSchema}
+      />
+
       {/* Hero */}
       <section className="pt-32 lg:pt-40 pb-16 lg:pb-24 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl">
+          <Breadcrumbs className="mb-8" />
+          
+          <header className="max-w-3xl">
             <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
               Contact
             </p>
             <h1 className="font-serif text-display-lg text-foreground mb-8">
-              Let's Begin
+              {isNL ? 'Laten We Beginnen' : "Let's Begin"}
             </h1>
             <p className="text-muted-foreground text-body-lg leading-relaxed">
-              Whether you're interested in our collections, considering a bespoke 
-              commission, or simply wish to visit our showroom—we welcome your inquiry.
+              {isNL
+                ? 'Of u nu interesse heeft in onze collecties, een maatwerkopdracht overweegt, of simpelweg onze showroom wilt bezoeken—we verwelkomen uw vraag.'
+                : "Whether you're interested in our collections, considering a bespoke commission, or simply wish to visit our showroom—we welcome your inquiry."}
             </p>
-          </div>
+          </header>
         </div>
       </section>
 
@@ -51,13 +88,13 @@ const Contact = () => {
             {/* Contact Info */}
             <div>
               <h2 className="font-serif text-display-sm text-foreground mb-12">
-                The Atelier
+                {isNL ? 'Het Atelier' : 'The Atelier'}
               </h2>
 
-              <div className="space-y-10">
+              <address className="space-y-10 not-italic">
                 <div className="flex gap-6">
                   <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-border">
-                    <MapPin className="w-5 h-5 text-muted-foreground" />
+                    <MapPin className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
@@ -66,18 +103,18 @@ const Contact = () => {
                     <p className="text-muted-foreground text-body-md leading-relaxed">
                       Keizersgracht 585<br />
                       1017 DR Amsterdam<br />
-                      The Netherlands
+                      {isNL ? 'Nederland' : 'The Netherlands'}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-6">
                   <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-border">
-                    <Mail className="w-5 h-5 text-muted-foreground" />
+                    <Mail className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
-                      Email
+                      E-mail
                     </h3>
                     <a 
                       href="mailto:atelier@seranorr.com" 
@@ -90,25 +127,25 @@ const Contact = () => {
 
                 <div className="flex gap-6">
                   <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-border">
-                    <Clock className="w-5 h-5 text-muted-foreground" />
+                    <Clock className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
-                      Visiting Hours
+                      {isNL ? 'Bezoekuren' : 'Visiting Hours'}
                     </h3>
                     <p className="text-muted-foreground text-body-md leading-relaxed">
-                      By appointment only<br />
-                      Monday – Friday, 10:00 – 18:00
+                      {isNL ? 'Alleen op afspraak' : 'By appointment only'}<br />
+                      {isNL ? 'Maandag – Vrijdag, 10:00 – 18:00' : 'Monday – Friday, 10:00 – 18:00'}
                     </p>
                   </div>
                 </div>
-              </div>
+              </address>
 
               <div className="mt-12 pt-12 border-t border-border">
                 <p className="text-muted-foreground text-body-sm leading-relaxed">
-                  Our showroom visits are private and by appointment. Experience 
-                  our collections in an intimate setting, guided by our team who 
-                  can speak to materials, process, and customization possibilities.
+                  {isNL
+                    ? 'Onze showroom bezoeken zijn privé en alleen op afspraak. Ervaar onze collecties in een intieme setting, begeleid door ons team dat u alles kan vertellen over materialen, proces en aanpassingsmogelijkheden.'
+                    : 'Our showroom visits are private and by appointment. Experience our collections in an intimate setting, guided by our team who can speak to materials, process, and customization possibilities.'}
                 </p>
               </div>
             </div>
@@ -116,69 +153,73 @@ const Contact = () => {
             {/* Contact Form */}
             <div>
               <h2 className="font-serif text-display-sm text-foreground mb-12">
-                Get in Touch
+                {isNL ? 'Neem Contact Op' : 'Get in Touch'}
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                      Name
+                    <label htmlFor="name" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                      {isNL ? 'Naam' : 'Name'}
                     </label>
                     <Input
+                      id="name"
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
                       className="bg-background border-border focus:border-foreground"
-                      placeholder="Your name"
+                      placeholder={isNL ? 'Uw naam' : 'Your name'}
                     />
                   </div>
                   <div>
-                    <label className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                      Email
+                    <label htmlFor="email" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                      E-mail
                     </label>
                     <Input
+                      id="email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
                       className="bg-background border-border focus:border-foreground"
-                      placeholder="your@email.com"
+                      placeholder="uw@email.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                    Subject
+                  <label htmlFor="subject" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                    {isNL ? 'Onderwerp' : 'Subject'}
                   </label>
                   <Input
+                    id="subject"
                     type="text"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     className="bg-background border-border focus:border-foreground"
-                    placeholder="Collections, Bespoke, Showroom Visit..."
+                    placeholder={isNL ? 'Collecties, Maatwerk, Showroom Bezoek...' : 'Collections, Bespoke, Showroom Visit...'}
                   />
                 </div>
 
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                    Message
+                  <label htmlFor="message" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                    {isNL ? 'Bericht' : 'Message'}
                   </label>
                   <Textarea
+                    id="message"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     rows={6}
                     className="bg-background border-border focus:border-foreground resize-none"
-                    placeholder="How can we help you?"
+                    placeholder={isNL ? 'Hoe kunnen we u helpen?' : 'How can we help you?'}
                   />
                 </div>
 
                 <div className="pt-4">
                   <Button type="submit" variant="atelier-filled" size="lg" className="w-full md:w-auto">
-                    Send Message
+                    {isNL ? 'Verstuur Bericht' : 'Send Message'}
                   </Button>
                 </div>
               </form>
@@ -190,14 +231,16 @@ const Contact = () => {
       {/* Quote Section */}
       <section className="section-padding bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <blockquote className="max-w-3xl mx-auto text-center">
-            <p className="font-serif text-display-sm text-foreground mb-6 italic">
-              "The best objects are those that speak quietly but cannot be ignored."
-            </p>
-            <cite className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground not-italic">
+          <figure className="max-w-3xl mx-auto text-center">
+            <blockquote className="font-serif text-display-sm text-foreground mb-6 italic">
+              {isNL 
+                ? '"De beste objecten zijn zij die stil spreken maar niet kunnen worden genegeerd."'
+                : '"The best objects are those that speak quietly but cannot be ignored."'}
+            </blockquote>
+            <figcaption className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground">
               — Sera Norr Atelier
-            </cite>
-          </blockquote>
+            </figcaption>
+          </figure>
         </div>
       </section>
     </Layout>

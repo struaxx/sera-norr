@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import { fetchProductByHandle } from "@/lib/shopify";
 import { useCartStore, CartItem } from "@/stores/cartStore";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { SEOHead, generateProductSchema, generateBreadcrumbSchema } from "@/components/seo";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { ServicePromises } from "@/components/trust";
 
 interface ProductData {
   id: string;
@@ -53,7 +56,8 @@ interface ProductData {
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isNL = i18n.language === 'nl';
   const [product, setProduct] = useState<ProductData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
@@ -101,7 +105,7 @@ const ProductDetail = () => {
     };
 
     addItem(cartItem);
-    toast.success("Toegevoegd aan winkeltas", {
+    toast.success(isNL ? "Toegevoegd aan winkeltas" : "Added to bag", {
       description: product.title,
       position: "top-center",
     });
@@ -130,15 +134,20 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <Layout>
+        <SEOHead 
+          title={isNL ? "Product niet gevonden" : "Product not found"}
+          description={isNL ? "Dit product kon niet worden gevonden." : "This product could not be found."}
+          noindex={true}
+        />
         <section className="pt-32 lg:pt-40 pb-section bg-background">
           <div className="container mx-auto px-6 lg:px-12 text-center">
             <h1 className="font-serif text-display-sm text-foreground mb-6">
-              Product niet gevonden
+              {isNL ? "Product niet gevonden" : "Product not found"}
             </h1>
             <Button asChild variant="atelier">
               <Link to="/collections">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Terug naar collecties
+                {isNL ? "Terug naar collecties" : "Back to collections"}
               </Link>
             </Button>
           </div>
@@ -152,18 +161,53 @@ const ProductDetail = () => {
   const price = product.priceRange.minVariantPrice;
   const hasMultipleVariants = product.variants.edges.length > 1;
 
+  // SEO structured data
+  const productSchema = generateProductSchema({
+    title: product.title,
+    description: product.description,
+    price: price.amount,
+    currency: price.currencyCode,
+    image: currentImage?.url || '',
+    handle: product.handle,
+    available: product.variants.edges.some(v => v.node.availableForSale),
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: isNL ? 'Home' : 'Home', url: '/' },
+    { name: isNL ? 'Collecties' : 'Collections', url: '/collections' },
+    { name: product.title, url: `/product/${product.handle}` },
+  ]);
+
+  const combinedSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [productSchema, breadcrumbSchema],
+  };
+
+  const seoDescription = product.description 
+    ? product.description.slice(0, 155) 
+    : `${product.title} - ${isNL ? 'Handgemaakt stenen meubelstuk van SERA NORR' : 'Handcrafted stone furniture piece by SERA NORR'}`;
+
   return (
     <Layout>
+      <SEOHead 
+        title={`${product.title} | SERA NORR`}
+        description={seoDescription}
+        type="product"
+        image={currentImage?.url}
+        structuredData={combinedSchema}
+        keywords={`${product.title}, ${isNL ? 'stenen meubels, marmeren tafel, luxe meubels' : 'stone furniture, marble table, luxury furniture'}`}
+      />
+
       <section className="pt-32 lg:pt-40 pb-section bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          {/* Back Link */}
-          <Link
-            to="/collections"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Terug naar collecties
-          </Link>
+          {/* Breadcrumbs */}
+          <Breadcrumbs 
+            items={[
+              { label: isNL ? 'Collecties' : 'Collections', href: '/collections' },
+              { label: product.title, href: `/product/${product.handle}` },
+            ]}
+            className="mb-8"
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Images */}
@@ -172,7 +216,7 @@ const ProductDetail = () => {
                 {currentImage && (
                   <img
                     src={currentImage.url}
-                    alt={currentImage.altText || product.title}
+                    alt={currentImage.altText || `${product.title} - ${isNL ? 'SERA NORR stenen meubel' : 'SERA NORR stone furniture'}`}
                     className="w-full h-full object-cover"
                   />
                 )}
@@ -186,10 +230,11 @@ const ProductDetail = () => {
                       className={`w-20 h-24 bg-ivory/50 overflow-hidden transition-opacity ${
                         selectedImage === index ? "opacity-100 ring-1 ring-foreground" : "opacity-60 hover:opacity-100"
                       }`}
+                      aria-label={`${isNL ? 'Bekijk afbeelding' : 'View image'} ${index + 1}`}
                     >
                       <img
                         src={img.node.url}
-                        alt={img.node.altText || `${product.title} ${index + 1}`}
+                        alt={img.node.altText || `${product.title} - ${isNL ? 'afbeelding' : 'image'} ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </button>
@@ -216,7 +261,9 @@ const ProductDetail = () => {
               {/* Variant Selector */}
               {hasMultipleVariants && (
                 <div className="mb-8">
-                  <p className="text-sm text-muted-foreground mb-3">Variant</p>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {isNL ? 'Variant' : 'Variant'}
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {product.variants.edges.map((variant) => (
                       <button
@@ -242,25 +289,31 @@ const ProductDetail = () => {
                 onClick={handleAddToCart}
                 variant="atelier-filled"
                 size="lg"
-                className="w-full mb-6"
+                className="w-full mb-8"
               >
-                Toevoegen aan winkeltas
+                {isNL ? 'Toevoegen aan winkeltas' : 'Add to bag'}
               </Button>
 
-              {/* Features */}
-              <div className="border-t border-border pt-8 space-y-3">
-                <div className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <Check className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span>Handgemaakt in Europa</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <Check className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span>Maatwerk mogelijk op aanvraag</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <Check className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span>Professionele levering en plaatsing</span>
-                </div>
+              {/* Service Promises / Trust Elements */}
+              <div className="border-t border-border pt-8">
+                <ServicePromises variant="compact" />
+              </div>
+
+              {/* Bespoke CTA */}
+              <div className="mt-8 p-6 bg-secondary/30 border border-border/50">
+                <p className="font-serif text-lg text-foreground mb-2">
+                  {isNL ? 'Andere afmetingen of materiaal?' : 'Different dimensions or material?'}
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {isNL 
+                    ? 'Elk stuk kan worden aangepast. Vraag een voorstel op maat aan.' 
+                    : 'Every piece can be customized. Request a bespoke proposal.'}
+                </p>
+                <Button asChild variant="atelier" size="sm">
+                  <Link to="/bespoke">
+                    {isNL ? 'Start maatwerktraject' : 'Start bespoke process'}
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>

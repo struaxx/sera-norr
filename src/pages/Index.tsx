@@ -4,12 +4,15 @@ import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { ProductGrid } from "@/components/shop";
+import { SEOHead, organizationSchema } from "@/components/seo";
+import { TrustBadges } from "@/components/trust";
 import heroImage from "@/assets/hero-vanta.jpg";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
 
 const Index = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isNL = i18n.language === 'nl';
 
   const collections = [
     {
@@ -26,14 +29,33 @@ const Index = () => {
     },
   ];
 
+  const seoTitle = isNL 
+    ? "SERA NORR — Luxe Stenen Meubels & Maatwerk Atelier" 
+    : "SERA NORR — Luxury Stone Furniture & Bespoke Atelier";
+  
+  const seoDescription = isNL
+    ? "Sculpturale stenen meubels vervaardigd in Europa. Travertin, Calacatta Viola en andere zeldzame steensoorten. Maatwerk marmeren tafels en design meubels."
+    : "Sculptural stone furniture crafted in Europe. Travertine, Calacatta Viola and other rare stones. Bespoke marble tables and designer furniture.";
+
+  const seoKeywords = isNL
+    ? "stenen meubels, marmeren tafel, travertin tafel, luxe meubels, maatwerk meubels, Calacatta Viola, design tafel, natuursteen meubels"
+    : "stone furniture, marble table, travertine table, luxury furniture, bespoke furniture, Calacatta Viola, designer table, natural stone furniture";
+
   return (
     <Layout>
+      <SEOHead 
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords}
+        structuredData={organizationSchema}
+      />
+
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={heroImage}
-            alt="SERA NORR - Sculpturale stenen meubels"
+            alt={isNL ? "SERA NORR - Sculpturale stenen meubels van travertin en Calacatta Viola marmer" : "SERA NORR - Sculptural stone furniture from travertine and Calacatta Viola marble"}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-foreground/30" />
@@ -58,6 +80,13 @@ const Index = () => {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background/60">
           <span className="font-sans text-[10px] uppercase tracking-[0.3em]">{t('home.scroll')}</span>
           <div className="w-px h-12 bg-background/30" />
+        </div>
+      </section>
+
+      {/* Trust Section - New */}
+      <section className="py-12 lg:py-16 bg-ivory/50 border-b border-border/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <TrustBadges variant="horizontal" />
         </div>
       </section>
 
@@ -91,13 +120,13 @@ const Index = () => {
                 to={`/collections/${collection.id}`}
                 className="group block"
               >
-                <div className="aspect-[4/3] bg-muted mb-6 overflow-hidden">
+                <article className="aspect-[4/3] bg-muted mb-6 overflow-hidden">
                   <img
                     src={collection.image}
-                    alt={`${collection.name} Collection`}
+                    alt={isNL ? `${collection.name} Collectie - ${collection.material} stenen meubels` : `${collection.name} Collection - ${collection.material} stone furniture`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                </div>
+                </article>
                 <div className="space-y-1">
                   <h3 className="font-serif text-2xl text-foreground">
                     {collection.name}
