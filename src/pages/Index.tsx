@@ -78,11 +78,16 @@ const Index = () => {
   const getCollectionDescription = (handle: string, originalDescription: string) => {
     if (!isNL) return originalDescription;
     
-    const dutchDescriptions: Record<string, string> = {
-      'vanta': 'De VANTA Collectie is vervaardigd uit Calacatta Viola marmer, een zeldzame steen bekend om zijn rijke paarse adering en luxueuze uitstraling. Elk stuk is uniek in kleur en karakter.',
-      'terra': 'De TERRA Collectie is vervaardigd uit natuurlijk travertin, een steen gewaardeerd om zijn warme beigetinten en tijdloze karakter. Elke tafel toont unieke lagen en texturen gevormd door eeuwen.',
-    };
-    return dutchDescriptions[handle.toLowerCase()] || originalDescription;
+    const handleLower = handle.toLowerCase();
+    
+    if (handleLower.includes('vanta')) {
+      return 'De VANTA Collectie is vervaardigd uit Calacatta Viola marmer, een zeldzame steen bekend om zijn rijke paarse adering en luxueuze uitstraling. Elk stuk is uniek in kleur en karakter.';
+    }
+    if (handleLower.includes('terra')) {
+      return 'De TERRA Collectie is vervaardigd uit natuurlijk travertin, een steen gewaardeerd om zijn warme beigetinten en tijdloze karakter. Elke tafel toont unieke lagen en texturen gevormd door eeuwen.';
+    }
+    
+    return originalDescription;
   };
 
   return (
