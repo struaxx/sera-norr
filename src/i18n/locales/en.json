@@ -100,7 +100,7 @@
       "name": "TERRA",
       "subtitle": "Travertine",
       "description": "Travertine with calm tones and natural layering. Designs with gentle strength, clear lines and a calm presence.",
-      "editorialCopy": "Travertine formed over millennia, carrying the memory of water in every layer. Warm, honeyed tones and characteristic texture. For those seeking calm and refinement.",
+      "editorialCopy": "Italian travertine with warm, honeyed tones and characteristic texture. Every piece is made to measure according to your dimensions and form preferences.",
       "cta": "View TERRA",
       "longDescription": "The TERRA collection draws from the ancient warmth of Italian travertine—stone formed over millennia from mineral springs, carrying within it the memory of water. Each piece reveals the characteristic pitting and honeyed tones that make travertine one of nature's most expressive materials."
     },
@@ -108,18 +108,21 @@
       "name": "VANTA",
       "subtitle": "Calacatta Viola",
       "description": "Calacatta Viola with rich veins and pronounced contrast. Clean forms that let the material speak without excess.",
-      "editorialCopy": "Calacatta Viola from the Apuan Alps — one of the rarest marbles in the world. Bold violet veining against luminous white. For interiors that demand a powerful statement.",
+      "editorialCopy": "Calacatta Viola with violet veining and a luminous white surface. Every piece is made to measure according to your dimensions and form preferences.",
       "cta": "View VANTA",
       "longDescription": "VANTA celebrates Calacatta Viola—among the rarest and most dramatic marbles quarried from the Apuan Alps. Its bold violet veining against luminous white creates pieces that are as much sculpture as furniture."
     },
     "other": {
       "name": "Other stone types",
       "subtitle": "Selection on request",
-      "description": "For projects with a specific colour tone or stone type, we work beyond the fixed collections. Verde Alpi, Nero Marquina, and other rare stone types — we source the right material for your project.",
-      "cta": "Request material options"
+      "description": "For projects with a specific colour tone or stone type, we work beyond the fixed collections. Verde Alpi, Nero Marquina and other stone types — selected based on drawing and character of your space.",
+      "cta": "Request material options",
+      "selectionTitle": "Selection on request",
+      "selectionSubtitle": "Materials beyond the fixed collections — selected based on drawing and character."
     },
     "pricing": {
       "title": "Starting prices",
+      "subtitle": "On request — depending on size, stone and finish.",
       "diningTables": "Dining tables",
       "coffeeTables": "Coffee tables",
       "consoles": "Consoles",
