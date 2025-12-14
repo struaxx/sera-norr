@@ -1,35 +1,33 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import terraImage from "@/assets/terra-collection.jpg";
-import vantaImage from "@/assets/vanta-collection.jpg";
+import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Collections = () => {
   const { t, i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
+  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const collections = [
-    {
-      id: "terra",
-      name: "TERRA",
-      subtitle: t("collections.terra.subtitle"),
-      description: t("collections.terra.description"),
-      image: terraImage,
-      cta: t("collections.terra.cta"),
-    },
-    {
-      id: "vanta",
-      name: "VANTA",
-      subtitle: t("collections.vanta.subtitle"),
-      description: t("collections.vanta.description"),
-      image: vantaImage,
-      cta: t("collections.vanta.cta"),
-    },
-  ];
+  useEffect(() => {
+    const loadCollections = async () => {
+      try {
+        const data = await fetchCollections(10);
+        setCollections(data);
+      } catch (error) {
+        console.error("Failed to fetch collections:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCollections();
+  }, []);
 
   const seoTitle = isNL 
     ? "Collecties | Travertin & Calacatta Viola Meubels | SERA NORR"
@@ -76,48 +74,72 @@ const Collections = () => {
       <section className="pb-section bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="space-y-24 lg:space-y-32">
-            {collections.map((collection, index) => (
-              <article
-                key={collection.id}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center ${
-                  index % 2 === 1 ? "lg:grid-flow-dense" : ""
-                }`}
-              >
-                {/* Image */}
-                <div className={`image-reveal ${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
-                  <Link to={`/collections/${collection.id}`}>
-                    <div className="aspect-[4/5] bg-muted overflow-hidden">
-                      <img
-                        src={collection.image}
-                        alt={`${collection.name} ${isNL ? 'Collectie' : 'Collection'} - ${collection.subtitle} ${isNL ? 'stenen meubels' : 'stone furniture'}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </Link>
-                </div>
-
-                {/* Content */}
-                <div className={`flex flex-col justify-center ${index % 2 === 1 ? "lg:col-start-1" : ""}`}>
-                  <h2 className="font-serif text-display-sm text-foreground mb-2">
-                    {collection.name}
-                  </h2>
-                  <p className="font-sans text-sm uppercase tracking-[0.15em] text-muted-foreground mb-6">
-                    {collection.subtitle}
-                  </p>
-                  <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
-                    {collection.description}
-                  </p>
-                  <div>
-                    <Button asChild variant="atelier">
-                      <Link to={`/collections/${collection.id}`}>
-                        {collection.cta}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
+            {loading ? (
+              // Loading skeletons
+              [1, 2].map((i) => (
+                <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                  <Skeleton className="aspect-[4/5] w-full" />
+                  <div className="space-y-4">
+                    <Skeleton className="h-10 w-1/2" />
+                    <Skeleton className="h-4 w-1/4" />
+                    <Skeleton className="h-24 w-full" />
+                    <Skeleton className="h-10 w-32" />
                   </div>
                 </div>
-              </article>
-            ))}
+              ))
+            ) : collections.length > 0 ? (
+              collections.map((collection, index) => (
+                <article
+                  key={collection.node.id}
+                  className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center ${
+                    index % 2 === 1 ? "lg:grid-flow-dense" : ""
+                  }`}
+                >
+                  {/* Image */}
+                  <div className={`image-reveal ${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
+                    <Link to={`/collections/${collection.node.handle}`}>
+                      <div className="aspect-[4/5] bg-muted overflow-hidden">
+                        {collection.node.image ? (
+                          <img
+                            src={collection.node.image.url}
+                            alt={collection.node.image.altText || `${collection.node.title} ${isNL ? 'collectie' : 'collection'}`}
+                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-secondary/50 flex items-center justify-center">
+                            <span className="text-muted-foreground font-serif text-3xl">{collection.node.title}</span>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  </div>
+
+                  {/* Content */}
+                  <div className={`flex flex-col justify-center ${index % 2 === 1 ? "lg:col-start-1" : ""}`}>
+                    <h2 className="font-serif text-display-sm text-foreground mb-2">
+                      {collection.node.title}
+                    </h2>
+                    {collection.node.description && (
+                      <p className="text-muted-foreground text-body-md leading-relaxed mb-8 max-w-lg">
+                        {collection.node.description}
+                      </p>
+                    )}
+                    <div>
+                      <Button asChild variant="atelier">
+                        <Link to={`/collections/${collection.node.handle}`}>
+                          {isNL ? 'Bekijk collectie' : 'View collection'}
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p className="text-muted-foreground text-center py-12">
+                {isNL ? 'Geen collecties gevonden.' : 'No collections found.'}
+              </p>
+            )}
 
             {/* Other Stones - Special Block */}
             <article className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
