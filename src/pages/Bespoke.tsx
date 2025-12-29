@@ -47,8 +47,8 @@ const Bespoke = () => {
     : "Bespoke Stone Furniture | Request Quote | SERA NORR";
 
   const seoDescription = isNL
-    ? "Maatwerk stenen meubels vanaf €2.000. Travertin, Calacatta Viola en andere steensoorten. Doorlooptijd 12-20 weken. Vraag een vrijblijvende offerte aan."
-    : "Bespoke stone furniture from €2,000. Travertine, Calacatta Viola and other stones. Lead time 12-20 weeks. Request a no-obligation quote.";
+    ? "Maatwerk stenen meubels vanaf €2.000. Travertin, Calacatta Viola en andere steensoorten. Doorlooptijd 8-12 weken. Vraag een vrijblijvende offerte aan."
+    : "Bespoke stone furniture from €2,000. Travertine, Calacatta Viola and other stones. Lead time 8-12 weeks. Request a no-obligation quote.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -120,41 +120,38 @@ const Bespoke = () => {
       />
 
       {/* Hero with Clear Value Proposition */}
-      <section className="pt-32 lg:pt-40 pb-16 lg:pb-20 bg-background">
+      <section className="pt-32 lg:pt-40 pb-14 lg:pb-16 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <Breadcrumbs className="mb-8" />
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div>
               <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
                 {t('bespoke.subtitle')}
               </p>
-              <h1 className="font-serif text-display-lg text-foreground mb-6">
-                {isNL ? 'Uw stuk, op maat gemaakt' : 'Your piece, made to measure'}
+              <h1 className="font-serif text-display-lg text-foreground mb-5">
+                {isNL ? 'Maatwerk in natuursteen, ontworpen voor uw ruimte' : 'Bespoke natural stone, designed for your space'}
               </h1>
               <p className="text-muted-foreground text-body-lg leading-relaxed mb-6">
                 {isNL 
-                  ? 'Van eerste gesprek tot geïnstalleerd meubel in 12-20 weken. Wij vertalen uw wensen naar een stuk dat precies past bij uw ruimte.'
-                  : 'From first conversation to installed furniture in 12-20 weeks. We translate your wishes into a piece that fits your space perfectly.'}
+                  ? 'Van eerste schets tot plaatsing. Een zorgvuldig traject met materiaalkeuze, visualisaties en white-glove levering.'
+                  : 'From first sketch to installation. A careful process with material selection, visualizations and white-glove delivery.'}
               </p>
               
-              {/* Key Stats */}
-              <div className="grid grid-cols-3 gap-6 py-6 border-y border-border/50 mb-6">
-                <div>
-                  <p className="font-serif text-2xl text-foreground">{isNL ? 'Vanaf' : 'From'}</p>
-                  <p className="font-serif text-2xl text-foreground">€2.000</p>
-                </div>
-                <div>
-                  <p className="font-serif text-2xl text-foreground">12-20</p>
-                  <p className="text-sm text-muted-foreground">{isNL ? 'weken' : 'weeks'}</p>
-                </div>
-                <div>
-                  <p className="font-serif text-2xl text-foreground">5 {isNL ? 'jaar' : 'year'}</p>
-                  <p className="text-sm text-muted-foreground">{isNL ? 'garantie' : 'warranty'}</p>
-                </div>
+              {/* Key Stats as Chips */}
+              <div className="flex flex-wrap gap-2.5 mb-6">
+                <span className="inline-flex items-center px-3.5 py-1.5 bg-secondary/50 border border-border/50 text-sm text-foreground">
+                  {isNL ? 'Projecten vanaf €2.000' : 'Projects from €2,000'}
+                </span>
+                <span className="inline-flex items-center px-3.5 py-1.5 bg-secondary/50 border border-border/50 text-sm text-foreground">
+                  {isNL ? 'Gemiddeld 8–12 weken' : 'Average 8–12 weeks'}
+                </span>
+                <span className="inline-flex items-center px-3.5 py-1.5 bg-secondary/50 border border-border/50 text-sm text-foreground">
+                  {isNL ? '5 jaar garantie' : '5 year warranty'}
+                </span>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col sm:flex-row gap-3 mb-4">
                 <Button asChild variant="atelier-filled" size="lg">
                   <a href="#offerte">
                     {isNL ? 'Vraag offerte aan' : 'Request quote'}
@@ -167,16 +164,35 @@ const Bespoke = () => {
                   </Link>
                 </Button>
               </div>
+              
+              {/* Trust line */}
+              <p className="text-sm text-muted-foreground">
+                {isNL ? 'Reactie binnen 48 uur — geen verplichtingen.' : 'Response within 48 hours — no obligations.'}
+              </p>
             </div>
             
-            {/* Example Images */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-[3/4] bg-muted overflow-hidden">
-                <img src={terraImage} alt={isNL ? "Maatwerk travertin meubel" : "Bespoke travertine furniture"} className="w-full h-full object-cover" />
+            {/* Dominant + Overlap Image Layout */}
+            <div className="relative">
+              {/* Main dominant image */}
+              <div className="aspect-[4/5] bg-muted overflow-hidden">
+                <img 
+                  src={terraImage} 
+                  alt={isNL ? "Maatwerk travertin meubel" : "Bespoke travertine furniture"} 
+                  className="w-full h-full object-cover" 
+                />
               </div>
-              <div className="aspect-[3/4] bg-muted overflow-hidden mt-8">
-                <img src={vantaImage} alt={isNL ? "Maatwerk marmeren tafel" : "Bespoke marble table"} className="w-full h-full object-cover" />
+              {/* Overlap detail image */}
+              <div className="absolute -bottom-6 -left-6 lg:-left-10 w-32 lg:w-40 aspect-square bg-muted overflow-hidden border-4 border-background shadow-xl">
+                <img 
+                  src={vantaImage} 
+                  alt={isNL ? "Maatwerk marmeren tafel detail" : "Bespoke marble table detail"} 
+                  className="w-full h-full object-cover" 
+                />
               </div>
+              {/* Caption */}
+              <p className="absolute -bottom-6 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
+              </p>
             </div>
           </div>
         </div>

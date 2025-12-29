@@ -18,7 +18,7 @@ export function USPBullets({ className, variant = 'default' }: USPBulletsProps) 
     },
     {
       icon: Clock,
-      text: isNL ? 'Levertijd 12-20 weken' : 'Lead time 12-20 weeks',
+      text: isNL ? 'Levertijd 8-12 weken' : 'Lead time 8-12 weeks',
     },
     {
       icon: Truck,
