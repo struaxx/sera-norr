@@ -58,23 +58,23 @@ const Bespoke = () => {
   const priceExamples = [
     {
       type: isNL ? 'Bijzettafel' : 'Side Table',
-      from: '€1.400',
-      example: isNL ? 'Ø45 × H55 cm, travertin' : 'Ø45 × H55 cm, travertine',
+      price: '€1.400',
+      spec: 'Ø45 × H55 — travertin',
     },
     {
       type: isNL ? 'Salontafel' : 'Coffee Table',
-      from: '€2.800',
-      example: isNL ? 'L120 × B80 cm, travertin' : 'L120 × W80 cm, travertine',
+      price: '€2.800',
+      spec: 'L120 × B80 — travertin',
     },
     {
       type: isNL ? 'Console' : 'Console',
-      from: '€3.800',
-      example: isNL ? 'L160 × B45 cm, marmer' : 'L160 × W45 cm, marble',
+      price: '€3.800',
+      spec: 'L160 × B45 — marmer',
     },
     {
       type: isNL ? 'Eettafel' : 'Dining Table',
-      from: '€6.500',
-      example: isNL ? 'L200 × B100 cm, travertin' : 'L200 × W100 cm, travertine',
+      price: '€6.500',
+      spec: 'L200 × B100 — travertin',
     },
   ];
 
@@ -206,19 +206,27 @@ const Bespoke = () => {
       </section>
 
       {/* Pricing Examples */}
-      <section className="py-12 lg:py-16 bg-background">
+      <section id="voorbeelden" className="py-12 lg:py-16 bg-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
           <header className="mb-8">
-            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
-              {isNL ? 'Prijsindicatie' : 'Price Indication'}
-            </p>
+            <div className="flex items-baseline justify-between gap-4 mb-3">
+              <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                {isNL ? 'Prijsindicatie' : 'Price Indication'}
+              </p>
+              <a 
+                href="#voorbeelden" 
+                className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
+              >
+                {isNL ? 'Bekijk voorbeelden ↓' : 'View examples ↓'}
+              </a>
+            </div>
             <h2 className="font-serif text-display-sm text-foreground mb-3">
               {isNL ? 'Vanafprijzen per categorie' : 'Starting prices by category'}
             </h2>
             <p className="text-muted-foreground text-body-md max-w-2xl">
               {isNL 
-                ? 'Richtprijzen voor standaard afmetingen in travertin. Incl. levering & plaatsing NL/BE. Excl. onderstel.'
-                : 'Guide prices for standard dimensions in travertine. Incl. delivery & installation NL/BE. Excl. base frame.'}
+                ? 'Richtprijzen voor standaardformaten in travertin. Exacte prijs hangt af van steen, dikte, randafwerking en onderstel.'
+                : 'Guide prices for standard dimensions in travertine. Exact price depends on stone, thickness, edge finish and base.'}
             </p>
           </header>
 
@@ -226,17 +234,28 @@ const Bespoke = () => {
             {priceExamples.map((item, index) => (
               <div key={index} className="p-5 bg-secondary/30 border border-border/50">
                 <h3 className="font-serif text-base text-foreground mb-1">{item.type}</h3>
-                <p className="font-serif text-xl text-foreground mb-1.5">{item.from}</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">{item.example}</p>
+                <p className="font-serif text-xl text-foreground mb-1.5">
+                  <span className="text-sm font-sans text-muted-foreground mr-1">{isNL ? 'vanaf' : 'from'}</span>
+                  {item.price}
+                </p>
+                <p className="text-[11px] text-muted-foreground/70 leading-relaxed">{item.spec}</p>
               </div>
             ))}
           </div>
 
-          <p className="text-xs text-muted-foreground mt-5 text-center leading-relaxed">
-            {isNL 
-              ? 'Prijs afhankelijk van: steensoort • dikte (2/3 cm) • randafwerking • complexiteit. Zeldzame steensoorten op aanvraag. Prijzen excl. BTW.'
-              : 'Price depends on: stone type • thickness (2/3 cm) • edge finish • complexity. Rare stones on request. Prices excl. VAT.'}
-          </p>
+          {/* Notes */}
+          <div className="mt-6 space-y-1.5 text-center">
+            <p className="text-xs text-muted-foreground">
+              {isNL 
+                ? 'Calacatta Viola & zeldzame steensoorten op aanvraag.'
+                : 'Calacatta Viola & rare stones on request.'}
+            </p>
+            <p className="text-xs text-muted-foreground/70">
+              {isNL 
+                ? 'Prijzen exclusief btw. Levering & plaatsing afhankelijk van locatie.'
+                : 'Prices exclude VAT. Delivery & installation depend on location.'}
+            </p>
+          </div>
         </div>
       </section>
 
