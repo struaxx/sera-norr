@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Check, Clock, Truck, Wrench, Shield } from 'lucide-react';
+import { Clock, Truck, Wrench, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface USPBulletsProps {
@@ -18,7 +18,7 @@ export function USPBullets({ className, variant = 'default' }: USPBulletsProps) 
     },
     {
       icon: Clock,
-      text: isNL ? 'Levertijd 8-12 weken' : 'Lead time 8-12 weeks',
+      text: isNL ? 'Levertijd 12-20 weken' : 'Lead time 12-20 weeks',
     },
     {
       icon: Truck,
@@ -36,8 +36,8 @@ export function USPBullets({ className, variant = 'default' }: USPBulletsProps) 
     return (
       <div className={cn('flex flex-wrap gap-4 lg:gap-6', className)}>
         {displayUsps.map((usp, index) => (
-          <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-            <usp.icon className="h-4 w-4 flex-shrink-0 text-forest" />
+          <div key={index} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+            <usp.icon className="h-5 w-5 flex-shrink-0 text-forest" />
             <span>{usp.text}</span>
           </div>
         ))}
@@ -49,7 +49,7 @@ export function USPBullets({ className, variant = 'default' }: USPBulletsProps) 
     <div className={cn('space-y-3', className)}>
       {displayUsps.map((usp, index) => (
         <div key={index} className="flex items-center gap-3 text-sm text-muted-foreground">
-          <usp.icon className="h-4 w-4 flex-shrink-0 text-forest" />
+          <usp.icon className="h-5 w-5 flex-shrink-0 text-forest" />
           <span>{usp.text}</span>
         </div>
       ))}
