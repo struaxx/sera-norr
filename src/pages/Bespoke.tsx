@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { TrustBadges, BespokeTimeline, USPBullets } from "@/components/trust";
-import { ArrowRight, Calendar, FileText, MessageSquare } from "lucide-react";
+import { ArrowRight, Calendar, FileText, MessageSquare, Upload } from "lucide-react";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
 import { trackLeadSubmit } from "@/lib/analytics";
@@ -18,11 +20,14 @@ const Bespoke = () => {
   const { t, i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     projectType: "",
+    dimensions: "",
     budget: "",
     message: "",
   });
@@ -39,7 +44,8 @@ const Bespoke = () => {
       title: t('bespoke.formSuccess'),
       description: t('bespoke.formSuccessDescription'),
     });
-    setFormData({ name: "", email: "", phone: "", projectType: "", budget: "", message: "" });
+    setFormData({ name: "", email: "", phone: "", projectType: "", dimensions: "", budget: "", message: "" });
+    setFileName(null);
   };
 
   const seoTitle = isNL 
@@ -433,12 +439,91 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* Inquiry Form */}
+      {/* FAQ Section */}
+      <section className="py-12 lg:py-16 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-3xl mx-auto">
+            <header className="text-center mb-8">
+              <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+                {isNL ? 'Veelgestelde vragen' : 'Frequently asked questions'}
+              </p>
+              <h2 className="font-serif text-display-sm text-foreground">
+                {isNL ? 'Alles over ons maatwerkproces' : 'Everything about our bespoke process'}
+              </h2>
+            </header>
+
+            <Accordion type="single" collapsible className="space-y-3">
+              <AccordionItem value="item-1" className="border border-border/50 px-5">
+                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
+                  {isNL ? 'Wat is de minimale afname?' : 'What is the minimum order?'}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm pb-4">
+                  {isNL 
+                    ? 'Er is geen minimale afname. Elk project is uniek en we maken graag één stuk op maat. Onze vanafprijzen beginnen bij €1.400 voor een bijzettafel.'
+                    : 'There is no minimum order. Each project is unique and we happily create a single bespoke piece. Our starting prices begin at €1,400 for a side table.'}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2" className="border border-border/50 px-5">
+                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
+                  {isNL ? 'Kan ik mijn eigen steenplaat kiezen?' : 'Can I choose my own stone slab?'}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm pb-4">
+                  {isNL 
+                    ? 'Absoluut. Na goedkeuring van het ontwerp selecteert u uw specifieke plaat. U ontvangt foto\'s van beschikbare platen of u bezoekt onze showroom in Amsterdam om ze persoonlijk te bekijken.'
+                    : 'Absolutely. After design approval, you select your specific slab. You\'ll receive photos of available slabs or visit our Amsterdam showroom to view them in person.'}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3" className="border border-border/50 px-5">
+                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
+                  {isNL ? 'Hoe werkt onderhoud en bescherming?' : 'How does maintenance and protection work?'}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm pb-4">
+                  {isNL 
+                    ? 'Elk stuk wordt geleverd met gedetailleerde onderhoudsinstructies. Natuursteen vereist minimaal onderhoud: regelmatig afstoffen en periodiek behandelen met een geschikte steenbehandeling. We adviseren u graag over de beste aanpak voor uw materiaal.'
+                    : 'Each piece comes with detailed care instructions. Natural stone requires minimal maintenance: regular dusting and periodic treatment with a suitable stone sealant. We\'re happy to advise on the best approach for your material.'}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-4" className="border border-border/50 px-5">
+                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
+                  {isNL ? 'Wat valt onder white-glove levering?' : 'What\'s included in white-glove delivery?'}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm pb-4">
+                  {isNL 
+                    ? 'White-glove levering omvat: transport met klimaatcontrole, levering op de gewenste locatie in uw woning, uitpakken, plaatsing, inspectie met u en afvoer van alle verpakkingsmaterialen.'
+                    : 'White-glove delivery includes: climate-controlled transport, delivery to your desired location within your home, unpacking, placement, inspection with you, and removal of all packaging materials.'}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-5" className="border border-border/50 px-5">
+                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
+                  {isNL ? 'Leveren jullie door heel Nederland?' : 'Do you deliver throughout the Netherlands?'}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm pb-4">
+                  {isNL 
+                    ? 'Ja, wij leveren door heel Nederland en België. Voor leveringen buiten deze regio\'s neem contact met ons op voor een maatwerkofferte.'
+                    : 'Yes, we deliver throughout the Netherlands and Belgium. For deliveries outside these regions, please contact us for a custom quote.'}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-6" className="border border-border/50 px-5">
+                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
+                  {isNL ? 'Wat bepaalt de prijs het meest?' : 'What most determines the price?'}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm pb-4">
+                  {isNL 
+                    ? 'De prijs wordt bepaald door: steensoort (travertin vs. Calacatta Viola), afmetingen, plaatdikte (2 of 3 cm), randafwerking, complexiteit van het ontwerp en het type onderstel. Wij geven altijd een transparante prijsopbouw.'
+                    : 'Price is determined by: stone type (travertine vs. Calacatta Viola), dimensions, slab thickness (2 or 3 cm), edge finish, design complexity, and base type. We always provide a transparent price breakdown.'}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+      {/* Inquiry Form - Couture Styling */}
       <section id="offerte" className="py-14 lg:py-20 bg-foreground text-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-2xl mx-auto">
-            {/* Form container with subtle border */}
-            <div className="border border-background/10 p-8 lg:p-10">
+            {/* Enhanced form container with inner shadow and better border */}
+            <div className="border border-background/15 bg-background/[0.03] p-8 lg:p-10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
               <header className="text-center mb-8">
                 <p className="font-sans text-xs uppercase tracking-[0.3em] text-background/60 mb-3">
                   {isNL ? 'Offerte aanvragen' : 'Request quote'}
@@ -453,120 +538,166 @@ const Bespoke = () => {
                 </p>
               </header>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="bespoke-name" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    {t('bespoke.formName')} *
-                  </label>
-                  <Input
-                    id="bespoke-name"
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder={t('bespoke.formNamePlaceholder')}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="bespoke-email" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    {t('bespoke.formEmail')} *
-                  </label>
-                  <Input
-                    id="bespoke-email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder={t('bespoke.formEmailPlaceholder')}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="bespoke-phone" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    {isNL ? 'Telefoon' : 'Phone'}
-                  </label>
-                  <Input
-                    id="bespoke-phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder={isNL ? '+31 6 12345678' : '+31 6 12345678'}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="bespoke-projectType" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    {t('bespoke.formProjectType')} *
-                  </label>
-                  <Input
-                    id="bespoke-projectType"
-                    type="text"
-                    value={formData.projectType}
-                    onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                    required
-                    className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                    placeholder={t('bespoke.formProjectTypePlaceholder')}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="bespoke-budget" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                  {isNL ? 'Budget indicatie' : 'Budget indication'}
-                </label>
-                <Input
-                  id="bespoke-budget"
-                  type="text"
-                  value={formData.budget}
-                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                  className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60"
-                  placeholder={isNL ? 'bijv. €3.000 - €5.000' : 'e.g. €3,000 - €5,000'}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="bespoke-message" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                  {t('bespoke.formVision')} *
-                </label>
-                <Textarea
-                  id="bespoke-message"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                  rows={5}
-                  className="bg-transparent border-background/20 text-background placeholder:text-background/40 focus:border-background/60 resize-none"
-                  placeholder={isNL 
-                    ? 'Beschrijf uw wensen: type meubel, gewenste afmetingen, materiaalvoorkeuren...'
-                    : 'Describe your wishes: type of furniture, desired dimensions, material preferences...'}
-                />
-              </div>
-
-              <div className="pt-4">
-                <Button type="submit" variant="outline" size="lg" className="w-full border-background/40 text-background hover:bg-background hover:text-foreground">
-                  {isNL ? 'Verstuur aanvraag' : 'Submit request'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </form>
-            
-            {/* Trust indicators below form */}
-            <div className="mt-6 pt-6 border-t border-background/10 text-center">
-              <p className="text-xs text-background/50 mb-3">
-                {isNL 
-                  ? 'Wij reageren binnen 48 uur. Geen verplichtingen, geen spam.'
-                  : 'We respond within 48 hours. No obligations, no spam.'}
+              {/* Required fields note */}
+              <p className="text-xs text-background/50 mb-6 text-center">
+                {isNL ? 'Velden met * zijn verplicht.' : 'Fields marked with * are required.'}
               </p>
-              <div className="flex items-center justify-center gap-4 text-xs text-background/40">
-                <span>{isNL ? '✓ 50+ projecten voltooid' : '✓ 50+ projects completed'}</span>
-                <span>•</span>
-                <span>{isNL ? '✓ 5 jaar garantie' : '✓ 5 year warranty'}</span>
-              </div>
-            </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="bespoke-name" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                      {t('bespoke.formName')} *
+                    </label>
+                    <Input
+                      id="bespoke-name"
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
+                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
+                      placeholder={t('bespoke.formNamePlaceholder')}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="bespoke-email" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                      {t('bespoke.formEmail')} *
+                    </label>
+                    <Input
+                      id="bespoke-email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
+                      placeholder={t('bespoke.formEmailPlaceholder')}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="bespoke-phone" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                      {isNL ? 'Telefoon' : 'Phone'}
+                    </label>
+                    <Input
+                      id="bespoke-phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
+                      placeholder={isNL ? '+31 6 12345678' : '+31 6 12345678'}
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                      {t('bespoke.formProjectType')} *
+                    </label>
+                    <Select 
+                      value={formData.projectType} 
+                      onValueChange={(value) => setFormData({ ...formData, projectType: value })}
+                      required
+                    >
+                      <SelectTrigger className="bg-background/10 border-background/25 text-background focus:border-background/50 focus:ring-1 focus:ring-background/20 [&>span]:text-background/40 data-[state=open]:border-background/50">
+                        <SelectValue placeholder={isNL ? 'Selecteer type stuk' : 'Select piece type'} />
+                      </SelectTrigger>
+                      <SelectContent className="bg-foreground border-background/20">
+                        <SelectItem value="side-table" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Bijzettafel' : 'Side table'}</SelectItem>
+                        <SelectItem value="coffee-table" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Salontafel' : 'Coffee table'}</SelectItem>
+                        <SelectItem value="dining-table" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Eettafel' : 'Dining table'}</SelectItem>
+                        <SelectItem value="console" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Console' : 'Console'}</SelectItem>
+                        <SelectItem value="desk" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Bureau' : 'Desk'}</SelectItem>
+                        <SelectItem value="other" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Anders' : 'Other'}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="bespoke-dimensions" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                      {isNL ? 'Gewenste afmetingen' : 'Desired dimensions'}
+                    </label>
+                    <Input
+                      id="bespoke-dimensions"
+                      type="text"
+                      value={formData.dimensions}
+                      onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
+                      placeholder={isNL ? 'bijv. L120 × B80 × H45 cm' : 'e.g. L120 × W80 × H45 cm'}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="bespoke-budget" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                      {isNL ? 'Budget indicatie' : 'Budget indication'}
+                    </label>
+                    <Input
+                      id="bespoke-budget"
+                      type="text"
+                      value={formData.budget}
+                      onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
+                      placeholder={isNL ? 'bijv. €3.000 - €5.000' : 'e.g. €3,000 - €5,000'}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="bespoke-message" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                    {t('bespoke.formVision')} *
+                  </label>
+                  <Textarea
+                    id="bespoke-message"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    rows={4}
+                    className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all resize-none"
+                    placeholder={isNL 
+                      ? 'Beschrijf uw wensen: materiaalvoorkeuren, stijl, ruimte waar het stuk komt...'
+                      : 'Describe your wishes: material preferences, style, space where the piece will go...'}
+                  />
+                </div>
+
+                {/* Optional file upload */}
+                <div>
+                  <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
+                    {isNL ? 'Inspiratie / foto ruimte (optioneel)' : 'Inspiration / room photo (optional)'}
+                  </label>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      setFileName(file ? file.name : null);
+                    }}
+                    accept="image/*,.pdf"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-dashed border-background/25 bg-background/5 text-background/60 hover:border-background/40 hover:bg-background/10 transition-all text-sm"
+                  >
+                    <Upload className="w-4 h-4" />
+                    {fileName || (isNL ? 'Upload bestand' : 'Upload file')}
+                  </button>
+                </div>
+
+                <div className="pt-2">
+                  <Button type="submit" variant="outline" size="lg" className="w-full border-background/40 text-background hover:bg-background hover:text-foreground">
+                    {isNL ? 'Verstuur aanvraag' : 'Submit request'}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Trust microcopy */}
+                <p className="text-xs text-background/50 text-center pt-2">
+                  {isNL 
+                    ? 'Reactie binnen 48 uur. Geen verplichtingen. Geen spam.'
+                    : 'Response within 48 hours. No obligations. No spam.'}
+                </p>
+              </form>
             </div>
           </div>
         </div>
