@@ -186,6 +186,28 @@ const Bespoke = () => {
         </div>
       </section>
 
+      {/* Materialen & afwerking section */}
+      <section className="py-10 lg:py-12 bg-background border-t border-border/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl">
+            <h2 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+              {isNL ? 'Materialen & afwerking' : 'Materials & finish'}
+            </h2>
+            <p className="text-muted-foreground text-body-md leading-relaxed mb-4">
+              {isNL 
+                ? 'Steenkeuze, afwerking en details stemmen we samen af tijdens de intake. U ontvangt advies op basis van uw ruimte en gebruik.'
+                : 'Stone choice, finish and details are coordinated together during the intake. You receive advice based on your space and use.'}
+            </p>
+            <Link 
+              to="/materials" 
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline"
+            >
+              {isNL ? 'Bekijk een selectie stenen →' : 'View a selection of stones →'}
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Process Timeline - True 2-column layout */}
       <section className="py-12 lg:py-16 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
