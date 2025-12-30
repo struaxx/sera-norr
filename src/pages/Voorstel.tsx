@@ -9,8 +9,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Upload, Check, Calendar, MessageSquare } from "lucide-react";
+import { ArrowRight, Upload, Check, Calendar } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
+import { supabase } from "@/integrations/supabase/client";
 
 type FormStep = 'form' | 'success';
 
@@ -21,6 +22,7 @@ const Voorstel = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<FormStep>('form');
   const [fileName, setFileName] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     type: "",
@@ -35,6 +37,7 @@ const Voorstel = () => {
     email: "",
     telefoon: "",
     opmerkingen: "",
+    honeypot: "",
   });
 
   // Dimension presets per type
@@ -54,23 +57,79 @@ const Voorstel = () => {
     anders: [],
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Track lead submission
-    trackLeadSubmit('voorstel' as const, {
-      productType: formData.type,
-      stone: formData.steenvoorkeur,
-      budget: formData.budget,
-    });
+    // Client-side validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: isNL ? "Ongeldig e-mailadres" : "Invalid email address",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Show success state
-    setStep('success');
+    setIsSubmitting(true);
 
-    toast({
-      title: isNL ? "Aanvraag ontvangen" : "Request received",
-      description: isNL ? "Wij reageren binnen 48 uur." : "We will respond within 48 hours.",
-    });
+    try {
+      const metadata = {
+        type: formData.type,
+        vorm: formData.vorm,
+        afmeting: formData.customAfmeting || formData.afmeting,
+        steenvoorkeur: formData.steenvoorkeur,
+        afwerking: formData.afwerking,
+        postcode: formData.postcode,
+        timing: formData.timing,
+        budget: formData.budget,
+      };
+
+      const { error } = await supabase.functions.invoke('submit-form', {
+        body: {
+          form_type: 'voorstel',
+          email: formData.email,
+          phone: formData.telefoon,
+          message: formData.opmerkingen,
+          metadata,
+          honeypot: formData.honeypot,
+        },
+      });
+
+      if (error) throw error;
+
+      // Track lead submission
+      trackLeadSubmit('voorstel' as const, {
+        productType: formData.type,
+        stone: formData.steenvoorkeur,
+        budget: formData.budget,
+      });
+
+      // Show success state
+      setStep('success');
+
+      toast({
+        title: isNL ? "Aanvraag ontvangen" : "Request received",
+        description: isNL ? "Wij reageren binnen 48 uur." : "We will respond within 48 hours.",
+      });
+    } catch (error: any) {
+      console.error("Form submission error:", error);
+      
+      if (error.message?.includes("429") || error.message?.includes("Too many")) {
+        toast({
+          title: isNL ? "Te veel pogingen" : "Too many attempts",
+          description: isNL ? "Probeer het later opnieuw." : "Please try again later.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: isNL ? "Verzenden mislukt" : "Submission failed",
+          description: isNL ? "Probeer het opnieuw." : "Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,6 +278,20 @@ const Voorstel = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Honeypot field - hidden from users */}
+            <div className="absolute -left-[9999px]" aria-hidden="true">
+              <label htmlFor="website-voorstel">Website</label>
+              <input
+                id="website-voorstel"
+                type="text"
+                name="website"
+                value={formData.honeypot}
+                onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+            
             {/* Type */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">
@@ -519,10 +592,12 @@ const Voorstel = () => {
                 variant="atelier-filled" 
                 size="lg"
                 className="w-full sm:w-auto"
-                disabled={!formData.type || !formData.steenvoorkeur || !formData.timing || !formData.budget || !formData.email || !formData.telefoon || !formData.postcode}
+                disabled={isSubmitting || !formData.type || !formData.steenvoorkeur || !formData.timing || !formData.budget || !formData.email || !formData.telefoon || !formData.postcode}
               >
-                {isNL ? "Ontvang voorstel" : "Receive proposal"}
-                <ArrowRight className="ml-2 h-4 w-4" />
+                {isSubmitting 
+                  ? (isNL ? "Verzenden..." : "Submitting...") 
+                  : (isNL ? "Ontvang voorstel" : "Receive proposal")}
+                {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
               <p className="text-xs text-muted-foreground mt-3">
                 {isNL ? "Vrijblijvend — geen verplichtingen." : "No obligation — no commitments."}

@@ -10,6 +10,7 @@ import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, Lock, Calendar } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
+import { supabase } from "@/integrations/supabase/client";
 
 // Curated lookbook items
 const lookbookItems = [
@@ -32,25 +33,70 @@ const Lookbook = () => {
   const isNL = i18n.language === 'nl';
   const { toast } = useToast();
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [interest, setInterest] = useState("");
+  const [honeypot, setHoneypot] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email) return;
 
-    // Track lead submission
-    trackLeadSubmit('lookbook' as const, {
-      interest: interest,
-    });
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: isNL ? "Ongeldig e-mailadres" : "Invalid email address",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    setIsUnlocked(true);
+    setIsSubmitting(true);
 
-    toast({
-      title: isNL ? "Toegang verleend" : "Access granted",
-      description: isNL ? "Bekijk alle voorbeelden hieronder." : "View all examples below.",
-    });
+    try {
+      const { error } = await supabase.functions.invoke('submit-form', {
+        body: {
+          form_type: 'lookbook',
+          email: email,
+          metadata: { interest },
+          honeypot,
+        },
+      });
+
+      if (error) throw error;
+
+      // Track lead submission
+      trackLeadSubmit('lookbook' as const, {
+        interest: interest,
+      });
+
+      setIsUnlocked(true);
+
+      toast({
+        title: isNL ? "Toegang verleend" : "Access granted",
+        description: isNL ? "Bekijk alle voorbeelden hieronder." : "View all examples below.",
+      });
+    } catch (error: any) {
+      console.error("Form submission error:", error);
+      
+      if (error.message?.includes("429") || error.message?.includes("Too many")) {
+        toast({
+          title: isNL ? "Te veel pogingen" : "Too many attempts",
+          description: isNL ? "Probeer het later opnieuw." : "Please try again later.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: isNL ? "Verzenden mislukt" : "Submission failed",
+          description: isNL ? "Probeer het opnieuw." : "Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const seoTitle = isNL 
@@ -95,6 +141,20 @@ const Lookbook = () => {
           {!isUnlocked && (
             <div className="max-w-md mx-auto mb-12">
               <form onSubmit={handleSubmit} className="space-y-4 bg-secondary/30 border border-border/30 p-6">
+                {/* Honeypot field - hidden from users */}
+                <div className="absolute -left-[9999px]" aria-hidden="true">
+                  <label htmlFor="website-lookbook">Website</label>
+                  <input
+                    id="website-lookbook"
+                    type="text"
+                    name="website"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-sm font-medium">
                     {isNL ? "E-mail" : "Email"} *
@@ -106,6 +166,7 @@ const Lookbook = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    maxLength={255}
                   />
                 </div>
                 <div className="space-y-2">
@@ -129,9 +190,12 @@ const Lookbook = () => {
                   type="submit" 
                   variant="atelier-filled" 
                   className="w-full"
+                  disabled={isSubmitting}
                 >
-                  {isNL ? "Ontvang toegang" : "Get access"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  {isSubmitting 
+                    ? (isNL ? "Laden..." : "Loading...") 
+                    : (isNL ? "Ontvang toegang" : "Get access")}
+                  {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" />}
                 </Button>
               </form>
             </div>
