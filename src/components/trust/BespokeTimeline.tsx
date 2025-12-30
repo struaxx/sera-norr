@@ -11,8 +11,8 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
 
-  // Updated durations to add up to 8-12 weeks total:
-  // 1 week + 1 week + 1-2 weeks + 4-6 weeks + 1 week = 8-11 weeks (round to 8-12)
+  // Updated durations to add up to 13-15 weeks total:
+  // 1 week + 1-2 weeks + 1-2 weeks + 8-10 weeks + 2 weeks = 13-17 weeks (target: ±13-15)
   const steps = [
     {
       icon: Sparkles,
@@ -27,7 +27,7 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
       icon: FileText,
       step: '2',
       title: isNL ? 'Voorstel & Offerte' : 'Proposal & Quote',
-      duration: '1 week',
+      duration: isNL ? '1–2 weken' : '1–2 weeks',
       description: isNL 
         ? 'Schetsen, materiaalopties en prijsvoorstel.' 
         : 'Sketches, material options and price proposal.',
@@ -45,7 +45,7 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
       icon: Hammer,
       step: '4',
       title: isNL ? 'Productie' : 'Production',
-      duration: isNL ? '4–6 weken' : '4–6 weeks',
+      duration: isNL ? '8–10 weken' : '8–10 weeks',
       description: isNL 
         ? 'Vakkundige productie door onze ambachtslieden.' 
         : 'Expert production by our artisans.',
@@ -54,7 +54,7 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
       icon: Home,
       step: '5',
       title: isNL ? 'Levering & Plaatsing' : 'Delivery & Installation',
-      duration: '1 week',
+      duration: isNL ? '1–2 weken' : '1–2 weeks',
       description: isNL 
         ? 'White-glove levering en professionele plaatsing.' 
         : 'White-glove delivery and professional installation.',
@@ -108,7 +108,7 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
         
         {compact && (
           <p className="text-xs text-muted-foreground pl-12">
-            {isNL ? 'Totale doorlooptijd: 12-20 weken' : 'Total lead time: 12-20 weeks'}
+            {isNL ? 'Totale doorlooptijd: ±13–15 weken' : 'Total lead time: ±13–15 weeks'}
           </p>
         )}
       </div>
