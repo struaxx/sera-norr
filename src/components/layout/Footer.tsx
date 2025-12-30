@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Instagram, Linkedin, Mail } from "lucide-react";
 
 export function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <footer className="bg-secondary/50 border-t border-border">
@@ -87,9 +87,17 @@ export function Footer() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} Sera Norr. {t('footer.copyright')}
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+            <p className="text-muted-foreground text-sm">
+              © {new Date().getFullYear()} Sera Norr. {t('footer.copyright')}
+            </p>
+            <span className="hidden md:inline text-muted-foreground/40">|</span>
+            <p className="text-muted-foreground/70 text-xs">
+              {i18n.language === 'nl' 
+                ? 'SERA NORR is een designatelier voor maatwerk natuursteenmeubels.'
+                : 'SERA NORR is a design atelier for bespoke natural stone furniture.'}
+            </p>
+          </div>
           <p className="text-muted-foreground text-sm">{t('footer.crafted')}</p>
         </div>
       </div>

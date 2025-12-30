@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
+import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
 import { TrustBadges, BespokeTimeline, USPBullets } from "@/components/trust";
 import { ArrowRight, FileText, MessageSquare, Upload } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
@@ -47,17 +47,65 @@ const Bespoke = () => {
   };
 
   const seoTitle = isNL 
-    ? "Maatwerk Stenen Meubels | Offerte Aanvragen | SERA NORR"
-    : "Bespoke Stone Furniture | Request Quote | SERA NORR";
+    ? "Maatwerk natuursteen meubels | SERA NORR Online Atelier"
+    : "Bespoke Natural Stone Furniture | SERA NORR Online Atelier";
 
   const seoDescription = isNL
-    ? "Maatwerk stenen meubels op aanvraag. Travertin, Calacatta Viola en andere steensoorten. Doorlooptijd ±13-15 weken. Vraag een vrijblijvende offerte aan."
-    : "Bespoke stone furniture on request. Travertine, Calacatta Viola and other stones. Lead time ±13-15 weeks. Request a no-obligation quote.";
+    ? "Maatwerk in travertin en marmer, afgestemd op uw ruimte. Intake, materiaalkeuze, visualisaties en levering/plaatsing. Prijs op aanvraag."
+    : "Bespoke travertine and marble furniture tailored to your space. Intake, material selection, visualizations and delivery. Price on request.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: isNL ? 'Maatwerk' : 'Bespoke', url: '/bespoke' },
   ]);
+
+  // FAQ items for structured data and on-page content
+  const faqItems = isNL ? [
+    { question: 'Hoe werkt het traject?', answer: 'Na uw aanvraag plannen we een korte intake (telefonisch of video). We bespreken steenkeuze, afmetingen en afwerking. U ontvangt een visualisatie en offerte binnen 48 uur.' },
+    { question: 'Hoe lang is de doorlooptijd?', answer: 'Gemiddeld 13-15 weken vanaf akkoord, afhankelijk van steenkeuze en complexiteit. Travertin is doorgaans sneller beschikbaar dan zeldzame marmersoorten.' },
+    { question: 'Welke materialen zijn mogelijk?', answer: 'Wij werken met travertin, Calacatta Viola marmer en geselecteerde natuurstenen. Steenkeuze stemmen we af op uw ruimte, gebruik en esthetische voorkeur.' },
+    { question: 'Hoe werkt levering en plaatsing?', answer: 'White-glove levering in Nederland en België. Wij plaatsen het meubel op locatie en verwijderen alle verpakking. Buitenland in overleg.' },
+    { question: 'Is er garantie?', answer: 'Ja, 5 jaar garantie op constructie en materiaal. Natuursteen is duurzaam en gaat bij goed onderhoud generaties mee.' },
+    { question: 'Hoe onderhoud ik natuursteen?', answer: 'Regelmatig reinigen met een vochtige doek. Wij leveren onderhoudsadvies op maat. Bij levering ontvangt u een verzorgingsset.' },
+    { question: 'Wat kost een maatwerk meubel?', answer: 'De prijs hangt af van steenkeuze, afmetingen, afwerking en levering. Na intake ontvangt u een heldere offerte zonder verplichtingen.' },
+    { question: 'Kan ik het ontwerp aanpassen?', answer: 'Absoluut. Elke tafel, console of bijzettafel wordt op maat gemaakt. U bepaalt vorm, maat, randafwerking en onderstel.' },
+  ] : [
+    { question: 'How does the process work?', answer: 'After your inquiry, we schedule a brief intake (phone or video). We discuss stone choice, dimensions and finish. You receive a visualization and quote within 48 hours.' },
+    { question: 'What is the lead time?', answer: 'Average 13-15 weeks from approval, depending on stone choice and complexity. Travertine is typically available faster than rare marbles.' },
+    { question: 'What materials are available?', answer: 'We work with travertine, Calacatta Viola marble and selected natural stones. Stone selection is tailored to your space, use and aesthetic preference.' },
+    { question: 'How does delivery and installation work?', answer: 'White-glove delivery in the Netherlands and Belgium. We place the furniture on location and remove all packaging. International on request.' },
+    { question: 'Is there a warranty?', answer: 'Yes, 5-year warranty on construction and materials. Natural stone is durable and lasts generations with proper care.' },
+    { question: 'How do I care for natural stone?', answer: 'Clean regularly with a damp cloth. We provide tailored care advice. Upon delivery you receive a care kit.' },
+    { question: 'What does a bespoke piece cost?', answer: 'Price depends on stone choice, dimensions, finish and delivery. After intake you receive a clear quote with no obligations.' },
+    { question: 'Can I customize the design?', answer: 'Absolutely. Every table, console or side table is made to measure. You determine shape, size, edge finish and base.' },
+  ];
+
+  const faqSchema = generateFAQSchema(faqItems);
+
+  // Combined structured data
+  const combinedSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      breadcrumbSchema,
+      faqSchema,
+      {
+        '@type': 'Service',
+        '@id': 'https://sera-norr.com/bespoke/#service',
+        name: isNL ? 'Maatwerk natuursteen meubels' : 'Bespoke natural stone furniture',
+        description: isNL 
+          ? 'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Steenkeuze en afwerking stemmen we samen af tijdens de intake.'
+          : 'SERA NORR is an online atelier for bespoke natural stone furniture (travertine, marble and selected stones). Stone choice and finish are coordinated together during the intake.',
+        provider: {
+          '@id': 'https://sera-norr.com/#organization',
+        },
+        areaServed: {
+          '@type': 'Country',
+          name: 'Netherlands',
+        },
+        serviceType: 'Bespoke furniture design and manufacturing',
+      },
+    ],
+  };
 
   // Use-case inspiration items (editorial style, no per-item CTAs)
   const inspirationItems = [
@@ -94,13 +142,29 @@ const Bespoke = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "maatwerk meubels, offerte stenen tafel, marmeren tafel op maat, travertin eettafel, ontworpen in Nederland" 
-          : "bespoke furniture, stone table quote, custom marble table, travertine dining table, designed in the Netherlands"}
-        structuredData={breadcrumbSchema}
+          ? "SERA NORR, maatwerk natuursteenmeubels, online atelier, travertin tafel op maat, marmeren tafel, Calacatta Viola" 
+          : "SERA NORR, bespoke natural stone furniture, online atelier, custom travertine table, marble table, Calacatta Viola"}
+        structuredData={combinedSchema}
       />
 
       {/* Hero with Scroll Animations */}
       <BespokeHero />
+
+      {/* Entity Definition Block - SEO critical */}
+      <section className="py-10 lg:py-12 bg-background border-b border-border/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-3xl">
+            <h2 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+              {isNL ? 'Online atelier voor maatwerk natuursteenmeubels' : 'Online atelier for bespoke natural stone furniture'}
+            </h2>
+            <p className="text-muted-foreground text-body-md leading-relaxed">
+              {isNL 
+                ? 'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Steenkeuze en afwerking stemmen we samen af tijdens de intake.'
+                : 'SERA NORR is an online atelier for bespoke furniture in natural stone (travertine, marble and selected stone types). Stone choice and finish are coordinated together during the intake.'}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Trust Badges - Tighter spacing with top divider */}
       <section className="py-6 lg:py-8 bg-ivory/50 border-t border-border/40">
@@ -398,7 +462,7 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* FAQ Section - Aligned with structured data */}
       <section className="py-12 lg:py-16 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-3xl mx-auto">
@@ -412,66 +476,16 @@ const Bespoke = () => {
             </header>
 
             <Accordion type="single" collapsible className="space-y-3">
-              <AccordionItem value="item-1" className="border border-border/50 px-5">
-                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                  {isNL ? 'Is er een minimale afname?' : 'Is there a minimum order?'}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-sm pb-4">
-                  {isNL 
-                    ? 'Nee, er is geen minimale afname. Elk project is uniek en we maken graag één stuk op maat voor u.'
-                    : 'No, there is no minimum order. Each project is unique and we happily create a single bespoke piece for you.'}
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2" className="border border-border/50 px-5">
-                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                  {isNL ? 'Kan ik mijn eigen steenplaat kiezen?' : 'Can I choose my own stone slab?'}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-sm pb-4">
-                  {isNL 
-                    ? 'Absoluut. Na goedkeuring van het ontwerp selecteert u uw specifieke plaat. U ontvangt foto\'s van beschikbare platen om uw keuze te maken.'
-                    : 'Absolutely. After design approval, you select your specific slab. You\'ll receive photos of available slabs to make your choice.'}
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3" className="border border-border/50 px-5">
-                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                  {isNL ? 'Hoe werkt onderhoud en bescherming?' : 'How does maintenance and protection work?'}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-sm pb-4">
-                  {isNL 
-                    ? 'Elk stuk wordt geleverd met gedetailleerde onderhoudsinstructies. Natuursteen vereist minimaal onderhoud: regelmatig afstoffen en periodiek behandelen met een geschikte steenbehandeling. We adviseren u graag over de beste aanpak voor uw materiaal.'
-                    : 'Each piece comes with detailed care instructions. Natural stone requires minimal maintenance: regular dusting and periodic treatment with a suitable stone sealant. We\'re happy to advise on the best approach for your material.'}
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-4" className="border border-border/50 px-5">
-                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                  {isNL ? 'Wat valt onder white-glove levering?' : 'What\'s included in white-glove delivery?'}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-sm pb-4">
-                  {isNL 
-                    ? 'White-glove levering omvat: transport met klimaatcontrole, levering op de gewenste locatie in uw woning, uitpakken, plaatsing, inspectie met u en afvoer van alle verpakkingsmaterialen.'
-                    : 'White-glove delivery includes: climate-controlled transport, delivery to your desired location within your home, unpacking, placement, inspection with you, and removal of all packaging materials.'}
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-5" className="border border-border/50 px-5">
-                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                  {isNL ? 'Leveren jullie door heel Nederland?' : 'Do you deliver throughout the Netherlands?'}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-sm pb-4">
-                  {isNL 
-                    ? 'Ja, wij leveren door heel Nederland en België. Voor leveringen buiten deze regio\'s neem contact met ons op voor een maatwerkofferte.'
-                    : 'Yes, we deliver throughout the Netherlands and Belgium. For deliveries outside these regions, please contact us for a custom quote.'}
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-6" className="border border-border/50 px-5">
-                <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                  {isNL ? 'Wat bepaalt de prijs het meest?' : 'What most determines the price?'}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-sm pb-4">
-                  {isNL 
-                    ? 'De prijs wordt bepaald door: steensoort (travertin vs. Calacatta Viola), afmetingen, plaatdikte (2 of 3 cm), randafwerking, complexiteit van het ontwerp en het type onderstel. Wij geven altijd een transparante prijsopbouw.'
-                    : 'Price is determined by: stone type (travertine vs. Calacatta Viola), dimensions, slab thickness (2 or 3 cm), edge finish, design complexity, and base type. We always provide a transparent price breakdown.'}
-                </AccordionContent>
-              </AccordionItem>
+              {faqItems.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index + 1}`} className="border border-border/50 px-5">
+                  <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground text-sm pb-4">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
             </Accordion>
           </div>
         </div>

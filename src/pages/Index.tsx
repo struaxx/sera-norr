@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Truck, Award, Settings } from "lucide-react";
-import { SEOHead, organizationSchema } from "@/components/seo";
+import { SEOHead, baseSchema } from "@/components/seo";
 import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import heroImage from "@/assets/hero-homepage.png";
@@ -30,16 +30,16 @@ const Index = () => {
   }, []);
 
   const seoTitle = isNL 
-    ? "SERA NORR — Luxe Stenen Meubels op Maat | Atelier" 
-    : "SERA NORR — Luxury Bespoke Stone Furniture | Atelier";
+    ? "SERA NORR — Luxe natuursteen meubels op maat | Online atelier" 
+    : "SERA NORR — Luxury Natural Stone Furniture | Online Atelier";
   
   const seoDescription = isNL
-    ? "Luxe stenen meubels ontworpen in Nederland. Travertin, marmer en andere steensoorten. 5 jaar garantie, white-glove levering."
-    : "Luxury stone furniture designed in the Netherlands. Travertine, marble and other stone types. 5-year warranty, white-glove delivery.";
+    ? "Online atelier voor maatwerk tafels en consoles in travertin en marmer. Van ontwerp en visualisatie tot white-glove levering in Nederland."
+    : "Online atelier for bespoke tables and consoles in travertine and marble. From design and visualization to white-glove delivery in the Netherlands.";
 
   const seoKeywords = isNL
-    ? "luxe stenen meubels, marmeren tafel op maat, travertin tafel, maatwerk meubels, stenen eettafel, Calacatta Viola, design meubels"
-    : "luxury stone furniture, bespoke marble table, travertine table, custom furniture, stone dining table, Calacatta Viola, designer furniture";
+    ? "SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel"
+    : "SERA NORR, online atelier, bespoke natural stone furniture, travertine table, custom marble table, Calacatta Viola, stone dining table";
 
   const routes = [
     {
@@ -92,7 +92,7 @@ const Index = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={seoKeywords}
-        structuredData={organizationSchema}
+        structuredData={baseSchema}
       />
 
       {/* Hero Section */}
