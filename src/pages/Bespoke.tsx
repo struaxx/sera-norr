@@ -9,11 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
-import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { TrustBadges, BespokeTimeline, USPBullets } from "@/components/trust";
 import { ArrowRight, Calendar, FileText, MessageSquare, Upload } from "lucide-react";
-import bespokeHeroImage from "@/assets/bespoke-hero.png";
 import { trackLeadSubmit } from "@/lib/analytics";
+import BespokeHero from "@/components/bespoke/BespokeHero";
 
 const Bespoke = () => {
   const { t, i18n } = useTranslation();
@@ -122,75 +121,8 @@ const Bespoke = () => {
         structuredData={breadcrumbSchema}
       />
 
-      {/* Hero with Clear Value Proposition */}
-      <section className="pt-32 lg:pt-40 pb-8 lg:pb-10 bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <Breadcrumbs className="mb-8" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div>
-              <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-                {t('bespoke.subtitle')}
-              </p>
-              <h1 className="font-serif text-display-lg text-foreground mb-5 leading-[1.1]">
-                {isNL ? 'Maatwerk in natuursteen — ontworpen voor uw ruimte' : 'Bespoke natural stone — designed for your space'}
-              </h1>
-              <p className="text-muted-foreground text-body-lg leading-relaxed mb-6">
-                {isNL 
-                  ? 'Van eerste schets tot plaatsing. Een zorgvuldig traject met materiaalkeuze, visualisaties en white-glove levering.'
-                  : 'From first sketch to installation. A careful process with material selection, visualizations and white-glove delivery.'}
-              </p>
-              
-              {/* Key Stats as Refined Chips */}
-              <div className="flex flex-wrap gap-2.5 mb-6">
-                <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
-                  {isNL ? 'Prijs op aanvraag' : 'Price on request'}
-                </span>
-                <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
-                  {isNL ? 'Doorlooptijd 12–16 weken' : 'Lead time 12–16 weeks'}
-                </span>
-                <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
-                  {isNL ? '5 jaar garantie' : '5 year warranty'}
-                </span>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                <Button asChild variant="atelier-filled" size="lg" className="h-12">
-                  <a href="#offerte">
-                    {isNL ? 'Vraag offerte aan' : 'Request quote'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button asChild variant="atelier" size="lg" className="h-12 border-foreground/30 hover:border-foreground/60">
-                  <Link to="/contact">
-                    {isNL ? 'Plan vrijblijvend gesprek' : 'Schedule free consultation'}
-                  </Link>
-                </Button>
-              </div>
-              
-              {/* Trust line */}
-              <p className="text-sm text-muted-foreground">
-                {isNL ? 'Reactie binnen 48 uur — geen verplichtingen.' : 'Response within 48 hours — no obligations.'}
-              </p>
-            </div>
-            
-            {/* Hero Image */}
-            <div className="relative">
-              <div className="aspect-[4/3] lg:aspect-[16/10] bg-muted overflow-hidden">
-                <img 
-                  src={bespokeHeroImage} 
-                  alt={isNL ? "SERA NORR maatwerk ontwerp met materiaalstalen" : "SERA NORR bespoke design with material samples"} 
-                  className="w-full h-full object-cover" 
-                />
-              </div>
-              {/* Caption */}
-              <p className="absolute -bottom-4 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {isNL ? 'Ontwerpproces — materiaalstalen' : 'Design process — material samples'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero with Scroll Animations */}
+      <BespokeHero />
 
       {/* Trust Badges - Tighter spacing with top divider */}
       <section className="py-6 lg:py-8 bg-ivory/50 border-t border-border/40">
