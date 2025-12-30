@@ -14,11 +14,10 @@ export function Header() {
   // Check if on homepage (transparent header with hero)
   const isHomePage = location.pathname === "/";
 
-  // Simplified navigation: 5 items max
+  // Simplified navigation: 3 items (cleaner, more premium)
   const navLinks = [
     { name: t('nav.collections'), path: "/collections" },
     { name: t('nav.bespoke'), path: "/bespoke" },
-    { name: t('nav.materials'), path: "/materials" },
     { name: t('nav.contact'), path: "/contact" },
   ];
 
