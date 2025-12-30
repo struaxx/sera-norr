@@ -40,7 +40,7 @@
       "terra_description": "Warm tones and natural layering. Timeless and calm.",
       "vanta_material": "Calacatta Viola",
       "vanta_description": "Rich veins and pronounced contrast. Sculptural and powerful.",
-      "startingFrom": "From",
+      "priceOnRequest": "Price on request",
       "viewCollection": "View collection",
       "other": "Other stone types available on request.",
       "cta": "View all collections"
@@ -54,7 +54,7 @@
       },
       "step2": {
         "title": "Receive proposal",
-        "description": "Drawing, specifications and price indication."
+        "description": "Drawing, specifications and quote."
       },
       "step3": {
         "title": "Start realisation",
@@ -85,7 +85,7 @@
     "closing": {
       "title": "Receive a proposal",
       "description": "Share your preferences and dimensions. We will create a bespoke proposal.",
-      "deliverables": "You receive: drawing, specifications and price indication.",
+      "deliverables": "You receive: drawing, specifications and clear quote.",
       "cta": "Request proposal"
     }
   },
@@ -121,12 +121,13 @@
       "bullet2": "First response within 24–48 hours"
     },
     "pricing": {
-      "title": "Starting prices",
-      "subtitle": "On request — depending on size, stone and finish.",
-      "diningTables": "Dining tables",
-      "coffeeTables": "Coffee tables",
-      "consoles": "Consoles",
-      "onRequest": "On request"
+      "title": "Bespoke on request",
+      "subtitle": "Every SERA NORR piece is made to measure. The price depends on stone choice, dimensions, thickness, edge finish, base and delivery/installation. After a brief intake you receive a clear quote.",
+      "note": "Calacatta Viola & rare stones on request. Prices excl. VAT. Delivery & installation depend on location.",
+      "ctaPrimary": "Request a quote",
+      "ctaSecondary": "View examples",
+      "priceOnRequest": "Price on request",
+      "exampleFormat": "Example dimensions"
     },
     "cta": {
       "discover": "Discover collection",
@@ -144,7 +145,7 @@
       },
       "step3": {
         "title": "Receive proposal",
-        "description": "Drawing, specifications and bespoke price indication."
+        "description": "Drawing, specifications and clear quote."
       },
       "cta": "Request proposal",
       "microcopy": "First response from the atelier within 24–48 hours."
@@ -183,7 +184,7 @@
     "craftsmanshipSubtitle": "Craftsmanship",
     "craftsmanshipTitle": "Dutch Design",
     "craftsmanshipDescription": "Every Sera Norr piece is designed in our Dutch studio. We combine traditional stone-working techniques with contemporary precision, collaborating with selected artisans worldwide.",
-    "leadTimeDescription": "Total lead time for bespoke commissions is ±13–15 weeks, including design, production and shipping. We believe in craftsmanship that cannot be rushed.",
+    "leadTimeDescription": "Average lead time: 12–16 weeks (depending on stone choice and location). We believe in craftsmanship that cannot be rushed.",
     "formSubtitle": "Begin Your Journey",
     "formTitle": "Your Commission",
     "formName": "Name",

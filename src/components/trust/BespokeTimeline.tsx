@@ -11,8 +11,8 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
 
-  // Updated durations to add up to 13-15 weeks total:
-  // 1 week + 1-2 weeks + 1-2 weeks + 8-10 weeks + 2 weeks = 13-17 weeks (target: ±13-15)
+  // Updated durations to add up to 12-16 weeks total:
+  // 1 week + 1-2 weeks + 1-2 weeks + 8-10 weeks + 1-2 weeks = 12-17 weeks (target: 12-16)
   const steps = [
     {
       icon: Sparkles,
@@ -108,7 +108,7 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
         
         {compact && (
           <p className="text-xs text-muted-foreground pl-12">
-            {isNL ? 'Totale doorlooptijd: ±13–15 weken' : 'Total lead time: ±13–15 weeks'}
+            {isNL ? 'Gemiddelde doorlooptijd: 12–16 weken' : 'Average lead time: 12–16 weeks'}
           </p>
         )}
       </div>

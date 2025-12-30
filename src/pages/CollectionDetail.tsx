@@ -48,13 +48,13 @@ Travertine is ideal for furniture that needs to radiate warmth and calm. The por
       { question: "Wat is travertin en waarom is het geschikt voor meubels?", answer: "Travertin is een natuursteen gevormd uit kalkafzettingen van minerale bronnen. Het heeft een warme, honingkleurige tint en een karakteristieke poreuze structuur. De steen is sterk genoeg voor dagelijks gebruik en ontwikkelt met de tijd een mooie patina." },
       { question: "Kan ik de afmetingen van TERRA meubels aanpassen?", answer: "Ja, alle TERRA stukken kunnen op maat worden gemaakt. U kunt de lengte, breedte, hoogte en vorm aanpassen aan uw ruimte. Neem contact op voor een vrijblijvend voorstel." },
       { question: "Hoe onderhoud ik travertin meubels?", answer: "Travertin vereist minimaal onderhoud. Regelmatig afstoffen en af en toe schoonmaken met een vochtige doek volstaat. Wij adviseren jaarlijks een steen-impregnatie om vlekken te voorkomen." },
-      { question: "Wat is de levertijd voor een TERRA stuk op maat?", answer: "De levertijd voor maatwerk bedraagt doorgaans 8 tot 12 weken, afhankelijk van de complexiteit en beschikbaarheid van het materiaal." },
+      { question: "Wat is de levertijd voor een TERRA stuk op maat?", answer: "De levertijd voor maatwerk bedraagt gemiddeld 12 tot 16 weken, afhankelijk van de complexiteit, steenkeuze en locatie." },
     ],
     faqsEn: [
       { question: "What is travertine and why is it suitable for furniture?", answer: "Travertine is a natural stone formed from limestone deposits of mineral springs. It has a warm, honey-coloured tone and characteristic porous structure. The stone is strong enough for daily use and develops a beautiful patina over time." },
       { question: "Can I customize the dimensions of TERRA furniture?", answer: "Yes, all TERRA pieces can be made to measure. You can adjust the length, width, height and shape to fit your space. Contact us for a no-obligation proposal." },
       { question: "How do I maintain travertine furniture?", answer: "Travertine requires minimal maintenance. Regular dusting and occasional cleaning with a damp cloth is sufficient. We recommend annual stone impregnation to prevent stains." },
-      { question: "What is the delivery time for a custom TERRA piece?", answer: "The delivery time for custom work is typically 8 to 12 weeks, depending on complexity and material availability." },
+      { question: "What is the delivery time for a custom TERRA piece?", answer: "The delivery time for custom work is typically 12 to 16 weeks, depending on complexity, stone selection and location." },
     ],
   },
   vanta: {
@@ -211,9 +211,9 @@ const CollectionDetail = () => {
 
   const combinedSchema = faqSchema ? [collectionSchema, breadcrumbSchema, faqSchema] : [collectionSchema, breadcrumbSchema];
 
-  const formatPrice = (amount: string, currencyCode: string) => {
-    const num = parseFloat(amount);
-    return `${isEnglish ? 'From' : 'Vanaf'} €${num.toLocaleString('nl-NL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  // Format price as "Price on request" for bespoke items
+  const formatPriceOnRequest = () => {
+    return isEnglish ? 'Price on request' : 'Prijs op aanvraag';
   };
 
   return (
@@ -343,8 +343,8 @@ const CollectionDetail = () => {
                         )}
                       </div>
                       {price && (
-                        <p className="font-sans text-sm text-foreground whitespace-nowrap">
-                          {formatPrice(price.amount, price.currencyCode)}
+                        <p className="font-sans text-sm text-muted-foreground whitespace-nowrap">
+                          {formatPriceOnRequest()}
                         </p>
                       )}
                     </div>

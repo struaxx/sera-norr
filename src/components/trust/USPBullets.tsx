@@ -18,7 +18,7 @@ export function USPBullets({ className, variant = 'default' }: USPBulletsProps) 
     },
     {
       icon: Clock,
-      text: isNL ? 'Doorlooptijd ±13–15 weken' : 'Lead time ±13–15 weeks',
+      text: isNL ? 'Doorlooptijd 12–16 weken' : 'Lead time 12–16 weeks',
     },
     {
       icon: Truck,

@@ -40,7 +40,7 @@
       "terra_description": "Warme tinten en natuurlijke gelaagdheid. Tijdloos en rustig.",
       "vanta_material": "Calacatta Viola",
       "vanta_description": "Rijke aders en uitgesproken contrast. Sculpturaal en krachtig.",
-      "startingFrom": "Vanaf",
+      "priceOnRequest": "Prijs op aanvraag",
       "viewCollection": "Bekijk collectie",
       "other": "Andere steensoorten beschikbaar op aanvraag.",
       "cta": "Bekijk alle collecties"
@@ -54,7 +54,7 @@
       },
       "step2": {
         "title": "Ontvang voorstel",
-        "description": "Tekening, specificaties en prijsindicatie."
+        "description": "Tekening, specificaties en offerte."
       },
       "step3": {
         "title": "Start realisatie",
@@ -85,7 +85,7 @@
     "closing": {
       "title": "Ontvang een voorstel",
       "description": "Deel uw voorkeuren en afmetingen. Wij maken een voorstel op maat.",
-      "deliverables": "U ontvangt: tekening, specificaties en prijsindicatie.",
+      "deliverables": "U ontvangt: tekening, specificaties en heldere offerte.",
       "cta": "Vraag voorstel aan"
     }
   },
@@ -121,12 +121,13 @@
       "bullet2": "Eerste reactie binnen 24–48 uur"
     },
     "pricing": {
-      "title": "Vanafprijzen",
-      "subtitle": "Op aanvraag — afhankelijk van maat, steen en afwerking.",
-      "diningTables": "Eettafels",
-      "coffeeTables": "Salontafels",
-      "consoles": "Consoles",
-      "onRequest": "Op aanvraag"
+      "title": "Maatwerk op aanvraag",
+      "subtitle": "Elke SERA NORR piece wordt op maat gemaakt. De prijs is afhankelijk van steenkeuze, afmetingen, dikte, randafwerking, onderstel en levering/plaatsing. Na een korte intake ontvang je een heldere offerte.",
+      "note": "Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie.",
+      "ctaPrimary": "Vraag een offerte aan",
+      "ctaSecondary": "Bekijk voorbeelden",
+      "priceOnRequest": "Prijs op aanvraag",
+      "exampleFormat": "Voorbeeldformaat"
     },
     "cta": {
       "discover": "Ontdek collectie",
@@ -144,7 +145,7 @@
       },
       "step3": {
         "title": "Ontvang voorstel",
-        "description": "Tekening, specificaties en prijsindicatie op maat."
+        "description": "Tekening, specificaties en heldere offerte."
       },
       "cta": "Vraag voorstel aan",
       "microcopy": "Binnen 24–48 uur een eerste reactie van het atelier."
@@ -183,7 +184,7 @@
     "craftsmanshipSubtitle": "Vakmanschap",
     "craftsmanshipTitle": "Nederlands Ontwerp",
     "craftsmanshipDescription": "Elk Sera Norr stuk wordt ontworpen in onze Nederlandse studio. We combineren traditionele steenbewerkingstechnieken met hedendaagse precisie, en werken samen met geselecteerde ambachtslieden wereldwijd.",
-    "leadTimeDescription": "De totale doorlooptijd voor maatwerk is ±13–15 weken, inclusief ontwerp, productie en verzending. Wij geloven in vakmanschap dat niet kan worden gehaast.",
+    "leadTimeDescription": "Gemiddelde doorlooptijd: 12–16 weken (afhankelijk van steenkeuze en locatie). Wij geloven in vakmanschap dat niet kan worden gehaast.",
     "formSubtitle": "Begin Uw Traject",
     "formTitle": "Uw Opdracht",
     "formName": "Naam",
