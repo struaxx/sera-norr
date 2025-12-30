@@ -168,15 +168,15 @@ const About = () => {
               {isNL ? 'De Studio' : 'The Studio'}
             </p>
             <h2 className="font-serif text-display-sm mb-8">
-              {isNL ? 'Ontworpen in Nederland' : 'Designed in the Netherlands'}
+              {isNL ? 'Online Atelier' : 'Online Atelier'}
             </h2>
             <p className="text-background/80 text-body-lg leading-relaxed mb-12">
               {isNL
-                ? 'Onze studio is zowel werkplaats als creatieve ruimte—waar zeldzame materialen worden getransformeerd tot objecten van permanentie. Bezoekers zijn welkom op afspraak om ons ontwerpproces van dichtbij te ervaren.'
-                : 'Our studio is both workshop and creative space—where rare materials are transformed into objects of permanence. Visitors are welcome by appointment to experience our design process firsthand.'}
+                ? 'SERA NORR is een online atelier—onze creatieve ruimte waar zeldzame materialen worden getransformeerd tot objecten van permanentie. Via persoonlijke begeleiding op afstand begeleiden we u door elk stap van het ontwerpproces.'
+                : 'SERA NORR is an online atelier—our creative space where rare materials are transformed into objects of permanence. Through personal remote guidance, we walk you through every step of the design process.'}
             </p>
             <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
-              <Link to="/contact">{isNL ? 'Maak een Afspraak' : 'Arrange a Visit'}</Link>
+              <Link to="/bespoke">{isNL ? 'Start uw traject' : 'Start your journey'}</Link>
             </Button>
           </div>
         </div>

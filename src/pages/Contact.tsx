@@ -37,12 +37,12 @@ const Contact = () => {
   };
 
   const seoTitle = isNL 
-    ? "Contact | SERA NORR Showroom Amsterdam"
-    : "Contact | SERA NORR Showroom Amsterdam";
+    ? "Contact | SERA NORR Online Atelier"
+    : "Contact | SERA NORR Online Atelier";
 
   const seoDescription = isNL
-    ? "Neem contact op met SERA NORR. Bezoek onze showroom in Amsterdam op afspraak. Vraag een voorstel aan voor maatwerk stenen meubels."
-    : "Contact SERA NORR. Visit our Amsterdam showroom by appointment. Request a proposal for bespoke stone furniture.";
+    ? "Neem contact op met SERA NORR. Vraag een voorstel aan voor maatwerk stenen meubels. Reactie binnen 48 uur."
+    : "Contact SERA NORR. Request a proposal for bespoke stone furniture. Response within 48 hours.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -60,8 +60,8 @@ const Contact = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "contact SERA NORR, showroom Amsterdam, afspraak maken, maatwerk aanvraag" 
-          : "contact SERA NORR, showroom Amsterdam, schedule appointment, bespoke inquiry"}
+          ? "contact SERA NORR, online atelier, maatwerk aanvraag, stenen meubels" 
+          : "contact SERA NORR, online atelier, bespoke inquiry, stone furniture"}
         structuredData={combinedSchema}
       />
 
@@ -79,8 +79,8 @@ const Contact = () => {
             </h1>
             <p className="text-muted-foreground text-body-lg leading-relaxed">
               {isNL
-                ? 'Of u nu interesse heeft in onze collecties, een maatwerkopdracht overweegt, of simpelweg onze showroom wilt bezoeken—we verwelkomen uw vraag.'
-                : "Whether you're interested in our collections, considering a bespoke commission, or simply wish to visit our showroom—we welcome your inquiry."}
+                ? 'Of u nu interesse heeft in onze collecties of een maatwerkopdracht overweegt—we verwelkomen uw vraag.'
+                : "Whether you're interested in our collections or considering a bespoke commission—we welcome your inquiry."}
             </p>
           </header>
         </div>
@@ -103,12 +103,11 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
-                      Showroom
+                      {isNL ? 'Online Atelier' : 'Online Atelier'}
                     </h3>
                     <p className="text-muted-foreground text-body-md leading-relaxed">
-                      Keizersgracht 585<br />
-                      1017 DR Amsterdam<br />
-                      {isNL ? 'Nederland' : 'The Netherlands'}
+                      {isNL ? 'Ontworpen in Nederland' : 'Designed in the Netherlands'}<br />
+                      {isNL ? 'Persoonlijke begeleiding op afstand' : 'Personal guidance remotely'}
                     </p>
                   </div>
                 </div>
@@ -136,11 +135,11 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
-                      {isNL ? 'Bezoekuren' : 'Visiting Hours'}
+                      {isNL ? 'Reactietijd' : 'Response Time'}
                     </h3>
                     <p className="text-muted-foreground text-body-md leading-relaxed">
-                      {isNL ? 'Alleen op afspraak' : 'By appointment only'}<br />
-                      {isNL ? 'Maandag – Vrijdag, 10:00 – 18:00' : 'Monday – Friday, 10:00 – 18:00'}
+                      {isNL ? 'Binnen 48 uur' : 'Within 48 hours'}<br />
+                      {isNL ? 'Maandag – Vrijdag' : 'Monday – Friday'}
                     </p>
                   </div>
                 </div>
@@ -149,8 +148,8 @@ const Contact = () => {
               <div className="mt-12 pt-12 border-t border-border">
                 <p className="text-muted-foreground text-body-sm leading-relaxed">
                   {isNL
-                    ? 'Onze showroom bezoeken zijn privé en alleen op afspraak. Ervaar onze collecties in een intieme setting, begeleid door ons team dat u alles kan vertellen over materialen, proces en aanpassingsmogelijkheden.'
-                    : 'Our showroom visits are private and by appointment. Experience our collections in an intimate setting, guided by our team who can speak to materials, process, and customization possibilities.'}
+                    ? 'Als online atelier begeleiden we u door het volledige ontwerpproces op afstand. Via foto\'s, video en gedetailleerde visualisaties zorgen we dat u precies weet wat u kunt verwachten.'
+                    : 'As an online atelier, we guide you through the complete design process remotely. Through photos, video and detailed visualizations, we ensure you know exactly what to expect.'}
                 </p>
               </div>
             </div>
@@ -203,7 +202,7 @@ const Contact = () => {
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     className="bg-background border-border focus:border-foreground"
-                    placeholder={isNL ? 'Collecties, Maatwerk, Showroom Bezoek...' : 'Collections, Bespoke, Showroom Visit...'}
+                    placeholder={isNL ? 'Collecties, Maatwerk, Algemene vraag...' : 'Collections, Bespoke, General inquiry...'}
                   />
                 </div>
 

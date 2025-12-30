@@ -11,14 +11,11 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
 
-  // Updated durations to add up to 12-16 weeks total:
-  // 1 week + 1-2 weeks + 1-2 weeks + 8-10 weeks + 1-2 weeks = 12-17 weeks (target: 12-16)
   const steps = [
     {
       icon: Sparkles,
       step: '1',
       title: isNL ? 'Consultatie' : 'Consultation',
-      duration: '1 week',
       description: isNL 
         ? 'Vrijblijvend gesprek over uw wensen en ruimte.' 
         : 'No-obligation conversation about your wishes and space.',
@@ -27,25 +24,22 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
       icon: FileText,
       step: '2',
       title: isNL ? 'Voorstel & Offerte' : 'Proposal & Quote',
-      duration: isNL ? '1–2 weken' : '1–2 weeks',
       description: isNL 
-        ? 'Schetsen, materiaalopties en prijsvoorstel.' 
-        : 'Sketches, material options and price proposal.',
+        ? 'Schetsen, materiaalopties en offerte.' 
+        : 'Sketches, material options and quote.',
     },
     {
       icon: Palette,
       step: '3',
       title: isNL ? 'Materiaalselectie' : 'Material Selection',
-      duration: isNL ? '1–2 weken' : '1–2 weeks',
       description: isNL 
-        ? 'Selecteer uw steenplaat. Foto\'s of showroombezoek.' 
-        : 'Select your stone slab. Photos or showroom visit.',
+        ? 'Selecteer uw steenplaat aan de hand van foto\'s.' 
+        : 'Select your stone slab based on photos.',
     },
     {
       icon: Hammer,
       step: '4',
       title: isNL ? 'Productie' : 'Production',
-      duration: isNL ? '8–10 weken' : '8–10 weeks',
       description: isNL 
         ? 'Vakkundige productie door onze ambachtslieden.' 
         : 'Expert production by our artisans.',
@@ -54,7 +48,6 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
       icon: Home,
       step: '5',
       title: isNL ? 'Levering & Plaatsing' : 'Delivery & Installation',
-      duration: isNL ? '1–2 weken' : '1–2 weeks',
       description: isNL 
         ? 'White-glove levering en professionele plaatsing.' 
         : 'White-glove delivery and professional installation.',
@@ -86,17 +79,12 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
             
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <div className="flex items-baseline gap-3 mb-1">
-                <h4 className={cn(
-                  'font-sans text-sm font-medium text-foreground',
-                  compact && 'text-xs'
-                )}>
-                  {item.title}
-                </h4>
-                <span className="text-xs text-muted-foreground">
-                  {item.duration}
-                </span>
-              </div>
+              <h4 className={cn(
+                'font-sans text-sm font-medium text-foreground mb-1',
+                compact && 'text-xs'
+              )}>
+                {item.title}
+              </h4>
               {!compact && (
                 <p className="text-sm text-muted-foreground">
                   {item.description}
