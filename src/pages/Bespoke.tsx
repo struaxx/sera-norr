@@ -60,25 +60,29 @@ const Bespoke = () => {
     { name: isNL ? 'Maatwerk' : 'Bespoke', url: '/bespoke' },
   ]);
 
-  // Example products (dimensions only, no prices)
-  const exampleProducts = [
+  // Use-case inspiration cards (no prices)
+  const inspirationCards = [
     {
-      type: isNL ? 'Bijzettafel' : 'Side Table',
+      title: isNL ? 'Naast de bank' : 'Beside the sofa',
+      line: isNL ? 'Compact statement, subtiel aanwezig.' : 'Compact statement, subtly present.',
       spec: 'Ø45 × H55',
       material: 'Travertin',
     },
     {
-      type: isNL ? 'Salontafel' : 'Coffee Table',
+      title: isNL ? 'Voor de zithoek' : 'For the sitting area',
+      line: isNL ? 'Rustige basis voor dagelijkse momenten.' : 'Calm foundation for daily moments.',
       spec: 'L120 × B80',
       material: 'Travertin',
     },
     {
-      type: isNL ? 'Console' : 'Console',
+      title: isNL ? 'In de hal' : 'In the hallway',
+      line: isNL ? 'Architecturale lijn met verfijnde details.' : 'Architectural line with refined details.',
       spec: 'L160 × B45',
       material: isNL ? 'Marmer' : 'Marble',
     },
     {
-      type: isNL ? 'Eettafel' : 'Dining Table',
+      title: isNL ? 'Als centerpiece' : 'As centerpiece',
+      line: isNL ? 'Gemaakt om samen te komen.' : 'Made for gathering together.',
       spec: 'L200 × B100',
       material: 'Travertin',
     },
@@ -207,13 +211,13 @@ const Bespoke = () => {
             </h2>
             <p className="text-muted-foreground text-body-md leading-relaxed">
               {isNL 
-                ? 'Elke SERA NORR piece wordt op maat gemaakt. De prijs is afhankelijk van steenkeuze, afmetingen, dikte, randafwerking, onderstel en levering/plaatsing. Na een korte intake ontvang je een heldere offerte.'
-                : 'Every SERA NORR piece is made to measure. The price depends on stone choice, dimensions, thickness, edge finish, base and delivery/installation. After a brief intake you receive a clear quote.'}
+                ? 'Elke SERA NORR piece wordt op maat gemaakt. Materiaal, maatvoering, randafwerking, onderstel en levering/plaatsing bepalen de uiteindelijke prijs. Na een korte intake ontvang je een voorstel op maat.'
+                : 'Every SERA NORR piece is made to measure. Material, dimensions, edge finish, base and delivery/installation determine the final price. After a brief intake you receive a tailored proposal.'}
             </p>
           </header>
 
           {/* CTAs */}
-          <div className="flex flex-wrap gap-3 mb-10">
+          <div className="flex flex-wrap gap-3 mb-8">
             <Button asChild variant="atelier-filled" size="lg">
               <a href="#offerte">
                 {isNL ? 'Vraag een offerte aan' : 'Request a quote'}
@@ -227,22 +231,38 @@ const Bespoke = () => {
             </Button>
           </div>
 
-          {/* Example Products Grid - No prices */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 mb-6">
-            {exampleProducts.map((item, index) => (
-              <div key={index} className="p-5 bg-secondary/30 border border-border/50">
-                <h3 className="font-serif text-base text-foreground mb-1">{item.type}</h3>
-                <p className="text-sm text-muted-foreground mb-1.5">{isNL ? 'Prijs op aanvraag' : 'Price on request'}</p>
-                <p className="text-[11px] text-muted-foreground/70 leading-relaxed">
-                  {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {item.spec}
-                </p>
-                <p className="text-[11px] text-muted-foreground/70">{item.material}</p>
+          {/* Single price line above grid */}
+          <p className="text-sm text-muted-foreground mb-6 border-t border-border/40 pt-6">
+            {isNL 
+              ? 'Prijs op aanvraag — op basis van steenkeuze, maatvoering, afwerking en levering/plaatsing.'
+              : 'Price on request — based on stone choice, dimensions, finish and delivery/installation.'}
+          </p>
+
+          {/* Inspiration/Use-case Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 mb-8">
+            {inspirationCards.map((card, index) => (
+              <div key={index} className="group p-6 bg-secondary/20 border border-border/40 hover:border-border/60 transition-colors">
+                <h3 className="font-serif text-lg text-foreground mb-2">{card.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{card.line}</p>
+                <div className="space-y-1 mb-4">
+                  <p className="text-[11px] text-muted-foreground/70">
+                    {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {card.spec}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground/70">{card.material}</p>
+                </div>
+                <a 
+                  href="#offerte" 
+                  className="inline-flex items-center text-xs text-foreground hover:text-foreground/70 transition-colors group-hover:underline underline-offset-2"
+                >
+                  {isNL ? 'Offerte aanvragen' : 'Request quote'}
+                  <ArrowRight className="ml-1 h-3 w-3" />
+                </a>
               </div>
             ))}
           </div>
 
-          {/* Notes */}
-          <div className="space-y-1.5 text-center">
+          {/* Footer note */}
+          <div className="text-center">
             <p className="text-xs text-muted-foreground">
               {isNL 
                 ? 'Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie.'
