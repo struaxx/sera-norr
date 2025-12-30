@@ -13,6 +13,9 @@ import ProductDetail from "./pages/ProductDetail";
 import Journal from "./pages/Journal";
 import Materials from "./pages/Materials";
 import MaterialDetail from "./pages/MaterialDetail";
+import Voorstel from "./pages/Voorstel";
+import Lookbook from "./pages/Lookbook";
+import Care from "./pages/Care";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +37,9 @@ const App = () => (
           <Route path="/journal" element={<Journal />} />
           <Route path="/materials" element={<Materials />} />
           <Route path="/materials/:materialId" element={<MaterialDetail />} />
+          <Route path="/voorstel" element={<Voorstel />} />
+          <Route path="/lookbook" element={<Lookbook />} />
+          <Route path="/care" element={<Care />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

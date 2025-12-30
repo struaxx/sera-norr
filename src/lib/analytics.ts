@@ -151,9 +151,12 @@ export const trackBeginCheckout = (items: Array<{
 };
 
 // Lead generation: Form submission
-export const trackLeadSubmit = (formType: 'bespoke' | 'contact' | 'quote', details?: {
+export const trackLeadSubmit = (formType: 'bespoke' | 'contact' | 'quote' | 'voorstel' | 'lookbook', details?: {
   productType?: string;
   estimatedValue?: number;
+  stone?: string;
+  budget?: string;
+  interest?: string;
 }) => {
   if (!isGtagAvailable()) return;
 
