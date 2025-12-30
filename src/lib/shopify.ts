@@ -2,9 +2,9 @@ import { toast } from "sonner";
 
 // Shopify API Configuration
 export const SHOPIFY_API_VERSION = '2025-07';
-export const SHOPIFY_STORE_PERMANENT_DOMAIN = 'ygc1q1-4j.myshopify.com';
+export const SHOPIFY_STORE_PERMANENT_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || 'ygc1q1-4j.myshopify.com';
 export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-export const SHOPIFY_STOREFRONT_TOKEN = '32e6f6789df25f596c9d1c0136c74b7a';
+export const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '';
 
 // Types
 export interface ShopifyProduct {
@@ -271,38 +271,96 @@ export const CART_CREATE_MUTATION = `
   }
 `;
 
-// API Helper
+// API Helper with comprehensive error handling
 export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
-  const response = await fetch(SHOPIFY_STOREFRONT_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  });
-
-  if (response.status === 402) {
-    toast.error("Shopify: Betaling vereist", {
-      description: "Shopify API-toegang vereist een actief abonnement. Bezoek admin.shopify.com om te upgraden.",
+  // Validate token exists
+  if (!SHOPIFY_STOREFRONT_TOKEN) {
+    toast.error("Shopify configuratie ontbreekt", {
+      description: "Neem contact op met de beheerder.",
     });
     return null;
   }
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  // Request with timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  const data = await response.json();
-  
-  if (data.errors) {
-    throw new Error(`Error calling Shopify: ${data.errors.map((e: { message: string }) => e.message).join(', ')}`);
-  }
+  try {
+    const response = await fetch(SHOPIFY_STOREFRONT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
+      },
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+      signal: controller.signal,
+    });
 
-  return data;
+    clearTimeout(timeoutId);
+
+    // Handle specific error codes
+    if (response.status === 402) {
+      toast.error("Shopify: Betaling vereist", {
+        description: "Shopify API-toegang vereist een actief abonnement.",
+      });
+      return null;
+    }
+
+    if (response.status === 429) {
+      toast.error("Te veel verzoeken", {
+        description: "Probeer het over een moment opnieuw.",
+      });
+      return null;
+    }
+
+    if (response.status === 401 || response.status === 403) {
+      toast.error("Verbinding met winkel niet mogelijk", {
+        description: "Neem contact op met de beheerder.",
+      });
+      return null;
+    }
+
+    if (response.status >= 500) {
+      toast.error("Winkel tijdelijk niet beschikbaar", {
+        description: "Probeer het later opnieuw.",
+      });
+      return null;
+    }
+
+    if (!response.ok) {
+      toast.error("Er ging iets mis", {
+        description: "Probeer het later opnieuw.",
+      });
+      return null;
+    }
+
+    const data = await response.json();
+    
+    if (data.errors) {
+      toast.error("Er ging iets mis bij het laden", {
+        description: "Probeer het later opnieuw.",
+      });
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    
+    if (error instanceof Error && error.name === 'AbortError') {
+      toast.error("Verbinding timeout", {
+        description: "Probeer het later opnieuw.",
+      });
+    } else {
+      toast.error("Netwerkfout", {
+        description: "Controleer uw internetverbinding.",
+      });
+    }
+    return null;
+  }
 }
 
 // Fetch all products

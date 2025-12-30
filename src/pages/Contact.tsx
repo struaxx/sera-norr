@@ -73,7 +73,9 @@ const Contact = () => {
       });
       setFormData({ name: "", email: "", subject: "", message: "", honeypot: "" });
     } catch (error: any) {
-      console.error("Form submission error:", error);
+      if (import.meta.env.DEV) {
+        console.error("Form submission error:", error);
+      }
       
       // Handle rate limiting
       if (error.message?.includes("429") || error.message?.includes("Too many")) {

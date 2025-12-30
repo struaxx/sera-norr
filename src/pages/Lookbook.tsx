@@ -79,7 +79,9 @@ const Lookbook = () => {
         description: isNL ? "Bekijk alle voorbeelden hieronder." : "View all examples below.",
       });
     } catch (error: any) {
-      console.error("Form submission error:", error);
+      if (import.meta.env.DEV) {
+        console.error("Form submission error:", error);
+      }
       
       if (error.message?.includes("429") || error.message?.includes("Too many")) {
         toast({
