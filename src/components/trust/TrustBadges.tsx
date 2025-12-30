@@ -40,8 +40,8 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
     },
     {
       icon: Clock,
-      title: isNL ? '12-20 Weken Levertijd' : '12-20 Weeks Lead Time',
-      description: isNL ? 'Vakmanschap vraagt tijd' : 'Craftsmanship takes time',
+      title: isNL ? '13–15 Weken Doorlooptijd' : '13–15 Weeks Lead Time',
+      description: isNL ? 'Incl. ontwerp, productie & verzending' : 'Incl. design, production & shipping',
     },
   ];
 

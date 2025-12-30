@@ -53,8 +53,8 @@ const Bespoke = () => {
     : "Bespoke Stone Furniture | Request Quote | SERA NORR";
 
   const seoDescription = isNL
-    ? "Maatwerk stenen meubels vanaf €2.000. Travertin, Calacatta Viola en andere steensoorten. Doorlooptijd 8-12 weken. Vraag een vrijblijvende offerte aan."
-    : "Bespoke stone furniture from €2,000. Travertine, Calacatta Viola and other stones. Lead time 8-12 weeks. Request a no-obligation quote.";
+    ? "Maatwerk stenen meubels op aanvraag. Travertin, Calacatta Viola en andere steensoorten. Doorlooptijd ±13-15 weken. Vraag een vrijblijvende offerte aan."
+    : "Bespoke stone furniture on request. Travertine, Calacatta Viola and other stones. Lead time ±13-15 weeks. Request a no-obligation quote.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -150,10 +150,10 @@ const Bespoke = () => {
               {/* Key Stats as Refined Chips */}
               <div className="flex flex-wrap gap-2.5 mb-6">
                 <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
-                  {isNL ? 'Projecten vanaf €2.000' : 'Projects from €2,000'}
+                  {isNL ? 'Prijs op aanvraag' : 'Price on request'}
                 </span>
                 <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
-                  {isNL ? 'Gemiddeld 8–12 weken' : 'Average 8–12 weeks'}
+                  {isNL ? 'Doorlooptijd ±13–15 weken' : 'Lead time ±13–15 weeks'}
                 </span>
                 <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
                   {isNL ? '5 jaar garantie' : '5 year warranty'}
@@ -301,7 +301,7 @@ const Bespoke = () => {
                   <div>
                     <div className="flex items-baseline gap-2 mb-0.5">
                       <h4 className="font-serif text-base text-foreground">{isNL ? 'Voorstel & Offerte' : 'Proposal & Quote'}</h4>
-                      <span className="text-xs text-muted-foreground">1 week</span>
+                      <span className="text-xs text-muted-foreground">{isNL ? '1–2 weken' : '1–2 weeks'}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">{isNL ? 'Schetsen, materiaalopties en prijsvoorstel.' : 'Sketches, material options and price proposal.'}</p>
                   </div>
@@ -323,7 +323,7 @@ const Bespoke = () => {
                   <div>
                     <div className="flex items-baseline gap-2 mb-0.5">
                       <h4 className="font-serif text-base text-foreground">{isNL ? 'Productie' : 'Production'}</h4>
-                      <span className="text-xs text-muted-foreground">{isNL ? '4–6 weken' : '4–6 weeks'}</span>
+                      <span className="text-xs text-muted-foreground">{isNL ? '8–10 weken' : '8–10 weeks'}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">{isNL ? 'Vakkundige productie door onze ambachtslieden.' : 'Expert production by our artisans.'}</p>
                   </div>
@@ -334,7 +334,7 @@ const Bespoke = () => {
                   <div>
                     <div className="flex items-baseline gap-2 mb-0.5">
                       <h4 className="font-serif text-base text-foreground">{isNL ? 'Levering & Plaatsing' : 'Delivery & Installation'}</h4>
-                      <span className="text-xs text-muted-foreground">1 week</span>
+                      <span className="text-xs text-muted-foreground">{isNL ? '1–2 weken' : '1–2 weeks'}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">{isNL ? 'White-glove levering en professionele plaatsing.' : 'White-glove delivery and professional installation.'}</p>
                   </div>
