@@ -35,8 +35,8 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
     },
     {
       icon: MapPin,
-      title: isNL ? 'Amsterdam Showroom' : 'Amsterdam Showroom',
-      description: isNL ? 'Bezoek op afspraak' : 'Visits by appointment',
+      title: isNL ? 'Online Atelier' : 'Online Atelier',
+      description: isNL ? 'Persoonlijke begeleiding op afstand' : 'Personal guidance remotely',
     },
     {
       icon: Clock,

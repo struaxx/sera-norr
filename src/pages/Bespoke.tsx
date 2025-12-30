@@ -100,21 +100,11 @@ const Bespoke = () => {
       icon: FileText,
       title: isNL ? 'Offerte aanvragen' : 'Request quote',
       description: isNL 
-        ? 'Binnen 48 uur een voorstel met schetsen en prijsindicatie.' 
-        : 'Proposal with sketches and price indication within 48 hours.',
+        ? 'Binnen 48 uur een voorstel met schetsen en offerte.' 
+        : 'Proposal with sketches and quote within 48 hours.',
       cta: isNL ? 'Vraag offerte aan' : 'Request quote',
       primary: true,
       label: isNL ? 'Meest gekozen' : 'Most popular',
-    },
-    {
-      icon: Calendar,
-      title: isNL ? 'Showroom bezoek' : 'Showroom visit',
-      description: isNL 
-        ? 'Materialen bekijken en afwerkingen voelen in Amsterdam.' 
-        : 'View materials and feel finishes in Amsterdam.',
-      cta: isNL ? 'Maak afspraak' : 'Book appointment',
-      primary: false,
-      label: null,
     },
   ];
 
@@ -292,10 +282,7 @@ const Bespoke = () => {
                 <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
                   <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">1</span>
                   <div>
-                    <div className="flex items-baseline gap-2 mb-0.5">
-                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Consultatie' : 'Consultation'}</h4>
-                      <span className="text-xs text-muted-foreground">1 week</span>
-                    </div>
+                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Consultatie' : 'Consultation'}</h4>
                     <p className="text-sm text-muted-foreground">{isNL ? 'Vrijblijvend gesprek over uw wensen en ruimte.' : 'No-obligation conversation about your wishes and space.'}</p>
                   </div>
                 </div>
@@ -303,32 +290,23 @@ const Bespoke = () => {
                 <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
                   <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">2</span>
                   <div>
-                    <div className="flex items-baseline gap-2 mb-0.5">
-                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Voorstel & Offerte' : 'Proposal & Quote'}</h4>
-                      <span className="text-xs text-muted-foreground">{isNL ? '1–2 weken' : '1–2 weeks'}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{isNL ? 'Schetsen, materiaalopties en prijsvoorstel.' : 'Sketches, material options and price proposal.'}</p>
+                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Voorstel & Offerte' : 'Proposal & Quote'}</h4>
+                    <p className="text-sm text-muted-foreground">{isNL ? 'Schetsen, materiaalopties en offerte.' : 'Sketches, material options and quote.'}</p>
                   </div>
                 </div>
                 {/* Step 3 */}
                 <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
                   <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">3</span>
                   <div>
-                    <div className="flex items-baseline gap-2 mb-0.5">
-                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Materiaalselectie' : 'Material Selection'}</h4>
-                      <span className="text-xs text-muted-foreground">{isNL ? '1–2 weken' : '1–2 weeks'}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{isNL ? 'Selecteer uw steenplaat. Foto\'s of showroombezoek.' : 'Select your stone slab. Photos or showroom visit.'}</p>
+                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Materiaalselectie' : 'Material Selection'}</h4>
+                    <p className="text-sm text-muted-foreground">{isNL ? 'Selecteer uw steenplaat aan de hand van foto\'s.' : 'Select your stone slab based on photos.'}</p>
                   </div>
                 </div>
                 {/* Step 4 */}
                 <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
                   <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">4</span>
                   <div>
-                    <div className="flex items-baseline gap-2 mb-0.5">
-                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Productie' : 'Production'}</h4>
-                      <span className="text-xs text-muted-foreground">{isNL ? '8–10 weken' : '8–10 weeks'}</span>
-                    </div>
+                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Productie' : 'Production'}</h4>
                     <p className="text-sm text-muted-foreground">{isNL ? 'Vakkundige productie door onze ambachtslieden.' : 'Expert production by our artisans.'}</p>
                   </div>
                 </div>
@@ -336,10 +314,7 @@ const Bespoke = () => {
                 <div className="flex gap-4 pl-6 relative">
                   <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">5</span>
                   <div>
-                    <div className="flex items-baseline gap-2 mb-0.5">
-                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Levering & Plaatsing' : 'Delivery & Installation'}</h4>
-                      <span className="text-xs text-muted-foreground">{isNL ? '1–2 weken' : '1–2 weeks'}</span>
-                    </div>
+                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Levering & Plaatsing' : 'Delivery & Installation'}</h4>
                     <p className="text-sm text-muted-foreground">{isNL ? 'White-glove levering en professionele plaatsing.' : 'White-glove delivery and professional installation.'}</p>
                   </div>
                 </div>
@@ -385,11 +360,11 @@ const Bespoke = () => {
           {/* Total bar */}
           <div className="mt-8 pt-6 border-t border-border/50">
             <p className="text-center text-sm text-foreground">
-              <span className="font-medium">{isNL ? 'Totaal:' : 'Total:'}</span>{' '}
+              <span className="font-medium">{isNL ? 'Gemiddelde doorlooptijd:' : 'Average lead time:'}</span>{' '}
               <span className="text-muted-foreground">
                 {isNL 
-                  ? 'gemiddeld 8–12 weken (afhankelijk van complexiteit en materiaal)'
-                  : 'average 8–12 weeks (depending on complexity and material)'}
+                  ? '12–16 weken (afhankelijk van steenkeuze en locatie)'
+                  : '12–16 weeks (depending on stone choice and location)'}
               </span>
             </p>
           </div>
@@ -410,7 +385,7 @@ const Bespoke = () => {
             </p>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch max-w-2xl mx-auto">
             {ctaOptions.map((option, index) => (
               <div 
                 key={index} 
@@ -459,12 +434,12 @@ const Bespoke = () => {
             <Accordion type="single" collapsible className="space-y-3">
               <AccordionItem value="item-1" className="border border-border/50 px-5">
                 <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                  {isNL ? 'Wat is de minimale afname?' : 'What is the minimum order?'}
+                  {isNL ? 'Is er een minimale afname?' : 'Is there a minimum order?'}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground text-sm pb-4">
                   {isNL 
-                    ? 'Er is geen minimale afname. Elk project is uniek en we maken graag één stuk op maat. Onze vanafprijzen beginnen bij €1.400 voor een bijzettafel.'
-                    : 'There is no minimum order. Each project is unique and we happily create a single bespoke piece. Our starting prices begin at €1,400 for a side table.'}
+                    ? 'Nee, er is geen minimale afname. Elk project is uniek en we maken graag één stuk op maat voor u.'
+                    : 'No, there is no minimum order. Each project is unique and we happily create a single bespoke piece for you.'}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2" className="border border-border/50 px-5">
@@ -473,8 +448,8 @@ const Bespoke = () => {
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground text-sm pb-4">
                   {isNL 
-                    ? 'Absoluut. Na goedkeuring van het ontwerp selecteert u uw specifieke plaat. U ontvangt foto\'s van beschikbare platen of u bezoekt onze showroom in Amsterdam om ze persoonlijk te bekijken.'
-                    : 'Absolutely. After design approval, you select your specific slab. You\'ll receive photos of available slabs or visit our Amsterdam showroom to view them in person.'}
+                    ? 'Absoluut. Na goedkeuring van het ontwerp selecteert u uw specifieke plaat. U ontvangt foto\'s van beschikbare platen om uw keuze te maken.'
+                    : 'Absolutely. After design approval, you select your specific slab. You\'ll receive photos of available slabs to make your choice.'}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3" className="border border-border/50 px-5">
