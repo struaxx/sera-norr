@@ -360,6 +360,72 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Lookbook Module */}
+      <section className="py-16 lg:py-20 bg-secondary/20 border-y border-border/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-xl mx-auto text-center">
+            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+              {isNL ? 'Inspiratie' : 'Inspiration'}
+            </p>
+            <h2 className="font-serif text-display-sm text-foreground mb-3">
+              {isNL ? 'Voorbeelden uit het atelier' : 'Examples from the atelier'}
+            </h2>
+            <p className="text-muted-foreground text-body-md mb-6">
+              {isNL ? 'Ontvang toegang tot het lookbook.' : 'Get access to the lookbook.'}
+            </p>
+            <Button asChild variant="atelier" size="lg">
+              <Link to="/lookbook">
+                {isNL ? 'Bekijk online voorbeelden' : 'View online examples'}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Care & Protection Module */}
+      <section className="py-16 lg:py-20 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="font-serif text-display-sm text-foreground mb-3 text-center">
+              {isNL ? 'Onderhoud & bescherming' : 'Care & protection'}
+            </h2>
+            <p className="text-muted-foreground text-body-md text-center mb-6">
+              {isNL 
+                ? 'Natuursteen blijft het mooist met de juiste bescherming en eenvoudig onderhoud. Wij adviseren wat past bij uw gebruik en kunnen bescherming meenemen in het voorstel.'
+                : 'Natural stone looks best with proper protection and simple care. We advise what suits your use and can include protection in the proposal.'}
+            </p>
+            <ul className="flex flex-wrap justify-center gap-4 mb-8 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-foreground/50 rounded-full" />
+                {isNL ? 'Vlekbescherming & impregnatie' : 'Stain protection & sealing'}
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-foreground/50 rounded-full" />
+                {isNL ? 'Eenvoudige dagelijkse care' : 'Simple daily care'}
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-foreground/50 rounded-full" />
+                {isNL ? 'Langdurige schoonheid' : 'Lasting beauty'}
+              </li>
+            </ul>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button asChild variant="atelier" size="lg">
+                <Link to="/care">
+                  {isNL ? 'Lees over care' : 'Read about care'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" size="lg">
+                <Link to="/voorstel">
+                  {isNL ? 'Ontvang voorstel' : 'Receive proposal'}
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Closing CTA Section */}
       <section className="py-16 lg:py-24 bg-foreground text-background">
         <div className="container mx-auto px-6 lg:px-12">
@@ -374,8 +440,8 @@ const Index = () => {
               {t('home.closing.deliverables')}
             </p>
             <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
-              <Link to="/bespoke">
-                {t('home.closing.cta')}
+              <Link to="/voorstel">
+                {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

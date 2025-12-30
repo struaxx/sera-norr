@@ -388,6 +388,31 @@ const Collections = () => {
         </div>
       </section>
 
+      {/* Editorial Banner Tile - Maatwerk CTA */}
+      <section className="py-10 lg:py-14 bg-secondary/30 border-y border-border/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-xl mx-auto text-center">
+            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+              {isNL ? 'Maatwerk' : 'Bespoke'}
+            </p>
+            <h2 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+              {isNL ? 'Maatwerk in uw afmeting?' : 'Bespoke in your dimensions?'}
+            </h2>
+            <p className="text-muted-foreground text-sm mb-6">
+              {isNL 
+                ? 'Ontvang voorstel binnen 48 uur.'
+                : 'Receive proposal within 48 hours.'}
+            </p>
+            <Button asChild variant="atelier-filled" size="lg">
+              <Link to="/voorstel">
+                {isNL ? 'Ontvang voorstel' : 'Receive proposal'}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Process Section - Van collectie naar voorstel */}
       <section className="py-12 lg:py-16 bg-ivory/50">
         <div className="container mx-auto px-6 lg:px-12">

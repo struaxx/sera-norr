@@ -227,13 +227,13 @@ const Bespoke = () => {
           {/* Single CTA row - only place to request offer */}
           <div className="flex flex-wrap gap-3 mb-10 pt-2">
             <Button asChild variant="atelier-filled" size="lg">
-              <a href="#offerte">
-                {isNL ? 'Vraag een offerte aan' : 'Request a quote'}
+              <Link to="/voorstel">
+                {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
                 <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
+              </Link>
             </Button>
             <Button asChild variant="atelier" size="lg">
-              <Link to="/collections">
+              <Link to="/lookbook">
                 {isNL ? 'Bekijk voorbeelden' : 'View examples'}
               </Link>
             </Button>
@@ -246,6 +246,28 @@ const Bespoke = () => {
                 ? 'Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie.'
                 : 'Calacatta Viola & rare stones on request. Prices excl. VAT. Delivery & installation depend on location.'}
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Mid-page CTA Band - "Vertaal dit naar uw ruimte" */}
+      <section className="py-12 lg:py-16 bg-foreground text-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="font-serif text-xl lg:text-2xl text-background mb-3">
+              {isNL ? 'Vertaal dit naar uw ruimte.' : 'Translate this to your space.'}
+            </h2>
+            <p className="text-background/80 text-sm mb-6">
+              {isNL 
+                ? 'Deel uw afmetingen en voorkeuren — wij maken een voorstel op maat.'
+                : 'Share your dimensions and preferences — we create a tailored proposal.'}
+            </p>
+            <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
+              <Link to="/voorstel">
+                {isNL ? 'Ontvang voorstel' : 'Receive proposal'}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
