@@ -10,7 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { TrustBadges, BespokeTimeline, USPBullets } from "@/components/trust";
-import { ArrowRight, Calendar, FileText, MessageSquare, Upload } from "lucide-react";
+import { ArrowRight, FileText, MessageSquare, Upload } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
 import BespokeHero from "@/components/bespoke/BespokeHero";
 
@@ -87,28 +87,6 @@ const Bespoke = () => {
     },
   ];
 
-  const ctaOptions = [
-    {
-      icon: MessageSquare,
-      title: isNL ? 'Vrijblijvend gesprek' : 'Free consultation',
-      description: isNL 
-        ? 'Telefonisch of via videocall. Binnen 2 werkdagen reactie.' 
-        : 'By phone or video call. Response within 2 business days.',
-      cta: isNL ? 'Plan een gesprek' : 'Schedule a call',
-      primary: false,
-      label: null,
-    },
-    {
-      icon: FileText,
-      title: isNL ? 'Offerte aanvragen' : 'Request quote',
-      description: isNL 
-        ? 'Binnen 48 uur een voorstel met schetsen en offerte.' 
-        : 'Proposal with sketches and quote within 48 hours.',
-      cta: isNL ? 'Vraag offerte aan' : 'Request quote',
-      primary: true,
-      label: isNL ? 'Meest gekozen' : 'Most popular',
-    },
-  ];
 
   return (
     <Layout>
@@ -317,7 +295,7 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* CTA Options */}
+      {/* CTA Options - Unified Two-Choice Module */}
       <section className="py-12 lg:py-14 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <header className="text-center mb-8">
@@ -331,35 +309,69 @@ const Bespoke = () => {
             </p>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch max-w-2xl mx-auto">
-            {ctaOptions.map((option, index) => (
-              <div 
-                key={index} 
-                className={`relative p-5 border flex flex-col ${option.primary ? 'bg-foreground text-background border-foreground' : 'bg-background border-border/50'}`}
-              >
-                {/* Label for primary option */}
-                {option.label && (
-                  <span className="absolute -top-3 left-5 px-2 py-0.5 bg-foreground text-background text-[10px] uppercase tracking-wider font-medium">
-                    {option.label}
-                  </span>
-                )}
-                <option.icon className={`w-5 h-5 mb-2.5 ${option.primary ? 'text-background' : 'text-foreground'}`} />
-                <h3 className={`font-serif text-base mb-1.5 ${option.primary ? 'text-background' : 'text-foreground'}`}>
-                  {option.title}
+          {/* Unified Container */}
+          <div className="max-w-3xl mx-auto border border-border/40 bg-secondary/20">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              {/* Choice A: Vrijblijvend gesprek */}
+              <div className="p-6 lg:p-8 flex flex-col border-b md:border-b-0 md:border-r border-border/30">
+                <MessageSquare className="w-5 h-5 text-foreground mb-4" />
+                <h3 className="font-serif text-lg text-foreground mb-2">
+                  {isNL ? 'Vrijblijvend gesprek' : 'Free consultation'}
                 </h3>
-                <p className={`text-sm leading-relaxed flex-1 ${option.primary ? 'text-background/80' : 'text-muted-foreground'}`}>
-                  {option.description}
+                <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
+                  {isNL 
+                    ? 'Telefonisch of via videocall. Binnen 2 werkdagen reactie.' 
+                    : 'By phone or video call. Response within 2 business days.'}
                 </p>
-                <Button 
-                  asChild 
-                  variant={option.primary ? 'outline' : 'atelier'} 
-                  size="sm"
-                  className={`mt-4 ${option.primary ? 'border-background/40 text-background hover:bg-background hover:text-foreground' : ''}`}
-                >
-                  <a href="#offerte">{option.cta}</a>
+                <p className="text-xs text-muted-foreground/60 mb-5 flex-1">
+                  {isNL 
+                    ? 'Geschikt als u nog twijfelt over formaat of steensoort.' 
+                    : 'Suitable if you\'re still undecided about size or stone type.'}
+                </p>
+                <Button asChild variant="atelier" size="default">
+                  <a href="#offerte">
+                    {isNL ? 'Plan een gesprek' : 'Schedule a call'}
+                  </a>
                 </Button>
               </div>
-            ))}
+
+              {/* Choice B: Offerte aanvragen (Primary) */}
+              <div className="relative p-6 lg:p-8 flex flex-col bg-secondary/30">
+                {/* Meest gekozen pill */}
+                <span className="absolute top-4 right-4 px-2.5 py-1 text-[10px] uppercase tracking-widest font-medium text-muted-foreground border border-border/50 bg-background/50">
+                  {isNL ? 'Meest gekozen' : 'Most popular'}
+                </span>
+                <FileText className="w-5 h-5 text-foreground mb-4" />
+                <h3 className="font-serif text-lg text-foreground mb-2">
+                  {isNL ? 'Offerte aanvragen' : 'Request quote'}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
+                  {isNL 
+                    ? 'Binnen 48 uur een voorstel met schetsen en offerte.' 
+                    : 'Proposal with sketches and quote within 48 hours.'}
+                </p>
+                <p className="text-xs text-muted-foreground/60 mb-5 flex-1">
+                  {isNL 
+                    ? 'Geschikt als u al een richting of maat in gedachten heeft.' 
+                    : 'Suitable if you already have a direction or size in mind.'}
+                </p>
+                <Button asChild variant="atelier-filled" size="default">
+                  <a href="#offerte">
+                    {isNL ? 'Vraag offerte aan' : 'Request quote'}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Shared reassurance line */}
+            <div className="px-6 lg:px-8 py-4 border-t border-border/30 bg-background/40">
+              <p className="text-xs text-muted-foreground text-center">
+                {isNL 
+                  ? 'Online atelier — materiaalkeuze en details stemmen we samen af. Geen verplichtingen.' 
+                  : 'Online atelier — we align material choices and details together. No obligations.'}
+              </p>
+            </div>
           </div>
         </div>
       </section>
