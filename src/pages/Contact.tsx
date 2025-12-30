@@ -9,31 +9,93 @@ import { Mail, MapPin, Clock } from "lucide-react";
 import { SEOHead, localBusinessSchema, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { trackLeadSubmit } from "@/lib/analytics";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const { t, i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
+    honeypot: "", // Hidden spam prevention field
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Track lead submission
-    trackLeadSubmit('contact');
+    // Client-side validation
+    if (!formData.email || !formData.name || !formData.message) {
+      toast({
+        title: isNL ? "Vul alle verplichte velden in" : "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    toast({
-      title: isNL ? "Bericht Verzonden" : "Message Sent",
-      description: isNL 
-        ? "Bedankt voor uw bericht. We reageren binnen 24-48 uur."
-        : "Thank you for reaching out. We will respond within 24-48 hours.",
-    });
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: isNL ? "Ongeldig e-mailadres" : "Invalid email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('submit-form', {
+        body: {
+          form_type: 'contact',
+          email: formData.email,
+          name: formData.name,
+          subject: formData.subject,
+          message: formData.message,
+          honeypot: formData.honeypot,
+        },
+      });
+
+      if (error) throw error;
+
+      // Track lead submission
+      trackLeadSubmit('contact');
+
+      toast({
+        title: isNL ? "Bericht Verzonden" : "Message Sent",
+        description: isNL 
+          ? "Bedankt voor uw bericht. We reageren binnen 24-48 uur."
+          : "Thank you for reaching out. We will respond within 24-48 hours.",
+      });
+      setFormData({ name: "", email: "", subject: "", message: "", honeypot: "" });
+    } catch (error: any) {
+      console.error("Form submission error:", error);
+      
+      // Handle rate limiting
+      if (error.message?.includes("429") || error.message?.includes("Too many")) {
+        toast({
+          title: isNL ? "Te veel pogingen" : "Too many attempts",
+          description: isNL 
+            ? "Probeer het later opnieuw."
+            : "Please try again later.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: isNL ? "Verzenden mislukt" : "Submission failed",
+          description: isNL 
+            ? "Probeer het opnieuw of neem contact op via e-mail."
+            : "Please try again or contact us via email.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const seoTitle = isNL 
@@ -174,10 +236,24 @@ const Contact = () => {
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Honeypot field - hidden from users, visible to bots */}
+                <div className="absolute -left-[9999px]" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    type="text"
+                    name="website"
+                    value={formData.honeypot}
+                    onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                      {isNL ? 'Naam' : 'Name'}
+                      {isNL ? 'Naam' : 'Name'} *
                     </label>
                     <Input
                       id="name"
@@ -185,13 +261,14 @@ const Contact = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
+                      maxLength={100}
                       className="bg-background border-border focus:border-foreground"
                       placeholder={isNL ? 'Uw naam' : 'Your name'}
                     />
                   </div>
                   <div>
                     <label htmlFor="email" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                      E-mail
+                      E-mail *
                     </label>
                     <Input
                       id="email"
@@ -199,6 +276,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
+                      maxLength={255}
                       className="bg-background border-border focus:border-foreground"
                       placeholder="uw@email.com"
                     />
@@ -214,6 +292,7 @@ const Contact = () => {
                     type="text"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    maxLength={200}
                     className="bg-background border-border focus:border-foreground"
                     placeholder={isNL ? 'Collecties, Maatwerk, Algemene vraag...' : 'Collections, Bespoke, General inquiry...'}
                   />
@@ -221,7 +300,7 @@ const Contact = () => {
 
                 <div>
                   <label htmlFor="message" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                    {isNL ? 'Bericht' : 'Message'}
+                    {isNL ? 'Bericht' : 'Message'} *
                   </label>
                   <Textarea
                     id="message"
@@ -229,14 +308,23 @@ const Contact = () => {
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     rows={6}
+                    maxLength={5000}
                     className="bg-background border-border focus:border-foreground resize-none"
                     placeholder={isNL ? 'Hoe kunnen we u helpen?' : 'How can we help you?'}
                   />
                 </div>
 
                 <div className="pt-4">
-                  <Button type="submit" variant="atelier-filled" size="lg" className="w-full md:w-auto">
-                    {isNL ? 'Verstuur Bericht' : 'Send Message'}
+                  <Button 
+                    type="submit" 
+                    variant="atelier-filled" 
+                    size="lg" 
+                    className="w-full md:w-auto"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting 
+                      ? (isNL ? 'Verzenden...' : 'Sending...') 
+                      : (isNL ? 'Verstuur Bericht' : 'Send Message')}
                   </Button>
                 </div>
               </form>
