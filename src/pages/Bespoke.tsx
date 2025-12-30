@@ -59,8 +59,8 @@ const Bespoke = () => {
     { name: isNL ? 'Maatwerk' : 'Bespoke', url: '/bespoke' },
   ]);
 
-  // Use-case inspiration cards (no prices)
-  const inspirationCards = [
+  // Use-case inspiration items (editorial style, no per-item CTAs)
+  const inspirationItems = [
     {
       title: isNL ? 'Naast de bank' : 'Beside the sofa',
       line: isNL ? 'Compact statement, subtiel aanwezig.' : 'Compact statement, subtly present.',
@@ -131,14 +131,14 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* Maatwerk op aanvraag Section */}
-      <section id="voorbeelden" className="py-12 lg:py-16 bg-background scroll-mt-24">
+      {/* Maatwerk op aanvraag Section - Editorial Style */}
+      <section id="voorbeelden" className="py-16 lg:py-20 bg-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
-          <header className="mb-8 max-w-3xl">
+          <header className="mb-10 max-w-3xl">
             <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
               {isNL ? 'Maatwerk' : 'Bespoke'}
             </p>
-            <h2 className="font-serif text-display-sm text-foreground mb-4">
+            <h2 className="font-serif text-display-sm text-foreground mb-5">
               {isNL ? 'Maatwerk op aanvraag' : 'Bespoke on request'}
             </h2>
             <p className="text-muted-foreground text-body-md leading-relaxed">
@@ -148,8 +148,42 @@ const Bespoke = () => {
             </p>
           </header>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap gap-3 mb-8">
+          {/* Price line - refined, small */}
+          <p className="text-sm text-muted-foreground mb-8 pb-6 border-b border-border/30">
+            {isNL 
+              ? 'Prijs op aanvraag — op basis van steenkeuze, maatvoering, afwerking en levering/plaatsing.'
+              : 'Price on request — based on stone choice, dimensions, finish and delivery/installation.'}
+          </p>
+
+          {/* Editorial Curated List - 2 columns desktop, 1 column mobile */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 mb-10">
+            {inspirationItems.map((item, index) => (
+              <div 
+                key={index} 
+                className={`py-6 ${
+                  index < 2 ? 'md:border-b md:border-border/30' : ''
+                } ${
+                  index % 2 === 0 ? 'md:pr-10 md:border-r md:border-border/30' : 'md:pl-10'
+                } ${
+                  index < inspirationItems.length - 1 ? 'border-b border-border/30 md:border-b-0' : ''
+                } ${
+                  index >= 2 && index < inspirationItems.length - 1 ? 'md:border-b md:border-border/30' : ''
+                }`}
+              >
+                <h3 className="font-serif text-lg text-foreground mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{item.line}</p>
+                <div className="space-y-0.5">
+                  <p className="text-xs text-muted-foreground/60">
+                    {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {item.spec}
+                  </p>
+                  <p className="text-xs text-muted-foreground/60">{item.material}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Single CTA row - only place to request offer */}
+          <div className="flex flex-wrap gap-3 mb-10 pt-2">
             <Button asChild variant="atelier-filled" size="lg">
               <a href="#offerte">
                 {isNL ? 'Vraag een offerte aan' : 'Request a quote'}
@@ -163,38 +197,8 @@ const Bespoke = () => {
             </Button>
           </div>
 
-          {/* Single price line above grid */}
-          <p className="text-sm text-muted-foreground mb-6 border-t border-border/40 pt-6">
-            {isNL 
-              ? 'Prijs op aanvraag — op basis van steenkeuze, maatvoering, afwerking en levering/plaatsing.'
-              : 'Price on request — based on stone choice, dimensions, finish and delivery/installation.'}
-          </p>
-
-          {/* Inspiration/Use-case Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 mb-8">
-            {inspirationCards.map((card, index) => (
-              <div key={index} className="group p-6 bg-secondary/20 border border-border/40 hover:border-border/60 transition-colors">
-                <h3 className="font-serif text-lg text-foreground mb-2">{card.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{card.line}</p>
-                <div className="space-y-1 mb-4">
-                  <p className="text-[11px] text-muted-foreground/70">
-                    {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {card.spec}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground/70">{card.material}</p>
-                </div>
-                <a 
-                  href="#offerte" 
-                  className="inline-flex items-center text-xs text-foreground hover:text-foreground/70 transition-colors group-hover:underline underline-offset-2"
-                >
-                  {isNL ? 'Offerte aanvragen' : 'Request quote'}
-                  <ArrowRight className="ml-1 h-3 w-3" />
-                </a>
-              </div>
-            ))}
-          </div>
-
           {/* Footer note */}
-          <div className="text-center">
+          <div className="text-center pt-6 border-t border-border/30">
             <p className="text-xs text-muted-foreground">
               {isNL 
                 ? 'Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie.'
