@@ -12,8 +12,7 @@ import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { TrustBadges, BespokeTimeline, USPBullets } from "@/components/trust";
 import { ArrowRight, Calendar, FileText, MessageSquare, Upload } from "lucide-react";
-import terraImage from "@/assets/terra-collection.jpg";
-import vantaImage from "@/assets/vanta-collection.jpg";
+import bespokeHeroImage from "@/assets/bespoke-hero.png";
 import { trackLeadSubmit } from "@/lib/analytics";
 
 const Bespoke = () => {
@@ -171,27 +170,18 @@ const Bespoke = () => {
               </p>
             </div>
             
-            {/* Dominant + Overlap Image Layout */}
+            {/* Hero Image */}
             <div className="relative">
-              {/* Main dominant image */}
-              <div className="aspect-[4/5] bg-muted overflow-hidden">
+              <div className="aspect-[4/3] lg:aspect-[16/10] bg-muted overflow-hidden">
                 <img 
-                  src={terraImage} 
-                  alt={isNL ? "Maatwerk travertin meubel" : "Bespoke travertine furniture"} 
-                  className="w-full h-full object-cover" 
-                />
-              </div>
-              {/* Overlap detail image */}
-              <div className="absolute -bottom-6 -left-6 lg:-left-10 w-32 lg:w-40 aspect-square bg-muted overflow-hidden border-4 border-background shadow-xl">
-                <img 
-                  src={vantaImage} 
-                  alt={isNL ? "Maatwerk marmeren tafel detail" : "Bespoke marble table detail"} 
+                  src={bespokeHeroImage} 
+                  alt={isNL ? "SERA NORR maatwerk ontwerp met materiaalstalen" : "SERA NORR bespoke design with material samples"} 
                   className="w-full h-full object-cover" 
                 />
               </div>
               {/* Caption */}
-              <p className="absolute -bottom-6 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
+              <p className="absolute -bottom-4 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                {isNL ? 'Ontwerpproces — materiaalstalen' : 'Design process — material samples'}
               </p>
             </div>
           </div>
