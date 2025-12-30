@@ -17,23 +17,23 @@ const BespokeHero = () => {
   // Refs for scroll tracking
   const heroRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const collageRef = useRef<HTMLDivElement>(null);
   
   // In-view detection for staggered animations
   const isTextInView = useInView(textRef, { once: true, margin: "-100px" });
+  const isCaptionInView = useInView(heroRef, { once: true, margin: "-50px" });
   
-  // Scroll progress for parallax
+  // Scroll progress for parallax (no sticky, just subtle movement)
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"]
+    offset: ["start end", "end start"]
   });
   
-  // Parallax transforms (subtle, max 30px travel)
-  const mainImageY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [0, 30]);
-  const detailImageY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [0, 20]);
-  const atelierImageY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [0, 15]);
+  // Subtle parallax transforms (no sticky, just depth)
+  const mainImageY = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [-12, 24]);
+  const thumb1Y = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [-8, 32]);
+  const thumb2Y = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [-6, 28]);
   
-  // Em-dash animation state
+  // Em-dash animation state (once only)
   const [dashWidth, setDashWidth] = useState(prefersReducedMotion ? 100 : 0);
   
   useEffect(() => {
@@ -47,14 +47,14 @@ const BespokeHero = () => {
     }
   }, [isTextInView, prefersReducedMotion]);
 
-  // Animation variants
+  // Animation variants - calm, premium timing
   const fadeUpVariant = {
     hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 12 },
     visible: (delay: number) => ({
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
+        duration: 0.65,
         delay: prefersReducedMotion ? 0 : delay,
         ease: [0.22, 1, 0.36, 1]
       }
@@ -67,24 +67,50 @@ const BespokeHero = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4,
-        delay: prefersReducedMotion ? 0 : 0.5 + i * 0.1,
+        duration: 0.45,
+        delay: prefersReducedMotion ? 0 : 0.55 + i * 0.1,
         ease: [0.22, 1, 0.36, 1]
       }
     })
   };
 
   const imageRevealVariant = {
-    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 16 },
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 14 },
     visible: (delay: number) => ({
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
+        duration: 0.75,
         delay: prefersReducedMotion ? 0 : delay,
         ease: [0.22, 1, 0.36, 1]
       }
     })
+  };
+
+  const captionFadeVariant = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        delay: prefersReducedMotion ? 0 : 0.9,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Breathing Ken Burns animation for main image
+  const breathingAnimation = prefersReducedMotion ? {} : {
+    animate: {
+      scale: [1, 1.03, 1],
+      x: [0, 4, 0],
+      y: [0, 3, 0],
+    },
+    transition: {
+      duration: 12,
+      repeat: Infinity,
+      ease: "easeInOut",
+    }
   };
 
   const chips = [
@@ -94,12 +120,12 @@ const BespokeHero = () => {
   ];
 
   return (
-    <section ref={heroRef} className="pt-32 lg:pt-40 pb-8 lg:pb-10 bg-background relative overflow-hidden">
+    <section ref={heroRef} className="pt-32 lg:pt-40 pb-12 lg:pb-16 bg-background relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12">
         <Breadcrumbs className="mb-8" />
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-          {/* Left: Text Content */}
+          {/* Left: Text Content - Staged reveal */}
           <div ref={textRef}>
             {/* Eyebrow */}
             <motion.p 
@@ -118,7 +144,7 @@ const BespokeHero = () => {
               variants={fadeUpVariant}
               initial="hidden"
               animate={isTextInView ? "visible" : "hidden"}
-              custom={0.1}
+              custom={0.12}
             >
               {isNL ? (
                 <>
@@ -151,7 +177,7 @@ const BespokeHero = () => {
               variants={fadeUpVariant}
               initial="hidden"
               animate={isTextInView ? "visible" : "hidden"}
-              custom={0.2}
+              custom={0.24}
             >
               {isNL 
                 ? 'Van eerste schets tot plaatsing. Een zorgvuldig traject met materiaalkeuze, visualisaties en white-glove levering.'
@@ -180,7 +206,7 @@ const BespokeHero = () => {
               variants={fadeUpVariant}
               initial="hidden"
               animate={isTextInView ? "visible" : "hidden"}
-              custom={0.7}
+              custom={0.75}
             >
               <Button asChild variant="atelier-filled" size="lg" className="h-12">
                 <a href="#offerte">
@@ -201,74 +227,74 @@ const BespokeHero = () => {
               variants={fadeUpVariant}
               initial="hidden"
               animate={isTextInView ? "visible" : "hidden"}
-              custom={0.8}
+              custom={0.85}
             >
               {isNL ? 'Reactie binnen 48 uur — geen verplichtingen.' : 'Response within 48 hours — no obligations.'}
             </motion.p>
           </div>
           
-          {/* Right: Collage with Sticky + Parallax */}
-          <div ref={collageRef} className="lg:sticky lg:top-32 lg:self-start">
-            <div className="relative">
-              {/* Main dominant image */}
-              <motion.div 
-                className="aspect-[4/5] bg-muted overflow-hidden relative z-10"
-                variants={imageRevealVariant}
-                initial="hidden"
-                animate={isTextInView ? "visible" : "hidden"}
-                custom={0.2}
-                style={{ y: mainImageY }}
-              >
-                <img 
-                  src={bespokeHeroImage} 
-                  alt={isNL ? "SERA NORR maatwerk ontwerp" : "SERA NORR bespoke design"} 
-                  className="w-full h-full object-cover" 
-                />
-              </motion.div>
-              
-              {/* Detail image - bottom left overlap */}
-              <motion.div 
-                className="absolute -bottom-6 -left-4 lg:-left-8 w-28 lg:w-36 aspect-square bg-muted overflow-hidden border-4 border-background shadow-lg z-20"
-                variants={imageRevealVariant}
-                initial="hidden"
-                animate={isTextInView ? "visible" : "hidden"}
-                custom={0.4}
-                style={{ y: detailImageY }}
-              >
-                <img 
-                  src={terraImage} 
-                  alt={isNL ? "Travertin detail" : "Travertine detail"} 
-                  className="w-full h-full object-cover" 
-                />
-              </motion.div>
-              
-              {/* Atelier image - bottom right overlap */}
-              <motion.div 
-                className="absolute -bottom-4 right-6 lg:right-8 w-24 lg:w-32 aspect-[3/4] bg-muted overflow-hidden border-4 border-background shadow-lg z-20"
-                variants={imageRevealVariant}
-                initial="hidden"
-                animate={isTextInView ? "visible" : "hidden"}
-                custom={0.6}
-                style={{ y: atelierImageY }}
-              >
-                <img 
-                  src={vantaImage} 
-                  alt={isNL ? "Atelier detail" : "Atelier detail"} 
-                  className="w-full h-full object-cover" 
-                />
-              </motion.div>
-              
-              {/* Caption */}
-              <motion.p 
-                className="absolute -bottom-10 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={isTextInView ? "visible" : "hidden"}
-                custom={0.8}
-              >
-                TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
-              </motion.p>
-            </div>
+          {/* Right: Collage with parallax + breathing (NO sticky) */}
+          <div className="relative">
+            {/* Main dominant image with breathing drift */}
+            <motion.div 
+              className="aspect-[4/5] bg-muted overflow-hidden relative z-10"
+              variants={imageRevealVariant}
+              initial="hidden"
+              animate={isTextInView ? "visible" : "hidden"}
+              custom={0.2}
+              style={{ y: mainImageY }}
+            >
+              <motion.img 
+                src={bespokeHeroImage} 
+                alt={isNL ? "SERA NORR maatwerk ontwerp" : "SERA NORR bespoke design"} 
+                className="w-full h-full object-cover"
+                {...breathingAnimation}
+              />
+            </motion.div>
+            
+            {/* Detail thumbnail - bottom left overlap with hover */}
+            <motion.div 
+              className="absolute -bottom-6 -left-4 lg:-left-8 w-28 lg:w-36 aspect-square bg-muted overflow-hidden border-4 border-background shadow-lg z-20 cursor-pointer"
+              variants={imageRevealVariant}
+              initial="hidden"
+              animate={isTextInView ? "visible" : "hidden"}
+              custom={0.4}
+              style={{ y: thumb1Y }}
+              whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -3, transition: { duration: 0.25 } }}
+            >
+              <img 
+                src={terraImage} 
+                alt={isNL ? "Travertin detail" : "Travertine detail"} 
+                className="w-full h-full object-cover" 
+              />
+            </motion.div>
+            
+            {/* Atelier thumbnail - bottom right overlap with hover */}
+            <motion.div 
+              className="absolute -bottom-4 right-6 lg:right-8 w-24 lg:w-32 aspect-[3/4] bg-muted overflow-hidden border-4 border-background shadow-lg z-20 cursor-pointer"
+              variants={imageRevealVariant}
+              initial="hidden"
+              animate={isTextInView ? "visible" : "hidden"}
+              custom={0.6}
+              style={{ y: thumb2Y }}
+              whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -3, transition: { duration: 0.25 } }}
+            >
+              <img 
+                src={vantaImage} 
+                alt={isNL ? "Atelier detail" : "Atelier detail"} 
+                className="w-full h-full object-cover" 
+              />
+            </motion.div>
+            
+            {/* Caption with fade only */}
+            <motion.p 
+              className="absolute -bottom-12 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+              variants={captionFadeVariant}
+              initial="hidden"
+              animate={isCaptionInView ? "visible" : "hidden"}
+            >
+              TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
+            </motion.p>
           </div>
         </div>
       </div>
