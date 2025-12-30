@@ -61,20 +61,23 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
           key={index}
           className={cn(
             'flex items-start gap-3',
-            variant === 'horizontal' && 'flex-col items-center text-center max-w-[140px]',
+            variant === 'horizontal' && 'flex-col items-center text-center max-w-[160px]',
             variant === 'grid' && 'flex-col'
           )}
         >
           <div className={cn(
-            'flex items-center justify-center w-10 h-10 border border-border/50',
-            variant === 'horizontal' && 'w-12 h-12'
+            'flex items-center justify-center w-12 h-12 border border-border/50',
+            variant === 'horizontal' && 'w-14 h-14'
           )}>
-            <badge.icon className="w-5 h-5 text-muted-foreground" />
+            <badge.icon className={cn(
+              'w-6 h-6 text-foreground/80',
+              variant === 'horizontal' && 'w-7 h-7'
+            )} />
           </div>
           <div>
             <p className={cn(
               'font-sans text-xs uppercase tracking-wider text-foreground',
-              variant === 'horizontal' && 'text-[10px]'
+              variant === 'horizontal' && 'text-[11px]'
             )}>
               {badge.title}
             </p>
