@@ -71,15 +71,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Service & Legal */}
+          {/* Informatie */}
           <div>
             <h4 className="font-sans text-xs uppercase tracking-[0.2em] text-foreground mb-6">
               {t('footer.service')}
             </h4>
             <ul className="space-y-3">
+              <li><Link to="/voorstel" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Voorstel aanvragen' : 'Request proposal'}</Link></li>
+              <li><Link to="/lookbook" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Online voorbeelden' : 'Online examples'}</Link></li>
+              <li><Link to="/care" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Onderhoud & bescherming' : 'Care & protection'}</Link></li>
               <li><Link to="/shipping" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.shipping')}</Link></li>
-              <li><Link to="/returns" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.returns')}</Link></li>
-              <li><Link to="/care" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.care')}</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.privacy')}</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.terms')}</Link></li>
             </ul>
