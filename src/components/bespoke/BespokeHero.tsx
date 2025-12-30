@@ -209,10 +209,10 @@ const BespokeHero = () => {
               custom={0.75}
             >
               <Button asChild variant="atelier-filled" size="lg" className="h-12">
-                <a href="#offerte">
-                  {isNL ? 'Vraag offerte aan' : 'Request quote'}
+                <Link to="/voorstel">
+                  {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
+                </Link>
               </Button>
               <Button asChild variant="atelier" size="lg" className="h-12 border-foreground/30 hover:border-foreground/60">
                 <Link to="/contact">
