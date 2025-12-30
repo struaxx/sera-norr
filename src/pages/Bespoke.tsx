@@ -83,28 +83,31 @@ const Bespoke = () => {
       icon: MessageSquare,
       title: isNL ? 'Vrijblijvend gesprek' : 'Free consultation',
       description: isNL 
-        ? 'Bespreek uw project telefonisch of per videocall. Binnen 2 werkdagen contact.' 
-        : 'Discuss your project by phone or video call. Contact within 2 business days.',
+        ? 'Telefonisch of via videocall. Binnen 2 werkdagen reactie.' 
+        : 'By phone or video call. Response within 2 business days.',
       cta: isNL ? 'Plan een gesprek' : 'Schedule a call',
       primary: false,
+      label: null,
     },
     {
       icon: FileText,
       title: isNL ? 'Offerte aanvragen' : 'Request quote',
       description: isNL 
-        ? 'Ontvang binnen 48 uur een vrijblijvend voorstel met schetsen en prijsindicatie.' 
-        : 'Receive a no-obligation proposal with sketches and price indication within 48 hours.',
+        ? 'Binnen 48 uur een voorstel met schetsen en prijsindicatie.' 
+        : 'Proposal with sketches and price indication within 48 hours.',
       cta: isNL ? 'Vraag offerte aan' : 'Request quote',
       primary: true,
+      label: isNL ? 'Meest gekozen' : 'Most popular',
     },
     {
       icon: Calendar,
       title: isNL ? 'Showroom bezoek' : 'Showroom visit',
       description: isNL 
-        ? 'Bekijk materialen en afgewerkte stukken in onze Amsterdam showroom.' 
-        : 'View materials and finished pieces in our Amsterdam showroom.',
+        ? 'Materialen bekijken en afwerkingen voelen in Amsterdam.' 
+        : 'View materials and feel finishes in Amsterdam.',
       cta: isNL ? 'Maak afspraak' : 'Book appointment',
       primary: false,
+      label: null,
     },
   ];
 
@@ -397,24 +400,30 @@ const Bespoke = () => {
             </p>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
             {ctaOptions.map((option, index) => (
               <div 
                 key={index} 
-                className={`p-6 border ${option.primary ? 'bg-foreground text-background border-foreground' : 'bg-background border-border/50'}`}
+                className={`relative p-5 border flex flex-col ${option.primary ? 'bg-foreground text-background border-foreground' : 'bg-background border-border/50'}`}
               >
-                <option.icon className={`w-6 h-6 mb-3 ${option.primary ? 'text-background' : 'text-foreground'}`} />
-                <h3 className={`font-serif text-lg mb-2 ${option.primary ? 'text-background' : 'text-foreground'}`}>
+                {/* Label for primary option */}
+                {option.label && (
+                  <span className="absolute -top-3 left-5 px-2 py-0.5 bg-foreground text-background text-[10px] uppercase tracking-wider font-medium">
+                    {option.label}
+                  </span>
+                )}
+                <option.icon className={`w-5 h-5 mb-2.5 ${option.primary ? 'text-background' : 'text-foreground'}`} />
+                <h3 className={`font-serif text-base mb-1.5 ${option.primary ? 'text-background' : 'text-foreground'}`}>
                   {option.title}
                 </h3>
-                <p className={`text-sm mb-5 leading-relaxed ${option.primary ? 'text-background/80' : 'text-muted-foreground'}`}>
+                <p className={`text-sm leading-relaxed flex-1 ${option.primary ? 'text-background/80' : 'text-muted-foreground'}`}>
                   {option.description}
                 </p>
                 <Button 
                   asChild 
                   variant={option.primary ? 'outline' : 'atelier'} 
                   size="sm"
-                  className={option.primary ? 'border-background/40 text-background hover:bg-background hover:text-foreground' : ''}
+                  className={`mt-4 ${option.primary ? 'border-background/40 text-background hover:bg-background hover:text-foreground' : ''}`}
                 >
                   <a href="#offerte">{option.cta}</a>
                 </Button>
