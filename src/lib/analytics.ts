@@ -1,5 +1,6 @@
 // GA4 Analytics Tracking
 // Initialize by adding GA4 script to index.html with your measurement ID
+// Updated: Lead form types extended
 
 declare global {
   interface Window {
@@ -150,14 +151,20 @@ export const trackBeginCheckout = (items: Array<{
   });
 };
 
+// Lead form types
+type LeadFormType = 'bespoke' | 'contact' | 'quote' | 'voorstel' | 'lookbook';
+
 // Lead generation: Form submission
-export const trackLeadSubmit = (formType: 'bespoke' | 'contact' | 'quote' | 'voorstel' | 'lookbook', details?: {
-  productType?: string;
-  estimatedValue?: number;
-  stone?: string;
-  budget?: string;
-  interest?: string;
-}) => {
+export const trackLeadSubmit = (
+  formType: LeadFormType,
+  details?: {
+    productType?: string;
+    estimatedValue?: number;
+    stone?: string;
+    budget?: string;
+    interest?: string;
+  }
+) => {
   if (!isGtagAvailable()) return;
 
   window.gtag('event', 'generate_lead', {

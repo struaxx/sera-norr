@@ -57,8 +57,8 @@ const Voorstel = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Track lead
-    trackLeadSubmit('voorstel', {
+    // Track lead submission
+    trackLeadSubmit('voorstel' as const, {
       productType: formData.type,
       stone: formData.steenvoorkeur,
       budget: formData.budget,

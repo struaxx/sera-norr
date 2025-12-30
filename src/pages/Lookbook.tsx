@@ -40,8 +40,8 @@ const Lookbook = () => {
     
     if (!email) return;
 
-    // Track lead
-    trackLeadSubmit('lookbook', {
+    // Track lead submission
+    trackLeadSubmit('lookbook' as const, {
       interest: interest,
     });
 
