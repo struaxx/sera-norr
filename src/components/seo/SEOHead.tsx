@@ -120,27 +120,68 @@ export function SEOHead({
   return null;
 }
 
-// Organization structured data for the site
+// Organization structured data for the site with stable @id
 export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': 'https://sera-norr.com/#organization',
   name: 'SERA NORR',
+  alternateName: 'SERA NORR Online Atelier',
   url: 'https://sera-norr.com',
-  logo: 'https://sera-norr.com/logo.png',
-  description: 'Sculpturale stenen meubels ontworpen in Nederland. Travertin, Calacatta Viola en andere zeldzame steensoorten.',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Keizersgracht 585',
-    addressLocality: 'Amsterdam',
-    postalCode: '1017 DR',
-    addressCountry: 'NL',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://sera-norr.com/logo.png',
+    caption: 'SERA NORR logo',
+  },
+  image: 'https://sera-norr.com/og-image.jpg',
+  description: 'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Ontworpen in Nederland.',
+  slogan: 'Online atelier voor maatwerk natuursteenmeubels',
+  foundingLocation: {
+    '@type': 'Place',
+    name: 'Nederland',
+  },
+  areaServed: {
+    '@type': 'Country',
+    name: 'Netherlands',
   },
   contactPoint: {
     '@type': 'ContactPoint',
     email: 'atelier@seranorr.com',
     contactType: 'customer service',
+    availableLanguage: ['Dutch', 'English'],
   },
-  sameAs: [],
+  sameAs: [
+    'https://www.instagram.com/seranorr/',
+    'https://www.pinterest.com/seranorr/',
+  ],
+  knowsAbout: [
+    'Natural stone furniture',
+    'Bespoke furniture design',
+    'Travertine tables',
+    'Marble furniture',
+    'Calacatta Viola marble',
+  ],
+};
+
+// WebSite structured data with stable @id
+export const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://sera-norr.com/#website',
+  name: 'SERA NORR',
+  alternateName: 'SERA NORR Online Atelier',
+  url: 'https://sera-norr.com',
+  description: 'Online atelier voor maatwerk meubels in natuursteen. Travertin, marmer en geselecteerde steensoorten.',
+  publisher: {
+    '@id': 'https://sera-norr.com/#organization',
+  },
+  inLanguage: ['nl', 'en'],
+};
+
+// Combined base schema for all pages
+export const baseSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [organizationSchema, websiteSchema],
 };
 
 // Product structured data generator
@@ -198,29 +239,24 @@ export function generateBreadcrumbSchema(items: { name: string; url: string }[])
   };
 }
 
-// LocalBusiness schema for contact page
+// LocalBusiness schema for contact page (online atelier)
 export const localBusinessSchema = {
   '@context': 'https://schema.org',
-  '@type': 'FurnitureStore',
-  name: 'SERA NORR Atelier',
-  image: 'https://sera-norr.com/showroom.jpg',
+  '@type': 'HomeAndConstructionBusiness',
+  '@id': 'https://sera-norr.com/#business',
+  name: 'SERA NORR Online Atelier',
+  image: 'https://sera-norr.com/og-image.jpg',
   url: 'https://sera-norr.com',
-  telephone: '',
   email: 'atelier@seranorr.com',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Keizersgracht 585',
-    addressLocality: 'Amsterdam',
-    postalCode: '1017 DR',
-    addressCountry: 'NL',
-  },
-  openingHoursSpecification: {
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    opens: '10:00',
-    closes: '18:00',
+  description: 'Online atelier voor maatwerk meubels in natuursteen. Travertin, marmer en geselecteerde steensoorten. Ontworpen in Nederland.',
+  areaServed: {
+    '@type': 'Country',
+    name: 'Netherlands',
   },
   priceRange: '€€€€',
+  parentOrganization: {
+    '@id': 'https://sera-norr.com/#organization',
+  },
 };
 
 // FAQ structured data generator

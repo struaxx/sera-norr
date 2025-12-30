@@ -10,17 +10,35 @@ const About = () => {
   const isNL = i18n.language === 'nl';
 
   const seoTitle = isNL 
-    ? "Over SERA NORR | Stenen Meubels Atelier Amsterdam"
-    : "About SERA NORR | Stone Furniture Atelier Amsterdam";
+    ? "Over SERA NORR | Online Atelier voor Maatwerk Natuursteenmeubels"
+    : "About SERA NORR | Online Atelier for Bespoke Natural Stone Furniture";
 
   const seoDescription = isNL
-    ? "SERA NORR is een maatwerk atelier voor sculpturale stenen meubels. Ontworpen in Nederland uit travertin, Calacatta Viola en andere zeldzame steensoorten."
-    : "SERA NORR is a bespoke atelier for sculptural stone furniture. Designed in the Netherlands from travertine, Calacatta Viola and other rare stones.";
+    ? "SERA NORR is een online atelier voor sculpturale meubels in natuursteen. Ontworpen in Nederland uit travertin, Calacatta Viola en andere geselecteerde steensoorten."
+    : "SERA NORR is an online atelier for sculptural natural stone furniture. Designed in the Netherlands from travertine, Calacatta Viola and other selected stones.";
+
+  // About page schema
+  const aboutPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': 'https://sera-norr.com/about/#page',
+    name: isNL ? 'Over SERA NORR' : 'About SERA NORR',
+    description: seoDescription,
+    url: 'https://sera-norr.com/about',
+    mainEntity: {
+      '@id': 'https://sera-norr.com/#organization',
+    },
+  };
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: isNL ? 'Over Ons' : 'About', url: '/about' },
   ]);
+
+  const combinedSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [aboutPageSchema, breadcrumbSchema],
+  };
 
   const values = isNL ? [
     {
@@ -80,9 +98,9 @@ const About = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "over SERA NORR, atelier Amsterdam, stenen meubels, ontworpen in Nederland, maatwerk" 
-          : "about SERA NORR, atelier Amsterdam, stone furniture, designed in the Netherlands, bespoke"}
-        structuredData={breadcrumbSchema}
+          ? "over SERA NORR, online atelier, maatwerk natuursteenmeubels, ontworpen in Nederland, travertin, marmer" 
+          : "about SERA NORR, online atelier, bespoke natural stone furniture, designed in the Netherlands, travertine, marble"}
+        structuredData={combinedSchema}
       />
 
       {/* Hero */}

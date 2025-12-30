@@ -37,21 +37,34 @@ const Contact = () => {
   };
 
   const seoTitle = isNL 
-    ? "Contact | SERA NORR Online Atelier"
-    : "Contact | SERA NORR Online Atelier";
+    ? "Contact | SERA NORR — Online Atelier voor Maatwerk Natuursteenmeubels"
+    : "Contact | SERA NORR — Online Atelier for Bespoke Natural Stone Furniture";
 
   const seoDescription = isNL
-    ? "Neem contact op met SERA NORR. Vraag een voorstel aan voor maatwerk stenen meubels. Reactie binnen 48 uur."
-    : "Contact SERA NORR. Request a proposal for bespoke stone furniture. Response within 48 hours.";
+    ? "Neem contact op met SERA NORR online atelier. Vraag een voorstel aan voor maatwerk stenen meubels in travertin of marmer. Reactie binnen 48 uur."
+    : "Contact SERA NORR online atelier. Request a proposal for bespoke stone furniture in travertine or marble. Response within 48 hours.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Contact', url: '/contact' },
   ]);
 
+  // Contact page schema
+  const contactPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': 'https://sera-norr.com/contact/#page',
+    name: 'Contact SERA NORR',
+    description: seoDescription,
+    url: 'https://sera-norr.com/contact',
+    mainEntity: {
+      '@id': 'https://sera-norr.com/#organization',
+    },
+  };
+
   const combinedSchema = {
     '@context': 'https://schema.org',
-    '@graph': [localBusinessSchema, breadcrumbSchema],
+    '@graph': [localBusinessSchema, breadcrumbSchema, contactPageSchema],
   };
 
   return (
@@ -60,8 +73,8 @@ const Contact = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "contact SERA NORR, online atelier, maatwerk aanvraag, stenen meubels" 
-          : "contact SERA NORR, online atelier, bespoke inquiry, stone furniture"}
+          ? "contact SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren meubels" 
+          : "contact SERA NORR, online atelier, bespoke natural stone furniture, travertine table, marble furniture"}
         structuredData={combinedSchema}
       />
 

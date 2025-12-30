@@ -108,17 +108,35 @@ const Collections = () => {
   };
 
   const seoTitle = isNL 
-    ? "Collecties | Travertin & Calacatta Viola Meubels | SERA NORR"
-    : "Collections | Travertine & Calacatta Viola Furniture | SERA NORR";
+    ? "Collecties | SERA NORR — Online Atelier voor Natuursteen Meubels"
+    : "Collections | SERA NORR — Online Atelier for Natural Stone Furniture";
 
   const seoDescription = isNL
-    ? "SERA NORR toont collecties in travertin, Calacatta Viola en geselecteerde steensoorten. Elk stuk op maat, in vorm, maat en detail."
-    : "SERA NORR presents collections in travertine, Calacatta Viola and selected stone types. Every piece made to measure, in form, size and detail.";
+    ? "Ontdek de SERA NORR collecties: travertin, Calacatta Viola en geselecteerde natuurstenen. Elk stuk op maat gemaakt in ons online atelier."
+    : "Discover SERA NORR collections: travertine, Calacatta Viola and selected natural stones. Every piece custom made in our online atelier.";
+
+  // Collection page schema
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': 'https://sera-norr.com/collections/#page',
+    name: isNL ? 'SERA NORR Collecties' : 'SERA NORR Collections',
+    description: seoDescription,
+    url: 'https://sera-norr.com/collections',
+    isPartOf: {
+      '@id': 'https://sera-norr.com/#website',
+    },
+  };
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: isNL ? 'Collecties' : 'Collections', url: '/collections' },
   ]);
+
+  const combinedSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [collectionPageSchema, breadcrumbSchema],
+  };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -133,9 +151,9 @@ const Collections = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "collecties, travertin meubels, Calacatta Viola, stenen tafels, marmeren meubels, maatwerk" 
-          : "collections, travertine furniture, Calacatta Viola, stone tables, marble furniture, bespoke"}
-        structuredData={breadcrumbSchema}
+          ? "SERA NORR, collecties, travertin meubels, Calacatta Viola marmer, stenen tafels, maatwerk natuursteenmeubels" 
+          : "SERA NORR, collections, travertine furniture, Calacatta Viola marble, stone tables, bespoke natural stone furniture"}
+        structuredData={combinedSchema}
       />
 
       {/* Hero Section */}
