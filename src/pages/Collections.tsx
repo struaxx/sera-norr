@@ -216,19 +216,19 @@ const Collections = () => {
                 {t("collections.vanta.editorialCopy")}
               </p>
 
-              {/* Pricing Block */}
+              {/* Pricing Block - Now "On Request" */}
               <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
                 <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
                   {t("collections.pricing.title")}
                 </p>
-                <p className="text-xs text-muted-foreground mb-4">
-                  {t("collections.pricing.subtitle")}
+                <p className="text-sm text-muted-foreground mb-3">
+                  {t("collections.pricing.priceOnRequest")}
                 </p>
-                <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-foreground">
-                  <span>{t("collections.pricing.diningTables")}</span>
-                  <span>{t("collections.pricing.coffeeTables")}</span>
-                  <span>{t("collections.pricing.consoles")}</span>
-                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {isNL 
+                    ? 'Steenkeuze, afmetingen en afwerking bepalen de prijs. Na intake ontvangt u een heldere offerte.'
+                    : 'Stone choice, dimensions and finish determine the price. After intake you receive a clear quote.'}
+                </p>
               </div>
 
               {/* CTAs */}
@@ -283,19 +283,19 @@ const Collections = () => {
                 {t("collections.terra.editorialCopy")}
               </p>
 
-              {/* Pricing Block */}
+              {/* Pricing Block - Now "On Request" */}
               <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
                 <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
                   {t("collections.pricing.title")}
                 </p>
-                <p className="text-xs text-muted-foreground mb-4">
-                  {t("collections.pricing.subtitle")}
+                <p className="text-sm text-muted-foreground mb-3">
+                  {t("collections.pricing.priceOnRequest")}
                 </p>
-                <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-foreground">
-                  <span>{t("collections.pricing.diningTables")}</span>
-                  <span>{t("collections.pricing.coffeeTables")}</span>
-                  <span>{t("collections.pricing.consoles")}</span>
-                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {isNL 
+                    ? 'Steenkeuze, afmetingen en afwerking bepalen de prijs. Na intake ontvangt u een heldere offerte.'
+                    : 'Stone choice, dimensions and finish determine the price. After intake you receive a clear quote.'}
+                </p>
               </div>
 
               {/* CTAs */}

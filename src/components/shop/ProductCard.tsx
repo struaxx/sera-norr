@@ -45,7 +45,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         {node.title}
       </h3>
       <p className="text-muted-foreground text-sm">
-        {price.currencyCode} {parseFloat(price.amount).toFixed(0)}
+        Prijs op aanvraag
       </p>
     </Link>
   );

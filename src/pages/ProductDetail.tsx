@@ -229,10 +229,10 @@ const ProductDetail = () => {
                 {product.title}
               </h1>
               <p className="text-lg text-muted-foreground mb-2">
-                {isNL ? 'Vanaf' : 'From'} {price.currencyCode} {parseFloat(price.amount).toFixed(0)}
+                {isNL ? 'Prijs op aanvraag' : 'Price on request'}
               </p>
               <p className="text-sm text-muted-foreground mb-6">
-                {isNL ? 'Maatwerk mogelijk — op aanvraag' : 'Custom sizes available — on request'}
+                {isNL ? 'Gemiddelde doorlooptijd: 12–16 weken' : 'Average lead time: 12–16 weeks'}
               </p>
 
               {/* USP Bullets - Above the fold */}
@@ -271,8 +271,8 @@ const ProductDetail = () => {
                 </p>
                 <p className="text-sm text-muted-foreground mb-4">
                   {isNL 
-                    ? 'Elk stuk wordt op maat gemaakt. Ontvang binnen 48 uur een voorstel met tekening, specificaties en prijsindicatie.' 
-                    : 'Every piece is made to measure. Receive a proposal within 48 hours including drawing, specifications and price indication.'}
+                    ? 'Elk stuk wordt op maat gemaakt. Ontvang binnen 48 uur een voorstel met tekening, specificaties en offerte.' 
+                    : 'Every piece is made to measure. Receive a proposal within 48 hours including drawing, specifications and quote.'}
                 </p>
                 <div className="mb-4">
                   <BespokeTimeline compact />

@@ -61,26 +61,27 @@ const Bespoke = () => {
     { name: isNL ? 'Maatwerk' : 'Bespoke', url: '/bespoke' },
   ]);
 
-  const priceExamples = [
+  // Example products (dimensions only, no prices)
+  const exampleProducts = [
     {
       type: isNL ? 'Bijzettafel' : 'Side Table',
-      price: '€1.400',
-      spec: 'Ø45 × H55 — travertin',
+      spec: 'Ø45 × H55',
+      material: 'Travertin',
     },
     {
       type: isNL ? 'Salontafel' : 'Coffee Table',
-      price: '€2.800',
-      spec: 'L120 × B80 — travertin',
+      spec: 'L120 × B80',
+      material: 'Travertin',
     },
     {
       type: isNL ? 'Console' : 'Console',
-      price: '€3.800',
-      spec: 'L160 × B45 — marmer',
+      spec: 'L160 × B45',
+      material: isNL ? 'Marmer' : 'Marble',
     },
     {
       type: isNL ? 'Eettafel' : 'Dining Table',
-      price: '€6.500',
-      spec: 'L200 × B100 — travertin',
+      spec: 'L200 × B100',
+      material: 'Travertin',
     },
   ];
 
@@ -153,7 +154,7 @@ const Bespoke = () => {
                   {isNL ? 'Prijs op aanvraag' : 'Price on request'}
                 </span>
                 <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
-                  {isNL ? 'Doorlooptijd ±13–15 weken' : 'Lead time ±13–15 weeks'}
+                  {isNL ? 'Doorlooptijd 12–16 weken' : 'Lead time 12–16 weeks'}
                 </span>
                 <span className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground rounded-sm">
                   {isNL ? '5 jaar garantie' : '5 year warranty'}
@@ -214,55 +215,58 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* Pricing Examples */}
+      {/* Maatwerk op aanvraag Section */}
       <section id="voorbeelden" className="py-12 lg:py-16 bg-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
-          <header className="mb-8">
-            <div className="flex items-baseline justify-between gap-4 mb-3">
-              <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground">
-                {isNL ? 'Prijsindicatie' : 'Price Indication'}
-              </p>
-              <a 
-                href="#voorbeelden" 
-                className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
-              >
-                {isNL ? 'Bekijk voorbeelden ↓' : 'View examples ↓'}
-              </a>
-            </div>
-            <h2 className="font-serif text-display-sm text-foreground mb-3">
-              {isNL ? 'Vanafprijzen per categorie' : 'Starting prices by category'}
+          <header className="mb-8 max-w-3xl">
+            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+              {isNL ? 'Maatwerk' : 'Bespoke'}
+            </p>
+            <h2 className="font-serif text-display-sm text-foreground mb-4">
+              {isNL ? 'Maatwerk op aanvraag' : 'Bespoke on request'}
             </h2>
-            <p className="text-muted-foreground text-body-md max-w-2xl">
+            <p className="text-muted-foreground text-body-md leading-relaxed">
               {isNL 
-                ? 'Richtprijzen voor standaardformaten in travertin. Exacte prijs hangt af van steen, dikte, randafwerking en onderstel.'
-                : 'Guide prices for standard dimensions in travertine. Exact price depends on stone, thickness, edge finish and base.'}
+                ? 'Elke SERA NORR piece wordt op maat gemaakt. De prijs is afhankelijk van steenkeuze, afmetingen, dikte, randafwerking, onderstel en levering/plaatsing. Na een korte intake ontvang je een heldere offerte.'
+                : 'Every SERA NORR piece is made to measure. The price depends on stone choice, dimensions, thickness, edge finish, base and delivery/installation. After a brief intake you receive a clear quote.'}
             </p>
           </header>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-            {priceExamples.map((item, index) => (
+          {/* CTAs */}
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Button asChild variant="atelier-filled" size="lg">
+              <a href="#offerte">
+                {isNL ? 'Vraag een offerte aan' : 'Request a quote'}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            <Button asChild variant="atelier" size="lg">
+              <Link to="/collections">
+                {isNL ? 'Bekijk voorbeelden' : 'View examples'}
+              </Link>
+            </Button>
+          </div>
+
+          {/* Example Products Grid - No prices */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 mb-6">
+            {exampleProducts.map((item, index) => (
               <div key={index} className="p-5 bg-secondary/30 border border-border/50">
                 <h3 className="font-serif text-base text-foreground mb-1">{item.type}</h3>
-                <p className="font-serif text-xl text-foreground mb-1.5">
-                  <span className="text-sm font-sans text-muted-foreground mr-1">{isNL ? 'vanaf' : 'from'}</span>
-                  {item.price}
+                <p className="text-sm text-muted-foreground mb-1.5">{isNL ? 'Prijs op aanvraag' : 'Price on request'}</p>
+                <p className="text-[11px] text-muted-foreground/70 leading-relaxed">
+                  {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {item.spec}
                 </p>
-                <p className="text-[11px] text-muted-foreground/70 leading-relaxed">{item.spec}</p>
+                <p className="text-[11px] text-muted-foreground/70">{item.material}</p>
               </div>
             ))}
           </div>
 
           {/* Notes */}
-          <div className="mt-6 space-y-1.5 text-center">
+          <div className="space-y-1.5 text-center">
             <p className="text-xs text-muted-foreground">
               {isNL 
-                ? 'Calacatta Viola & zeldzame steensoorten op aanvraag.'
-                : 'Calacatta Viola & rare stones on request.'}
-            </p>
-            <p className="text-xs text-muted-foreground/70">
-              {isNL 
-                ? 'Prijzen exclusief btw. Levering & plaatsing afhankelijk van locatie.'
-                : 'Prices exclude VAT. Delivery & installation depend on location.'}
+                ? 'Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie.'
+                : 'Calacatta Viola & rare stones on request. Prices excl. VAT. Delivery & installation depend on location.'}
             </p>
           </div>
         </div>

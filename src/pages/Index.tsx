@@ -65,13 +65,9 @@ const Index = () => {
     { key: 'materials', icon: Settings }
   ];
 
-  // Get starting price from collection name (mapped values)
-  const getStartingPrice = (handle: string) => {
-    const prices: Record<string, string> = {
-      'terra': '€4.200',
-      'vanta': '€4.000',
-    };
-    return prices[handle.toLowerCase()] || '€4.000';
+  // Get price display for collections (now "on request" instead of prices)
+  const getPriceDisplay = () => {
+    return isNL ? 'Prijs op aanvraag' : 'Price on request';
   };
 
   // Get Dutch description for collections
@@ -222,8 +218,8 @@ const Index = () => {
                         {getCollectionDescription(collection.node.handle, collection.node.description)}
                       </p>
                     )}
-                    <p className="font-sans text-sm text-foreground">
-                      {t('home.collections.startingFrom')} {getStartingPrice(collection.node.handle)}
+                    <p className="font-sans text-sm text-muted-foreground">
+                      {getPriceDisplay()}
                     </p>
                     <span className="inline-flex items-center text-foreground text-sm font-medium group-hover:translate-x-1 transition-transform pt-2">
                       {t('home.collections.viewCollection')}
