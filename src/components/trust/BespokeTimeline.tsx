@@ -11,48 +11,50 @@ export function BespokeTimeline({ className, compact = false }: BespokeTimelineP
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
 
+  // Updated durations to add up to 8-12 weeks total:
+  // 1 week + 1 week + 1-2 weeks + 4-6 weeks + 1 week = 8-11 weeks (round to 8-12)
   const steps = [
     {
       icon: Sparkles,
       step: '1',
       title: isNL ? 'Consultatie' : 'Consultation',
-      duration: isNL ? '1-2 weken' : '1-2 weeks',
+      duration: '1 week',
       description: isNL 
-        ? 'Vrijblijvend gesprek over uw wensen, ruimte en materiaalvoorkeuren.' 
-        : 'No-obligation conversation about your wishes, space and material preferences.',
+        ? 'Vrijblijvend gesprek over uw wensen en ruimte.' 
+        : 'No-obligation conversation about your wishes and space.',
     },
     {
       icon: FileText,
       step: '2',
       title: isNL ? 'Voorstel & Offerte' : 'Proposal & Quote',
-      duration: isNL ? '1-2 weken' : '1-2 weeks',
+      duration: '1 week',
       description: isNL 
-        ? 'Schetsen, materiaalopties en prijsvoorstel op maat.' 
-        : 'Sketches, material options and custom price proposal.',
+        ? 'Schetsen, materiaalopties en prijsvoorstel.' 
+        : 'Sketches, material options and price proposal.',
     },
     {
       icon: Palette,
       step: '3',
       title: isNL ? 'Materiaalselectie' : 'Material Selection',
-      duration: isNL ? '2-4 weken' : '2-4 weeks',
+      duration: isNL ? '1–2 weken' : '1–2 weeks',
       description: isNL 
-        ? 'Selecteer uw specifieke steenplaat. Foto\'s of showroom bezoek.' 
-        : 'Select your specific stone slab. Photos or showroom visit.',
+        ? 'Selecteer uw steenplaat. Foto\'s of showroombezoek.' 
+        : 'Select your stone slab. Photos or showroom visit.',
     },
     {
       icon: Hammer,
       step: '4',
       title: isNL ? 'Productie' : 'Production',
-      duration: isNL ? '6-12 weken' : '6-12 weeks',
+      duration: isNL ? '4–6 weken' : '4–6 weeks',
       description: isNL 
-        ? 'Vakkundige productie door geselecteerde ambachtslieden.' 
-        : 'Expert production by selected artisans.',
+        ? 'Vakkundige productie door onze ambachtslieden.' 
+        : 'Expert production by our artisans.',
     },
     {
       icon: Home,
       step: '5',
       title: isNL ? 'Levering & Plaatsing' : 'Delivery & Installation',
-      duration: isNL ? '1-2 weken' : '1-2 weeks',
+      duration: '1 week',
       description: isNL 
         ? 'White-glove levering en professionele plaatsing.' 
         : 'White-glove delivery and professional installation.',

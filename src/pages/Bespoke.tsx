@@ -259,51 +259,126 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* Process Timeline */}
+      {/* Process Timeline - True 2-column layout */}
       <section className="py-12 lg:py-16 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-            <div>
-              <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
-                {t('bespoke.journeySubtitle')}
-              </p>
-              <h2 className="font-serif text-display-sm text-foreground mb-4">
-                {isNL ? 'Van idee tot meubel in 5 stappen' : 'From idea to furniture in 5 steps'}
-              </h2>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-6">
-                {isNL 
-                  ? 'Elk maatwerktraject volgt dezelfde zorgvuldige aanpak. U blijft betrokken bij elke stap.'
-                  : 'Every bespoke project follows the same careful approach. You stay involved at every step.'}
-              </p>
-              <BespokeTimeline />
+          <header className="mb-8">
+            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+              {t('bespoke.journeySubtitle')}
+            </p>
+            <h2 className="font-serif text-display-sm text-foreground">
+              {isNL ? 'Van idee tot meubel in 5 stappen' : 'From idea to furniture in 5 steps'}
+            </h2>
+          </header>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
+            {/* Left: Numbered Timeline (3 cols) */}
+            <div className="lg:col-span-3">
+              <div className="space-y-0">
+                {/* Step 1 */}
+                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
+                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">1</span>
+                  <div>
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Consultatie' : 'Consultation'}</h4>
+                      <span className="text-xs text-muted-foreground">1 week</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{isNL ? 'Vrijblijvend gesprek over uw wensen en ruimte.' : 'No-obligation conversation about your wishes and space.'}</p>
+                  </div>
+                </div>
+                {/* Step 2 */}
+                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
+                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">2</span>
+                  <div>
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Voorstel & Offerte' : 'Proposal & Quote'}</h4>
+                      <span className="text-xs text-muted-foreground">1 week</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{isNL ? 'Schetsen, materiaalopties en prijsvoorstel.' : 'Sketches, material options and price proposal.'}</p>
+                  </div>
+                </div>
+                {/* Step 3 */}
+                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
+                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">3</span>
+                  <div>
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Materiaalselectie' : 'Material Selection'}</h4>
+                      <span className="text-xs text-muted-foreground">{isNL ? '1–2 weken' : '1–2 weeks'}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{isNL ? 'Selecteer uw steenplaat. Foto\'s of showroombezoek.' : 'Select your stone slab. Photos or showroom visit.'}</p>
+                  </div>
+                </div>
+                {/* Step 4 */}
+                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
+                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">4</span>
+                  <div>
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Productie' : 'Production'}</h4>
+                      <span className="text-xs text-muted-foreground">{isNL ? '4–6 weken' : '4–6 weeks'}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{isNL ? 'Vakkundige productie door onze ambachtslieden.' : 'Expert production by our artisans.'}</p>
+                  </div>
+                </div>
+                {/* Step 5 */}
+                <div className="flex gap-4 pl-6 relative">
+                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">5</span>
+                  <div>
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      <h4 className="font-serif text-base text-foreground">{isNL ? 'Levering & Plaatsing' : 'Delivery & Installation'}</h4>
+                      <span className="text-xs text-muted-foreground">1 week</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{isNL ? 'White-glove levering en professionele plaatsing.' : 'White-glove delivery and professional installation.'}</p>
+                  </div>
+                </div>
+              </div>
             </div>
             
-            <div className="lg:pt-12">
-              <div className="bg-background p-6 lg:p-7 border border-border/50">
-                <h3 className="font-serif text-lg text-foreground mb-4">
+            {/* Right: Compact "Wat u krijgt" card (2 cols) */}
+            <div className="lg:col-span-2">
+              <div className="bg-background p-5 lg:p-6 border border-border/50 h-full">
+                <h3 className="font-serif text-base text-foreground mb-4">
                   {isNL ? 'Wat u krijgt' : 'What you receive'}
                 </h3>
-                <USPBullets className="mb-5" />
-                <ul className="space-y-2.5 text-sm text-muted-foreground">
-                  <li className="flex gap-2.5">
-                    <span className="text-forest font-medium">✓</span>
-                    {isNL ? 'Gedetailleerde schetsen en 3D-visualisaties' : 'Detailed sketches and 3D visualizations'}
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex gap-2">
+                    <span className="text-foreground">✓</span>
+                    {isNL ? '3D-visualisaties' : '3D visualizations'}
                   </li>
-                  <li className="flex gap-2.5">
-                    <span className="text-forest font-medium">✓</span>
-                    {isNL ? 'Materiaalmonsters ter goedkeuring' : 'Material samples for approval'}
+                  <li className="flex gap-2">
+                    <span className="text-foreground">✓</span>
+                    {isNL ? 'Materiaalmonsters' : 'Material samples'}
                   </li>
-                  <li className="flex gap-2.5">
-                    <span className="text-forest font-medium">✓</span>
-                    {isNL ? 'Foto-updates tijdens productie' : 'Photo updates during production'}
+                  <li className="flex gap-2">
+                    <span className="text-foreground">✓</span>
+                    {isNL ? 'Foto-updates productie' : 'Production photo updates'}
                   </li>
-                  <li className="flex gap-2.5">
-                    <span className="text-forest font-medium">✓</span>
-                    {isNL ? 'Onderhoudsinstructies en certificaat' : 'Care instructions and certificate'}
+                  <li className="flex gap-2">
+                    <span className="text-foreground">✓</span>
+                    {isNL ? 'White-glove levering' : 'White-glove delivery'}
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-foreground">✓</span>
+                    {isNL ? '5 jaar garantie' : '5 year warranty'}
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-foreground">✓</span>
+                    {isNL ? 'Onderhoudsinstructies' : 'Care instructions'}
                   </li>
                 </ul>
               </div>
             </div>
+          </div>
+
+          {/* Total bar */}
+          <div className="mt-8 pt-6 border-t border-border/50">
+            <p className="text-center text-sm text-foreground">
+              <span className="font-medium">{isNL ? 'Totaal:' : 'Total:'}</span>{' '}
+              <span className="text-muted-foreground">
+                {isNL 
+                  ? 'gemiddeld 8–12 weken (afhankelijk van complexiteit en materiaal)'
+                  : 'average 8–12 weeks (depending on complexity and material)'}
+              </span>
+            </p>
           </div>
         </div>
       </section>
