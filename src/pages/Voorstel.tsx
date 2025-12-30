@@ -112,7 +112,9 @@ const Voorstel = () => {
         description: isNL ? "Wij reageren binnen 48 uur." : "We will respond within 48 hours.",
       });
     } catch (error: any) {
-      console.error("Form submission error:", error);
+      if (import.meta.env.DEV) {
+        console.error("Form submission error:", error);
+      }
       
       if (error.message?.includes("429") || error.message?.includes("Too many")) {
         toast({

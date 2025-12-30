@@ -19,7 +19,9 @@ export const ProductGrid = ({ query, limit = 20 }: ProductGridProps) => {
         const data = await fetchProducts(limit, query);
         setProducts(data);
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        if (import.meta.env.DEV) {
+          console.error("Failed to fetch products:", error);
+        }
       } finally {
         setLoading(false);
       }

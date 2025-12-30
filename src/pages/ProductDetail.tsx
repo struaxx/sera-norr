@@ -79,7 +79,9 @@ const ProductDetail = () => {
           });
         }
       } catch (error) {
-        console.error("Failed to fetch product:", error);
+        if (import.meta.env.DEV) {
+          console.error("Failed to fetch product:", error);
+        }
       } finally {
         setLoading(false);
       }
