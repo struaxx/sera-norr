@@ -3,6 +3,7 @@ import { SEOHead, generateBreadcrumbSchema, Breadcrumbs } from "@/components/seo
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
+import { SectionBand, SectionHeader } from "@/components/ui/section-band";
 
 const materials = [
   {
@@ -84,25 +85,23 @@ export default function Materials() {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-24 lg:py-32 bg-secondary/30">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-serif text-2xl lg:text-3xl text-foreground mb-6">
-              {t("materials.philosophy.title")}
-            </h2>
-            <p className="font-sans text-muted-foreground leading-relaxed mb-4">
-              {t("materials.philosophy.description1")}
-            </p>
-            <p className="font-sans text-muted-foreground leading-relaxed">
-              {t("materials.philosophy.description2")}
-            </p>
-          </div>
+      <SectionBand variant="sand" size="lg">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="font-serif text-2xl lg:text-3xl text-foreground mb-6">
+            {t("materials.philosophy.title")}
+          </h2>
+          <p className="font-sans text-muted-foreground leading-relaxed mb-4">
+            {t("materials.philosophy.description1")}
+          </p>
+          <p className="font-sans text-muted-foreground leading-relaxed">
+            {t("materials.philosophy.description2")}
+          </p>
         </div>
-      </section>
+      </SectionBand>
 
       {/* CTA Section */}
-      <section className="py-16 lg:py-24 bg-background">
-        <div className="container mx-auto px-6 lg:px-12 text-center">
+      <SectionBand variant="default" size="md">
+        <div className="text-center">
           <h2 className="font-serif text-2xl lg:text-3xl text-foreground mb-4">
             {t("materials.cta.title")}
           </h2>
@@ -117,7 +116,7 @@ export default function Materials() {
             <ArrowRight size={14} />
           </Link>
         </div>
-      </section>
+      </SectionBand>
     </Layout>
   );
 }
