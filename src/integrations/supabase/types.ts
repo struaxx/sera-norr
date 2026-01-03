@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          created_at: string
+          device_type: string | null
+          event_name: string
+          id: string
+          page_url: string | null
+          properties: Json | null
+          referrer: string | null
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_type?: string | null
+          event_name: string
+          id?: string
+          page_url?: string | null
+          properties?: Json | null
+          referrer?: string | null
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          device_type?: string | null
+          event_name?: string
+          id?: string
+          page_url?: string | null
+          properties?: Json | null
+          referrer?: string | null
+          session_id?: string
+        }
+        Relationships: []
+      }
       form_submissions: {
         Row: {
           created_at: string
@@ -56,6 +89,45 @@ export type Database = {
           phone?: string | null
           subject?: string | null
           user_agent?: string | null
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          email: string
+          first_identified_at: string
+          id: string
+          intent_level: string | null
+          intent_score: number | null
+          interest_tags: string[] | null
+          last_updated_at: string
+          last_viewed_product: string | null
+          marketing_opt_in: boolean | null
+          session_id: string | null
+        }
+        Insert: {
+          email: string
+          first_identified_at?: string
+          id?: string
+          intent_level?: string | null
+          intent_score?: number | null
+          interest_tags?: string[] | null
+          last_updated_at?: string
+          last_viewed_product?: string | null
+          marketing_opt_in?: boolean | null
+          session_id?: string | null
+        }
+        Update: {
+          email?: string
+          first_identified_at?: string
+          id?: string
+          intent_level?: string | null
+          intent_score?: number | null
+          interest_tags?: string[] | null
+          last_updated_at?: string
+          last_viewed_product?: string | null
+          marketing_opt_in?: boolean | null
+          session_id?: string | null
         }
         Relationships: []
       }

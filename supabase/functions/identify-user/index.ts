@@ -79,35 +79,35 @@ Deno.serve(async (req) => {
       });
     }
     
-    // Build profile data for CRM/email integration
-    const profileData = {
-      email: sanitizedEmail,
-      session_id: sessionId,
-      marketing_opt_in: Boolean(payload.marketing_opt_in),
-      intent_level: intentLevel,
-      intent_score: intentScore,
-      last_viewed_product: lastViewedProduct,
-      interest_tags: interestTags,
-      identified_at: new Date().toISOString(),
-    };
-    
-    console.log('[identify-user] Profile data:', profileData);
-    
-    // Here you would integrate with your email/CRM platform
-    // Examples:
-    // - Klaviyo: POST to /api/identify or /api/track
-    // - Mailchimp: POST to /3.0/lists/{list_id}/members
-    // - Customer.io: POST to /api/v1/customers/{identifier}
-    
-    // For now, we log the data and store in Supabase
+    // Store in Supabase
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     
     if (supabaseUrl && supabaseKey) {
       const supabase = createClient(supabaseUrl, supabaseKey);
       
-      // Store identification in form_submissions with special form_type
-      const { error } = await supabase
+      // Upsert user profile
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .upsert({
+          email: sanitizedEmail,
+          session_id: sessionId,
+          marketing_opt_in: Boolean(payload.marketing_opt_in),
+          intent_level: intentLevel,
+          intent_score: intentScore,
+          last_viewed_product: lastViewedProduct,
+          interest_tags: interestTags,
+          last_updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'email',
+        });
+      
+      if (profileError) {
+        console.error('[identify-user] Profile error:', profileError);
+      }
+      
+      // Also store in form_submissions for backward compatibility
+      const { error: formError } = await supabase
         .from('form_submissions')
         .insert({
           form_type: 'user_identification',
@@ -122,10 +122,74 @@ Deno.serve(async (req) => {
           },
         });
       
-      if (error) {
-        console.error('[identify-user] Database error:', error);
+      if (formError) {
+        console.error('[identify-user] Form submission error:', formError);
       }
     }
+    
+    // Optional: Sync to Klaviyo if configured
+    const klaviyoKey = Deno.env.get('KLAVIYO_API_KEY');
+    const klaviyoListId = Deno.env.get('KLAVIYO_LIST_ID');
+    
+    if (klaviyoKey && payload.marketing_opt_in) {
+      try {
+        // Create/update Klaviyo profile
+        const profileResponse = await fetch('https://a.klaviyo.com/api/profiles/', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Klaviyo-API-Key ${klaviyoKey}`,
+            'Content-Type': 'application/json',
+            'revision': '2024-02-15',
+          },
+          body: JSON.stringify({
+            data: {
+              type: 'profile',
+              attributes: {
+                email: sanitizedEmail,
+                properties: {
+                  intent_level: intentLevel,
+                  intent_score: intentScore,
+                  last_viewed_product: lastViewedProduct,
+                  travertine_interest: payload.interests?.travertine || false,
+                  viola_interest: payload.interests?.viola || false,
+                  custom_interest: payload.interests?.custom || false,
+                  size_interests: payload.interests?.sizes || [],
+                  material_interests: payload.interests?.materials || [],
+                },
+              },
+            },
+          }),
+        });
+        
+        if (profileResponse.ok && klaviyoListId) {
+          const profileData = await profileResponse.json();
+          const profileId = profileData.data?.id;
+          
+          if (profileId) {
+            // Subscribe to list
+            await fetch(`https://a.klaviyo.com/api/lists/${klaviyoListId}/relationships/profiles/`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Klaviyo-API-Key ${klaviyoKey}`,
+                'Content-Type': 'application/json',
+                'revision': '2024-02-15',
+              },
+              body: JSON.stringify({
+                data: [{ type: 'profile', id: profileId }],
+              }),
+            });
+          }
+        }
+        
+        console.log('[identify-user] Synced to Klaviyo');
+      } catch (klaviyoError) {
+        console.error('[identify-user] Klaviyo error:', klaviyoError);
+      }
+    } else if (!klaviyoKey) {
+      console.log('[identify-user] Klaviyo not configured - skipping CRM sync');
+    }
+    
+    console.log('[identify-user] Profile identified:', sanitizedEmail);
     
     return new Response(
       JSON.stringify({ 

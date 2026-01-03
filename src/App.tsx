@@ -18,6 +18,7 @@ import MaterialDetail from "./pages/MaterialDetail";
 import Voorstel from "./pages/Voorstel";
 import Lookbook from "./pages/Lookbook";
 import Care from "./pages/Care";
+import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,8 @@ const App = () => (
           <Route path="/voorstel" element={<Voorstel />} />
           <Route path="/lookbook" element={<Lookbook />} />
           <Route path="/care" element={<Care />} />
+          <Route path="/insights" element={<Insights />} />
+          <Route path="*" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieBanner />
