@@ -106,10 +106,10 @@ interface CollectionData {
   };
 }
 
-// Map URL slugs to Shopify collection handles
-const urlToShopifyHandle: Record<string, string> = {
-  'vanta': 'frontpage', // VANTA collection has handle "frontpage" in Shopify
-  'terra': 'terra',
+// Map URL slugs to Shopify collection handles - try multiple options
+const urlToShopifyHandles: Record<string, string[]> = {
+  'vanta': ['vanta', 'frontpage', 'vanta-collection'],
+  'terra': ['terra', 'terra-collection'],
 };
 
 const CollectionDetail = () => {
@@ -126,16 +126,27 @@ const CollectionDetail = () => {
     const loadCollection = async () => {
       if (!collectionId) return;
       setLoading(true);
-      try {
-        // Convert URL slug to Shopify handle
-        const shopifyHandle = urlToShopifyHandle[collectionId.toLowerCase()] || collectionId.toLowerCase();
-        const data = await fetchCollectionByHandle(shopifyHandle, 20);
-        setCollection(data);
-      } catch (error) {
-        console.error("Failed to fetch collection:", error);
-      } finally {
-        setLoading(false);
+      
+      const normalizedId = collectionId.toLowerCase();
+      const handlesToTry = urlToShopifyHandles[normalizedId] || [normalizedId];
+      
+      // Try each possible handle until we find a collection
+      for (const handle of handlesToTry) {
+        try {
+          const data = await fetchCollectionByHandle(handle, 20);
+          if (data) {
+            setCollection(data);
+            setLoading(false);
+            return;
+          }
+        } catch (error) {
+          // Continue to next handle
+        }
       }
+      
+      // No collection found with any handle
+      setCollection(null);
+      setLoading(false);
     };
 
     loadCollection();
