@@ -65,6 +65,7 @@ export default {
         bone: "hsl(var(--bone))",
         ivory: "hsl(var(--ivory))",
         sand: "hsl(var(--sand))",
+        greige: "hsl(var(--greige))",
         umber: "hsl(var(--umber))",
         forest: "hsl(var(--forest))",
         stone: "hsl(var(--stone))",
@@ -77,6 +78,8 @@ export default {
         "soft": "var(--shadow-soft)",
         "medium": "var(--shadow-medium)",
         "elevated": "var(--shadow-elevated)",
+        "card": "var(--shadow-card)",
+        "card-hover": "var(--shadow-card-hover)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -84,17 +87,23 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontSize: {
-        "display-xl": ["clamp(3rem, 8vw, 7rem)", { lineHeight: "0.95", letterSpacing: "-0.02em" }],
-        "display-lg": ["clamp(2.5rem, 6vw, 5rem)", { lineHeight: "1", letterSpacing: "-0.02em" }],
-        "display-md": ["clamp(2rem, 4vw, 3.5rem)", { lineHeight: "1.1", letterSpacing: "-0.01em" }],
-        "display-sm": ["clamp(1.5rem, 3vw, 2.5rem)", { lineHeight: "1.2", letterSpacing: "-0.01em" }],
-        "body-lg": ["1.25rem", { lineHeight: "1.6" }],
+        // Editorial display hierarchy - stronger
+        "display-xl": ["clamp(3.5rem, 9vw, 8rem)", { lineHeight: "0.92", letterSpacing: "-0.025em", fontWeight: "400" }],
+        "display-lg": ["clamp(2.75rem, 7vw, 5.5rem)", { lineHeight: "0.95", letterSpacing: "-0.02em", fontWeight: "400" }],
+        "display-md": ["clamp(2.25rem, 5vw, 4rem)", { lineHeight: "1.05", letterSpacing: "-0.015em", fontWeight: "400" }],
+        "display-sm": ["clamp(1.75rem, 3.5vw, 2.75rem)", { lineHeight: "1.15", letterSpacing: "-0.01em", fontWeight: "400" }],
+        // Body hierarchy
+        "body-xl": ["1.375rem", { lineHeight: "1.6" }],
+        "body-lg": ["1.125rem", { lineHeight: "1.65" }],
         "body-md": ["1rem", { lineHeight: "1.7" }],
-        "body-sm": ["0.875rem", { lineHeight: "1.6" }],
-        "caption": ["0.75rem", { lineHeight: "1.5", letterSpacing: "0.1em" }],
+        "body-sm": ["0.875rem", { lineHeight: "1.65" }],
+        // Micro typography
+        "eyebrow": ["0.6875rem", { lineHeight: "1.4", letterSpacing: "0.15em", fontWeight: "500" }],
+        "caption": ["0.75rem", { lineHeight: "1.5", letterSpacing: "0.08em" }],
       },
       spacing: {
-        "section": "clamp(4rem, 10vw, 8rem)",
+        "section": "clamp(5rem, 12vw, 10rem)",
+        "section-sm": "clamp(3.5rem, 8vw, 6rem)",
         "18": "4.5rem",
         "22": "5.5rem",
       },
