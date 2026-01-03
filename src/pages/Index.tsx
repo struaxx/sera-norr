@@ -180,7 +180,7 @@ const Index = () => {
         </div>
         
         <div className="relative z-10 text-center px-6 max-w-3xl stagger-children">
-          <h1 className="font-serif text-display-lg lg:text-display-xl text-background mb-6 leading-[1.1]">
+          <h1 className="font-serif font-medium text-display-lg lg:text-display-xl text-background mb-6 leading-[1.1] tracking-wide">
             {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
           </h1>
           <p className="font-sans text-base lg:text-lg text-background/85 max-w-xl mx-auto mb-10 leading-relaxed">
