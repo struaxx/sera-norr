@@ -1,10 +1,15 @@
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 export interface FeatureCard {
-  icon: LucideIcon;
+  icon?: LucideIcon;
+  label?: string;
   title: string;
   description: string;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
 interface PremiumFeatureCardsProps {
@@ -22,7 +27,7 @@ export function PremiumFeatureCards({ cards, className, columns = 2 }: PremiumFe
 
   return (
     <div className={cn(
-      'grid gap-4 lg:gap-6',
+      'grid gap-5 lg:gap-6',
       gridClass[columns],
       className
     )}>
@@ -34,27 +39,45 @@ export function PremiumFeatureCards({ cards, className, columns = 2 }: PremiumFe
             className={cn(
               'group relative p-6 lg:p-8',
               'bg-background',
-              'border border-border/40 rounded-sm',
-              'shadow-[0_2px_12px_-4px_hsl(var(--foreground)/0.04)]',
-              'hover:shadow-[0_8px_24px_-8px_hsl(var(--foreground)/0.08)]',
+              'border border-border/50 rounded-sm',
+              'shadow-card',
+              'hover:shadow-card-hover',
               'hover:-translate-y-0.5',
-              'transition-all duration-500 ease-out'
+              'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]'
             )}
           >
-            {/* Icon */}
-            <div className="mb-4">
-              <Icon className="w-5 h-5 text-foreground/70 group-hover:text-foreground transition-colors duration-300" strokeWidth={1.5} />
+            {/* Label / Icon */}
+            <div className="mb-4 flex items-center gap-3">
+              {Icon && (
+                <Icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300" strokeWidth={1.5} />
+              )}
+              {card.label && (
+                <span className="text-eyebrow uppercase text-muted-foreground">
+                  {card.label}
+                </span>
+              )}
             </div>
             
             {/* Title */}
-            <h3 className="font-serif text-base lg:text-lg text-foreground mb-2">
+            <h3 className="font-serif text-lg lg:text-xl text-foreground mb-2">
               {card.title}
             </h3>
             
-            {/* Description */}
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            {/* Description - 1 sentence max */}
+            <p className="text-body-sm text-muted-foreground leading-relaxed mb-4">
               {card.description}
             </p>
+
+            {/* CTA Button */}
+            {card.ctaText && card.ctaLink && (
+              <Link 
+                to={card.ctaLink}
+                className="inline-flex items-center text-sm font-medium text-foreground group-hover:translate-x-1 transition-transform duration-300"
+              >
+                {card.ctaText}
+                <ArrowRight className="ml-2 h-3.5 w-3.5" />
+              </Link>
+            )}
           </article>
         );
       })}

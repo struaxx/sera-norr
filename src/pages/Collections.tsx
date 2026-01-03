@@ -6,30 +6,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { SectionBand, SectionHeader } from "@/components/ui/section-band";
+import { TrustBand } from "@/components/ui/trust-band";
 import { fetchCollections, fetchProducts, ShopifyCollection, ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import vantaFallback from "@/assets/vanta-collection.jpg";
 import terraFallback from "@/assets/terra-collection.jpg";
 import otherStonesImage from "@/assets/other-stones-materials.png";
-
-// Tab button component for section navigation
-const TabButton = ({ onClick, label, isActive }: { onClick: () => void; label: string; isActive: boolean }) => {
-  return (
-    <button 
-      onClick={onClick}
-      className={`
-        text-[11px] uppercase tracking-[0.15em] font-medium
-        transition-all duration-200 py-3 border-b-2 -mb-px
-        ${isActive 
-          ? 'text-foreground border-foreground' 
-          : 'text-muted-foreground/60 border-transparent hover:text-foreground hover:border-foreground/30'
-        }
-      `}
-    >
-      {label}
-    </button>
-  );
-};
 
 const Collections = () => {
   const { t, i18n } = useTranslation();
@@ -37,29 +20,6 @@ const Collections = () => {
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState<string>('vanta');
-
-  // Scroll spy to track active section
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['vanta', 'terra', 'andere-steensoorten'];
-      const scrollPos = window.scrollY + 150; // Offset for sticky header + tabs
-      
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPos >= offsetTop && scrollPos < offsetTop + offsetHeight) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -79,19 +39,14 @@ const Collections = () => {
     loadData();
   }, []);
 
-  // Get collection image from Shopify collection or product images
   const getCollectionImage = (handle: string) => {
-    // First try to get collection image from Shopify
     const collection = collections.find(c => 
       c.node.handle.toLowerCase() === handle.toLowerCase() ||
       c.node.title.toLowerCase().includes(handle.toLowerCase())
     );
     
-    if (collection?.node.image?.url) {
-      return collection.node.image.url;
-    }
+    if (collection?.node.image?.url) return collection.node.image.url;
     
-    // If no collection image, try to get from products
     const matchingProduct = products.find(p => 
       p.node.title.toLowerCase().includes(handle.toLowerCase()) ||
       p.node.handle.toLowerCase().includes(handle.toLowerCase())
@@ -101,7 +56,6 @@ const Collections = () => {
       return matchingProduct.node.images.edges[0].node.url;
     }
     
-    // Fallback to local images
     if (handle === 'vanta') return vantaFallback;
     if (handle === 'terra') return terraFallback;
     return null;
@@ -112,38 +66,23 @@ const Collections = () => {
     : "Collections | SERA NORR — Online Atelier for Natural Stone Furniture";
 
   const seoDescription = isNL
-    ? "Ontdek de SERA NORR collecties: travertin, Calacatta Viola en geselecteerde natuurstenen. Elk stuk op maat gemaakt in ons online atelier."
-    : "Discover SERA NORR collections: travertine, Calacatta Viola and selected natural stones. Every piece custom made in our online atelier.";
-
-  // Collection page schema
-  const collectionPageSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    '@id': 'https://sera-norr.com/collections/#page',
-    name: isNL ? 'SERA NORR Collecties' : 'SERA NORR Collections',
-    description: seoDescription,
-    url: 'https://sera-norr.com/collections',
-    isPartOf: {
-      '@id': 'https://sera-norr.com/#website',
-    },
-  };
+    ? "Ontdek de SERA NORR collecties: travertin, Calacatta Viola en geselecteerde natuurstenen."
+    : "Discover SERA NORR collections: travertine, Calacatta Viola and selected natural stones.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: isNL ? 'Collecties' : 'Collections', url: '/collections' },
   ]);
 
-  const combinedSchema = {
-    '@context': 'https://schema.org',
-    '@graph': [collectionPageSchema, breadcrumbSchema],
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const trustItems = isNL ? [
+    { text: 'Op maat gemaakt' },
+    { text: 'White-glove levering' },
+    { text: 'Geselecteerde materialen' },
+  ] : [
+    { text: 'Made to measure' },
+    { text: 'White-glove delivery' },
+    { text: 'Selected materials' },
+  ];
 
   return (
     <Layout>
@@ -151,261 +90,31 @@ const Collections = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "SERA NORR, collecties, travertin meubels, Calacatta Viola marmer, stenen tafels, maatwerk natuursteenmeubels" 
-          : "SERA NORR, collections, travertine furniture, Calacatta Viola marble, stone tables, bespoke natural stone furniture"}
-        structuredData={combinedSchema}
+          ? "SERA NORR, collecties, travertin meubels, Calacatta Viola marmer" 
+          : "SERA NORR, collections, travertine furniture, Calacatta Viola marble"}
+        structuredData={breadcrumbSchema}
       />
 
-      {/* Hero Section */}
-      <section className="pt-28 lg:pt-36 pb-6 bg-background">
+      {/* Hero */}
+      <section className="pt-28 lg:pt-36 pb-12 lg:pb-16 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <Breadcrumbs className="mb-4 opacity-60 text-[10px]" />
+          <Breadcrumbs className="mb-6 opacity-60 text-[10px]" />
           
-          <header className="max-w-3xl mb-5">
-            <h1 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
-              {t("collections.hero.title")}
+          <div className="max-w-3xl">
+            <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+              {isNL ? 'Collecties' : 'Collections'}
+            </p>
+            <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
+              {isNL ? "Travertin & marmer" : "Travertine & marble"}
             </h1>
-            <p className="text-muted-foreground text-body-md leading-relaxed max-w-2xl">
-              {t("collections.hero.intro")}
-            </p>
-          </header>
-
-          {/* CTA Button */}
-          <div className="mb-8">
-            <Button asChild variant="atelier-filled" size="sm" className="text-xs px-5 py-2.5">
-              <Link to="/bespoke">
-                {t("collections.hero.ctaPrimary")}
-                <ArrowRight className="ml-2 h-3.5 w-3.5" />
-              </Link>
-            </Button>
-          </div>
-
-          {/* Section Navigation Tabs - editorial, non-sticky */}
-          <nav className="flex gap-8 lg:gap-10">
-            <TabButton 
-              onClick={() => scrollToSection('vanta')}
-              label="VANTA"
-              isActive={activeSection === 'vanta'}
-            />
-            <TabButton 
-              onClick={() => scrollToSection('terra')}
-              label="TERRA"
-              isActive={activeSection === 'terra'}
-            />
-            <TabButton 
-              onClick={() => scrollToSection('andere-steensoorten')}
-              label={isNL ? 'ANDERE STEENSOORTEN' : 'OTHER STONES'}
-              isActive={activeSection === 'andere-steensoorten'}
-            />
-          </nav>
-        </div>
-      </section>
-
-      {/* VANTA Collection */}
-      <section id="vanta" className="scroll-mt-20 lg:scroll-mt-24 py-10 lg:py-14 bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-            {/* Image */}
-            <div className="image-reveal">
-              <Link to="/collections/vanta">
-                <div className="aspect-[4/5] bg-muted overflow-hidden">
-                  {loading ? (
-                    <Skeleton className="w-full h-full" />
-                  ) : (
-                    <img
-                      src={getCollectionImage('vanta') || vantaFallback}
-                      alt={isNL ? "VANTA collectie - Calacatta Viola marmer meubels" : "VANTA collection - Calacatta Viola marble furniture"}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                    />
-                  )}
-                </div>
-              </Link>
-            </div>
-
-            {/* Content */}
-            <div className="flex flex-col justify-center">
-              <h2 className="font-serif text-display-sm text-foreground mb-1">
-                {t("collections.vanta.name")}
-              </h2>
-              <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-5">
-                {t("collections.vanta.subtitle")}
-              </p>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-6 max-w-lg">
-                {t("collections.vanta.editorialCopy")}
-              </p>
-
-              {/* Pricing Block - Now "On Request" */}
-              <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
-                <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
-                  {t("collections.pricing.title")}
-                </p>
-                <p className="text-sm text-muted-foreground mb-3">
-                  {t("collections.pricing.priceOnRequest")}
-                </p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {isNL 
-                    ? 'Steenkeuze, afmetingen en afwerking bepalen de prijs. Na intake ontvangt u een heldere offerte.'
-                    : 'Stone choice, dimensions and finish determine the price. After intake you receive a clear quote.'}
-                </p>
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <Button asChild variant="atelier">
-                  <Link to="/collections/vanta">
-                    {isNL ? "Ontdek VANTA" : "Discover VANTA"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link to="/bespoke">
-                    {t("collections.cta.requestProposal")}
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TERRA Collection */}
-      <section id="terra" className="scroll-mt-20 lg:scroll-mt-24 py-10 lg:py-14 bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center lg:grid-flow-dense">
-            {/* Image */}
-            <div className="image-reveal lg:col-start-2">
-              <Link to="/collections/terra">
-                <div className="aspect-[4/5] bg-muted overflow-hidden">
-                  {loading ? (
-                    <Skeleton className="w-full h-full" />
-                  ) : (
-                    <img
-                      src={getCollectionImage('terra') || terraFallback}
-                      alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                    />
-                  )}
-                </div>
-              </Link>
-            </div>
-
-            {/* Content */}
-            <div className="flex flex-col justify-center lg:col-start-1">
-              <h2 className="font-serif text-display-sm text-foreground mb-1">
-                {t("collections.terra.name")}
-              </h2>
-              <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-5">
-                {t("collections.terra.subtitle")}
-              </p>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-6 max-w-lg">
-                {t("collections.terra.editorialCopy")}
-              </p>
-
-              {/* Pricing Block - Now "On Request" */}
-              <div className="bg-ivory/50 p-5 mb-6 border border-border/30">
-                <p className="text-xs uppercase tracking-[0.2em] text-foreground mb-1">
-                  {t("collections.pricing.title")}
-                </p>
-                <p className="text-sm text-muted-foreground mb-3">
-                  {t("collections.pricing.priceOnRequest")}
-                </p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {isNL 
-                    ? 'Steenkeuze, afmetingen en afwerking bepalen de prijs. Na intake ontvangt u een heldere offerte.'
-                    : 'Stone choice, dimensions and finish determine the price. After intake you receive a clear quote.'}
-                </p>
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <Button asChild variant="atelier">
-                  <Link to="/collections/terra">
-                    {isNL ? "Ontdek TERRA" : "Discover TERRA"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link to="/bespoke">
-                    {t("collections.cta.requestProposal")}
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Other Stones - Service Block */}
-      <section id="andere-steensoorten" className="scroll-mt-20 lg:scroll-mt-24 py-8 lg:py-12 bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-            {/* Image */}
-            <div className="image-reveal">
-              <div className="aspect-[4/5] bg-muted overflow-hidden">
-                <img
-                  src={otherStonesImage}
-                  alt={isNL ? "Materiaalmonsters en ontwerptekening voor maatwerk steenmeubels" : "Material samples and design drawing for bespoke stone furniture"}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="flex flex-col justify-center">
-              <h2 className="font-serif text-display-sm text-foreground mb-1">
-                {t("collections.other.name")}
-              </h2>
-              <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground/80 mb-4">
-                {t("collections.other.subtitle")}
-              </p>
-              <p className="text-muted-foreground text-body-md leading-relaxed mb-5 max-w-lg">
-                {t("collections.other.description")}
-              </p>
-
-              {/* Info bullets - refined */}
-              <div className="mb-5 space-y-2.5">
-                <div className="flex items-center gap-3">
-                  <span className="text-muted-foreground/60">•</span>
-                  <span className="text-sm text-muted-foreground leading-relaxed">{t("collections.other.bullet1")}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-muted-foreground/60">•</span>
-                  <span className="text-sm text-muted-foreground leading-relaxed">{t("collections.other.bullet2")}</span>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div>
-                <Button asChild variant="atelier">
-                  <Link to="/materials">
-                    {t("collections.other.cta")}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Editorial Banner Tile - Maatwerk CTA */}
-      <section className="py-10 lg:py-14 bg-secondary/30 border-y border-border/30">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-xl mx-auto text-center">
-            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
-              {isNL ? 'Maatwerk' : 'Bespoke'}
-            </p>
-            <h2 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
-              {isNL ? 'Maatwerk in uw afmeting?' : 'Bespoke in your dimensions?'}
-            </h2>
-            <p className="text-muted-foreground text-sm mb-6">
+            <p className="text-body-lg text-muted-foreground leading-relaxed max-w-2xl mb-8">
               {isNL 
-                ? 'Ontvang voorstel binnen 48 uur.'
-                : 'Receive proposal within 48 hours.'}
+                ? "Twee signatuurcollecties, elk met een eigen karakter. Op maat gemaakt naar uw specificaties."
+                : "Two signature collections, each with its own character. Made to measure to your specifications."}
             </p>
             <Button asChild variant="atelier-filled" size="lg">
-              <Link to="/voorstel">
-                {isNL ? 'Ontvang voorstel' : 'Receive proposal'}
+              <Link to="/bespoke">
+                {isNL ? "Start uw project" : "Start your project"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -413,65 +122,163 @@ const Collections = () => {
         </div>
       </section>
 
-      {/* Process Section - Van collectie naar voorstel */}
-      <section className="py-12 lg:py-16 bg-ivory/50">
-        <div className="container mx-auto px-6 lg:px-12">
-          <header className="text-center mb-10">
-            <h2 className="font-serif text-display-sm text-foreground mb-3">
-              {t("collections.process.title")}
-            </h2>
-          </header>
-
-          {/* Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 mb-10">
-            <div className="text-center">
-              <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-3 font-serif text-base">
-                1
+      {/* VANTA Collection - Editorial Split */}
+      <SectionBand variant="default" size="lg">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+          {/* Image */}
+          <div className="image-reveal">
+            <Link to="/collections/vanta">
+              <div className="aspect-[4/5] bg-muted overflow-hidden">
+                {loading ? (
+                  <Skeleton className="w-full h-full" />
+                ) : (
+                  <img
+                    src={getCollectionImage('vanta') || vantaFallback}
+                    alt={isNL ? "VANTA collectie - Calacatta Viola marmer" : "VANTA collection - Calacatta Viola marble"}
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
-              <h3 className="font-serif text-base text-foreground mb-1">
-                {t("collections.process.step1.title")}
-              </h3>
-              <p className="text-muted-foreground text-sm">
-                {t("collections.process.step1.description")}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-3 font-serif text-base">
-                2
-              </div>
-              <h3 className="font-serif text-base text-foreground mb-1">
-                {t("collections.process.step2.title")}
-              </h3>
-              <p className="text-muted-foreground text-sm">
-                {t("collections.process.step2.description")}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-3 font-serif text-base">
-                3
-              </div>
-              <h3 className="font-serif text-base text-foreground mb-1">
-                {t("collections.process.step3.title")}
-              </h3>
-              <p className="text-muted-foreground text-sm">
-                {t("collections.process.step3.description")}
-              </p>
-            </div>
+            </Link>
           </div>
 
-          {/* CTA */}
-          <div className="text-center">
-            <Button asChild variant="atelier-filled" size="lg">
-              <Link to="/bespoke">
-                {t("collections.process.cta")}
-              </Link>
-            </Button>
-            <p className="text-muted-foreground text-xs mt-3">
-              {t("collections.process.microcopy")}
+          {/* Content */}
+          <div>
+            <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+              Calacatta Viola
             </p>
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
+              VANTA
+            </h2>
+            <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-lg">
+              {isNL 
+                ? "Rijke paarse adering in zeldzaam Italiaans marmer. Elk stuk is uniek in kleur en karakter."
+                : "Rich purple veining in rare Italian marble. Every piece is unique in color and character."}
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button asChild variant="atelier-filled" size="lg">
+                <Link to="/collections/vanta">
+                  {isNL ? "Ontdek VANTA" : "Discover VANTA"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" size="lg">
+                <Link to="/bespoke">
+                  {isNL ? "Vraag voorstel aan" : "Request proposal"}
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
-      </section>
+      </SectionBand>
+
+      {/* TERRA Collection - Editorial Split (Reversed) */}
+      <SectionBand variant="sand" size="lg">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+          {/* Content */}
+          <div className="order-2 lg:order-1">
+            <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+              Travertin
+            </p>
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
+              TERRA
+            </h2>
+            <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-lg">
+              {isNL 
+                ? "Warme beigetinten en tijdloze texturen. Natuurlijk travertin gevormd door eeuwen."
+                : "Warm beige tones and timeless textures. Natural travertine formed over centuries."}
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button asChild variant="atelier-filled" size="lg">
+                <Link to="/collections/terra">
+                  {isNL ? "Ontdek TERRA" : "Discover TERRA"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" size="lg">
+                <Link to="/bespoke">
+                  {isNL ? "Vraag voorstel aan" : "Request proposal"}
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* Image */}
+          <div className="order-1 lg:order-2 image-reveal">
+            <Link to="/collections/terra">
+              <div className="aspect-[4/5] bg-muted overflow-hidden">
+                {loading ? (
+                  <Skeleton className="w-full h-full" />
+                ) : (
+                  <img
+                    src={getCollectionImage('terra') || terraFallback}
+                    alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+            </Link>
+          </div>
+        </div>
+      </SectionBand>
+
+      {/* Other Stones - Editorial Split */}
+      <SectionBand variant="default" size="lg">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+          {/* Image */}
+          <div className="image-reveal">
+            <div className="aspect-[4/5] bg-muted overflow-hidden">
+              <img
+                src={otherStonesImage}
+                alt={isNL ? "Materiaalmonsters voor maatwerk" : "Material samples for bespoke"}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Content */}
+          <div>
+            <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+              {isNL ? 'Op aanvraag' : 'On request'}
+            </p>
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
+              {isNL ? "Andere steensoorten" : "Other stone types"}
+            </h2>
+            <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-lg">
+              {isNL 
+                ? "Naast onze collecties werken we met diverse geselecteerde steensoorten. Steenkeuze stemmen we af tijdens de intake."
+                : "In addition to our collections, we work with various selected stone types. Stone choice is aligned during the intake."}
+            </p>
+            <Button asChild variant="atelier" size="lg">
+              <Link to="/materials">
+                {isNL ? "Bekijk materialen" : "View materials"}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </SectionBand>
+
+      {/* Trust Band */}
+      <TrustBand items={trustItems} />
+
+      {/* CTA Band */}
+      <SectionBand variant="dark" size="md">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="font-serif text-display-sm text-background mb-4">
+            {isNL ? "Maatwerk in uw afmeting?" : "Bespoke in your dimensions?"}
+          </h2>
+          <p className="text-background/70 text-body-md mb-8">
+            {isNL ? "Ontvang voorstel binnen 48 uur." : "Receive proposal within 48 hours."}
+          </p>
+          <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
+            <Link to="/voorstel">
+              {isNL ? "Ontvang voorstel" : "Receive proposal"}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      </SectionBand>
     </Layout>
   );
 };

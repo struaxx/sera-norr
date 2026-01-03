@@ -15,33 +15,33 @@ interface PremiumTimelineProps {
 export function PremiumTimeline({ steps, className }: PremiumTimelineProps) {
   return (
     <div className={cn('w-full', className)}>
-      {/* Desktop: Horizontal timeline */}
+      {/* Desktop: Horizontal timeline - clean editorial */}
       <div className="hidden lg:block">
         <div className="relative">
-          {/* Connecting line */}
-          <div className="absolute top-8 left-0 right-0 h-px bg-border/60" />
+          {/* Connecting line - subtle */}
+          <div className="absolute top-[3.5rem] left-0 right-0 h-px bg-border/40" />
           
-          {/* Steps */}
-          <div className="grid grid-cols-3 gap-8 lg:gap-12">
+          {/* Steps - always 3 columns for consistency */}
+          <div className="grid grid-cols-3 gap-12 lg:gap-16">
             {steps.slice(0, 3).map((step, index) => (
-              <div key={index} className="relative pt-0">
-                {/* Number */}
-                <div className="relative z-10 mb-6">
-                  <span className="font-serif text-5xl lg:text-6xl font-light text-foreground/15 leading-none">
+              <div key={index} className="relative">
+                {/* Large number - editorial style */}
+                <div className="relative z-10 mb-8">
+                  <span className="font-serif text-7xl lg:text-8xl font-light text-foreground/10 leading-none block">
                     {step.number}
                   </span>
                 </div>
                 
                 {/* Content */}
-                <div className="space-y-2">
-                  <h4 className="font-serif text-lg text-foreground">
+                <div className="space-y-3">
+                  <h4 className="font-serif text-xl text-foreground">
                     {step.title}
                   </h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-body-sm text-muted-foreground leading-relaxed">
                     {step.description}
                   </p>
                   {step.detail && (
-                    <p className="text-xs text-muted-foreground/70 pt-2 border-t border-border/30 mt-3">
+                    <p className="text-eyebrow uppercase text-muted-foreground/60 pt-4">
                       {step.detail}
                     </p>
                   )}
@@ -49,62 +49,34 @@ export function PremiumTimeline({ steps, className }: PremiumTimelineProps) {
               </div>
             ))}
           </div>
-          
-          {/* Additional steps if more than 3 */}
-          {steps.length > 3 && (
-            <div className="grid grid-cols-3 gap-8 lg:gap-12 mt-12">
-              {steps.slice(3).map((step, index) => (
-                <div key={index + 3} className="relative pt-0">
-                  <div className="relative z-10 mb-6">
-                    <span className="font-serif text-5xl lg:text-6xl font-light text-foreground/15 leading-none">
-                      {step.number}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-serif text-lg text-foreground">
-                      {step.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {step.description}
-                    </p>
-                    {step.detail && (
-                      <p className="text-xs text-muted-foreground/70 pt-2 border-t border-border/30 mt-3">
-                        {step.detail}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Mobile: Vertical stacked timeline */}
-      <div className="lg:hidden space-y-8">
+      {/* Mobile: Vertical stacked timeline - clean */}
+      <div className="lg:hidden space-y-10">
         {steps.map((step, index) => (
-          <div key={index} className="flex gap-5">
+          <div key={index} className="flex gap-6">
             {/* Number column */}
             <div className="flex-shrink-0 relative">
-              <span className="font-serif text-4xl font-light text-foreground/20 leading-none">
+              <span className="font-serif text-5xl font-light text-foreground/15 leading-none block">
                 {step.number}
               </span>
               {/* Vertical line for mobile */}
               {index < steps.length - 1 && (
-                <div className="absolute top-12 left-4 bottom-0 w-px bg-border/40 -mb-8" />
+                <div className="absolute top-16 left-5 bottom-0 w-px bg-border/40 -mb-10" />
               )}
             </div>
             
             {/* Content */}
-            <div className="flex-1 pb-2">
-              <h4 className="font-serif text-base text-foreground mb-1.5">
+            <div className="flex-1 pt-2">
+              <h4 className="font-serif text-lg text-foreground mb-2">
                 {step.title}
               </h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-body-sm text-muted-foreground leading-relaxed">
                 {step.description}
               </p>
               {step.detail && (
-                <p className="text-xs text-muted-foreground/70 mt-3 pt-2 border-t border-border/30">
+                <p className="text-eyebrow uppercase text-muted-foreground/60 mt-4">
                   {step.detail}
                 </p>
               )}

@@ -9,15 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
-import { TrustBadges, USPBullets } from "@/components/trust";
-import { ArrowRight, FileText, MessageSquare, Upload, Check, Shield, Truck, Award, Palette } from "lucide-react";
+import { ArrowRight, Upload } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
-import BespokeHero from "@/components/bespoke/BespokeHero";
 import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
-import { PremiumFeatureCards, FeatureCard } from "@/components/ui/premium-feature-cards";
 import { SectionBand, SectionHeader } from "@/components/ui/section-band";
-import { usePageTracking, useCTATracking, useFAQTracking } from "@/hooks/use-tracking";
+import { TrustBand } from "@/components/ui/trust-band";
+import { usePageTracking, useCTATracking } from "@/hooks/use-tracking";
 import { trackFormStart, trackFormSubmit } from "@/lib/tracking";
+import bespokeHero from "@/assets/bespoke-hero.png";
 
 const Bespoke = () => {
   const { t, i18n } = useTranslation();
@@ -35,20 +34,12 @@ const Bespoke = () => {
     message: "",
   });
   
-  // Track page view and custom page (for intent scoring)
   usePageTracking();
   const { trackProposal } = useCTATracking();
-  const { trackFAQ } = useFAQTracking();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Track lead submission
-    trackLeadSubmit('bespoke', {
-      productType: formData.projectType,
-    });
-    
-    // Track form submit for intent scoring
+    trackLeadSubmit('bespoke', { productType: formData.projectType });
     trackFormSubmit('bespoke');
 
     toast({
@@ -76,147 +67,50 @@ const Bespoke = () => {
     { name: isNL ? 'Maatwerk' : 'Bespoke', url: '/bespoke' },
   ]);
 
-  // FAQ items for structured data and on-page content
   const faqItems = isNL ? [
-    { question: 'Hoe werkt het traject?', answer: 'Na uw aanvraag plannen we een korte intake (telefonisch of video). We bespreken steenkeuze, afmetingen en afwerking. U ontvangt een visualisatie en offerte binnen 48 uur.' },
-    { question: 'Hoe lang is de doorlooptijd?', answer: 'Gemiddeld 13-15 weken vanaf akkoord, afhankelijk van steenkeuze en complexiteit. Travertin is doorgaans sneller beschikbaar dan zeldzame marmersoorten.' },
-    { question: 'Welke materialen zijn mogelijk?', answer: 'Wij werken met travertin, Calacatta Viola marmer en geselecteerde natuurstenen. Steenkeuze stemmen we af op uw ruimte, gebruik en esthetische voorkeur.' },
-    { question: 'Hoe werkt levering en plaatsing?', answer: 'White-glove levering in Nederland en België. Wij plaatsen het meubel op locatie en verwijderen alle verpakking. Buitenland in overleg.' },
-    { question: 'Is er garantie?', answer: 'Ja, 5 jaar garantie op constructie en materiaal. Natuursteen is duurzaam en gaat bij goed onderhoud generaties mee.' },
-    { question: 'Hoe onderhoud ik natuursteen?', answer: 'Regelmatig reinigen met een vochtige doek. Wij leveren onderhoudsadvies op maat. Bij levering ontvangt u een verzorgingsset.' },
-    { question: 'Wat kost een maatwerk meubel?', answer: 'De prijs hangt af van steenkeuze, afmetingen, afwerking en levering. Na intake ontvangt u een heldere offerte zonder verplichtingen.' },
-    { question: 'Kan ik het ontwerp aanpassen?', answer: 'Absoluut. Elke tafel, console of bijzettafel wordt op maat gemaakt. U bepaalt vorm, maat, randafwerking en onderstel.' },
+    { question: 'Hoe werkt het traject?', answer: 'Na uw aanvraag plannen we een korte intake. We bespreken steenkeuze, afmetingen en afwerking. U ontvangt een visualisatie en offerte binnen 48 uur.' },
+    { question: 'Hoe lang is de doorlooptijd?', answer: 'Gemiddeld 12-16 weken vanaf akkoord, afhankelijk van steenkeuze en complexiteit.' },
+    { question: 'Welke materialen zijn mogelijk?', answer: 'Wij werken met travertin, Calacatta Viola marmer en geselecteerde natuurstenen.' },
+    { question: 'Hoe werkt levering en plaatsing?', answer: 'White-glove levering in Nederland en België. Wij plaatsen het meubel op locatie en verwijderen alle verpakking.' },
+    { question: 'Is er garantie?', answer: '5 jaar garantie op constructie en materiaal.' },
   ] : [
-    { question: 'How does the process work?', answer: 'After your inquiry, we schedule a brief intake (phone or video). We discuss stone choice, dimensions and finish. You receive a visualization and quote within 48 hours.' },
-    { question: 'What is the lead time?', answer: 'Average 13-15 weeks from approval, depending on stone choice and complexity. Travertine is typically available faster than rare marbles.' },
-    { question: 'What materials are available?', answer: 'We work with travertine, Calacatta Viola marble and selected natural stones. Stone selection is tailored to your space, use and aesthetic preference.' },
-    { question: 'How does delivery and installation work?', answer: 'White-glove delivery in the Netherlands and Belgium. We place the furniture on location and remove all packaging. International on request.' },
-    { question: 'Is there a warranty?', answer: 'Yes, 5-year warranty on construction and materials. Natural stone is durable and lasts generations with proper care.' },
-    { question: 'How do I care for natural stone?', answer: 'Clean regularly with a damp cloth. We provide tailored care advice. Upon delivery you receive a care kit.' },
-    { question: 'What does a bespoke piece cost?', answer: 'Price depends on stone choice, dimensions, finish and delivery. After intake you receive a clear quote with no obligations.' },
-    { question: 'Can I customize the design?', answer: 'Absolutely. Every table, console or side table is made to measure. You determine shape, size, edge finish and base.' },
+    { question: 'How does the process work?', answer: 'After your inquiry, we schedule a brief intake. We discuss stone choice, dimensions and finish. You receive a visualization and quote within 48 hours.' },
+    { question: 'What is the lead time?', answer: 'Average 12-16 weeks from approval, depending on stone choice and complexity.' },
+    { question: 'What materials are available?', answer: 'We work with travertine, Calacatta Viola marble and selected natural stones.' },
+    { question: 'How does delivery work?', answer: 'White-glove delivery in the Netherlands and Belgium. We place the furniture on location and remove all packaging.' },
+    { question: 'Is there a warranty?', answer: '5-year warranty on construction and materials.' },
   ];
 
   const faqSchema = generateFAQSchema(faqItems);
 
-  // Combined structured data
   const combinedSchema = {
     '@context': 'https://schema.org',
-    '@graph': [
-      breadcrumbSchema,
-      faqSchema,
-      {
-        '@type': 'Service',
-        '@id': 'https://sera-norr.com/bespoke/#service',
-        name: isNL ? 'Maatwerk natuursteen meubels' : 'Bespoke natural stone furniture',
-        description: isNL 
-          ? 'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Steenkeuze en afwerking stemmen we samen af tijdens de intake.'
-          : 'SERA NORR is an online atelier for bespoke natural stone furniture (travertine, marble and selected stones). Stone choice and finish are coordinated together during the intake.',
-        provider: {
-          '@id': 'https://sera-norr.com/#organization',
-        },
-        areaServed: {
-          '@type': 'Country',
-          name: 'Netherlands',
-        },
-        serviceType: 'Bespoke furniture design and manufacturing',
-      },
-    ],
+    '@graph': [breadcrumbSchema, faqSchema],
   };
 
-  // Use-case inspiration items (editorial style, no per-item CTAs)
-  const inspirationItems = [
-    {
-      title: isNL ? 'Naast de bank' : 'Beside the sofa',
-      line: isNL ? 'Compact statement, subtiel aanwezig.' : 'Compact statement, subtly present.',
-      spec: 'Ø45 × H55',
-      material: 'Travertin',
-    },
-    {
-      title: isNL ? 'Voor de zithoek' : 'For the sitting area',
-      line: isNL ? 'Rustige basis voor dagelijkse momenten.' : 'Calm foundation for daily moments.',
-      spec: 'L120 × B80',
-      material: 'Travertin',
-    },
-    {
-      title: isNL ? 'In de hal' : 'In the hallway',
-      line: isNL ? 'Architecturale lijn met verfijnde details.' : 'Architectural line with refined details.',
-      spec: 'L160 × B45',
-      material: isNL ? 'Marmer' : 'Marble',
-    },
-    {
-      title: isNL ? 'Als centerpiece' : 'As centerpiece',
-      line: isNL ? 'Gemaakt om samen te komen.' : 'Made for gathering together.',
-      spec: 'L200 × B100',
-      material: 'Travertin',
-    },
-  ];
-
-  // Process steps for premium horizontal timeline
+  // Process steps
   const processSteps: TimelineStep[] = isNL ? [
-    { 
-      number: '01', 
-      title: 'Consultatie', 
-      description: 'Vrijblijvend gesprek over uw wensen en ruimte.', 
-      detail: 'Binnen 24 uur reactie' 
-    },
-    { 
-      number: '02', 
-      title: 'Voorstel & Offerte', 
-      description: 'Schetsen, materiaalopties en heldere offerte.', 
-      detail: 'Binnen 48 uur' 
-    },
-    { 
-      number: '03', 
-      title: 'Materiaalselectie', 
-      description: 'Selecteer uw steenplaat aan de hand van foto\'s.', 
-      detail: 'Persoonlijk advies' 
-    },
+    { number: '01', title: 'Consultatie', description: 'Vrijblijvend gesprek over uw wensen.', detail: 'Binnen 24 uur reactie' },
+    { number: '02', title: 'Voorstel', description: 'Schetsen, materiaalopties en offerte.', detail: 'Binnen 48 uur' },
+    { number: '03', title: 'Realisatie', description: 'Productie en white-glove plaatsing.', detail: '12–16 weken' },
   ] : [
-    { 
-      number: '01', 
-      title: 'Consultation', 
-      description: 'No-obligation conversation about your wishes and space.', 
-      detail: 'Response within 24 hours' 
-    },
-    { 
-      number: '02', 
-      title: 'Proposal & Quote', 
-      description: 'Sketches, material options and clear quote.', 
-      detail: 'Within 48 hours' 
-    },
-    { 
-      number: '03', 
-      title: 'Material Selection', 
-      description: 'Select your stone slab based on photos.', 
-      detail: 'Personal advice' 
-    },
+    { number: '01', title: 'Consultation', description: 'No-obligation conversation about your wishes.', detail: 'Response within 24 hours' },
+    { number: '02', title: 'Proposal', description: 'Sketches, material options and quote.', detail: 'Within 48 hours' },
+    { number: '03', title: 'Realization', description: 'Production and white-glove installation.', detail: '12–16 weeks' },
   ];
 
-  // What you receive - feature cards
-  const deliverableCards: FeatureCard[] = [
-    { 
-      icon: Palette, 
-      title: isNL ? '3D-visualisaties' : '3D visualizations', 
-      description: isNL ? 'Uw ontwerp in realistische renders.' : 'Your design in realistic renders.' 
-    },
-    { 
-      icon: Award, 
-      title: isNL ? 'Materiaalmonsters' : 'Material samples', 
-      description: isNL ? 'Voel de steen voor u beslist.' : 'Feel the stone before you decide.' 
-    },
-    { 
-      icon: Truck, 
-      title: isNL ? 'White-glove levering' : 'White-glove delivery', 
-      description: isNL ? 'Professionele plaatsing inbegrepen.' : 'Professional installation included.' 
-    },
-    { 
-      icon: Shield, 
-      title: isNL ? '5 jaar garantie' : '5 year warranty', 
-      description: isNL ? 'Op constructie en materiaal.' : 'On construction and materials.' 
-    },
+  // Trust items
+  const trustItems = isNL ? [
+    { text: '5 jaar garantie' },
+    { text: 'White-glove levering' },
+    { text: 'Voorstel in 48 uur' },
+    { text: 'Geen verplichtingen' },
+  ] : [
+    { text: '5 year warranty' },
+    { text: 'White-glove delivery' },
+    { text: 'Proposal in 48 hours' },
+    { text: 'No obligations' },
   ];
-
 
   return (
     <Layout>
@@ -224,500 +118,286 @@ const Bespoke = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "SERA NORR, maatwerk natuursteenmeubels, online atelier, travertin tafel op maat, marmeren tafel, Calacatta Viola" 
-          : "SERA NORR, bespoke natural stone furniture, online atelier, custom travertine table, marble table, Calacatta Viola"}
+          ? "SERA NORR, maatwerk natuursteenmeubels, online atelier, travertin tafel op maat, marmeren tafel" 
+          : "SERA NORR, bespoke natural stone furniture, online atelier, custom travertine table, marble table"}
         structuredData={combinedSchema}
       />
 
-      {/* Hero with Scroll Animations */}
-      <BespokeHero />
-
-      {/* Entity Definition Block - SEO critical */}
-      <section className="py-10 lg:py-12 bg-background border-b border-border/30">
+      {/* Hero - Editorial Split */}
+      <section className="min-h-[85vh] flex items-center pt-20 lg:pt-24">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl">
-            <h2 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
-              {isNL ? 'Online atelier voor maatwerk natuursteenmeubels' : 'Online atelier for bespoke natural stone furniture'}
-            </h2>
-            <p className="text-muted-foreground text-body-md leading-relaxed">
-              {isNL 
-                ? 'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Steenkeuze en afwerking stemmen we samen af tijdens de intake.'
-                : 'SERA NORR is an online atelier for bespoke furniture in natural stone (travertine, marble and selected stone types). Stone choice and finish are coordinated together during the intake.'}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Badges - Tighter spacing with top divider */}
-      <section className="py-6 lg:py-8 bg-ivory/50 border-t border-border/40">
-        <div className="container mx-auto px-6 lg:px-12">
-          <TrustBadges variant="horizontal" />
-        </div>
-      </section>
-
-      {/* Maatwerk op aanvraag Section - Editorial Style */}
-      <section id="voorbeelden" className="py-16 lg:py-20 bg-background scroll-mt-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <header className="mb-10 max-w-3xl">
-            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
-              {isNL ? 'Maatwerk' : 'Bespoke'}
-            </p>
-            <h2 className="font-serif text-display-sm text-foreground mb-5">
-              {isNL ? 'Maatwerk op aanvraag' : 'Bespoke on request'}
-            </h2>
-            <p className="text-muted-foreground text-body-md leading-relaxed">
-              {isNL 
-                ? 'Elke SERA NORR piece wordt op maat gemaakt. Materiaal, maatvoering, randafwerking, onderstel en levering/plaatsing bepalen de uiteindelijke prijs. Na een korte intake ontvang je een voorstel op maat.'
-                : 'Every SERA NORR piece is made to measure. Material, dimensions, edge finish, base and delivery/installation determine the final price. After a brief intake you receive a tailored proposal.'}
-            </p>
-          </header>
-
-          {/* Price line - refined, small */}
-          <p className="text-sm text-muted-foreground mb-8 pb-6 border-b border-border/30">
-            {isNL 
-              ? 'Prijs op aanvraag — op basis van steenkeuze, maatvoering, afwerking en levering/plaatsing.'
-              : 'Price on request — based on stone choice, dimensions, finish and delivery/installation.'}
-          </p>
-
-          {/* Editorial Curated List - 2 columns desktop, 1 column mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 mb-10">
-            {inspirationItems.map((item, index) => (
-              <div 
-                key={index} 
-                className={`py-6 ${
-                  index < 2 ? 'md:border-b md:border-border/30' : ''
-                } ${
-                  index % 2 === 0 ? 'md:pr-10 md:border-r md:border-border/30' : 'md:pl-10'
-                } ${
-                  index < inspirationItems.length - 1 ? 'border-b border-border/30 md:border-b-0' : ''
-                } ${
-                  index >= 2 && index < inspirationItems.length - 1 ? 'md:border-b md:border-border/30' : ''
-                }`}
-              >
-                <h3 className="font-serif text-lg text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{item.line}</p>
-                <div className="space-y-0.5">
-                  <p className="text-xs text-muted-foreground/60">
-                    {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {item.spec}
-                  </p>
-                  <p className="text-xs text-muted-foreground/60">{item.material}</p>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Content */}
+            <div className="order-2 lg:order-1">
+              <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+                {isNL ? 'Online atelier' : 'Online atelier'}
+              </p>
+              <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
+                {isNL ? "Maatwerk in natuursteen" : "Bespoke in natural stone"}
+              </h1>
+              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-lg">
+                {isNL 
+                  ? "Elk meubel wordt op maat gemaakt. Materiaal, afmetingen en afwerking stemmen we samen af."
+                  : "Every piece is made to measure. Material, dimensions and finish are aligned together."}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Button asChild variant="atelier-filled" size="lg">
+                  <a href="#offerte" onClick={trackProposal}>
+                    {isNL ? "Ontvang voorstel" : "Receive proposal"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+                <Button asChild variant="ghost" size="lg">
+                  <Link to="/collections">
+                    {isNL ? "Bekijk collecties" : "View collections"}
+                  </Link>
+                </Button>
               </div>
-            ))}
-          </div>
-
-          {/* Single CTA row - only place to request offer */}
-          <div className="flex flex-wrap gap-3 mb-10 pt-2">
-            <Button asChild variant="atelier-filled" size="lg">
-              <Link to="/voorstel">
-                {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="atelier" size="lg">
-              <Link to="/lookbook">
-                {isNL ? 'Bekijk voorbeelden' : 'View examples'}
-              </Link>
-            </Button>
-          </div>
-
-          {/* Footer note */}
-          <div className="text-center pt-6 border-t border-border/30">
-            <p className="text-xs text-muted-foreground">
-              {isNL 
-                ? 'Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie.'
-                : 'Calacatta Viola & rare stones on request. Prices excl. VAT. Delivery & installation depend on location.'}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Mid-page CTA Band - "Vertaal dit naar uw ruimte" */}
-      <section className="py-12 lg:py-16 bg-foreground text-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-serif text-xl lg:text-2xl text-background mb-3">
-              {isNL ? 'Vertaal dit naar uw ruimte.' : 'Translate this to your space.'}
-            </h2>
-            <p className="text-background/80 text-sm mb-6">
-              {isNL 
-                ? 'Deel uw afmetingen en voorkeuren — wij maken een voorstel op maat.'
-                : 'Share your dimensions and preferences — we create a tailored proposal.'}
-            </p>
-            <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
-              <Link to="/voorstel">
-                {isNL ? 'Ontvang voorstel' : 'Receive proposal'}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Materialen & afwerking section */}
-      <section className="py-10 lg:py-12 bg-background border-t border-border/30">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl">
-            <h2 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
-              {isNL ? 'Materialen & afwerking' : 'Materials & finish'}
-            </h2>
-            <p className="text-muted-foreground text-body-md leading-relaxed mb-4">
-              {isNL 
-                ? 'Steenkeuze, afwerking en details stemmen we samen af tijdens de intake. U ontvangt advies op basis van uw ruimte en gebruik.'
-                : 'Stone choice, finish and details are coordinated together during the intake. You receive advice based on your space and use.'}
-            </p>
-            <Link 
-              to="/materials" 
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline"
-            >
-              {isNL ? 'Bekijk een selectie stenen →' : 'View a selection of stones →'}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Process Timeline - Premium Horizontal Layout */}
-      <SectionBand variant="sand" size="lg">
-        <SectionHeader
-          eyebrow={t('bespoke.journeySubtitle')}
-          title={isNL ? 'Van idee tot realisatie' : 'From idea to realization'}
-          description={isNL 
-            ? 'Ons traject is ontworpen voor maximale transparantie en een soepele ervaring.'
-            : 'Our process is designed for maximum transparency and a smooth experience.'}
-        />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
-          {/* Left: Premium Timeline */}
-          <div className="lg:col-span-2">
-            <PremiumTimeline steps={processSteps} />
-          </div>
-          
-          {/* Right: Feature Cards */}
-          <div className="lg:col-span-1">
-            <div className="bg-background p-6 lg:p-8 border border-border/40 rounded-sm">
-              <h3 className="font-serif text-lg text-foreground mb-6">
-                {isNL ? 'Wat u ontvangt' : 'What you receive'}
-              </h3>
-              <div className="space-y-4">
-                {deliverableCards.map((card, index) => {
-                  const Icon = card.icon;
-                  return (
-                    <div key={index} className="flex gap-4 items-start">
-                      <Icon className="w-4 h-4 text-foreground/70 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
-                      <div>
-                        <p className="text-sm font-medium text-foreground">{card.title}</p>
-                        <p className="text-xs text-muted-foreground">{card.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+            </div>
+            
+            {/* Image */}
+            <div className="order-1 lg:order-2 image-reveal">
+              <div className="aspect-[4/5] bg-muted overflow-hidden">
+                <img
+                  src={bespokeHero}
+                  alt={isNL ? "SERA NORR maatwerk natuursteen meubels" : "SERA NORR bespoke natural stone furniture"}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Lead time bar */}
-        <div className="mt-12 pt-6 border-t border-border/40 text-center">
-          <p className="text-sm text-muted-foreground">
-            <span className="text-foreground font-medium">{isNL ? 'Gemiddelde doorlooptijd:' : 'Average lead time:'}</span>{' '}
+      {/* Trust Band */}
+      <TrustBand items={trustItems} />
+
+      {/* Process Timeline */}
+      <SectionBand variant="default" size="lg">
+        <SectionHeader
+          eyebrow={isNL ? 'Werkwijze' : 'Process'}
+          title={isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
+          centered
+        />
+        <PremiumTimeline steps={processSteps} className="max-w-5xl mx-auto" />
+      </SectionBand>
+
+      {/* Editorial Statement */}
+      <SectionBand variant="sand" size="md">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="font-serif text-display-sm text-foreground leading-[1.2]">
             {isNL 
-              ? '12–16 weken (afhankelijk van steenkeuze en locatie)'
-              : '12–16 weeks (depending on stone choice and location)'}
+              ? "De steen bepaalt het karakter. Wij vertalen het naar uw ruimte."
+              : "The stone defines the character. We translate it to your space."}
           </p>
         </div>
       </SectionBand>
 
-      {/* CTA Options - Unified Two-Choice Module */}
-      <section className="py-12 lg:py-14 bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <header className="text-center mb-8">
-            <h2 className="font-serif text-display-sm text-foreground mb-3">
-              {isNL ? 'Hoe wilt u beginnen?' : 'How would you like to start?'}
-            </h2>
-            <p className="text-muted-foreground text-body-md max-w-xl mx-auto">
-              {isNL 
-                ? 'Kies de aanpak die bij u past. Alle opties zijn vrijblijvend.'
-                : 'Choose the approach that suits you. All options are no-obligation.'}
-            </p>
-          </header>
-
-          {/* Unified Container */}
-          <div className="max-w-3xl mx-auto border border-border/40 bg-secondary/20">
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              {/* Choice A: Vrijblijvend gesprek */}
-              <div className="p-6 lg:p-8 flex flex-col border-b md:border-b-0 md:border-r border-border/30">
-                <MessageSquare className="w-5 h-5 text-foreground mb-4" />
-                <h3 className="font-serif text-lg text-foreground mb-2">
-                  {isNL ? 'Vrijblijvend gesprek' : 'Free consultation'}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
-                  {isNL 
-                    ? 'Telefonisch of via videocall. Binnen 2 werkdagen reactie.' 
-                    : 'By phone or video call. Response within 2 business days.'}
-                </p>
-                <p className="text-xs text-muted-foreground/60 mb-5 flex-1">
-                  {isNL 
-                    ? 'Geschikt als u nog twijfelt over formaat of steensoort.' 
-                    : 'Suitable if you\'re still undecided about size or stone type.'}
-                </p>
-                <Button asChild variant="atelier" size="default">
-                  <a href="#offerte">
-                    {isNL ? 'Plan een gesprek' : 'Schedule a call'}
-                  </a>
-                </Button>
-              </div>
-
-              {/* Choice B: Offerte aanvragen (Primary) */}
-              <div className="relative p-6 lg:p-8 flex flex-col bg-secondary/30">
-                {/* Meest gekozen pill */}
-                <span className="absolute top-4 right-4 px-2.5 py-1 text-[10px] uppercase tracking-widest font-medium text-muted-foreground border border-border/50 bg-background/50">
-                  {isNL ? 'Meest gekozen' : 'Most popular'}
-                </span>
-                <FileText className="w-5 h-5 text-foreground mb-4" />
-                <h3 className="font-serif text-lg text-foreground mb-2">
-                  {isNL ? 'Offerte aanvragen' : 'Request quote'}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
-                  {isNL 
-                    ? 'Binnen 48 uur een voorstel met schetsen en offerte.' 
-                    : 'Proposal with sketches and quote within 48 hours.'}
-                </p>
-                <p className="text-xs text-muted-foreground/60 mb-5 flex-1">
-                  {isNL 
-                    ? 'Geschikt als u al een richting of maat in gedachten heeft.' 
-                    : 'Suitable if you already have a direction or size in mind.'}
-                </p>
-                <Button asChild variant="atelier-filled" size="default">
-                  <a href="#offerte">
-                    {isNL ? 'Vraag offerte aan' : 'Request quote'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Shared reassurance line */}
-            <div className="px-6 lg:px-8 py-4 border-t border-border/30 bg-background/40">
-              <p className="text-xs text-muted-foreground text-center">
-                {isNL 
-                  ? 'Online atelier — materiaalkeuze en details stemmen we samen af. Geen verplichtingen.' 
-                  : 'Online atelier — we align material choices and details together. No obligations.'}
+      {/* Materials CTA - Editorial Split */}
+      <SectionBand variant="default" size="lg">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="aspect-[4/5] bg-secondary/30 flex items-center justify-center">
+            <div className="text-center p-8">
+              <p className="font-serif text-2xl text-foreground mb-2">
+                {isNL ? "Travertin & marmer" : "Travertine & marble"}
+              </p>
+              <p className="text-body-sm text-muted-foreground">
+                {isNL ? "Geselecteerde steensoorten" : "Selected stone types"}
               </p>
             </div>
           </div>
+          
+          <div>
+            <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+              {isNL ? 'Materialen' : 'Materials'}
+            </p>
+            <h2 className="font-serif text-display-sm text-foreground mb-5">
+              {isNL ? "Steenkeuze op maat" : "Stone selection on request"}
+            </h2>
+            <p className="text-body-md text-muted-foreground leading-relaxed mb-8">
+              {isNL 
+                ? "Steenkeuze, afwerking en details stemmen we samen af tijdens de intake. U ontvangt advies op basis van uw ruimte en gebruik."
+                : "Stone choice, finish and details are aligned together during the intake. You receive advice based on your space and use."}
+            </p>
+            <Button asChild variant="atelier" size="lg">
+              <Link to="/materials">
+                {isNL ? "Bekijk materialen" : "View materials"}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
-      </section>
+      </SectionBand>
 
-      {/* FAQ Section - Aligned with structured data */}
-      <section className="py-12 lg:py-16 bg-background">
+      {/* FAQ Section */}
+      <SectionBand variant="cream" size="lg">
+        <SectionHeader
+          eyebrow={isNL ? 'FAQ' : 'FAQ'}
+          title={isNL ? "Veelgestelde vragen" : "Frequently asked questions"}
+          centered
+          size="sm"
+        />
+
+        <div className="max-w-2xl mx-auto">
+          <Accordion type="single" collapsible className="space-y-3">
+            {faqItems.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index + 1}`} className="border border-border/40 px-6 bg-background">
+                <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-5">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-body-sm pb-5">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </SectionBand>
+
+      {/* Inquiry Form */}
+      <section id="offerte" className="py-20 lg:py-28 bg-foreground text-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mx-auto">
-            <header className="text-center mb-8">
-              <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
-                {isNL ? 'Veelgestelde vragen' : 'Frequently asked questions'}
+          <div className="max-w-xl mx-auto">
+            <header className="text-center mb-10">
+              <p className="text-eyebrow uppercase text-background/60 mb-4">
+                {isNL ? 'Offerte aanvragen' : 'Request quote'}
               </p>
-              <h2 className="font-serif text-display-sm text-foreground">
-                {isNL ? 'Alles over ons maatwerkproces' : 'Everything about our bespoke process'}
+              <h2 className="font-serif text-display-sm mb-4">
+                {isNL ? 'Start uw project' : 'Start your project'}
               </h2>
+              <p className="text-background/70 text-body-md">
+                {isNL 
+                  ? 'Voorstel met schetsen binnen 48 uur.'
+                  : 'Proposal with sketches within 48 hours.'}
+              </p>
             </header>
 
-            <Accordion type="single" collapsible className="space-y-3">
-              {faqItems.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index + 1}`} className="border border-border/50 px-5">
-                  <AccordionTrigger className="text-left font-serif text-base hover:no-underline py-4">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground text-sm pb-4">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </div>
-      </section>
-
-      {/* Inquiry Form - Couture Styling */}
-      <section id="offerte" className="py-14 lg:py-20 bg-foreground text-background scroll-mt-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl mx-auto">
-            {/* Enhanced form container with inner shadow and better border */}
-            <div className="border border-background/15 bg-background/[0.03] p-8 lg:p-10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
-              <header className="text-center mb-8">
-                <p className="font-sans text-xs uppercase tracking-[0.3em] text-background/60 mb-3">
-                  {isNL ? 'Offerte aanvragen' : 'Request quote'}
-                </p>
-                <h2 className="font-serif text-display-sm mb-3">
-                  {isNL ? 'Vertel ons over uw project' : 'Tell us about your project'}
-                </h2>
-                <p className="text-background/70 text-body-md">
-                  {isNL 
-                    ? 'Binnen 48 uur ontvangt u een vrijblijvend voorstel met schetsen.'
-                    : 'Receive a no-obligation proposal with sketches within 48 hours.'}
-                </p>
-              </header>
-
-              {/* Required fields note */}
-              <p className="text-xs text-background/50 mb-6 text-center">
-                {isNL ? 'Velden met * zijn verplicht.' : 'Fields marked with * are required.'}
-              </p>
-
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="bespoke-name" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                      {t('bespoke.formName')} *
-                    </label>
-                    <Input
-                      id="bespoke-name"
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      required
-                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
-                      placeholder={t('bespoke.formNamePlaceholder')}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="bespoke-email" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                      {t('bespoke.formEmail')} *
-                    </label>
-                    <Input
-                      id="bespoke-email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
-                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
-                      placeholder={t('bespoke.formEmailPlaceholder')}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="bespoke-phone" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                      {isNL ? 'Telefoon' : 'Phone'}
-                    </label>
-                    <Input
-                      id="bespoke-phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
-                      placeholder={isNL ? '+31 6 12345678' : '+31 6 12345678'}
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                      {t('bespoke.formProjectType')} *
-                    </label>
-                    <Select 
-                      value={formData.projectType} 
-                      onValueChange={(value) => setFormData({ ...formData, projectType: value })}
-                      required
-                    >
-                      <SelectTrigger className="bg-background/10 border-background/25 text-background focus:border-background/50 focus:ring-1 focus:ring-background/20 [&>span]:text-background/40 data-[state=open]:border-background/50">
-                        <SelectValue placeholder={isNL ? 'Selecteer type stuk' : 'Select piece type'} />
-                      </SelectTrigger>
-                      <SelectContent className="bg-foreground border-background/20">
-                        <SelectItem value="side-table" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Bijzettafel' : 'Side table'}</SelectItem>
-                        <SelectItem value="coffee-table" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Salontafel' : 'Coffee table'}</SelectItem>
-                        <SelectItem value="dining-table" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Eettafel' : 'Dining table'}</SelectItem>
-                        <SelectItem value="console" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Console' : 'Console'}</SelectItem>
-                        <SelectItem value="desk" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Bureau' : 'Desk'}</SelectItem>
-                        <SelectItem value="other" className="text-background focus:bg-background/10 focus:text-background">{isNL ? 'Anders' : 'Other'}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="bespoke-dimensions" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                      {isNL ? 'Gewenste afmetingen' : 'Desired dimensions'}
-                    </label>
-                    <Input
-                      id="bespoke-dimensions"
-                      type="text"
-                      value={formData.dimensions}
-                      onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
-                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
-                      placeholder={isNL ? 'bijv. L120 × B80 × H45 cm' : 'e.g. L120 × W80 × H45 cm'}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="bespoke-budget" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                      {isNL ? 'Budget indicatie' : 'Budget indication'}
-                    </label>
-                    <Input
-                      id="bespoke-budget"
-                      type="text"
-                      value={formData.budget}
-                      onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                      className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all"
-                      placeholder={isNL ? 'bijv. €3.000 - €5.000' : 'e.g. €3,000 - €5,000'}
-                    />
-                  </div>
-                </div>
-
+            <form onSubmit={handleSubmit} onFocus={handleFormFocus} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label htmlFor="bespoke-message" className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    {t('bespoke.formVision')} *
+                  <label htmlFor="bespoke-name" className="block text-eyebrow uppercase text-background/60 mb-2">
+                    {t('bespoke.formName')} *
                   </label>
-                  <Textarea
-                    id="bespoke-message"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  <Input
+                    id="bespoke-name"
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    rows={4}
-                    className="bg-background/10 border-background/25 text-background placeholder:text-background/40 focus:border-background/50 focus:ring-1 focus:ring-background/20 transition-all resize-none"
-                    placeholder={isNL 
-                      ? 'Beschrijf uw wensen: materiaalvoorkeuren, stijl, ruimte waar het stuk komt...'
-                      : 'Describe your wishes: material preferences, style, space where the piece will go...'}
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                    placeholder={t('bespoke.formNamePlaceholder')}
                   />
                 </div>
-
-                {/* Optional file upload */}
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-background/60 mb-2">
-                    {isNL ? 'Inspiratie / foto ruimte (optioneel)' : 'Inspiration / room photo (optional)'}
+                  <label htmlFor="bespoke-email" className="block text-eyebrow uppercase text-background/60 mb-2">
+                    {t('bespoke.formEmail')} *
                   </label>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      setFileName(file ? file.name : null);
-                    }}
-                    accept="image/*,.pdf"
-                    className="hidden"
+                  <Input
+                    id="bespoke-email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                    placeholder={t('bespoke.formEmailPlaceholder')}
                   />
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-dashed border-background/25 bg-background/5 text-background/60 hover:border-background/40 hover:bg-background/10 transition-all text-sm"
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label htmlFor="bespoke-phone" className="block text-eyebrow uppercase text-background/60 mb-2">
+                    {isNL ? 'Telefoon' : 'Phone'}
+                  </label>
+                  <Input
+                    id="bespoke-phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                    placeholder="+31 6 12345678"
+                  />
+                </div>
+                <div>
+                  <label className="block text-eyebrow uppercase text-background/60 mb-2">
+                    {t('bespoke.formProjectType')} *
+                  </label>
+                  <Select 
+                    value={formData.projectType} 
+                    onValueChange={(value) => setFormData({ ...formData, projectType: value })}
                   >
-                    <Upload className="w-4 h-4" />
-                    {fileName || (isNL ? 'Upload bestand' : 'Upload file')}
-                  </button>
+                    <SelectTrigger className="bg-background/10 border-background/20 text-background focus:border-background/40 [&>span]:text-background/40">
+                      <SelectValue placeholder={isNL ? 'Selecteer type' : 'Select type'} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-foreground border-background/20">
+                      <SelectItem value="side-table" className="text-background focus:bg-background/10">{isNL ? 'Bijzettafel' : 'Side table'}</SelectItem>
+                      <SelectItem value="coffee-table" className="text-background focus:bg-background/10">{isNL ? 'Salontafel' : 'Coffee table'}</SelectItem>
+                      <SelectItem value="dining-table" className="text-background focus:bg-background/10">{isNL ? 'Eettafel' : 'Dining table'}</SelectItem>
+                      <SelectItem value="console" className="text-background focus:bg-background/10">{isNL ? 'Console' : 'Console'}</SelectItem>
+                      <SelectItem value="other" className="text-background focus:bg-background/10">{isNL ? 'Anders' : 'Other'}</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
+              </div>
 
-                <div className="pt-2">
-                  <Button type="submit" variant="outline" size="lg" className="w-full border-background/40 text-background hover:bg-background hover:text-foreground">
-                    {isNL ? 'Verstuur aanvraag' : 'Submit request'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
+              <div>
+                <label htmlFor="bespoke-dimensions" className="block text-eyebrow uppercase text-background/60 mb-2">
+                  {isNL ? 'Gewenste afmetingen' : 'Desired dimensions'}
+                </label>
+                <Input
+                  id="bespoke-dimensions"
+                  type="text"
+                  value={formData.dimensions}
+                  onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                  className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                  placeholder={isNL ? 'bijv. L120 × B80 × H45 cm' : 'e.g. L120 × W80 × H45 cm'}
+                />
+              </div>
 
-                {/* Trust microcopy */}
-                <p className="text-xs text-background/50 text-center pt-2">
-                  {isNL 
-                    ? 'Reactie binnen 48 uur. Geen verplichtingen. Geen spam.'
-                    : 'Response within 48 hours. No obligations. No spam.'}
-                </p>
-              </form>
-            </div>
+              <div>
+                <label htmlFor="bespoke-message" className="block text-eyebrow uppercase text-background/60 mb-2">
+                  {t('bespoke.formVision')} *
+                </label>
+                <Textarea
+                  id="bespoke-message"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required
+                  rows={4}
+                  className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 resize-none"
+                  placeholder={isNL 
+                    ? 'Beschrijf uw wensen: materiaalvoorkeuren, stijl, ruimte...'
+                    : 'Describe your wishes: material preferences, style, space...'}
+                />
+              </div>
+
+              <div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={(e) => setFileName(e.target.files?.[0]?.name || null)}
+                  accept="image/*,.pdf"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full flex items-center justify-center gap-2 py-3 border border-dashed border-background/20 text-background/60 hover:border-background/40 transition-all text-sm"
+                >
+                  <Upload className="w-4 h-4" />
+                  {fileName || (isNL ? 'Upload inspiratie (optioneel)' : 'Upload inspiration (optional)')}
+                </button>
+              </div>
+
+              <Button type="submit" variant="outline" size="lg" className="w-full border-background/30 text-background hover:bg-background hover:text-foreground">
+                {isNL ? 'Verstuur aanvraag' : 'Submit request'}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+
+              <p className="text-xs text-background/50 text-center">
+                {isNL ? 'Reactie binnen 48 uur. Geen verplichtingen.' : 'Response within 48 hours. No obligations.'}
+              </p>
+            </form>
           </div>
         </div>
       </section>
