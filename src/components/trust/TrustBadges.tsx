@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 interface TrustBadgesProps {
-  variant?: 'horizontal' | 'vertical' | 'grid';
+  variant?: 'horizontal' | 'vertical' | 'grid' | 'cards';
   showAll?: boolean;
   className?: string;
 }
 
 export function TrustBadges({ variant = 'horizontal', showAll = false, className }: TrustBadgesProps) {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
 
   const badges = [
@@ -47,6 +47,38 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
 
   const displayBadges = showAll ? badges : badges.slice(0, 4);
 
+  // Premium cards variant with hover effects
+  if (variant === 'cards') {
+    return (
+      <div className={cn(
+        'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6',
+        className
+      )}>
+        {displayBadges.map((badge, index) => (
+          <div 
+            key={index}
+            className={cn(
+              'group p-5 lg:p-6',
+              'bg-background border border-border/40 rounded-sm',
+              'shadow-[0_2px_12px_-4px_hsl(var(--foreground)/0.04)]',
+              'hover:shadow-[0_8px_24px_-8px_hsl(var(--foreground)/0.08)]',
+              'hover:-translate-y-0.5',
+              'transition-all duration-500 ease-out'
+            )}
+          >
+            <badge.icon className="w-5 h-5 text-foreground/70 group-hover:text-foreground transition-colors duration-300 mb-3" strokeWidth={1.5} />
+            <p className="font-serif text-sm text-foreground mb-1">
+              {badge.title}
+            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {badge.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   const containerClass = cn(
     variant === 'horizontal' && 'flex flex-wrap items-center justify-center gap-8 lg:gap-12',
     variant === 'vertical' && 'flex flex-col gap-4',
@@ -72,7 +104,7 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
             <badge.icon className={cn(
               'w-6 h-6 text-foreground/80',
               variant === 'horizontal' && 'w-7 h-7'
-            )} />
+            )} strokeWidth={1.5} />
           </div>
           <div>
             <p className={cn(

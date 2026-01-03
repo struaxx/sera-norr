@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { SectionBand, SectionHeader } from "@/components/ui/section-band";
+import { PremiumFeatureCards, FeatureCard } from "@/components/ui/premium-feature-cards";
+import { Gem, Eye, MapPin, Clock, Minimize2, Users } from "lucide-react";
 
 const About = () => {
   const { i18n } = useTranslation();
@@ -40,55 +43,67 @@ const About = () => {
     '@graph': [aboutPageSchema, breadcrumbSchema],
   };
 
-  const values = isNL ? [
+  const valueCards: FeatureCard[] = isNL ? [
     {
+      icon: Gem,
       title: "Materiaal Obsessie",
-      description: "We zoeken 's werelds zeldzaamste stenen, maanden besteedend aan het vinden van de perfecte plaat. Elk blok travertin, elke Calacatta Viola plaat wordt persoonlijk geselecteerd.",
+      description: "We zoeken 's werelds zeldzaamste stenen, maanden besteedend aan het vinden van de perfecte plaat.",
     },
     {
+      icon: Eye,
       title: "Sculpturale Intentie", 
-      description: "Elk stuk bestaat op het snijvlak van meubilair en kunstobject. We beschouwen negatieve ruimte even zorgvuldig als vorm, zodat elk stuk ademt binnen zijn omgeving.",
+      description: "Elk stuk bestaat op het snijvlak van meubilair en kunstobject. We beschouwen negatieve ruimte even zorgvuldig als vorm.",
     },
     {
+      icon: MapPin,
       title: "Ontworpen in Nederland",
-      description: "Elk ontwerp ontstaat in onze Nederlandse studio. Met oog voor detail en vakkennis werken we samen met ambachtslieden wereldwijd.",
+      description: "Elk ontwerp ontstaat in onze Nederlandse studio. Met oog voor detail werken we samen met ambachtslieden wereldwijd.",
     },
     {
+      icon: Clock,
       title: "Permanentie",
-      description: "We creëren objecten bedoeld om generaties mee te gaan. In een tijdperk van wegwerpbaarheid geloven we in dingen die blijven—stukken die worden geërfd, niet weggegooid.",
+      description: "We creëren objecten bedoeld om generaties mee te gaan. Stukken die worden geërfd, niet weggegooid.",
     },
     {
+      icon: Minimize2,
       title: "Ingetogenheid",
-      description: "Ware luxe ligt in wat wordt weggelaten. We ontwerpen met bewuste terughoudendheid, het onnodige eliminerend om het essentiële te onthullen.",
+      description: "Ware luxe ligt in wat wordt weggelaten. We ontwerpen met bewuste terughoudendheid.",
     },
     {
+      icon: Users,
       title: "Samenwerking",
-      description: "De meest betekenisvolle stukken ontstaan uit dialoog—tussen materiaal en maker, tussen atelier en klant. Uw visie is het startpunt voor iets buitengewoons.",
+      description: "De meest betekenisvolle stukken ontstaan uit dialoog—tussen materiaal en maker, tussen atelier en klant.",
     },
   ] : [
     {
+      icon: Gem,
       title: "Material Obsession",
-      description: "We source only exceptional materials—stones quarried in limited quantities, chosen for their unique character. Every piece of Calacatta Viola, every block of travertine, is personally selected.",
+      description: "We source only exceptional materials—stones quarried in limited quantities, chosen for their unique character.",
     },
     {
+      icon: Eye,
       title: "Sculptural Intent",
-      description: "Our furniture is designed to command space, to create moments of pause. We consider negative space as carefully as form, allowing each piece to breathe within its environment.",
+      description: "Our furniture is designed to command space, to create moments of pause. We consider negative space as carefully as form.",
     },
     {
+      icon: MapPin,
       title: "Designed in the Netherlands",
-      description: "Every design originates from our Dutch studio. With attention to detail and expertise, we collaborate with artisans worldwide.",
+      description: "Every design originates from our Dutch studio. With attention to detail, we collaborate with artisans worldwide.",
     },
     {
+      icon: Clock,
       title: "Permanence",
-      description: "We create objects meant to last generations. In an age of disposability, we believe in the quiet revolution of making things that endure—pieces that will be inherited, not discarded.",
+      description: "We create objects meant to last generations. Pieces that will be inherited, not discarded.",
     },
     {
+      icon: Minimize2,
       title: "Restraint",
-      description: "True luxury lies in what is left out. We design with deliberate restraint, eliminating the unnecessary to reveal the essential.",
+      description: "True luxury lies in what is left out. We design with deliberate restraint, eliminating the unnecessary.",
     },
     {
+      icon: Users,
       title: "Collaboration",
-      description: "The most meaningful pieces emerge from dialogue—between material and maker, between atelier and client. We welcome your vision as the starting point.",
+      description: "The most meaningful pieces emerge from dialogue—between material and maker, between atelier and client.",
     },
   ];
 
@@ -151,32 +166,15 @@ const About = () => {
         </div>
       </section>
 
-      {/* Values */}
-      <section className="section-padding bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <header className="mb-16">
-            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-              {isNL ? 'Onze Waarden' : 'Our Values'}
-            </p>
-            <h2 className="font-serif text-display-sm text-foreground">
-              {isNL ? 'Principes van Praktijk' : 'Principles of Practice'}
-            </h2>
-          </header>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
-            {values.map((value, index) => (
-              <article key={index}>
-                <h3 className="font-serif text-2xl text-foreground mb-4">
-                  {value.title}
-                </h3>
-                <p className="text-muted-foreground text-body-sm leading-relaxed">
-                  {value.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Values - Premium Feature Cards */}
+      <SectionBand variant="default" size="lg">
+        <SectionHeader
+          eyebrow={isNL ? 'Onze Waarden' : 'Our Values'}
+          title={isNL ? 'Principes van Praktijk' : 'Principles of Practice'}
+        />
+        
+        <PremiumFeatureCards cards={valueCards} columns={3} />
+      </SectionBand>
 
       {/* Studio */}
       <section className="section-padding bg-foreground text-background">

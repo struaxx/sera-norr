@@ -9,10 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
-import { TrustBadges, BespokeTimeline, USPBullets } from "@/components/trust";
-import { ArrowRight, FileText, MessageSquare, Upload } from "lucide-react";
+import { TrustBadges, USPBullets } from "@/components/trust";
+import { ArrowRight, FileText, MessageSquare, Upload, Check, Shield, Truck, Award, Palette } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
 import BespokeHero from "@/components/bespoke/BespokeHero";
+import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
+import { PremiumFeatureCards, FeatureCard } from "@/components/ui/premium-feature-cards";
+import { SectionBand, SectionHeader } from "@/components/ui/section-band";
 
 const Bespoke = () => {
   const { t, i18n } = useTranslation();
@@ -132,6 +135,71 @@ const Bespoke = () => {
       line: isNL ? 'Gemaakt om samen te komen.' : 'Made for gathering together.',
       spec: 'L200 × B100',
       material: 'Travertin',
+    },
+  ];
+
+  // Process steps for premium horizontal timeline
+  const processSteps: TimelineStep[] = isNL ? [
+    { 
+      number: '01', 
+      title: 'Consultatie', 
+      description: 'Vrijblijvend gesprek over uw wensen en ruimte.', 
+      detail: 'Binnen 24 uur reactie' 
+    },
+    { 
+      number: '02', 
+      title: 'Voorstel & Offerte', 
+      description: 'Schetsen, materiaalopties en heldere offerte.', 
+      detail: 'Binnen 48 uur' 
+    },
+    { 
+      number: '03', 
+      title: 'Materiaalselectie', 
+      description: 'Selecteer uw steenplaat aan de hand van foto\'s.', 
+      detail: 'Persoonlijk advies' 
+    },
+  ] : [
+    { 
+      number: '01', 
+      title: 'Consultation', 
+      description: 'No-obligation conversation about your wishes and space.', 
+      detail: 'Response within 24 hours' 
+    },
+    { 
+      number: '02', 
+      title: 'Proposal & Quote', 
+      description: 'Sketches, material options and clear quote.', 
+      detail: 'Within 48 hours' 
+    },
+    { 
+      number: '03', 
+      title: 'Material Selection', 
+      description: 'Select your stone slab based on photos.', 
+      detail: 'Personal advice' 
+    },
+  ];
+
+  // What you receive - feature cards
+  const deliverableCards: FeatureCard[] = [
+    { 
+      icon: Palette, 
+      title: isNL ? '3D-visualisaties' : '3D visualizations', 
+      description: isNL ? 'Uw ontwerp in realistische renders.' : 'Your design in realistic renders.' 
+    },
+    { 
+      icon: Award, 
+      title: isNL ? 'Materiaalmonsters' : 'Material samples', 
+      description: isNL ? 'Voel de steen voor u beslist.' : 'Feel the stone before you decide.' 
+    },
+    { 
+      icon: Truck, 
+      title: isNL ? 'White-glove levering' : 'White-glove delivery', 
+      description: isNL ? 'Professionele plaatsing inbegrepen.' : 'Professional installation included.' 
+    },
+    { 
+      icon: Shield, 
+      title: isNL ? '5 jaar garantie' : '5 year warranty', 
+      description: isNL ? 'Op constructie en materiaal.' : 'On construction and materials.' 
     },
   ];
 
@@ -294,114 +362,56 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* Process Timeline - True 2-column layout */}
-      <section className="py-12 lg:py-16 bg-secondary/30">
-        <div className="container mx-auto px-6 lg:px-12">
-          <header className="mb-8">
-            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
-              {t('bespoke.journeySubtitle')}
-            </p>
-            <h2 className="font-serif text-display-sm text-foreground">
-              {isNL ? 'Van idee tot meubel in 5 stappen' : 'From idea to furniture in 5 steps'}
-            </h2>
-          </header>
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
-            {/* Left: Numbered Timeline (3 cols) */}
-            <div className="lg:col-span-3">
-              <div className="space-y-0">
-                {/* Step 1 */}
-                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
-                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">1</span>
-                  <div>
-                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Consultatie' : 'Consultation'}</h4>
-                    <p className="text-sm text-muted-foreground">{isNL ? 'Vrijblijvend gesprek over uw wensen en ruimte.' : 'No-obligation conversation about your wishes and space.'}</p>
-                  </div>
-                </div>
-                {/* Step 2 */}
-                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
-                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">2</span>
-                  <div>
-                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Voorstel & Offerte' : 'Proposal & Quote'}</h4>
-                    <p className="text-sm text-muted-foreground">{isNL ? 'Schetsen, materiaalopties en offerte.' : 'Sketches, material options and quote.'}</p>
-                  </div>
-                </div>
-                {/* Step 3 */}
-                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
-                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">3</span>
-                  <div>
-                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Materiaalselectie' : 'Material Selection'}</h4>
-                    <p className="text-sm text-muted-foreground">{isNL ? 'Selecteer uw steenplaat aan de hand van foto\'s.' : 'Select your stone slab based on photos.'}</p>
-                  </div>
-                </div>
-                {/* Step 4 */}
-                <div className="flex gap-4 pb-5 border-l-2 border-border/50 pl-6 relative">
-                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">4</span>
-                  <div>
-                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Productie' : 'Production'}</h4>
-                    <p className="text-sm text-muted-foreground">{isNL ? 'Vakkundige productie door onze ambachtslieden.' : 'Expert production by our artisans.'}</p>
-                  </div>
-                </div>
-                {/* Step 5 */}
-                <div className="flex gap-4 pl-6 relative">
-                  <span className="absolute -left-3 top-0 w-6 h-6 flex items-center justify-center bg-foreground text-background text-xs font-medium">5</span>
-                  <div>
-                    <h4 className="font-serif text-base text-foreground mb-0.5">{isNL ? 'Levering & Plaatsing' : 'Delivery & Installation'}</h4>
-                    <p className="text-sm text-muted-foreground">{isNL ? 'White-glove levering en professionele plaatsing.' : 'White-glove delivery and professional installation.'}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right: Compact "Wat u krijgt" card (2 cols) */}
-            <div className="lg:col-span-2">
-              <div className="bg-background p-5 lg:p-6 border border-border/50 h-full">
-                <h3 className="font-serif text-base text-foreground mb-4">
-                  {isNL ? 'Wat u krijgt' : 'What you receive'}
-                </h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex gap-2">
-                    <span className="text-foreground">✓</span>
-                    {isNL ? '3D-visualisaties' : '3D visualizations'}
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-foreground">✓</span>
-                    {isNL ? 'Materiaalmonsters' : 'Material samples'}
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-foreground">✓</span>
-                    {isNL ? 'Foto-updates productie' : 'Production photo updates'}
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-foreground">✓</span>
-                    {isNL ? 'White-glove levering' : 'White-glove delivery'}
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-foreground">✓</span>
-                    {isNL ? '5 jaar garantie' : '5 year warranty'}
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-foreground">✓</span>
-                    {isNL ? 'Onderhoudsinstructies' : 'Care instructions'}
-                  </li>
-                </ul>
-              </div>
-            </div>
+      {/* Process Timeline - Premium Horizontal Layout */}
+      <SectionBand variant="sand" size="lg">
+        <SectionHeader
+          eyebrow={t('bespoke.journeySubtitle')}
+          title={isNL ? 'Van idee tot realisatie' : 'From idea to realization'}
+          description={isNL 
+            ? 'Ons traject is ontworpen voor maximale transparantie en een soepele ervaring.'
+            : 'Our process is designed for maximum transparency and a smooth experience.'}
+        />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+          {/* Left: Premium Timeline */}
+          <div className="lg:col-span-2">
+            <PremiumTimeline steps={processSteps} />
           </div>
-
-          {/* Total bar */}
-          <div className="mt-8 pt-6 border-t border-border/50">
-            <p className="text-center text-sm text-foreground">
-              <span className="font-medium">{isNL ? 'Gemiddelde doorlooptijd:' : 'Average lead time:'}</span>{' '}
-              <span className="text-muted-foreground">
-                {isNL 
-                  ? '12–16 weken (afhankelijk van steenkeuze en locatie)'
-                  : '12–16 weeks (depending on stone choice and location)'}
-              </span>
-            </p>
+          
+          {/* Right: Feature Cards */}
+          <div className="lg:col-span-1">
+            <div className="bg-background p-6 lg:p-8 border border-border/40 rounded-sm">
+              <h3 className="font-serif text-lg text-foreground mb-6">
+                {isNL ? 'Wat u ontvangt' : 'What you receive'}
+              </h3>
+              <div className="space-y-4">
+                {deliverableCards.map((card, index) => {
+                  const Icon = card.icon;
+                  return (
+                    <div key={index} className="flex gap-4 items-start">
+                      <Icon className="w-4 h-4 text-foreground/70 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{card.title}</p>
+                        <p className="text-xs text-muted-foreground">{card.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+
+        {/* Lead time bar */}
+        <div className="mt-12 pt-6 border-t border-border/40 text-center">
+          <p className="text-sm text-muted-foreground">
+            <span className="text-foreground font-medium">{isNL ? 'Gemiddelde doorlooptijd:' : 'Average lead time:'}</span>{' '}
+            {isNL 
+              ? '12–16 weken (afhankelijk van steenkeuze en locatie)'
+              : '12–16 weeks (depending on stone choice and location)'}
+          </p>
+        </div>
+      </SectionBand>
 
       {/* CTA Options - Unified Two-Choice Module */}
       <section className="py-12 lg:py-14 bg-background">

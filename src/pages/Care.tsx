@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
 import { ArrowRight, Calendar, Droplets, Shield, Sparkles } from "lucide-react";
+import { SectionBand } from "@/components/ui/section-band";
+import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
 
 const Care = () => {
   const { i18n } = useTranslation();
