@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
 import { PremiumFeatureCards, FeatureCard } from "@/components/ui/premium-feature-cards";
 import { SectionBand, SectionHeader } from "@/components/ui/section-band";
+import { usePageTracking, useCTATracking } from "@/hooks/use-tracking";
 import heroImage from "@/assets/hero-homepage.png";
 
 const Index = () => {
@@ -17,6 +18,10 @@ const Index = () => {
   const isNL = i18n.language === 'nl';
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [loading, setLoading] = useState(true);
+  const { trackProposal } = useCTATracking();
+  
+  // Track page view
+  usePageTracking();
 
   useEffect(() => {
     const loadCollections = async () => {
@@ -193,7 +198,7 @@ const Index = () => {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-background/60 text-background hover:bg-background/10">
-              <Link to="/bespoke">
+              <Link to="/bespoke" onClick={trackProposal}>
                 {isNL ? "Vraag voorstel aan" : "Request proposal"}
               </Link>
             </Button>

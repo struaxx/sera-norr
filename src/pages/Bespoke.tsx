@@ -16,6 +16,8 @@ import BespokeHero from "@/components/bespoke/BespokeHero";
 import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
 import { PremiumFeatureCards, FeatureCard } from "@/components/ui/premium-feature-cards";
 import { SectionBand, SectionHeader } from "@/components/ui/section-band";
+import { usePageTracking, useCTATracking, useFAQTracking } from "@/hooks/use-tracking";
+import { trackFormStart, trackFormSubmit } from "@/lib/tracking";
 
 const Bespoke = () => {
   const { t, i18n } = useTranslation();
@@ -32,6 +34,11 @@ const Bespoke = () => {
     budget: "",
     message: "",
   });
+  
+  // Track page view and custom page (for intent scoring)
+  usePageTracking();
+  const { trackProposal } = useCTATracking();
+  const { trackFAQ } = useFAQTracking();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +47,9 @@ const Bespoke = () => {
     trackLeadSubmit('bespoke', {
       productType: formData.projectType,
     });
+    
+    // Track form submit for intent scoring
+    trackFormSubmit('bespoke');
 
     toast({
       title: t('bespoke.formSuccess'),
@@ -47,6 +57,10 @@ const Bespoke = () => {
     });
     setFormData({ name: "", email: "", phone: "", projectType: "", dimensions: "", budget: "", message: "" });
     setFileName(null);
+  };
+  
+  const handleFormFocus = () => {
+    trackFormStart('bespoke');
   };
 
   const seoTitle = isNL 

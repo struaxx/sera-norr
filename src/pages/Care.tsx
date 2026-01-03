@@ -7,10 +7,18 @@ import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/componen
 import { ArrowRight, Calendar, Droplets, Shield, Sparkles } from "lucide-react";
 import { SectionBand } from "@/components/ui/section-band";
 import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
+import { usePageTracking, useTopicTracking, useFAQTracking, useCTATracking } from "@/hooks/use-tracking";
 
 const Care = () => {
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
+  
+  // Track page view and topic view
+  usePageTracking();
+  useTopicTracking('care');
+  
+  const { trackFAQ } = useFAQTracking();
+  const { trackProposal, trackConsult } = useCTATracking();
 
   const faqItems = isNL ? [
     { question: 'Kan ik hete pannen op natuursteen zetten?', answer: 'Natuursteen is hittebestendig, maar wij raden altijd een onderzetter aan om thermische schokken te voorkomen en de afwerking te beschermen.' },
@@ -183,7 +191,10 @@ const Care = () => {
             <Accordion type="single" collapsible className="w-full">
               {faqItems.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index}`} className="border-border/30">
-                  <AccordionTrigger className="text-left text-sm font-medium text-foreground hover:no-underline">
+                  <AccordionTrigger 
+                    className="text-left text-sm font-medium text-foreground hover:no-underline"
+                    onClick={() => trackFAQ('care')}
+                  >
                     {item.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground">
@@ -206,13 +217,13 @@ const Care = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild variant="atelier-filled" size="lg">
-                <Link to="/voorstel">
+                <Link to="/voorstel" onClick={trackProposal}>
                   {isNL ? "Ontvang voorstel binnen 48 uur" : "Receive proposal within 48 hours"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild variant="atelier" size="lg">
-                <Link to="/contact">
+                <Link to="/contact" onClick={trackConsult}>
                   <Calendar className="mr-2 h-4 w-4" />
                   {isNL ? "Plan vrijblijvend gesprek" : "Schedule free consultation"}
                 </Link>
