@@ -8,9 +8,47 @@ const corsHeaders = {
 const SHOPIFY_API_VERSION = "2025-07";
 const DEFAULT_SHOP_DOMAIN = "ygc1q1-4j.myshopify.com";
 
+// Rate limiting: 60 requests per minute per IP
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 60;
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+
+// Max query depth to prevent overly complex queries
+const MAX_QUERY_DEPTH = 6;
+
 type StorefrontProxyRequest = {
   query: string;
   variables?: Record<string, unknown>;
+};
+
+const checkRateLimit = (ip: string): boolean => {
+  const now = Date.now();
+  const record = requestCounts.get(ip);
+
+  if (!record || now > record.resetAt) {
+    requestCounts.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return false;
+  }
+
+  record.count++;
+  return true;
+};
+
+const containsIntrospection = (query: string): boolean => {
+  const lowerQuery = query.toLowerCase();
+  return lowerQuery.includes("__schema") || lowerQuery.includes("__type");
+};
+
+const isMutation = (query: string): boolean => {
+  return query.trim().toLowerCase().startsWith("mutation");
+};
+
+const getQueryDepth = (query: string): number => {
+  return (query.match(/{/g) || []).length;
 };
 
 serve(async (req: Request) => {
@@ -21,6 +59,16 @@ serve(async (req: Request) => {
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
+  // Rate limiting check
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (!checkRateLimit(ip)) {
+    console.warn("Rate limit exceeded for IP:", ip.substring(0, 8) + "***");
+    return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
+      status: 429,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   }
@@ -49,9 +97,37 @@ serve(async (req: Request) => {
     });
   }
 
-  // Basic abuse guard
+  // Block introspection queries
+  if (containsIntrospection(body.query)) {
+    console.warn("Introspection query blocked for IP:", ip.substring(0, 8) + "***");
+    return new Response(JSON.stringify({ error: "Introspection queries are not allowed" }), {
+      status: 403,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
+  // Block mutations - only allow read operations
+  if (isMutation(body.query)) {
+    console.warn("Mutation blocked for IP:", ip.substring(0, 8) + "***");
+    return new Response(JSON.stringify({ error: "Only query operations are allowed" }), {
+      status: 403,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
+  // Query size limit
   if (body.query.length > 50_000) {
     return new Response(JSON.stringify({ error: "Query too large" }), {
+      status: 413,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
+  // Query complexity limit
+  const depth = getQueryDepth(body.query);
+  if (depth > MAX_QUERY_DEPTH) {
+    console.warn("Query too complex (depth:", depth, ") for IP:", ip.substring(0, 8) + "***");
+    return new Response(JSON.stringify({ error: "Query too complex" }), {
       status: 413,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
