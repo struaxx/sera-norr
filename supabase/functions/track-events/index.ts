@@ -58,77 +58,106 @@ Deno.serve(async (req) => {
       );
     }
     
-    // Sanitize properties - remove any PII or sensitive data
-    const sanitizedProperties = {
-      session_id: String(payload.properties.session_id).slice(0, 50),
+    // Sanitize base properties
+    const sanitizedProperties: Record<string, unknown> = {
       timestamp: payload.properties.timestamp,
-      page_url: String(payload.properties.page_url || '').slice(0, 255),
-      referrer: String(payload.properties.referrer || '').slice(0, 100),
-      device_type: String(payload.properties.device_type || '').slice(0, 20),
     };
     
     // Add event-specific properties (sanitized)
-    const eventProps: Record<string, unknown> = {};
-    
     switch (payload.event_name) {
       case 'page_view':
-        eventProps.page_type = String(payload.properties.page_type || '').slice(0, 50);
+        sanitizedProperties.page_type = String(payload.properties.page_type || '').slice(0, 50);
         break;
       case 'collection_view':
-        eventProps.collection_name = String(payload.properties.collection_name || '').slice(0, 50);
+        sanitizedProperties.collection_name = String(payload.properties.collection_name || '').slice(0, 50);
         break;
       case 'product_view':
-        eventProps.product_id = String(payload.properties.product_id || '').slice(0, 50);
-        eventProps.material = String(payload.properties.material || '').slice(0, 50);
-        eventProps.shape = String(payload.properties.shape || '').slice(0, 50);
-        eventProps.size_range = String(payload.properties.size_range || '').slice(0, 50);
+        sanitizedProperties.product_id = String(payload.properties.product_id || '').slice(0, 50);
+        sanitizedProperties.material = String(payload.properties.material || '').slice(0, 50);
+        sanitizedProperties.shape = String(payload.properties.shape || '').slice(0, 50);
+        sanitizedProperties.size_range = String(payload.properties.size_range || '').slice(0, 50);
         break;
       case 'material_interest':
-        eventProps.material = String(payload.properties.material || '').slice(0, 50);
+        sanitizedProperties.material = String(payload.properties.material || '').slice(0, 50);
         break;
       case 'size_range_interest':
-        eventProps.range = String(payload.properties.range || '').slice(0, 50);
+        sanitizedProperties.range = String(payload.properties.range || '').slice(0, 50);
         break;
       case 'cta_click':
         const ctaType = String(payload.properties.cta_type || '');
-        eventProps.cta_type = ['proposal', 'consult', 'contact'].includes(ctaType) ? ctaType : 'unknown';
+        sanitizedProperties.cta_type = ['proposal', 'consult', 'contact'].includes(ctaType) ? ctaType : 'unknown';
         break;
       case 'lookbook_open':
-        eventProps.source = String(payload.properties.source || '').slice(0, 50);
+        sanitizedProperties.source = String(payload.properties.source || '').slice(0, 50);
         break;
       case 'lookbook_submit':
-        eventProps.email_opt_in = Boolean(payload.properties.email_opt_in);
-        eventProps.marketing_opt_in = Boolean(payload.properties.marketing_opt_in);
+        sanitizedProperties.email_opt_in = Boolean(payload.properties.email_opt_in);
+        sanitizedProperties.marketing_opt_in = Boolean(payload.properties.marketing_opt_in);
         break;
       case 'form_start':
       case 'form_submit':
-        eventProps.form_type = String(payload.properties.form_type || '').slice(0, 50);
+        sanitizedProperties.form_type = String(payload.properties.form_type || '').slice(0, 50);
         break;
       case 'topic_view':
         const topic = String(payload.properties.topic || '');
-        eventProps.topic = ['delivery', 'warranty', 'care'].includes(topic) ? topic : 'unknown';
+        sanitizedProperties.topic = ['delivery', 'warranty', 'care'].includes(topic) ? topic : 'unknown';
         break;
       case 'faq_open':
-        eventProps.topic = String(payload.properties.topic || '').slice(0, 100);
+        sanitizedProperties.topic = String(payload.properties.topic || '').slice(0, 100);
         break;
     }
     
     // UTM parameters (sanitized)
     ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((key) => {
       if (payload.properties[key]) {
-        eventProps[key] = String(payload.properties[key]).slice(0, 100);
+        sanitizedProperties[key] = String(payload.properties[key]).slice(0, 100);
       }
     });
     
-    // Log event for analytics (in production, this would go to a database or analytics service)
-    console.log('[track-events] Event received:', {
-      event_name: payload.event_name,
-      ...sanitizedProperties,
-      ...eventProps,
-    });
+    // Store event in database
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     
-    // In a production environment, you would store this in a database table
-    // For now, we just log it and return success
+    if (supabaseUrl && supabaseKey) {
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      
+      const { error: dbError } = await supabase
+        .from('analytics_events')
+        .insert({
+          event_name: payload.event_name,
+          session_id: String(payload.properties.session_id).slice(0, 50),
+          page_url: String(payload.properties.page_url || '').slice(0, 255),
+          referrer: String(payload.properties.referrer || '').slice(0, 100),
+          device_type: String(payload.properties.device_type || '').slice(0, 20),
+          properties: sanitizedProperties,
+        });
+      
+      if (dbError) {
+        console.error('[track-events] Database error:', dbError);
+      }
+      
+      // Optional: Forward to PostHog if configured
+      const posthogKey = Deno.env.get('POSTHOG_API_KEY');
+      if (posthogKey) {
+        try {
+          await fetch('https://eu.posthog.com/capture/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              api_key: posthogKey,
+              event: payload.event_name,
+              distinct_id: payload.properties.session_id,
+              properties: sanitizedProperties,
+            }),
+          });
+          console.log('[track-events] Forwarded to PostHog');
+        } catch (posthogError) {
+          console.error('[track-events] PostHog error:', posthogError);
+        }
+      }
+    }
+    
+    console.log('[track-events] Event stored:', payload.event_name);
     
     return new Response(
       JSON.stringify({ success: true }),

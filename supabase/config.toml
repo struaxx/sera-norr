@@ -12,3 +12,6 @@ verify_jwt = false
 [functions.identify-user]
 verify_jwt = false
 
+[functions.analytics-dashboard]
+verify_jwt = false
+
