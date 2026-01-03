@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, Lock, Calendar } from "lucide-react";
-import { trackLeadSubmit } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
+import { 
+  trackLookbookOpen, 
+  trackLookbookSubmit, 
+  trackFormStart,
+  trackFormSubmit,
+  identify 
+} from "@/lib/tracking";
 
 // Curated lookbook items
 const lookbookItems = [
@@ -36,7 +43,22 @@ const Lookbook = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [interest, setInterest] = useState("");
+  const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [honeypot, setHoneypot] = useState("");
+  const [hasStartedForm, setHasStartedForm] = useState(false);
+
+  // Track lookbook page open
+  useEffect(() => {
+    trackLookbookOpen('page_load');
+  }, []);
+
+  // Track form start on first interaction
+  const handleFormInteraction = () => {
+    if (!hasStartedForm) {
+      setHasStartedForm(true);
+      trackFormStart('lookbook');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,17 +82,22 @@ const Lookbook = () => {
         body: {
           form_type: 'lookbook',
           email: email,
-          metadata: { interest },
+          metadata: { 
+            interest,
+            marketing_opt_in: marketingOptIn,
+          },
           honeypot,
         },
       });
 
       if (error) throw error;
 
-      // Track lead submission
-      trackLeadSubmit('lookbook' as const, {
-        interest: interest,
-      });
+      // Track lookbook submission with opt-in status
+      trackLookbookSubmit(true, marketingOptIn);
+      trackFormSubmit('lookbook');
+
+      // Identify user and link interest data (only after explicit opt-in)
+      await identify(email, marketingOptIn);
 
       setIsUnlocked(true);
 
@@ -78,12 +105,10 @@ const Lookbook = () => {
         title: isNL ? "Toegang verleend" : "Access granted",
         description: isNL ? "Bekijk alle voorbeelden hieronder." : "View all examples below.",
       });
-    } catch (error: any) {
-      if (import.meta.env.DEV) {
-        console.error("Form submission error:", error);
-      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : '';
       
-      if (error.message?.includes("429") || error.message?.includes("Too many")) {
+      if (errorMessage.includes("429") || errorMessage.includes("Too many")) {
         toast({
           title: isNL ? "Te veel pogingen" : "Too many attempts",
           description: isNL ? "Probeer het later opnieuw." : "Please try again later.",
@@ -166,16 +191,24 @@ const Lookbook = () => {
                     type="email"
                     placeholder={isNL ? "uw@email.nl" : "your@email.com"}
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      handleFormInteraction();
+                    }}
+                    onFocus={handleFormInteraction}
                     required
                     maxLength={255}
                   />
                 </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="interest" className="text-sm font-medium">
                     {isNL ? "Waar bent u naar op zoek?" : "What are you looking for?"} ({isNL ? "optioneel" : "optional"})
                   </Label>
-                  <Select value={interest} onValueChange={setInterest}>
+                  <Select value={interest} onValueChange={(value) => {
+                    setInterest(value);
+                    handleFormInteraction();
+                  }}>
                     <SelectTrigger>
                       <SelectValue placeholder={isNL ? "Selecteer..." : "Select..."} />
                     </SelectTrigger>
@@ -188,6 +221,41 @@ const Lookbook = () => {
                     </SelectContent>
                   </Select>
                 </div>
+
+                {/* Marketing opt-in checkbox */}
+                <div className="flex items-start space-x-3 pt-2">
+                  <Checkbox
+                    id="marketing"
+                    checked={marketingOptIn}
+                    onCheckedChange={(checked) => {
+                      setMarketingOptIn(checked === true);
+                      handleFormInteraction();
+                    }}
+                    className="mt-0.5"
+                  />
+                  <div className="space-y-1">
+                    <Label 
+                      htmlFor="marketing" 
+                      className="text-sm text-muted-foreground leading-relaxed cursor-pointer"
+                    >
+                      {isNL 
+                        ? "Ja, stuur mij inspiratie en updates" 
+                        : "Yes, send me inspiration and updates"}
+                    </Label>
+                    <p className="text-xs text-muted-foreground/70">
+                      {isNL 
+                        ? "U kunt zich altijd uitschrijven. " 
+                        : "You can unsubscribe at any time. "}
+                      <Link 
+                        to="/privacy" 
+                        className="underline hover:text-foreground transition-colors"
+                      >
+                        {isNL ? "Privacybeleid" : "Privacy policy"}
+                      </Link>
+                    </p>
+                  </div>
+                </div>
+
                 <Button 
                   type="submit" 
                   variant="atelier-filled" 

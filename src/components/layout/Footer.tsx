@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Instagram, Linkedin, Mail } from "lucide-react";
+import { CookiePreferencesButton } from "@/components/CookieBanner";
 
 export function Footer() {
   const { t, i18n } = useTranslation();
@@ -83,6 +84,7 @@ export function Footer() {
               <li><Link to="/shipping" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.shipping')}</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.privacy')}</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.terms')}</Link></li>
+              <li><CookiePreferencesButton /></li>
             </ul>
           </div>
         </div>
