@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 // Shopify API Configuration
 export const SHOPIFY_API_VERSION = '2025-07';
@@ -273,29 +274,36 @@ export const CART_CREATE_MUTATION = `
 
 // API Helper with comprehensive error handling
 export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
-  // Validate token exists
-  if (!SHOPIFY_STOREFRONT_TOKEN) {
-    toast.error("Shopify configuratie ontbreekt", {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+  const useProxy = !SHOPIFY_STOREFRONT_TOKEN;
+  const proxyUrl = import.meta.env.VITE_SUPABASE_URL
+    ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/shopify-storefront`
+    : null;
+  const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "";
+
+  if (useProxy && (!proxyUrl || !publishableKey)) {
+    toast.error("Winkelconfiguratie ontbreekt", {
       description: "Neem contact op met de beheerder.",
     });
     return null;
   }
 
-  // Request with timeout
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-
   try {
-    const response = await fetch(SHOPIFY_STOREFRONT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
-      },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
+    const response = await fetch(useProxy ? proxyUrl! : SHOPIFY_STOREFRONT_URL, {
+      method: "POST",
+      headers: useProxy
+        ? {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${publishableKey}`,
+            apikey: publishableKey,
+          }
+        : {
+            "Content-Type": "application/json",
+            "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN,
+          },
+      body: JSON.stringify({ query, variables }),
       signal: controller.signal,
     });
 
@@ -338,7 +346,7 @@ export async function storefrontApiRequest(query: string, variables: Record<stri
     }
 
     const data = await response.json();
-    
+
     if (data.errors) {
       toast.error("Er ging iets mis bij het laden", {
         description: "Probeer het later opnieuw.",
@@ -349,8 +357,8 @@ export async function storefrontApiRequest(query: string, variables: Record<stri
     return data;
   } catch (error) {
     clearTimeout(timeoutId);
-    
-    if (error instanceof Error && error.name === 'AbortError') {
+
+    if (error instanceof Error && error.name === "AbortError") {
       toast.error("Verbinding timeout", {
         description: "Probeer het later opnieuw.",
       });

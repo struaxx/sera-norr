@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SEOHead, Breadcrumbs, FAQSection, generateCollectionSchema, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
-import { fetchCollectionByHandle, ShopifyProduct } from "@/lib/shopify";
+import { fetchCollectionByHandle, fetchCollections, fetchProducts, ShopifyProduct } from "@/lib/shopify";
+import vantaFallback from "@/assets/vanta-collection.jpg";
+import terraFallback from "@/assets/terra-collection.jpg";
 
 // Static collection metadata (FAQs, long descriptions, etc.)
 const collectionsMetadata: Record<string, {
@@ -126,25 +128,74 @@ const CollectionDetail = () => {
     const loadCollection = async () => {
       if (!collectionId) return;
       setLoading(true);
-      
+
       const normalizedId = collectionId.toLowerCase();
       const handlesToTry = urlToShopifyHandles[normalizedId] || [normalizedId];
-      
-      // Try each possible handle until we find a collection
+
+      const tryHandle = async (handle: string) => {
+        const data = await fetchCollectionByHandle(handle, 20);
+        if (data) {
+          setCollection(data);
+          return true;
+        }
+        return false;
+      };
+
+      // 1) Try known handles
       for (const handle of handlesToTry) {
         try {
-          const data = await fetchCollectionByHandle(handle, 20);
-          if (data) {
-            setCollection(data);
+          if (await tryHandle(handle)) {
             setLoading(false);
             return;
           }
-        } catch (error) {
-          // Continue to next handle
+        } catch {
+          // continue
         }
       }
-      
-      // No collection found with any handle
+
+      // 2) Try to discover collection by listing and matching title
+      try {
+        const all = await fetchCollections(50);
+        const match = all.find((c) => c.node.title.toLowerCase().includes(normalizedId));
+        if (match) {
+          try {
+            if (await tryHandle(match.node.handle)) {
+              setLoading(false);
+              return;
+            }
+          } catch {
+            // ignore
+          }
+        }
+      } catch {
+        // ignore
+      }
+
+      // 3) Fallback for VANTA: show real products even if collection doesn't exist in Shopify
+      if (normalizedId === "vanta") {
+        try {
+          const vantaProducts = await fetchProducts(20, "title:VANTA");
+          if (vantaProducts.length > 0) {
+            setCollection({
+              id: "fallback-vanta",
+              title: "VANTA",
+              handle: "vanta",
+              description: "",
+              image: {
+                url: vantaFallback,
+                altText: "VANTA collectie",
+              },
+              products: { edges: vantaProducts },
+            });
+            setLoading(false);
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      // No collection found
       setCollection(null);
       setLoading(false);
     };
