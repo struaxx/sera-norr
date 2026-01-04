@@ -14,7 +14,7 @@ const RATE_LIMIT_MAX_REQUESTS = 60;
 const requestCounts = new Map<string, { count: number; resetAt: number }>();
 
 // Max query depth to prevent overly complex queries
-const MAX_QUERY_DEPTH = 6;
+const MAX_QUERY_DEPTH = 20;
 
 type StorefrontProxyRequest = {
   query: string;
