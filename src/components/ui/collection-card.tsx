@@ -98,7 +98,7 @@ export function CollectionCard({
     <Link
       ref={cardRef}
       to={`/collections/${handle}`}
-      className={`group block ${index === 0 ? 'lg:mt-0' : 'lg:mt-10'}`}
+      className="group block h-full flex flex-col"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => {
@@ -114,7 +114,7 @@ export function CollectionCard({
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        <div className="aspect-[4/5] bg-muted overflow-hidden relative">
+        <div className="aspect-[3/4] bg-muted overflow-hidden relative">
           {imageUrl ? (
             <motion.div
               className="w-full h-full"
