@@ -104,19 +104,17 @@ const Index = () => {
   ];
 
   // Get Dutch description for collections
-  const getCollectionDescription = (handle: string, originalDescription: string) => {
-    if (!isNL) return originalDescription;
-    
+  const getCollectionDescription = (handle: string) => {
     const handleLower = handle.toLowerCase();
     
     if (handleLower.includes('vanta')) {
-      return 'Calacatta Viola marmer — rijke paarse adering.';
+      return isNL ? 'Calacatta Viola marmer — rijke paarse adering.' : 'Calacatta Viola marble — rich purple veining.';
     }
     if (handleLower.includes('terra')) {
-      return 'Natuurlijk travertin — warme beigetinten.';
+      return isNL ? 'Natuurlijk travertin — warme beigetinten.' : 'Natural travertine — warm beige tones.';
     }
     
-    return originalDescription;
+    return '';
   };
 
   return (
@@ -128,69 +126,90 @@ const Index = () => {
         structuredData={baseSchema}
       />
 
-      {/* HERO - Cinematic with editorial text area */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* ============================================
+          HERO - Cinematic full-screen with refined content rail
+          ============================================ */}
+      <section className="relative h-screen flex items-end overflow-hidden">
+        {/* Background image */}
         <div className="absolute inset-0">
           <img
             src={heroImage}
             alt={isNL ? "SERA NORR - Luxe stenen meubels op maat" : "SERA NORR - Luxury bespoke stone furniture"}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-foreground/35" />
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/20 to-transparent" />
         </div>
         
-        {/* Editorial hero content with micro-label */}
-        <div className="relative z-10 text-center px-6 max-w-3xl stagger-children">
-          {/* Micro-label / caption rail */}
-          <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/60 mb-6">
-            {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
-          </p>
-          
-          <h1 className="font-serif font-normal text-display-lg lg:text-display-xl text-background mb-6 leading-[0.95]">
-            {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
-          </h1>
-          
-          <p className="font-sans text-body-md lg:text-body-lg text-background/80 max-w-xl mx-auto mb-10">
-            {isNL 
-              ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
-              : "Travertine, marble and selected stone types. Made to measure."}
-          </p>
-          
-          {/* Signature buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
-              <Link to="/collections">
-                {isNL ? "Ontdek collecties" : "Discover collections"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="sera-secondary" size="lg" className="border-background/40 text-background hover:border-background/60 hover:bg-background/5">
-              <Link to="/bespoke" onClick={trackProposal}>
-                {isNL ? "Vraag voorstel aan" : "Request proposal"}
-              </Link>
-            </Button>
+        {/* Content rail - left-aligned on desktop */}
+        <div className="relative z-10 w-full pb-20 lg:pb-24">
+          <div className="container mx-auto px-6 lg:px-12">
+            <div className="max-w-2xl">
+              {/* Micro-label */}
+              <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/60 mb-4">
+                {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
+              </p>
+              
+              {/* H1 - controlled size */}
+              <h1 className="font-serif font-normal text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-background mb-4 leading-[1.05] tracking-[-0.02em]">
+                {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
+              </h1>
+              
+              {/* Subcopy - short */}
+              <p className="font-sans text-base lg:text-lg text-background/80 max-w-md mb-8">
+                {isNL 
+                  ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
+                  : "Travertine, marble and selected stone types. Made to measure."}
+              </p>
+              
+              {/* CTA rail - two buttons */}
+              <div className="flex flex-wrap gap-3 mb-8">
+                <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-7">
+                  <Link to="/collections">
+                    {isNL ? "Ontdek collecties" : "Discover collections"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="sera-secondary" size="default" className="border-background/30 text-background hover:border-background/50 hover:bg-background/5 h-12 px-7">
+                  <Link to="/bespoke" onClick={trackProposal}>
+                    {isNL ? "Vraag voorstel aan" : "Request proposal"}
+                  </Link>
+                </Button>
+              </div>
+              
+              {/* Trust rail - typographic, minimal */}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/50">
+                <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
+                <span className="hidden sm:inline text-background/30">·</span>
+                <span>{isNL ? '5 jaar garantie' : '5 year warranty'}</span>
+                <span className="hidden sm:inline text-background/30">·</span>
+                <span>{isNL ? 'White-glove levering' : 'White-glove delivery'}</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Scroll Indicator with hairline */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-background/50">
-          <span className="micro-label text-background/50">{t('home.scroll')}</span>
-          <div className="w-px h-10 bg-background/30" />
+        {/* Scroll indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background/40">
+          <span className="text-[10px] uppercase tracking-[0.2em]">{t('home.scroll')}</span>
+          <div className="w-px h-8 bg-background/30" />
         </div>
       </section>
 
-      {/* COLLECTIES - Editorial asymmetric layout with captions */}
+      {/* ============================================
+          COLLECTIES - Editorial asymmetric grid
+          ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
-          {/* Section header with hairlines */}
+          {/* Section header */}
           <div className="flex items-center gap-6 mb-16 lg:mb-20">
             <Hairline className="flex-1" />
             <span className="micro-label shrink-0">{isNL ? 'Collecties' : 'Collections'}</span>
             <Hairline className="flex-1" />
           </div>
 
-          <div className="max-w-xl mx-auto text-center mb-16">
-            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
+          <div className="max-w-lg mb-16">
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
               {isNL ? "Travertin & marmer" : "Travertine & marble"}
             </h2>
             <p className="text-body-md text-muted-foreground">
@@ -204,10 +223,10 @@ const Index = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {[1, 2].map((i) => (
                 <div key={i}>
-                  <Skeleton className="aspect-[3/4] w-full mb-6" />
-                  <Skeleton className="h-4 w-1/4 mb-3" />
-                  <Skeleton className="h-6 w-1/2 mb-2" />
-                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="aspect-[4/5] w-full mb-5" />
+                  <Skeleton className="h-3 w-20 mb-3" />
+                  <Skeleton className="h-6 w-32 mb-2" />
+                  <Skeleton className="h-4 w-48" />
                 </div>
               ))}
             </div>
@@ -217,11 +236,11 @@ const Index = () => {
                 <Link
                   key={collection.node.id}
                   to={`/collections/${collection.node.handle}`}
-                  className={`group block ${index === 0 ? 'lg:mt-12' : ''}`}
+                  className={`group block ${index === 0 ? 'lg:mt-0' : 'lg:mt-16'}`}
                 >
                   {/* Image with subtle hover */}
-                  <div className="image-reveal mb-6">
-                    <div className="aspect-[3/4] bg-muted overflow-hidden">
+                  <div className="image-reveal mb-5">
+                    <div className="aspect-[4/5] bg-muted overflow-hidden">
                       {collection.node.image ? (
                         <img
                           src={collection.node.image.url}
@@ -237,23 +256,24 @@ const Index = () => {
                   </div>
                   
                   {/* Editorial caption */}
-                  <div className="space-y-3">
-                    <p className="editorial-caption-label">
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-sans font-medium uppercase tracking-[0.15em] text-muted-foreground/60">
                       {isNL ? 'Collectie' : 'Collection'}
                     </p>
                     <h3 className="font-serif text-xl lg:text-2xl text-foreground">
                       {collection.node.title}
                     </h3>
-                    {collection.node.description && (
-                      <p className="text-body-sm text-muted-foreground max-w-xs">
-                        {getCollectionDescription(collection.node.handle, collection.node.description)}
-                      </p>
-                    )}
-                    <div className="pt-3 flex items-center gap-3">
-                      <span className="text-sm font-medium uppercase tracking-[0.1em] text-foreground">
-                        {isNL ? "Ontdek" : "Discover"}
+                    <p className="text-body-sm text-muted-foreground max-w-xs">
+                      {getCollectionDescription(collection.node.handle)}
+                    </p>
+                    
+                    {/* Price tag + CTA */}
+                    <div className="pt-3 flex items-center gap-4">
+                      <span className="inline-flex items-center px-2.5 py-1 border border-foreground/12 text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
+                        {isNL ? 'Prijs op aanvraag' : 'Price on request'}
                       </span>
-                      <span className="flex items-center justify-center w-8 h-8 border border-foreground/15 group-hover:border-foreground/30 group-hover:translate-x-1 transition-all duration-400">
+                      <span className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.1em] text-foreground group-hover:gap-3 transition-all duration-300">
+                        {isNL ? "Ontdek" : "Discover"}
                         <ArrowRight className="h-3.5 w-3.5" />
                       </span>
                     </div>
@@ -267,7 +287,7 @@ const Index = () => {
             </p>
           )}
 
-          <div className="text-center mt-16">
+          <div className="mt-16 lg:mt-20">
             <Button asChild variant="sera-secondary" size="lg">
               <Link to="/collections">
                 {isNL ? "Bekijk alle collecties" : "View all collections"}
@@ -278,24 +298,26 @@ const Index = () => {
         </div>
       </section>
 
-      {/* HOE KUNNEN WIJ HELPEN - Editorial split with action panels */}
-      <section className="py-24 lg:py-32 bg-secondary/20">
+      {/* ============================================
+          HOE KUNNEN WIJ HELPEN - Editorial split
+          ============================================ */}
+      <section className="py-24 lg:py-32 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-            {/* Left: Short intro + primary CTA */}
-            <div className="lg:sticky lg:top-32">
-              <p className="micro-label mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            {/* Left: Intro column */}
+            <div className="lg:col-span-5">
+              <p className="micro-label mb-5">
                 {isNL ? 'Hoe kunnen wij helpen?' : 'How can we help?'}
               </p>
-              <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-6">
+              <h2 className="font-serif text-display-sm text-foreground mb-5">
                 {isNL ? "Uw visie, onze expertise" : "Your vision, our expertise"}
               </h2>
-              <p className="text-body-md text-muted-foreground leading-relaxed mb-10 max-w-md">
+              <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-sm">
                 {isNL 
                   ? "Wij helpen u bij elke stap — van eerste idee tot plaatsing in uw interieur."
                   : "We guide you every step — from initial idea to installation in your interior."}
               </p>
-              <Button asChild variant="sera-primary" size="lg">
+              <Button asChild variant="sera-primary" size="default" className="h-12 px-7">
                 <Link to="/bespoke" onClick={trackProposal}>
                   {isNL ? "Start uw project" : "Start your project"}
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -303,30 +325,34 @@ const Index = () => {
               </Button>
             </div>
             
-            {/* Right: Two bespoke action panels */}
-            <div className="space-y-px">
-              <ActionPanel
-                label={isNL ? 'Collectie' : 'Collection'}
-                title={isNL ? "Kies uit onze collectie" : "Choose from our collection"}
-                description={isNL ? "Ontdek bestaande ontwerpen in travertin en marmer." : "Discover existing designs in travertine and marble."}
-                ctaText={isNL ? "Bekijk collecties" : "View collections"}
-                ctaLink="/collections"
-                className="bg-background"
-              />
-              <ActionPanel
-                label={isNL ? 'Maatwerk' : 'Bespoke'}
-                title={isNL ? "Laat iets unieks maken" : "Have something unique made"}
-                description={isNL ? "Op maat naar uw wensen, afmetingen en steenkeuze." : "Tailored to your wishes, dimensions and stone choice."}
-                ctaText={isNL ? "Vraag voorstel" : "Request proposal"}
-                ctaLink="/voorstel"
-                className="bg-background"
-              />
+            {/* Right: Action panels */}
+            <div className="lg:col-span-7">
+              <div className="space-y-px">
+                <ActionPanel
+                  label={isNL ? 'Collectie' : 'Collection'}
+                  title={isNL ? "Kies uit onze collectie" : "Choose from our collection"}
+                  description={isNL ? "Ontdek bestaande ontwerpen in travertin en marmer." : "Discover existing designs in travertine and marble."}
+                  ctaText={isNL ? "Bekijk collecties" : "View collections"}
+                  ctaLink="/collections"
+                  className="bg-background"
+                />
+                <ActionPanel
+                  label={isNL ? 'Maatwerk' : 'Bespoke'}
+                  title={isNL ? "Laat iets unieks maken" : "Have something unique made"}
+                  description={isNL ? "Op maat naar uw wensen, afmetingen en steenkeuze." : "Tailored to your wishes, dimensions and stone choice."}
+                  ctaText={isNL ? "Vraag voorstel" : "Request proposal"}
+                  ctaLink="/voorstel"
+                  className="bg-background"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* WERKWIJZE - Bespoke Timeline with ghost numbers */}
+      {/* ============================================
+          WERKWIJZE - Timeline with ghost numbers
+          ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
           {/* Section header */}
@@ -336,19 +362,19 @@ const Index = () => {
             <Hairline className="flex-1" />
           </div>
 
-          <div className="max-w-xl mx-auto text-center mb-16">
+          <div className="max-w-lg mb-16">
             <h2 className="font-serif text-display-sm lg:text-display-md text-foreground">
               {isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
             </h2>
           </div>
           
-          {/* Bespoke Timeline with hairline separators */}
-          <div className="border-t border-b" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
+          {/* Timeline */}
+          <div className="border-t border-b border-foreground/8">
             <BespokeTimeline steps={processSteps} className="max-w-6xl mx-auto" />
           </div>
           
-          <div className="text-center mt-16">
-            <Button asChild variant="sera-primary" size="lg">
+          <div className="mt-16">
+            <Button asChild variant="sera-primary" size="default" className="h-12 px-7">
               <Link to="/bespoke" onClick={trackProposal}>
                 {isNL ? "Start uw project" : "Start your project"}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -358,11 +384,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Editorial Statement */}
-      <section className="py-20 lg:py-28 bg-secondary/20">
+      {/* ============================================
+          EDITORIAL STATEMENT
+          ============================================ */}
+      <section className="py-20 lg:py-28 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="font-serif text-display-sm lg:text-display-md text-foreground leading-[1.2]">
+          <div className="max-w-3xl">
+            <p className="font-serif text-display-sm text-foreground leading-[1.25]">
               {isNL 
                 ? "Elk meubel is uniek. De steen bepaalt het karakter — wij vertalen het naar uw ruimte."
                 : "Every piece is unique. The stone defines the character — we translate it to your space."}
@@ -371,7 +399,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* WAAROM SERA NORR - Typographic proof grid with hairlines */}
+      {/* ============================================
+          WAAROM SERA NORR - Proof grid
+          ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
           {/* Section header */}
@@ -386,26 +416,28 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Final CTA Band */}
+      {/* ============================================
+          FINAL CTA BAND
+          ============================================ */}
       <section className="py-20 lg:py-28 bg-foreground text-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="max-w-xl">
             <h2 className="font-serif text-display-sm text-background mb-4">
               {isNL ? "Klaar om te beginnen?" : "Ready to begin?"}
             </h2>
-            <p className="text-background/70 text-body-md mb-10">
+            <p className="text-background/70 text-body-md mb-8">
               {isNL 
                 ? "Plan een vrijblijvend gesprek of bekijk onze voorbeelden."
                 : "Schedule a no-obligation conversation or view our examples."}
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
+            <div className="flex flex-wrap gap-3">
+              <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-7">
                 <Link to="/contact">
                   {isNL ? "Neem contact op" : "Get in touch"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="sera-secondary" size="lg" className="border-background/30 text-background hover:border-background/50">
+              <Button asChild variant="sera-secondary" size="default" className="border-background/30 text-background hover:border-background/50 h-12 px-7">
                 <Link to="/lookbook">
                   {isNL ? "Bekijk lookbook" : "View lookbook"}
                 </Link>
