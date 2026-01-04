@@ -5,21 +5,42 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-sans text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-sans text-sm font-medium tracking-[0.12em] uppercase transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-foreground/20 bg-transparent text-foreground hover:bg-foreground hover:text-background",
+        outline: "border border-foreground/20 bg-transparent text-foreground hover:border-foreground/40 hover:bg-foreground/[0.02] hover:-translate-y-px",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-foreground/5 text-foreground",
-        link: "text-foreground underline-offset-4 hover:underline p-0 h-auto",
-        // Atelier luxury variants
+        ghost: "hover:bg-foreground/[0.03] text-foreground",
+        link: "text-foreground underline-offset-4 hover:underline p-0 h-auto tracking-normal normal-case font-normal",
+        
+        // SERA NORR Signature Buttons
+        // Primary: filled with subtle inset highlight (premium, not flat)
+        "sera-primary": [
+          "bg-foreground text-background",
+          "shadow-[inset_0_1px_0_0_hsl(var(--foreground)/0.8),inset_0_-1px_0_0_hsl(var(--foreground)/1.1),0_1px_3px_0_hsl(var(--foreground)/0.1)]",
+          "hover:bg-foreground/95 hover:-translate-y-px",
+          "hover:shadow-[inset_0_1px_0_0_hsl(var(--foreground)/0.8),inset_0_-1px_0_0_hsl(var(--foreground)/1.1),0_4px_12px_-2px_hsl(var(--foreground)/0.15)]",
+        ].join(" "),
+        
+        // Secondary: hairline border
+        "sera-secondary": "border border-foreground/20 bg-transparent text-foreground hover:border-foreground/40 hover:bg-foreground/[0.02] hover:-translate-y-px",
+        
+        // Ghost with subtle background on hover
+        "sera-ghost": "text-foreground hover:bg-foreground/[0.03]",
+        
+        // Legacy atelier variants (for backwards compatibility)
         atelier: "border border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background",
-        "atelier-filled": "bg-foreground text-background hover:bg-foreground/90",
+        "atelier-filled": [
+          "bg-foreground text-background",
+          "shadow-[inset_0_1px_0_0_hsl(var(--foreground)/0.8),inset_0_-1px_0_0_hsl(var(--foreground)/1.1),0_1px_3px_0_hsl(var(--foreground)/0.1)]",
+          "hover:bg-foreground/95 hover:-translate-y-px",
+          "hover:shadow-[inset_0_1px_0_0_hsl(var(--foreground)/0.8),inset_0_-1px_0_0_hsl(var(--foreground)/1.1),0_4px_12px_-2px_hsl(var(--foreground)/0.15)]",
+        ].join(" "),
         "atelier-brass": "bg-brass text-background hover:bg-brass/90",
-        "atelier-subtle": "border border-foreground/15 bg-transparent text-foreground hover:border-foreground/40",
+        "atelier-subtle": "border border-foreground/15 bg-transparent text-foreground hover:border-foreground/30",
       },
       size: {
         default: "h-12 px-8 py-3",

@@ -11,9 +11,9 @@ import { useToast } from "@/hooks/use-toast";
 import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
 import { ArrowRight, Upload } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
-import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
-import { SectionBand, SectionHeader } from "@/components/ui/section-band";
-import { TrustBand } from "@/components/ui/trust-band";
+import { BespokeTimeline, BespokeTimelineStep } from "@/components/ui/bespoke-timeline";
+import { ProofGrid } from "@/components/ui/proof-grid";
+import { Hairline } from "@/components/ui/hairline";
 import { usePageTracking, useCTATracking } from "@/hooks/use-tracking";
 import { trackFormStart, trackFormSubmit } from "@/lib/tracking";
 import bespokeHero from "@/assets/bespoke-hero.png";
@@ -88,28 +88,28 @@ const Bespoke = () => {
     '@graph': [breadcrumbSchema, faqSchema],
   };
 
-  // Process steps
-  const processSteps: TimelineStep[] = isNL ? [
-    { number: '01', title: 'Consultatie', description: 'Vrijblijvend gesprek over uw wensen.', detail: 'Binnen 24 uur reactie' },
-    { number: '02', title: 'Voorstel', description: 'Schetsen, materiaalopties en offerte.', detail: 'Binnen 48 uur' },
-    { number: '03', title: 'Realisatie', description: 'Productie en white-glove plaatsing.', detail: '12–16 weken' },
+  // Process steps - Bespoke Timeline
+  const processSteps: BespokeTimelineStep[] = isNL ? [
+    { number: '01', title: 'Consultatie', description: 'Vrijblijvend gesprek over uw wensen.', tag: 'Binnen 24 uur reactie' },
+    { number: '02', title: 'Voorstel', description: 'Schetsen, materiaalopties en offerte.', tag: 'Binnen 48 uur' },
+    { number: '03', title: 'Realisatie', description: 'Productie en white-glove plaatsing.', tag: '12–16 weken' },
   ] : [
-    { number: '01', title: 'Consultation', description: 'No-obligation conversation about your wishes.', detail: 'Response within 24 hours' },
-    { number: '02', title: 'Proposal', description: 'Sketches, material options and quote.', detail: 'Within 48 hours' },
-    { number: '03', title: 'Realization', description: 'Production and white-glove installation.', detail: '12–16 weeks' },
+    { number: '01', title: 'Consultation', description: 'No-obligation conversation about your wishes.', tag: 'Response within 24 hours' },
+    { number: '02', title: 'Proposal', description: 'Sketches, material options and quote.', tag: 'Within 48 hours' },
+    { number: '03', title: 'Realization', description: 'Production and white-glove installation.', tag: '12–16 weeks' },
   ];
 
-  // Trust items
-  const trustItems = isNL ? [
-    { text: '5 jaar garantie' },
-    { text: 'White-glove levering' },
-    { text: 'Voorstel in 48 uur' },
-    { text: 'Geen verplichtingen' },
+  // Proof items
+  const proofItems = isNL ? [
+    { title: '5 jaar garantie', description: 'Op constructie en materiaal.' },
+    { title: 'White-glove levering', description: 'Plaatsing op locatie.' },
+    { title: 'Voorstel in 48 uur', description: 'Snel en persoonlijk.' },
+    { title: 'Geen verplichtingen', description: 'Vrijblijvende intake.' },
   ] : [
-    { text: '5 year warranty' },
-    { text: 'White-glove delivery' },
-    { text: 'Proposal in 48 hours' },
-    { text: 'No obligations' },
+    { title: '5 year warranty', description: 'On construction and materials.' },
+    { title: 'White-glove delivery', description: 'Installation on location.' },
+    { title: 'Proposal in 48 hours', description: 'Fast and personal.' },
+    { title: 'No obligations', description: 'Non-binding intake.' },
   ];
 
   return (
@@ -123,31 +123,31 @@ const Bespoke = () => {
         structuredData={combinedSchema}
       />
 
-      {/* Hero - Editorial Split */}
-      <section className="min-h-[85vh] flex items-center pt-20 lg:pt-24">
+      {/* HERO - Editorial Split with micro-label */}
+      <section className="min-h-[90vh] flex items-center pt-20 lg:pt-0">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Content */}
             <div className="order-2 lg:order-1">
-              <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+              <p className="micro-label mb-6">
                 {isNL ? 'Online atelier' : 'Online atelier'}
               </p>
               <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
                 {isNL ? "Maatwerk in natuursteen" : "Bespoke in natural stone"}
               </h1>
-              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-lg">
+              <p className="text-body-lg text-muted-foreground leading-relaxed mb-10 max-w-lg">
                 {isNL 
-                  ? "Elk meubel wordt op maat gemaakt. Materiaal, afmetingen en afwerking stemmen we samen af."
-                  : "Every piece is made to measure. Material, dimensions and finish are aligned together."}
+                  ? "Elk meubel op maat. Materiaal, afmetingen en afwerking stemmen we samen af."
+                  : "Every piece made to measure. Material, dimensions and finish aligned together."}
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button asChild variant="atelier-filled" size="lg">
+                <Button asChild variant="sera-primary" size="lg">
                   <a href="#offerte" onClick={trackProposal}>
                     {isNL ? "Ontvang voorstel" : "Receive proposal"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-                <Button asChild variant="ghost" size="lg">
+                <Button asChild variant="sera-secondary" size="lg">
                   <Link to="/collections">
                     {isNL ? "Bekijk collecties" : "View collections"}
                   </Link>
@@ -169,97 +169,136 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* Trust Band */}
-      <TrustBand items={trustItems} />
-
-      {/* Process Timeline */}
-      <SectionBand variant="default" size="lg">
-        <SectionHeader
-          eyebrow={isNL ? 'Werkwijze' : 'Process'}
-          title={isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
-          centered
-        />
-        <PremiumTimeline steps={processSteps} className="max-w-5xl mx-auto" />
-      </SectionBand>
-
-      {/* Editorial Statement */}
-      <SectionBand variant="sand" size="md">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="font-serif text-display-sm text-foreground leading-[1.2]">
-            {isNL 
-              ? "De steen bepaalt het karakter. Wij vertalen het naar uw ruimte."
-              : "The stone defines the character. We translate it to your space."}
-          </p>
+      {/* WAAROM - Proof Grid */}
+      <section className="py-20 lg:py-24 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <ProofGrid items={proofItems} className="max-w-6xl mx-auto" />
         </div>
-      </SectionBand>
+      </section>
 
-      {/* Materials CTA - Editorial Split */}
-      <SectionBand variant="default" size="lg">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="aspect-[4/5] bg-secondary/30 flex items-center justify-center">
-            <div className="text-center p-8">
-              <p className="font-serif text-2xl text-foreground mb-2">
-                {isNL ? "Travertin & marmer" : "Travertine & marble"}
-              </p>
-              <p className="text-body-sm text-muted-foreground">
-                {isNL ? "Geselecteerde steensoorten" : "Selected stone types"}
-              </p>
-            </div>
+      {/* WERKWIJZE - Process Timeline */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Section header */}
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Werkwijze' : 'Process'}</span>
+            <Hairline className="flex-1" />
+          </div>
+
+          <div className="max-w-xl mx-auto text-center mb-16">
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground">
+              {isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
+            </h2>
           </div>
           
-          <div>
-            <p className="text-eyebrow uppercase text-muted-foreground mb-4">
-              {isNL ? 'Materialen' : 'Materials'}
-            </p>
-            <h2 className="font-serif text-display-sm text-foreground mb-5">
-              {isNL ? "Steenkeuze op maat" : "Stone selection on request"}
-            </h2>
-            <p className="text-body-md text-muted-foreground leading-relaxed mb-8">
-              {isNL 
-                ? "Steenkeuze, afwerking en details stemmen we samen af tijdens de intake. U ontvangt advies op basis van uw ruimte en gebruik."
-                : "Stone choice, finish and details are aligned together during the intake. You receive advice based on your space and use."}
-            </p>
-            <Button asChild variant="atelier" size="lg">
-              <Link to="/materials">
-                {isNL ? "Bekijk materialen" : "View materials"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+          {/* Bespoke Timeline */}
+          <div className="border-t border-b" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
+            <BespokeTimeline steps={processSteps} className="max-w-6xl mx-auto" />
           </div>
         </div>
-      </SectionBand>
+      </section>
+
+      {/* Editorial Statement */}
+      <section className="py-16 lg:py-20 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="font-serif text-display-sm text-foreground leading-[1.2]">
+              {isNL 
+                ? "De steen bepaalt het karakter. Wij vertalen het naar uw ruimte."
+                : "The stone defines the character. We translate it to your space."}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* MATERIALEN - Editorial Split */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Image placeholder */}
+            <div className="aspect-[4/5] bg-secondary/30 flex items-center justify-center border" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
+              <div className="text-center p-8">
+                <p className="font-serif text-2xl text-foreground mb-2">
+                  {isNL ? "Travertin & marmer" : "Travertine & marble"}
+                </p>
+                <p className="text-body-sm text-muted-foreground">
+                  {isNL ? "Geselecteerde steensoorten" : "Selected stone types"}
+                </p>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div>
+              <p className="micro-label mb-6">
+                {isNL ? 'Materialen' : 'Materials'}
+              </p>
+              <h2 className="font-serif text-display-sm text-foreground mb-5">
+                {isNL ? "Steenkeuze op maat" : "Stone selection on request"}
+              </h2>
+              <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-md">
+                {isNL 
+                  ? "Steenkeuze, afwerking en details stemmen we samen af tijdens de intake."
+                  : "Stone choice, finish and details are aligned together during the intake."}
+              </p>
+              <Button asChild variant="sera-secondary" size="lg">
+                <Link to="/materials">
+                  {isNL ? "Bekijk materialen" : "View materials"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* FAQ Section */}
-      <SectionBand variant="cream" size="lg">
-        <SectionHeader
-          eyebrow={isNL ? 'FAQ' : 'FAQ'}
-          title={isNL ? "Veelgestelde vragen" : "Frequently asked questions"}
-          centered
-          size="sm"
-        />
+      <section className="py-24 lg:py-32 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Section header */}
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">FAQ</span>
+            <Hairline className="flex-1" />
+          </div>
 
-        <div className="max-w-2xl mx-auto">
-          <Accordion type="single" collapsible className="space-y-3">
-            {faqItems.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index + 1}`} className="border border-border/40 px-6 bg-background">
-                <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-5">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-body-sm pb-5">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <div className="max-w-xl mx-auto text-center mb-12">
+            <h2 className="font-serif text-display-sm text-foreground">
+              {isNL ? "Veelgestelde vragen" : "Frequently asked questions"}
+            </h2>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <Accordion type="single" collapsible className="space-y-0">
+              {faqItems.map((faq, index) => (
+                <AccordionItem 
+                  key={index} 
+                  value={`item-${index + 1}`} 
+                  className="border-t bg-background px-0"
+                  style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}
+                >
+                  <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-6 px-6">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground text-body-sm pb-6 px-6">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+              {/* Bottom border */}
+              <div className="h-px" style={{ backgroundColor: 'hsl(var(--foreground) / 0.08)' }} />
+            </Accordion>
+          </div>
         </div>
-      </SectionBand>
+      </section>
 
       {/* Inquiry Form */}
-      <section id="offerte" className="py-20 lg:py-28 bg-foreground text-background scroll-mt-24">
+      <section id="offerte" className="py-24 lg:py-32 bg-foreground text-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-xl mx-auto">
-            <header className="text-center mb-10">
-              <p className="text-eyebrow uppercase text-background/60 mb-4">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <p className="micro-label text-background/50 mb-4">
                 {isNL ? 'Offerte aanvragen' : 'Request quote'}
               </p>
               <h2 className="font-serif text-display-sm mb-4">
@@ -270,12 +309,12 @@ const Bespoke = () => {
                   ? 'Voorstel met schetsen binnen 48 uur.'
                   : 'Proposal with sketches within 48 hours.'}
               </p>
-            </header>
+            </div>
 
-            <form onSubmit={handleSubmit} onFocus={handleFormFocus} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <form onSubmit={handleSubmit} onFocus={handleFormFocus} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="bespoke-name" className="block text-eyebrow uppercase text-background/60 mb-2">
+                  <label htmlFor="bespoke-name" className="block micro-label text-background/50 mb-3">
                     {t('bespoke.formName')} *
                   </label>
                   <Input
@@ -284,12 +323,12 @@ const Bespoke = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
                     placeholder={t('bespoke.formNamePlaceholder')}
                   />
                 </div>
                 <div>
-                  <label htmlFor="bespoke-email" className="block text-eyebrow uppercase text-background/60 mb-2">
+                  <label htmlFor="bespoke-email" className="block micro-label text-background/50 mb-3">
                     {t('bespoke.formEmail')} *
                   </label>
                   <Input
@@ -298,15 +337,15 @@ const Bespoke = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
-                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
                     placeholder={t('bespoke.formEmailPlaceholder')}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="bespoke-phone" className="block text-eyebrow uppercase text-background/60 mb-2">
+                  <label htmlFor="bespoke-phone" className="block micro-label text-background/50 mb-3">
                     {isNL ? 'Telefoon' : 'Phone'}
                   </label>
                   <Input
@@ -314,19 +353,19 @@ const Bespoke = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
                     placeholder="+31 6 12345678"
                   />
                 </div>
                 <div>
-                  <label className="block text-eyebrow uppercase text-background/60 mb-2">
+                  <label className="block micro-label text-background/50 mb-3">
                     {t('bespoke.formProjectType')} *
                   </label>
                   <Select 
                     value={formData.projectType} 
                     onValueChange={(value) => setFormData({ ...formData, projectType: value })}
                   >
-                    <SelectTrigger className="bg-background/10 border-background/20 text-background focus:border-background/40 [&>span]:text-background/40">
+                    <SelectTrigger className="bg-background/10 border-background/20 text-background focus:border-background/40 [&>span]:text-background/40 h-12">
                       <SelectValue placeholder={isNL ? 'Selecteer type' : 'Select type'} />
                     </SelectTrigger>
                     <SelectContent className="bg-foreground border-background/20">
@@ -341,7 +380,7 @@ const Bespoke = () => {
               </div>
 
               <div>
-                <label htmlFor="bespoke-dimensions" className="block text-eyebrow uppercase text-background/60 mb-2">
+                <label htmlFor="bespoke-dimensions" className="block micro-label text-background/50 mb-3">
                   {isNL ? 'Gewenste afmetingen' : 'Desired dimensions'}
                 </label>
                 <Input
@@ -349,13 +388,13 @@ const Bespoke = () => {
                   type="text"
                   value={formData.dimensions}
                   onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
-                  className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+                  className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
                   placeholder={isNL ? 'bijv. L120 × B80 × H45 cm' : 'e.g. L120 × W80 × H45 cm'}
                 />
               </div>
 
               <div>
-                <label htmlFor="bespoke-message" className="block text-eyebrow uppercase text-background/60 mb-2">
+                <label htmlFor="bespoke-message" className="block micro-label text-background/50 mb-3">
                   {t('bespoke.formVision')} *
                 </label>
                 <Textarea
@@ -366,36 +405,51 @@ const Bespoke = () => {
                   rows={4}
                   className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 resize-none"
                   placeholder={isNL 
-                    ? 'Beschrijf uw wensen: materiaalvoorkeuren, stijl, ruimte...'
-                    : 'Describe your wishes: material preferences, style, space...'}
+                    ? 'Beschrijf uw project, gewenste materialen, stijl en eventuele referentiebeelden...'
+                    : 'Describe your project, desired materials, style and any reference images...'}
                 />
               </div>
 
+              {/* File Upload */}
               <div>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={(e) => setFileName(e.target.files?.[0]?.name || null)}
-                  accept="image/*,.pdf"
-                  className="hidden"
-                />
-                <button
-                  type="button"
+                <label className="block micro-label text-background/50 mb-3">
+                  {isNL ? 'Referentiebeelden (optioneel)' : 'Reference images (optional)'}
+                </label>
+                <div 
+                  className="border border-dashed border-background/20 py-6 px-4 text-center cursor-pointer hover:border-background/40 transition-colors"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full flex items-center justify-center gap-2 py-3 border border-dashed border-background/20 text-background/60 hover:border-background/40 transition-all text-sm"
                 >
-                  <Upload className="w-4 h-4" />
-                  {fileName || (isNL ? 'Upload inspiratie (optioneel)' : 'Upload inspiration (optional)')}
-                </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*,.pdf"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) setFileName(file.name);
+                    }}
+                  />
+                  <Upload className="h-5 w-5 mx-auto mb-2 text-background/50" />
+                  <p className="text-body-sm text-background/60">
+                    {fileName || (isNL ? 'Klik om bestand te uploaden' : 'Click to upload file')}
+                  </p>
+                </div>
               </div>
 
-              <Button type="submit" variant="outline" size="lg" className="w-full border-background/30 text-background hover:bg-background hover:text-foreground">
+              <Button 
+                type="submit" 
+                variant="sera-primary" 
+                size="lg"
+                className="w-full bg-background text-foreground hover:bg-background/95"
+              >
                 {isNL ? 'Verstuur aanvraag' : 'Submit request'}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
 
-              <p className="text-xs text-background/50 text-center">
-                {isNL ? 'Reactie binnen 48 uur. Geen verplichtingen.' : 'Response within 48 hours. No obligations.'}
+              <p className="text-center text-background/50 text-body-sm">
+                {isNL 
+                  ? 'U ontvangt binnen 24 uur een bevestiging.'
+                  : 'You will receive a confirmation within 24 hours.'}
               </p>
             </form>
           </div>
