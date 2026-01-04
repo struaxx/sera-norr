@@ -560,9 +560,144 @@ const Bespoke = () => {
       </section>
 
       {/* ============================================
-          10) FAQ Section
+          10) INSPIRATIE / LOOKBOOK
+          ============================================ */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center gap-6 mb-12 lg:mb-16">
+            <Hairline className="flex-1" />
+            <MicroLabel>{isNL ? 'INSPIRATIE' : 'INSPIRATION'}</MicroLabel>
+            <Hairline className="flex-1" />
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Left: Content */}
+            <div className="max-w-md">
+              <h2 className="font-serif text-display-sm text-foreground mb-4">
+                {isNL ? "Voorbeelden uit het atelier" : "Examples from the atelier"}
+              </h2>
+              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8">
+                {isNL 
+                  ? "Ontvang toegang tot het lookbook — een selectie gerealiseerde projecten en materiaalcombinaties ter inspiratie."
+                  : "Gain access to the lookbook — a selection of realized projects and material combinations for inspiration."}
+              </p>
+              <Button asChild variant="sera-primary" size="default" className="h-11 px-6">
+                <Link to="/lookbook">
+                  {isNL ? 'Bekijk online voorbeelden' : 'View online examples'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+            
+            {/* Right: Visual module */}
+            <div className="relative">
+              <div className="aspect-[4/3] bg-secondary/50 border border-foreground/8 flex items-center justify-center">
+                <div className="text-center p-10">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 block mb-3">
+                    {isNL ? 'ATELIER SELECTIE' : 'ATELIER SELECTION'}
+                  </span>
+                  <p className="font-serif text-xl text-foreground/80">
+                    {isNL ? 'Terra · Vanta · Maatwerk' : 'Terra · Vanta · Bespoke'}
+                  </p>
+                </div>
+              </div>
+              {/* Caption rail */}
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
+                  {isNL ? 'Gerealiseerde projecten' : 'Realized projects'}
+                </span>
+                <Hairline className="flex-1 mx-4" />
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
+                  2024
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          11) ONDERHOUD & BESCHERMING
           ============================================ */}
       <section className="py-24 lg:py-32 bg-secondary/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center gap-6 mb-12 lg:mb-16">
+            <Hairline className="flex-1" />
+            <MicroLabel>{isNL ? 'ONDERHOUD' : 'CARE'}</MicroLabel>
+            <Hairline className="flex-1" />
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+            {/* Left: Content + bullets + CTAs */}
+            <div>
+              <h2 className="font-serif text-display-sm text-foreground mb-4">
+                {isNL ? "Onderhoud & bescherming" : "Care & protection"}
+              </h2>
+              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-md">
+                {isNL 
+                  ? "Natuursteen blijft het mooist met de juiste bescherming en eenvoudig onderhoud. Wij adviseren wat past bij uw gebruik en kunnen bescherming meenemen in het voorstel."
+                  : "Natural stone stays most beautiful with the right protection and simple maintenance. We advise what suits your usage and can include protection in the proposal."}
+              </p>
+              
+              {/* Bullets with hairline separators */}
+              <div className="space-y-0 border-t border-foreground/8 mb-10">
+                {[
+                  isNL ? 'Vlekbescherming & impregnatie' : 'Stain protection & impregnation',
+                  isNL ? 'Eenvoudige dagelijkse care' : 'Simple daily care',
+                  isNL ? 'Langdurige schoonheid' : 'Long-lasting beauty',
+                ].map((bullet, index) => (
+                  <div key={index} className="py-4 border-b border-foreground/8 flex items-center gap-4">
+                    <span className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50 w-5">
+                      0{index + 1}
+                    </span>
+                    <span className="text-body-md text-foreground">{bullet}</span>
+                  </div>
+                ))}
+              </div>
+              
+              {/* CTA rail */}
+              <div className="flex flex-wrap items-center gap-4">
+                <Button asChild variant="sera-primary" size="default" className="h-11 px-6">
+                  <Link to="/care">
+                    {isNL ? 'Lees over care' : 'Read about care'}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="sera-secondary" size="default" className="h-11 px-6">
+                  <Link to="/voorstel">
+                    {isNL ? 'Ontvang voorstel' : 'Get proposal'}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            
+            {/* Right: Visual module with stone texture feel */}
+            <div className="relative hidden lg:block">
+              <div className="aspect-square bg-gradient-to-br from-secondary/80 to-secondary/30 border border-foreground/5">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <Shield className="h-10 w-10 text-foreground/20 mx-auto mb-4" />
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 block">
+                      {isNL ? '5 jaar garantie' : '5 year warranty'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              {/* Caption */}
+              <div className="mt-3">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
+                  {isNL ? 'Bescherming inbegrepen op aanvraag' : 'Protection included on request'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          12) FAQ Section
+          ============================================ */}
+      <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
           {/* Section header */}
           <div className="flex items-center gap-6 mb-12 lg:mb-16">
