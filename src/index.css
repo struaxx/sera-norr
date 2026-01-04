@@ -179,40 +179,158 @@
 }
 
 @layer components {
-  /* Elegant underline animation - refined */
+  /* ========================================
+     SERA NORR BESPOKE DESIGN SYSTEM
+     ======================================== */
+
+  /* === HAIRLINE GRID SYSTEM === */
+  .hairline {
+    @apply h-px;
+    background-color: hsl(var(--foreground) / 0.08);
+  }
+  
+  .hairline-vertical {
+    @apply w-px;
+    background-color: hsl(var(--foreground) / 0.08);
+  }
+  
+  .hairline-dark {
+    @apply h-px;
+    background-color: hsl(var(--foreground) / 0.15);
+  }
+  
+  .hairline-accent {
+    @apply h-px;
+    background-color: hsl(var(--brass) / 0.3);
+  }
+
+  /* Hairline section divider with micro-label */
+  .hairline-section {
+    @apply relative;
+  }
+  
+  .hairline-section::before {
+    content: '';
+    @apply absolute left-0 right-0 top-0 h-px;
+    background-color: hsl(var(--foreground) / 0.08);
+  }
+
+  /* === MICRO-LABELS (Architectural Typography) === */
+  .micro-label {
+    @apply text-[10px] font-sans font-medium uppercase;
+    letter-spacing: 0.2em;
+    color: hsl(var(--muted-foreground) / 0.7);
+  }
+  
+  .micro-label-dark {
+    @apply text-[10px] font-sans font-medium uppercase;
+    letter-spacing: 0.2em;
+    color: hsl(var(--foreground) / 0.5);
+  }
+
+  /* === EDITORIAL CAPTION SYSTEM === */
+  .editorial-caption {
+    @apply space-y-3;
+  }
+  
+  .editorial-caption-label {
+    @apply text-[11px] font-sans font-medium uppercase;
+    letter-spacing: 0.15em;
+    color: hsl(var(--muted-foreground) / 0.6);
+  }
+  
+  .editorial-caption-text {
+    @apply text-body-sm text-muted-foreground leading-relaxed;
+  }
+
+  /* === SIGNATURE BUTTON STYLES === */
+  /* Primary filled with subtle inset highlight */
+  .btn-sera-primary {
+    @apply relative inline-flex items-center justify-center gap-2 px-8 py-4;
+    @apply bg-foreground text-background font-sans text-sm font-medium;
+    @apply uppercase;
+    letter-spacing: 0.15em;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: inset 0 1px 0 0 hsl(var(--foreground) / 0.8), 
+                inset 0 -1px 0 0 hsl(var(--foreground) / 1.1),
+                0 1px 3px 0 hsl(var(--foreground) / 0.1);
+  }
+  
+  .btn-sera-primary:hover {
+    background-color: hsl(var(--foreground) / 0.95);
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 0 hsl(var(--foreground) / 0.8), 
+                inset 0 -1px 0 0 hsl(var(--foreground) / 1.1),
+                0 4px 12px -2px hsl(var(--foreground) / 0.15);
+  }
+
+  /* Secondary hairline border */
+  .btn-sera-secondary {
+    @apply relative inline-flex items-center justify-center gap-2 px-8 py-4;
+    @apply bg-transparent text-foreground font-sans text-sm font-medium;
+    @apply uppercase;
+    letter-spacing: 0.15em;
+    border: 1px solid hsl(var(--foreground) / 0.2);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .btn-sera-secondary:hover {
+    border-color: hsl(var(--foreground) / 0.4);
+    background-color: hsl(var(--foreground) / 0.02);
+    transform: translateY(-1px);
+  }
+
+  /* Text button with arrow compartment */
+  .btn-sera-text {
+    @apply relative inline-flex items-center gap-3 font-sans text-sm font-medium;
+    @apply uppercase text-foreground;
+    letter-spacing: 0.12em;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .btn-sera-text-arrow {
+    @apply flex items-center justify-center w-8 h-8 rounded-none;
+    border: 1px solid hsl(var(--foreground) / 0.15);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .btn-sera-text:hover .btn-sera-text-arrow {
+    border-color: hsl(var(--foreground) / 0.3);
+    background-color: hsl(var(--foreground) / 0.03);
+    transform: translateX(2px);
+  }
+
+  /* === LINK UNDERLINE ANIMATION === */
   .link-underline {
     @apply relative inline-block;
   }
   
   .link-underline::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-full h-px bg-current origin-right scale-x-0 transition-transform;
-    transition-duration: 400ms;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    @apply absolute bottom-0 left-0 w-full h-px bg-current origin-right scale-x-0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   .link-underline:hover::after {
     @apply origin-left scale-x-100;
   }
 
-  /* Image hover effect - subtle zoom 1.02 */
+  /* === IMAGE HOVER EFFECT === */
   .image-reveal {
     @apply overflow-hidden;
   }
   
   .image-reveal img {
-    @apply transition-transform duration-700;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   .image-reveal:hover img {
     transform: scale(1.02);
   }
 
-  /* Card hover lift - 2px */
+  /* === CARD HOVER LIFT === */
   .card-lift {
-    @apply transition-all duration-500;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   .card-lift:hover {
@@ -220,7 +338,48 @@
     box-shadow: var(--shadow-card-hover);
   }
 
-  /* Section spacing - premium vertical rhythm */
+  /* === BESPOKE ACTION PANEL === */
+  .action-panel {
+    @apply relative p-8;
+    border: 1px solid hsl(var(--foreground) / 0.08);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  @screen lg {
+    .action-panel {
+      @apply p-10;
+    }
+  }
+  
+  .action-panel:hover {
+    border-color: hsl(var(--foreground) / 0.15);
+    background-color: hsl(var(--foreground) / 0.01);
+  }
+
+  /* === PROOF GRID (Typographic grid with hairlines) === */
+  .proof-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4;
+  }
+  
+  .proof-grid-item {
+    @apply relative py-8 lg:py-10;
+  }
+  
+  /* Vertical hairlines between grid items */
+  .proof-grid-item:not(:last-child)::after {
+    content: '';
+    @apply hidden lg:block absolute right-0 top-4 bottom-4 w-px;
+    background-color: hsl(var(--foreground) / 0.08);
+  }
+  
+  /* Horizontal hairlines on mobile */
+  .proof-grid-item:not(:last-child)::before {
+    content: '';
+    @apply block lg:hidden absolute bottom-0 left-0 right-0 h-px;
+    background-color: hsl(var(--foreground) / 0.08);
+  }
+
+  /* === SECTION SPACING === */
   .section-padding {
     padding-top: var(--section-padding);
     padding-bottom: var(--section-padding);
@@ -231,12 +390,29 @@
     padding-bottom: var(--section-padding-sm);
   }
 
-  /* Fade in up animation */
+  /* === GHOST NUMBERS (Large watermark numbers for timeline) === */
+  .ghost-number {
+    @apply font-serif font-light leading-none;
+    @apply absolute select-none pointer-events-none;
+    font-size: 8rem;
+    top: -2rem;
+    left: 0;
+    color: hsl(var(--foreground) / 0.04);
+  }
+  
+  @screen lg {
+    .ghost-number {
+      font-size: 12rem;
+      top: -4rem;
+    }
+  }
+
+  /* === FADE IN UP ANIMATION === */
   .fade-in-up {
     animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  /* Stagger children - editorial reveal */
+  /* === STAGGER CHILDREN === */
   .stagger-children > * {
     opacity: 0;
     animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -247,20 +423,6 @@
   .stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
   .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
   .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
-  
-  /* Button underline animation for text buttons */
-  .btn-underline {
-    @apply relative;
-  }
-  
-  .btn-underline::after {
-    content: '';
-    @apply absolute bottom-0 left-0 w-full h-px bg-current scale-x-100 origin-left transition-transform duration-300;
-  }
-  
-  .btn-underline:hover::after {
-    @apply scale-x-0 origin-right;
-  }
 }
 
 @layer utilities {

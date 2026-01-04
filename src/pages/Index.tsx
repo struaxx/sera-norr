@@ -3,13 +3,14 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Truck, Award } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { SEOHead, baseSchema } from "@/components/seo";
 import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
-import { SectionBand, SectionHeader } from "@/components/ui/section-band";
-import { TrustBand } from "@/components/ui/trust-band";
+import { BespokeTimeline, BespokeTimelineStep } from "@/components/ui/bespoke-timeline";
+import { ProofGrid } from "@/components/ui/proof-grid";
+import { ActionPanel } from "@/components/ui/action-panel";
+import { Hairline } from "@/components/ui/hairline";
 import { usePageTracking, useCTATracking } from "@/hooks/use-tracking";
 import heroImage from "@/assets/hero-homepage.png";
 
@@ -48,58 +49,58 @@ const Index = () => {
     ? "SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel"
     : "SERA NORR, online atelier, bespoke natural stone furniture, travertine table, custom marble table, Calacatta Viola, stone dining table";
 
-  // Process steps
-  const processSteps: TimelineStep[] = isNL ? [
+  // Process steps - Bespoke Timeline
+  const processSteps: BespokeTimelineStep[] = isNL ? [
     { 
       number: '01', 
       title: 'Consultatie', 
       description: 'Vrijblijvend gesprek over uw wensen, ruimte en steenvoorkeur.', 
-      detail: 'Binnen 24 uur reactie' 
+      tag: 'Binnen 24 uur reactie' 
     },
     { 
       number: '02', 
       title: 'Voorstel & visualisatie', 
       description: 'Schets, materiaalopties en offerte op maat.', 
-      detail: 'Voorstel in 48 uur' 
+      tag: 'Voorstel in 48 uur' 
     },
     { 
       number: '03', 
       title: 'Productie & levering', 
       description: 'Vakkundige productie en white-glove plaatsing.', 
-      detail: '12–16 weken' 
+      tag: '12–16 weken' 
     },
   ] : [
     { 
       number: '01', 
       title: 'Consultation', 
       description: 'No-obligation conversation about your wishes, space and stone preference.', 
-      detail: 'Response within 24 hours' 
+      tag: 'Response within 24 hours' 
     },
     { 
       number: '02', 
       title: 'Proposal & visualization', 
       description: 'Sketch, material options and tailored quote.', 
-      detail: 'Proposal in 48 hours' 
+      tag: 'Proposal in 48 hours' 
     },
     { 
       number: '03', 
       title: 'Production & delivery', 
       description: 'Expert production and white-glove installation.', 
-      detail: '12–16 weeks' 
+      tag: '12–16 weeks' 
     },
   ];
 
-  // Trust band items
-  const trustItems = isNL ? [
-    { text: '5 jaar garantie' },
-    { text: 'White-glove levering' },
-    { text: 'Ontworpen in Nederland' },
-    { text: 'Geselecteerde materialen' },
+  // Proof items - Waarom SERA NORR
+  const proofItems = isNL ? [
+    { title: '5 jaar garantie', description: 'Op constructie en materiaal.' },
+    { title: 'White-glove levering', description: 'Plaatsing op locatie in NL/BE.' },
+    { title: 'Ontworpen in Nederland', description: 'Elk stuk uniek en op maat.' },
+    { title: 'Geselecteerde materialen', description: 'Travertin, marmer, natuursteen.' },
   ] : [
-    { text: '5 year warranty' },
-    { text: 'White-glove delivery' },
-    { text: 'Designed in Netherlands' },
-    { text: 'Selected materials' },
+    { title: '5 year warranty', description: 'On construction and materials.' },
+    { title: 'White-glove delivery', description: 'Installation on location in NL/BE.' },
+    { title: 'Designed in Netherlands', description: 'Each piece unique and bespoke.' },
+    { title: 'Selected materials', description: 'Travertine, marble, natural stone.' },
   ];
 
   // Get Dutch description for collections
@@ -109,10 +110,10 @@ const Index = () => {
     const handleLower = handle.toLowerCase();
     
     if (handleLower.includes('vanta')) {
-      return 'Calacatta Viola marmer — rijke paarse adering, uniek in kleur en karakter.';
+      return 'Calacatta Viola marmer — rijke paarse adering.';
     }
     if (handleLower.includes('terra')) {
-      return 'Natuurlijk travertin — warme beigetinten, tijdloze texturen.';
+      return 'Natuurlijk travertin — warme beigetinten.';
     }
     
     return originalDescription;
@@ -127,7 +128,7 @@ const Index = () => {
         structuredData={baseSchema}
       />
 
-      {/* Hero Section - Full height, editorial */}
+      {/* HERO - Cinematic with editorial text area */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -138,25 +139,32 @@ const Index = () => {
           <div className="absolute inset-0 bg-foreground/35" />
         </div>
         
+        {/* Editorial hero content with micro-label */}
         <div className="relative z-10 text-center px-6 max-w-3xl stagger-children">
+          {/* Micro-label / caption rail */}
+          <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/60 mb-6">
+            {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
+          </p>
+          
           <h1 className="font-serif font-normal text-display-lg lg:text-display-xl text-background mb-6 leading-[0.95]">
             {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
           </h1>
-          <p className="font-sans text-body-md lg:text-body-lg text-background/85 max-w-xl mx-auto mb-10">
+          
+          <p className="font-sans text-body-md lg:text-body-lg text-background/80 max-w-xl mx-auto mb-10">
             {isNL 
-              ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt voor uw ruimte." 
-              : "Travertine, marble and selected stone types. Custom made for your space."}
+              ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
+              : "Travertine, marble and selected stone types. Made to measure."}
           </p>
           
-          {/* CTAs - Primary + Secondary */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
+          {/* Signature buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
               <Link to="/collections">
                 {isNL ? "Ontdek collecties" : "Discover collections"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-background/50 text-background hover:bg-background/10">
+            <Button asChild variant="sera-secondary" size="lg" className="border-background/40 text-background hover:border-background/60 hover:bg-background/5">
               <Link to="/bespoke" onClick={trackProposal}>
                 {isNL ? "Vraag voorstel aan" : "Request proposal"}
               </Link>
@@ -164,187 +172,248 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator with hairline */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-background/50">
-          <span className="font-sans text-[10px] uppercase tracking-[0.3em]">{t('home.scroll')}</span>
+          <span className="micro-label text-background/50">{t('home.scroll')}</span>
           <div className="w-px h-10 bg-background/30" />
         </div>
       </section>
 
-      {/* Trust Band - Slim proof strip */}
-      <TrustBand items={trustItems} />
-
-      {/* Collections - Editorial Split Layout */}
-      <SectionBand variant="default" size="lg">
-        <SectionHeader
-          eyebrow={isNL ? 'Collecties' : 'Collections'}
-          title={isNL ? "Travertin & marmer" : "Travertine & marble"}
-          description={isNL 
-            ? "Twee signatuurcollecties, elk met een eigen karakter. Op maat gemaakt naar uw specificaties."
-            : "Two signature collections, each with its own character. Made to measure to your specifications."}
-        />
-
-        {loading ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            {[1, 2].map((i) => (
-              <div key={i}>
-                <Skeleton className="aspect-[4/5] w-full mb-6" />
-                <Skeleton className="h-8 w-1/3 mb-3" />
-                <Skeleton className="h-5 w-2/3" />
-              </div>
-            ))}
+      {/* COLLECTIES - Editorial asymmetric layout with captions */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Section header with hairlines */}
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Collecties' : 'Collections'}</span>
+            <Hairline className="flex-1" />
           </div>
-        ) : collections.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            {collections.slice(0, 2).map((collection) => (
-              <Link
-                key={collection.node.id}
-                to={`/collections/${collection.node.handle}`}
-                className="group block"
-              >
-                <article className="image-reveal">
-                  <div className="aspect-[4/5] bg-muted mb-6 overflow-hidden">
-                    {collection.node.image ? (
-                      <img
-                        src={collection.node.image.url}
-                        alt={collection.node.image.altText || `${collection.node.title} ${isNL ? 'collectie' : 'collection'}`}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-secondary/50 flex items-center justify-center">
-                        <span className="text-muted-foreground font-serif text-2xl">{collection.node.title}</span>
-                      </div>
-                    )}
-                  </div>
-                </article>
-                <div className="space-y-2">
-                  <h3 className="font-serif text-display-sm text-foreground">
-                    {collection.node.title}
-                  </h3>
-                  {collection.node.description && (
-                    <p className="font-sans text-body-sm text-muted-foreground">
-                      {getCollectionDescription(collection.node.handle, collection.node.description)}
-                    </p>
-                  )}
-                  <span className="inline-flex items-center text-foreground text-sm font-medium group-hover:translate-x-1 transition-transform duration-300 pt-3">
-                    {isNL ? "Ontdek collectie" : "Discover collection"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="text-muted-foreground text-center py-12">
-            {isNL ? 'Geen collecties gevonden.' : 'No collections found.'}
-          </p>
-        )}
 
-        <div className="text-center mt-12">
-          <Button asChild variant="ghost" size="lg">
-            <Link to="/collections">
-              {isNL ? "Bekijk alle collecties" : "View all collections"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </SectionBand>
-
-      {/* Process - Premium Timeline */}
-      <SectionBand variant="sand" size="lg">
-        <SectionHeader
-          eyebrow={isNL ? 'Werkwijze' : 'Process'}
-          title={isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
-          centered
-        />
-        
-        <PremiumTimeline steps={processSteps} className="max-w-5xl mx-auto" />
-        
-        <div className="text-center mt-16">
-          <Button asChild variant="atelier-filled" size="lg">
-            <Link to="/bespoke" onClick={trackProposal}>
-              {isNL ? "Start uw project" : "Start your project"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </SectionBand>
-
-      {/* Editorial Statement */}
-      <SectionBand variant="default" size="lg">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="font-serif text-display-sm lg:text-display-md text-foreground leading-[1.2]">
-            {isNL 
-              ? "Elk meubel is uniek. De steen bepaalt het karakter — wij vertalen het naar uw ruimte."
-              : "Every piece is unique. The stone defines the character — we translate it to your space."}
-          </p>
-        </div>
-      </SectionBand>
-
-      {/* Bespoke CTA - Editorial Split */}
-      <SectionBand variant="cream" size="lg">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="order-2 lg:order-1">
-            <p className="text-eyebrow uppercase text-muted-foreground mb-4">
-              {isNL ? 'Maatwerk' : 'Bespoke'}
-            </p>
+          <div className="max-w-xl mx-auto text-center mb-16">
             <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
-              {isNL ? "Uw visie, onze expertise" : "Your vision, our expertise"}
+              {isNL ? "Travertin & marmer" : "Travertine & marble"}
             </h2>
-            <p className="text-body-md text-muted-foreground leading-relaxed mb-8">
+            <p className="text-body-md text-muted-foreground">
               {isNL 
-                ? "Deel uw wensen en afmetingen. Binnen 48 uur ontvangt u een persoonlijk voorstel met visualisaties en materiaalopties."
-                : "Share your wishes and dimensions. Within 48 hours you receive a personal proposal with visualizations and material options."}
+                ? "Twee signatuurcollecties, elk met eigen karakter."
+                : "Two signature collections, each with its own character."}
             </p>
-            <Button asChild variant="atelier-filled" size="lg">
-              <Link to="/voorstel">
-                {isNL ? "Ontvang voorstel" : "Receive proposal"}
+          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {[1, 2].map((i) => (
+                <div key={i}>
+                  <Skeleton className="aspect-[3/4] w-full mb-6" />
+                  <Skeleton className="h-4 w-1/4 mb-3" />
+                  <Skeleton className="h-6 w-1/2 mb-2" />
+                  <Skeleton className="h-4 w-2/3" />
+                </div>
+              ))}
+            </div>
+          ) : collections.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+              {collections.slice(0, 2).map((collection, index) => (
+                <Link
+                  key={collection.node.id}
+                  to={`/collections/${collection.node.handle}`}
+                  className={`group block ${index === 0 ? 'lg:mt-12' : ''}`}
+                >
+                  {/* Image with subtle hover */}
+                  <div className="image-reveal mb-6">
+                    <div className="aspect-[3/4] bg-muted overflow-hidden">
+                      {collection.node.image ? (
+                        <img
+                          src={collection.node.image.url}
+                          alt={collection.node.image.altText || collection.node.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-secondary/50 flex items-center justify-center">
+                          <span className="text-muted-foreground font-serif text-2xl">{collection.node.title}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Editorial caption */}
+                  <div className="space-y-3">
+                    <p className="editorial-caption-label">
+                      {isNL ? 'Collectie' : 'Collection'}
+                    </p>
+                    <h3 className="font-serif text-xl lg:text-2xl text-foreground">
+                      {collection.node.title}
+                    </h3>
+                    {collection.node.description && (
+                      <p className="text-body-sm text-muted-foreground max-w-xs">
+                        {getCollectionDescription(collection.node.handle, collection.node.description)}
+                      </p>
+                    )}
+                    <div className="pt-3 flex items-center gap-3">
+                      <span className="text-sm font-medium uppercase tracking-[0.1em] text-foreground">
+                        {isNL ? "Ontdek" : "Discover"}
+                      </span>
+                      <span className="flex items-center justify-center w-8 h-8 border border-foreground/15 group-hover:border-foreground/30 group-hover:translate-x-1 transition-all duration-400">
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-center py-12">
+              {isNL ? 'Geen collecties gevonden.' : 'No collections found.'}
+            </p>
+          )}
+
+          <div className="text-center mt-16">
+            <Button asChild variant="sera-secondary" size="lg">
+              <Link to="/collections">
+                {isNL ? "Bekijk alle collecties" : "View all collections"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
-          
-          <div className="order-1 lg:order-2">
-            <div className="aspect-[4/5] bg-secondary/30 border border-border/30 flex items-center justify-center">
-              <div className="text-center p-8">
-                <p className="font-serif text-2xl text-foreground mb-2">
-                  {isNL ? "Voorstel in 48 uur" : "Proposal in 48 hours"}
-                </p>
-                <p className="text-body-sm text-muted-foreground">
-                  {isNL ? "Inclusief schetsen en materiaalopties" : "Including sketches and material options"}
-                </p>
-              </div>
+        </div>
+      </section>
+
+      {/* HOE KUNNEN WIJ HELPEN - Editorial split with action panels */}
+      <section className="py-24 lg:py-32 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+            {/* Left: Short intro + primary CTA */}
+            <div className="lg:sticky lg:top-32">
+              <p className="micro-label mb-6">
+                {isNL ? 'Hoe kunnen wij helpen?' : 'How can we help?'}
+              </p>
+              <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-6">
+                {isNL ? "Uw visie, onze expertise" : "Your vision, our expertise"}
+              </h2>
+              <p className="text-body-md text-muted-foreground leading-relaxed mb-10 max-w-md">
+                {isNL 
+                  ? "Wij helpen u bij elke stap — van eerste idee tot plaatsing in uw interieur."
+                  : "We guide you every step — from initial idea to installation in your interior."}
+              </p>
+              <Button asChild variant="sera-primary" size="lg">
+                <Link to="/bespoke" onClick={trackProposal}>
+                  {isNL ? "Start uw project" : "Start your project"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+            
+            {/* Right: Two bespoke action panels */}
+            <div className="space-y-px">
+              <ActionPanel
+                label={isNL ? 'Collectie' : 'Collection'}
+                title={isNL ? "Kies uit onze collectie" : "Choose from our collection"}
+                description={isNL ? "Ontdek bestaande ontwerpen in travertin en marmer." : "Discover existing designs in travertine and marble."}
+                ctaText={isNL ? "Bekijk collecties" : "View collections"}
+                ctaLink="/collections"
+                className="bg-background"
+              />
+              <ActionPanel
+                label={isNL ? 'Maatwerk' : 'Bespoke'}
+                title={isNL ? "Laat iets unieks maken" : "Have something unique made"}
+                description={isNL ? "Op maat naar uw wensen, afmetingen en steenkeuze." : "Tailored to your wishes, dimensions and stone choice."}
+                ctaText={isNL ? "Vraag voorstel" : "Request proposal"}
+                ctaLink="/voorstel"
+                className="bg-background"
+              />
             </div>
           </div>
         </div>
-      </SectionBand>
+      </section>
 
-      {/* Final CTA Band */}
-      <SectionBand variant="dark" size="md">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="font-serif text-display-sm text-background mb-4">
-            {isNL ? "Klaar om te beginnen?" : "Ready to begin?"}
-          </h2>
-          <p className="text-background/70 text-body-md mb-8">
-            {isNL 
-              ? "Plan een vrijblijvend gesprek of bekijk onze voorbeelden."
-              : "Schedule a no-obligation conversation or view our examples."}
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90">
-              <Link to="/contact">
-                {isNL ? "Neem contact op" : "Get in touch"}
+      {/* WERKWIJZE - Bespoke Timeline with ghost numbers */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Section header */}
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Werkwijze' : 'Process'}</span>
+            <Hairline className="flex-1" />
+          </div>
+
+          <div className="max-w-xl mx-auto text-center mb-16">
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground">
+              {isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
+            </h2>
+          </div>
+          
+          {/* Bespoke Timeline with hairline separators */}
+          <div className="border-t border-b" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
+            <BespokeTimeline steps={processSteps} className="max-w-6xl mx-auto" />
+          </div>
+          
+          <div className="text-center mt-16">
+            <Button asChild variant="sera-primary" size="lg">
+              <Link to="/bespoke" onClick={trackProposal}>
+                {isNL ? "Start uw project" : "Start your project"}
                 <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-background/30 text-background hover:bg-background/10">
-              <Link to="/lookbook">
-                {isNL ? "Bekijk lookbook" : "View lookbook"}
               </Link>
             </Button>
           </div>
         </div>
-      </SectionBand>
+      </section>
+
+      {/* Editorial Statement */}
+      <section className="py-20 lg:py-28 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="font-serif text-display-sm lg:text-display-md text-foreground leading-[1.2]">
+              {isNL 
+                ? "Elk meubel is uniek. De steen bepaalt het karakter — wij vertalen het naar uw ruimte."
+                : "Every piece is unique. The stone defines the character — we translate it to your space."}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* WAAROM SERA NORR - Typographic proof grid with hairlines */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Section header */}
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Waarom SERA NORR' : 'Why SERA NORR'}</span>
+            <Hairline className="flex-1" />
+          </div>
+
+          {/* Proof Grid */}
+          <ProofGrid items={proofItems} className="max-w-6xl mx-auto" />
+        </div>
+      </section>
+
+      {/* Final CTA Band */}
+      <section className="py-20 lg:py-28 bg-foreground text-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="font-serif text-display-sm text-background mb-4">
+              {isNL ? "Klaar om te beginnen?" : "Ready to begin?"}
+            </h2>
+            <p className="text-background/70 text-body-md mb-10">
+              {isNL 
+                ? "Plan een vrijblijvend gesprek of bekijk onze voorbeelden."
+                : "Schedule a no-obligation conversation or view our examples."}
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
+                <Link to="/contact">
+                  {isNL ? "Neem contact op" : "Get in touch"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="sera-secondary" size="lg" className="border-background/30 text-background hover:border-background/50">
+                <Link to="/lookbook">
+                  {isNL ? "Bekijk lookbook" : "View lookbook"}
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </Layout>
   );
 };

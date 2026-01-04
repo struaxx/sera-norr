@@ -37,15 +37,15 @@ export function EditorialSplit({
 }: EditorialSplitProps) {
   const variantStyles = {
     default: 'bg-background',
-    sand: 'bg-secondary/30',
+    sand: 'bg-secondary/20',
     cream: 'bg-ivory/50',
   };
 
   return (
-    <section className={cn(variantStyles[variant], 'py-section-sm lg:py-section', className)}>
+    <section className={cn(variantStyles[variant], 'py-24 lg:py-32', className)}>
       <div className="container mx-auto px-6 lg:px-12">
         <div className={cn(
-          'grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center',
+          'grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center',
           reverse && 'lg:[&>*:first-child]:order-2'
         )}>
           {/* Image */}
@@ -62,7 +62,7 @@ export function EditorialSplit({
           {/* Content */}
           <div className="flex flex-col justify-center max-w-lg">
             {eyebrow && (
-              <p className="text-eyebrow uppercase text-muted-foreground mb-4">
+              <p className="micro-label mb-6">
                 {eyebrow}
               </p>
             )}
@@ -71,7 +71,7 @@ export function EditorialSplit({
               {title}
             </h2>
             
-            <p className="text-body-md text-muted-foreground leading-relaxed mb-8">
+            <p className="text-body-md text-muted-foreground leading-relaxed mb-10">
               {description}
             </p>
 
@@ -80,7 +80,7 @@ export function EditorialSplit({
             {(ctaText || secondaryCtaText) && (
               <div className="flex flex-wrap items-center gap-4">
                 {ctaText && ctaLink && (
-                  <Button asChild variant="atelier-filled" size="lg">
+                  <Button asChild variant="sera-primary" size="lg">
                     <Link to={ctaLink}>
                       {ctaText}
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -88,7 +88,7 @@ export function EditorialSplit({
                   </Button>
                 )}
                 {secondaryCtaText && secondaryCtaLink && (
-                  <Button asChild variant="ghost" size="lg">
+                  <Button asChild variant="sera-secondary" size="lg">
                     <Link to={secondaryCtaLink}>
                       {secondaryCtaText}
                     </Link>
