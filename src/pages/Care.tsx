@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
-import { ArrowRight, Calendar, Droplets, Shield, Sparkles } from "lucide-react";
-import { SectionBand } from "@/components/ui/section-band";
-import { PremiumTimeline, TimelineStep } from "@/components/ui/premium-timeline";
+import { SEOHead, generateBreadcrumbSchema, generateFAQSchema, Breadcrumbs } from "@/components/seo";
+import { ArrowRight, Calendar } from "lucide-react";
+import { Hairline } from "@/components/ui/hairline";
+import { ProofGrid } from "@/components/ui/proof-grid";
 import { usePageTracking, useTopicTracking, useFAQTracking, useCTATracking } from "@/hooks/use-tracking";
 
 const Care = () => {
@@ -56,6 +56,21 @@ const Care = () => {
     '@graph': [breadcrumbSchema, faqSchema],
   };
 
+  const careSteps = isNL ? [
+    { title: 'Dagelijks onderhoud', description: 'Reinig regelmatig met een zachte, licht vochtige doek. Vermijd agressieve middelen.' },
+    { title: 'Impregnatie', description: 'Bescherm het oppervlak met hoogwaardige impregneermiddelen. Jaarlijks voor eettafels.' },
+    { title: 'Advies op maat', description: 'Elk type steen vraagt om aangepaste verzorging. Bij levering ontvangt u advies.' },
+  ] : [
+    { title: 'Daily care', description: 'Clean regularly with a soft, slightly damp cloth. Avoid aggressive products.' },
+    { title: 'Sealing', description: 'Protect the surface with high-quality sealants. Annually for dining tables.' },
+    { title: 'Tailored advice', description: 'Each type of stone requires tailored care. You receive advice upon delivery.' },
+  ];
+
+  const breadcrumbItems = [
+    { label: "SERA NORR", href: "/" },
+    { label: isNL ? 'Onderhoud' : 'Care', href: "/care" },
+  ];
+
   return (
     <Layout>
       <SEOHead 
@@ -64,165 +79,172 @@ const Care = () => {
         structuredData={combinedSchema}
       />
       
-      <section className="pt-28 lg:pt-36 pb-16 lg:pb-24 bg-background">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
-          {/* Header */}
-          <header className="text-center mb-12">
-            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+      {/* Hero */}
+      <section className="pt-28 lg:pt-36 pb-16 lg:pb-20 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <Breadcrumbs items={breadcrumbItems} className="mb-8 opacity-60 text-[10px]" />
+          
+          <div className="max-w-3xl">
+            <p className="micro-label mb-6">
               {isNL ? "Informatie" : "Information"}
             </p>
-            <h1 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
+            <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
               {isNL ? "Onderhoud & bescherming" : "Care & protection"}
             </h1>
-            <p className="text-muted-foreground text-body-md max-w-xl mx-auto">
+            <p className="text-body-lg text-muted-foreground leading-relaxed max-w-2xl">
               {isNL 
                 ? "Natuursteen blijft het mooist met de juiste bescherming en eenvoudig onderhoud. Wij adviseren wat past bij uw gebruik."
                 : "Natural stone looks best with proper protection and simple care. We advise what suits your use."}
             </p>
-          </header>
+          </div>
+        </div>
+      </section>
 
-          {/* Section 1: Dagelijks onderhoud */}
-          <section className="mb-12">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                <Droplets className="h-5 w-5 text-foreground" />
-              </div>
-              <div>
-                <h2 className="font-serif text-xl text-foreground mb-2">
-                  {isNL ? "Dagelijks onderhoud" : "Daily care"}
-                </h2>
-                <p className="text-muted-foreground text-body-md leading-relaxed">
-                  {isNL 
-                    ? "Reinig uw stenen meubel regelmatig met een zachte, licht vochtige doek. Vermijd agressieve schoonmaakmiddelen, zure vloeistoffen (citroensap, azijn) en schurende materialen. Voor dagelijks gebruik is water voldoende."
-                    : "Clean your stone furniture regularly with a soft, lightly damp cloth. Avoid aggressive cleaning products, acidic liquids (lemon juice, vinegar) and abrasive materials. For daily use, water is sufficient."}
-                </p>
-              </div>
-            </div>
-            <ul className="ml-14 space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-muted-foreground/50 rounded-full" />
-                {isNL ? "Gebruik een zachte microvezel doek" : "Use a soft microfiber cloth"}
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-muted-foreground/50 rounded-full" />
-                {isNL ? "Veeg gemorste vloeistoffen direct op" : "Wipe up spilled liquids immediately"}
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-muted-foreground/50 rounded-full" />
-                {isNL ? "Gebruik onderzetters onder hete voorwerpen" : "Use coasters under hot objects"}
-              </li>
-            </ul>
-          </section>
+      {/* Care Steps - Editorial Grid */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Verzorging' : 'Care'}</span>
+            <Hairline className="flex-1" />
+          </div>
 
-          {/* Section 2: Impregnatie */}
-          <section className="mb-12">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                <Shield className="h-5 w-5 text-foreground" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            {careSteps.map((step, index) => (
+              <div key={index} className="relative">
+                <span className="font-serif text-[80px] lg:text-[100px] text-foreground/[0.03] absolute -top-4 -left-2 leading-none select-none pointer-events-none">
+                  0{index + 1}
+                </span>
+                <div className="relative pt-8">
+                  <h3 className="font-serif text-xl text-foreground mb-3">
+                    {step.title}
+                  </h3>
+                  <p className="text-body-sm text-muted-foreground leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="font-serif text-xl text-foreground mb-2">
-                  {isNL ? "Impregnatie & bescherming" : "Sealing & protection"}
-                </h2>
-                <p className="text-muted-foreground text-body-md leading-relaxed">
-                  {isNL 
-                    ? "Impregnatie beschermt natuursteen tegen vlekken door een onzichtbare beschermlaag te creëren. Het sluit de poriën af zonder het natuurlijke karakter aan te tasten. Wij gebruiken hoogwaardige impregneermiddelen die langdurige bescherming bieden."
-                    : "Sealing protects natural stone against stains by creating an invisible protective layer. It closes the pores without affecting the natural character. We use high-quality sealants that offer long-lasting protection."}
-                </p>
-              </div>
-            </div>
-            <div className="ml-14 bg-secondary/30 border border-border/30 p-4">
-              <p className="text-sm text-foreground font-medium mb-1">
-                {isNL ? "Onze aanbeveling" : "Our recommendation"}
-              </p>
-              <p className="text-sm text-muted-foreground">
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Material Specifics - Editorial Split */}
+      <section className="py-24 lg:py-32 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Per materiaal' : 'Per material'}</span>
+            <Hairline className="flex-1" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            {/* Travertine */}
+            <div className="p-8 lg:p-10 border border-foreground/8 bg-background">
+              <p className="editorial-caption-label mb-3">01</p>
+              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-4">
+                Travertin
+              </h3>
+              <p className="text-body-md text-muted-foreground leading-relaxed mb-6">
                 {isNL 
-                  ? "Intensief gebruikte oppervlakken (eettafels): jaarlijks impregneren. Consoles en bijzettafels: om de 2-3 jaar."
-                  : "Heavily used surfaces (dining tables): annual sealing. Consoles and side tables: every 2-3 years."}
+                  ? "Warm en poreus. Impregneert uitstekend en ontwikkelt met de tijd een mooie patina die het karakter verdiept."
+                  : "Warm and porous. Seals excellently and develops a beautiful patina over time that deepens its character."}
               </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-center gap-3">
+                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
+                  {isNL ? "Gebruik zachte microvezel doek" : "Use soft microfiber cloth"}
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
+                  {isNL ? "Vermijd zure vloeistoffen" : "Avoid acidic liquids"}
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
+                  {isNL ? "Jaarlijkse impregnatie aanbevolen" : "Annual sealing recommended"}
+                </li>
+              </ul>
             </div>
-          </section>
 
-          {/* Section 3: Wat wij adviseren */}
-          <section className="mb-12">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                <Sparkles className="h-5 w-5 text-foreground" />
-              </div>
-              <div>
-                <h2 className="font-serif text-xl text-foreground mb-2">
-                  {isNL ? "Wat wij adviseren" : "What we recommend"}
-                </h2>
-                <p className="text-muted-foreground text-body-md leading-relaxed mb-4">
-                  {isNL 
-                    ? "Elk type steen heeft een eigen karakter en vraagt om aangepaste verzorging. Bij levering ontvangt u advies op maat en een verzorgingsset."
-                    : "Each type of stone has its own character and requires tailored care. Upon delivery you receive customized advice and a care kit."}
-                </p>
-              </div>
+            {/* Marble */}
+            <div className="p-8 lg:p-10 border border-foreground/8 bg-background">
+              <p className="editorial-caption-label mb-3">02</p>
+              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-4">
+                {isNL ? "Marmer" : "Marble"}
+              </h3>
+              <p className="text-body-md text-muted-foreground leading-relaxed mb-6">
+                {isNL 
+                  ? "Elegant en delicaat. Vraagt extra aandacht voor zure vloeistoffen. Regelmatige impregnatie beschermt het oppervlak."
+                  : "Elegant and delicate. Requires extra attention for acidic liquids. Regular sealing protects the surface."}
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-center gap-3">
+                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
+                  {isNL ? "Veeg gemorste vloeistoffen direct op" : "Wipe up spilled liquids immediately"}
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
+                  {isNL ? "Gebruik onderzetters" : "Use coasters"}
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
+                  {isNL ? "pH-neutrale reiniger" : "pH-neutral cleaner"}
+                </li>
+              </ul>
             </div>
-            <div className="ml-14 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="border border-border/30 p-4">
-                <p className="text-sm font-medium text-foreground mb-1">Travertin</p>
-                <p className="text-xs text-muted-foreground">
-                  {isNL 
-                    ? "Warm en poreus. Impregneert uitstekend. Lichte patina verdiept karakter."
-                    : "Warm and porous. Seals excellently. Light patina deepens character."}
-                </p>
-              </div>
-              <div className="border border-border/30 p-4">
-                <p className="text-sm font-medium text-foreground mb-1">{isNL ? "Marmer" : "Marble"}</p>
-                <p className="text-xs text-muted-foreground">
-                  {isNL 
-                    ? "Elegant en delicaat. Extra aandacht voor zure vloeistoffen. Regelmatige impregnatie."
-                    : "Elegant and delicate. Extra attention for acidic liquids. Regular sealing."}
-                </p>
-              </div>
-            </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
-          {/* Divider */}
-          <div className="border-t border-border/30 my-12" />
+      {/* FAQ Section */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Veelgestelde vragen' : 'FAQ'}</span>
+            <Hairline className="flex-1" />
+          </div>
 
-          {/* FAQ Section */}
-          <section className="mb-12">
-            <h2 className="font-serif text-xl text-foreground mb-6 text-center">
-              {isNL ? "Veelgestelde vragen" : "Frequently asked questions"}
-            </h2>
+          <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
               {faqItems.map((item, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="border-border/30">
+                <AccordionItem key={index} value={`item-${index}`} className="border-foreground/8">
                   <AccordionTrigger 
-                    className="text-left text-sm font-medium text-foreground hover:no-underline"
+                    className="text-left text-body-md font-medium text-foreground hover:no-underline py-6"
                     onClick={() => trackFAQ('care')}
                   >
                     {item.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground">
+                  <AccordionContent className="text-body-sm text-muted-foreground pb-6">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
-          </section>
+          </div>
+        </div>
+      </section>
 
-          {/* CTA */}
-          <div className="text-center pt-8 border-t border-border/30">
-            <h3 className="font-serif text-lg text-foreground mb-2">
+      {/* CTA Band */}
+      <section className="py-20 lg:py-28 bg-foreground text-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="font-serif text-display-sm text-background mb-4">
               {isNL ? "Bescherming meenemen in uw voorstel?" : "Include protection in your proposal?"}
-            </h3>
-            <p className="text-sm text-muted-foreground mb-6">
+            </h2>
+            <p className="text-background/70 text-body-md mb-10">
               {isNL 
                 ? "Wij adviseren wat past bij uw gebruik en kunnen bescherming meenemen in het voorstel."
                 : "We advise what suits your use and can include protection in the proposal."}
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button asChild variant="atelier-filled" size="lg">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
                 <Link to="/voorstel" onClick={trackProposal}>
                   {isNL ? "Ontvang voorstel binnen 48 uur" : "Receive proposal within 48 hours"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="atelier" size="lg">
+              <Button asChild variant="sera-secondary" size="lg" className="border-background/40 text-background hover:border-background/60 hover:bg-background/5">
                 <Link to="/contact" onClick={trackConsult}>
                   <Calendar className="mr-2 h-4 w-4" />
                   {isNL ? "Plan vrijblijvend gesprek" : "Schedule free consultation"}
