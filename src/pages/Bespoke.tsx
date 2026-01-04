@@ -150,81 +150,107 @@ const Bespoke = () => {
         structuredData={combinedSchema}
       />
 
-      {/* ============================================
-          1) HERO SECTION
-          ============================================ */}
-      <section className="pt-32 lg:pt-40 pb-16 lg:pb-24">
+      {/* Breadcrumb utility line */}
+      <div className="pt-24 lg:pt-28 pb-4">
         <div className="container mx-auto px-6 lg:px-12">
-          <Breadcrumbs className="mb-8" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Content */}
-            <div className="order-2 lg:order-1">
-              <MicroLabel className="mb-6 block">
+          <Breadcrumbs />
+        </div>
+      </div>
+
+      {/* ============================================
+          1) HERO SECTION — Editorial 2-column grid
+          ============================================ */}
+      <section className="pb-20 lg:pb-28">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            {/* Left: Content column */}
+            <div className="order-2 lg:order-1 lg:col-span-5 lg:pt-4">
+              <MicroLabel className="mb-5 block">
                 {isNL ? 'MAATWERK ATELIER' : 'BESPOKE ATELIER'}
               </MicroLabel>
               
-              <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6 leading-[1.1]">
-                {isNL 
-                  ? "Maatwerk in natuursteen — ontworpen voor uw ruimte"
-                  : "Bespoke natural stone — designed for your space"}
+              {/* H1 with controlled typography and intentional line breaks */}
+              <h1 className="font-serif text-[2rem] sm:text-[2.5rem] lg:text-[2.75rem] text-foreground leading-[1.15] tracking-[-0.01em] mb-5 max-w-md">
+                {isNL ? (
+                  <>
+                    Maatwerk in natuursteen
+                    <br className="hidden sm:block" />
+                    <span className="sm:hidden"> — </span>
+                    <span className="hidden sm:inline"> — </span>
+                    ontworpen voor uw ruimte
+                  </>
+                ) : (
+                  <>
+                    Bespoke natural stone
+                    <br className="hidden sm:block" />
+                    <span className="sm:hidden"> — </span>
+                    <span className="hidden sm:inline"> — </span>
+                    designed for your space
+                  </>
+                )}
               </h1>
               
-              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-lg">
+              <p className="text-base text-muted-foreground leading-relaxed mb-6 max-w-sm">
                 {isNL 
                   ? "Van eerste schets tot plaatsing. Een zorgvuldig traject met materiaalkeuze, visualisaties en white-glove levering."
                   : "From first sketch to installation. A careful process with material selection, visualizations and white-glove delivery."}
               </p>
               
-              {/* Chips */}
-              <div className="flex flex-wrap gap-2.5 mb-8">
+              {/* Premium micro-tags */}
+              <div className="flex flex-wrap gap-2 mb-7">
                 {[
                   isNL ? 'Prijs op aanvraag' : 'Price on request',
-                  isNL ? 'Doorlooptijd 12–16 weken' : 'Lead time 12–16 weeks',
+                  isNL ? '12–16 weken' : '12–16 weeks',
                   isNL ? '5 jaar garantie' : '5 year warranty',
                 ].map((chip) => (
                   <span 
                     key={chip}
-                    className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground"
+                    className="inline-flex items-center px-3 py-1 border border-foreground/15 text-[11px] uppercase tracking-[0.1em] text-muted-foreground"
                   >
                     {chip}
                   </span>
                 ))}
               </div>
 
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                <Button asChild variant="atelier-filled" size="lg" className="h-12">
+              {/* CTA rail */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-3">
+                <Button asChild variant="atelier-filled" size="default" className="h-11 px-6">
                   <a href="#offerte" onClick={trackProposal}>
-                    {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
+                    {isNL ? 'Ontvang voorstel' : 'Get proposal'}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-                <Button asChild variant="atelier" size="lg" className="h-12 border-foreground/30 hover:border-foreground/60">
+                <Button asChild variant="atelier" size="default" className="h-11 px-6 border-foreground/25 hover:border-foreground/50">
                   <Link to="/contact">
-                    {isNL ? 'Plan vrijblijvend gesprek' : 'Schedule free consultation'}
+                    {isNL ? 'Plan gesprek' : 'Schedule call'}
                   </Link>
                 </Button>
               </div>
               
-              {/* Trust line */}
-              <p className="text-sm text-muted-foreground">
+              {/* Micro-note */}
+              <p className="text-xs text-muted-foreground/70">
                 {isNL ? 'Reactie binnen 48 uur — geen verplichtingen.' : 'Response within 48 hours — no obligations.'}
               </p>
             </div>
             
-            {/* Image with caption */}
-            <div className="order-1 lg:order-2 relative">
-              <div className="aspect-[4/5] bg-muted overflow-hidden">
-                <img
-                  src={bespokeHero}
-                  alt={isNL ? "SERA NORR maatwerk natuursteen meubels" : "SERA NORR bespoke natural stone furniture"}
-                  className="w-full h-full object-cover"
-                />
+            {/* Right: Image column with editorial framing */}
+            <div className="order-1 lg:order-2 lg:col-span-7">
+              <div className="relative">
+                {/* Image with subtle framing */}
+                <div className="aspect-[4/5] lg:aspect-[5/6] bg-muted overflow-hidden border border-foreground/5 shadow-sm">
+                  <img
+                    src={bespokeHero}
+                    alt={isNL ? "SERA NORR maatwerk natuursteen meubels" : "SERA NORR bespoke natural stone furniture"}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Editorial caption */}
+                <div className="mt-3 flex items-center justify-end">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
+                    TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
+                  </span>
+                </div>
               </div>
-              <p className="absolute -bottom-8 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
-              </p>
             </div>
           </div>
         </div>
