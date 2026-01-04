@@ -384,6 +384,20 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ============================================
+          EDITORIAL STATEMENT
+          ============================================ */}
+      <section className="py-20 lg:py-28 bg-secondary/30">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="font-serif font-semibold text-display-sm text-foreground leading-[1.25]">
+              {isNL 
+                ? "Elk meubel is uniek. De steen bepaalt het karakter — wij vertalen het naar uw ruimte."
+                : "Every piece is unique. The stone defines the character — we translate it to your space."}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ============================================
           WAAROM SERA NORR - Proof grid
