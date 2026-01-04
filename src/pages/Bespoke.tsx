@@ -8,15 +8,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { SEOHead, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
-import { ArrowRight, Upload } from "lucide-react";
+import { SEOHead, generateBreadcrumbSchema, generateFAQSchema, Breadcrumbs } from "@/components/seo";
+import { ArrowRight, Upload, Phone, FileText, Eye, Package, Truck, Shield } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
 import { BespokeTimeline, BespokeTimelineStep } from "@/components/ui/bespoke-timeline";
 import { ProofGrid } from "@/components/ui/proof-grid";
-import { Hairline } from "@/components/ui/hairline";
+import { Hairline, MicroLabel } from "@/components/ui/hairline";
 import { usePageTracking, useCTATracking } from "@/hooks/use-tracking";
 import { trackFormStart, trackFormSubmit } from "@/lib/tracking";
 import bespokeHero from "@/assets/bespoke-hero.png";
+import otherStonesMaterials from "@/assets/other-stones-materials.png";
 
 const Bespoke = () => {
   const { t, i18n } = useTranslation();
@@ -88,28 +89,54 @@ const Bespoke = () => {
     '@graph': [breadcrumbSchema, faqSchema],
   };
 
-  // Process steps - Bespoke Timeline
+  // Process steps for timeline
   const processSteps: BespokeTimelineStep[] = isNL ? [
-    { number: '01', title: 'Consultatie', description: 'Vrijblijvend gesprek over uw wensen.', tag: 'Binnen 24 uur reactie' },
-    { number: '02', title: 'Voorstel', description: 'Schetsen, materiaalopties en offerte.', tag: 'Binnen 48 uur' },
-    { number: '03', title: 'Realisatie', description: 'Productie en white-glove plaatsing.', tag: '12–16 weken' },
+    { number: '01', title: 'Consultatie', description: 'Vrijblijvend gesprek over uw wensen en ruimte.', tag: 'Binnen 24 uur reactie' },
+    { number: '02', title: 'Voorstel & Offerte', description: 'Schetsen, materiaalopties en heldere offerte.', tag: 'Binnen 48 uur' },
+    { number: '03', title: 'Materiaalselectie', description: 'Selecteer uw steenplaat aan de hand van foto\'s.', tag: 'Persoonlijk advies' },
   ] : [
-    { number: '01', title: 'Consultation', description: 'No-obligation conversation about your wishes.', tag: 'Response within 24 hours' },
-    { number: '02', title: 'Proposal', description: 'Sketches, material options and quote.', tag: 'Within 48 hours' },
-    { number: '03', title: 'Realization', description: 'Production and white-glove installation.', tag: '12–16 weeks' },
+    { number: '01', title: 'Consultation', description: 'No-obligation conversation about your wishes and space.', tag: 'Response within 24 hours' },
+    { number: '02', title: 'Proposal & Quote', description: 'Sketches, material options and clear quote.', tag: 'Within 48 hours' },
+    { number: '03', title: 'Material Selection', description: 'Select your stone slab based on photos.', tag: 'Personal advice' },
   ];
 
   // Proof items
   const proofItems = isNL ? [
+    { title: 'Ontworpen in Nederland', description: 'Lokaal atelier.' },
     { title: '5 jaar garantie', description: 'Op constructie en materiaal.' },
     { title: 'White-glove levering', description: 'Plaatsing op locatie.' },
-    { title: 'Voorstel in 48 uur', description: 'Snel en persoonlijk.' },
-    { title: 'Geen verplichtingen', description: 'Vrijblijvende intake.' },
+    { title: 'Maatwerk mogelijk', description: 'Afgestemd op uw ruimte.' },
   ] : [
+    { title: 'Designed in the Netherlands', description: 'Local atelier.' },
     { title: '5 year warranty', description: 'On construction and materials.' },
     { title: 'White-glove delivery', description: 'Installation on location.' },
-    { title: 'Proposal in 48 hours', description: 'Fast and personal.' },
-    { title: 'No obligations', description: 'Non-binding intake.' },
+    { title: 'Bespoke possible', description: 'Tailored to your space.' },
+  ];
+
+  // Use case cards
+  const useCases = isNL ? [
+    { title: 'Naast de bank', description: 'Compact statement, subtiel aanwezig.', format: 'Ø45 × H55', material: 'Travertin' },
+    { title: 'Voor de zithoek', description: 'Rustige basis voor dagelijkse momenten.', format: 'L120 × B80', material: 'Travertin' },
+    { title: 'In de hal', description: 'Architecturale lijn met verfijnde details.', format: 'L160 × B45', material: 'Marmer' },
+    { title: 'Als centerpiece', description: 'Gemaakt om samen te komen.', format: 'L200 × B100', material: 'Travertin' },
+  ] : [
+    { title: 'Next to the sofa', description: 'Compact statement, subtly present.', format: 'Ø45 × H55', material: 'Travertine' },
+    { title: 'For the seating area', description: 'Calm base for daily moments.', format: 'L120 × W80', material: 'Travertine' },
+    { title: 'In the hallway', description: 'Architectural lines with refined details.', format: 'L160 × W45', material: 'Marble' },
+    { title: 'As centerpiece', description: 'Made to gather around.', format: 'L200 × W100', material: 'Travertine' },
+  ];
+
+  // "Wat u ontvangt" items
+  const deliverables = isNL ? [
+    { icon: Eye, title: '3D-visualisaties', description: 'Uw ontwerp in realistische renders.' },
+    { icon: Package, title: 'Materiaalmonsters', description: 'Voel de steen voor u beslist.' },
+    { icon: Truck, title: 'White-glove levering', description: 'Professionele plaatsing inbegrepen.' },
+    { icon: Shield, title: '5 jaar garantie', description: 'Op constructie en materiaal.' },
+  ] : [
+    { icon: Eye, title: '3D visualizations', description: 'Your design in realistic renders.' },
+    { icon: Package, title: 'Material samples', description: 'Feel the stone before you decide.' },
+    { icon: Truck, title: 'White-glove delivery', description: 'Professional installation included.' },
+    { icon: Shield, title: '5 year warranty', description: 'On construction and materials.' },
   ];
 
   return (
@@ -123,40 +150,71 @@ const Bespoke = () => {
         structuredData={combinedSchema}
       />
 
-      {/* HERO - Editorial Split with micro-label */}
-      <section className="min-h-[90vh] flex items-center pt-20 lg:pt-0">
+      {/* ============================================
+          1) HERO SECTION
+          ============================================ */}
+      <section className="pt-32 lg:pt-40 pb-16 lg:pb-24">
         <div className="container mx-auto px-6 lg:px-12">
+          <Breadcrumbs className="mb-8" />
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Content */}
             <div className="order-2 lg:order-1">
-              <p className="micro-label mb-6">
-                {isNL ? 'Online atelier' : 'Online atelier'}
-              </p>
-              <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
-                {isNL ? "Maatwerk in natuursteen" : "Bespoke in natural stone"}
-              </h1>
-              <p className="text-body-lg text-muted-foreground leading-relaxed mb-10 max-w-lg">
+              <MicroLabel className="mb-6 block">
+                {isNL ? 'MAATWERK ATELIER' : 'BESPOKE ATELIER'}
+              </MicroLabel>
+              
+              <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6 leading-[1.1]">
                 {isNL 
-                  ? "Elk meubel op maat. Materiaal, afmetingen en afwerking stemmen we samen af."
-                  : "Every piece made to measure. Material, dimensions and finish aligned together."}
+                  ? "Maatwerk in natuursteen — ontworpen voor uw ruimte"
+                  : "Bespoke natural stone — designed for your space"}
+              </h1>
+              
+              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-lg">
+                {isNL 
+                  ? "Van eerste schets tot plaatsing. Een zorgvuldig traject met materiaalkeuze, visualisaties en white-glove levering."
+                  : "From first sketch to installation. A careful process with material selection, visualizations and white-glove delivery."}
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Button asChild variant="sera-primary" size="lg">
+              
+              {/* Chips */}
+              <div className="flex flex-wrap gap-2.5 mb-8">
+                {[
+                  isNL ? 'Prijs op aanvraag' : 'Price on request',
+                  isNL ? 'Doorlooptijd 12–16 weken' : 'Lead time 12–16 weeks',
+                  isNL ? '5 jaar garantie' : '5 year warranty',
+                ].map((chip) => (
+                  <span 
+                    key={chip}
+                    className="inline-flex items-center px-4 py-1.5 bg-secondary/30 border border-border/40 text-sm text-foreground"
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                <Button asChild variant="atelier-filled" size="lg" className="h-12">
                   <a href="#offerte" onClick={trackProposal}>
-                    {isNL ? "Ontvang voorstel" : "Receive proposal"}
+                    {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-                <Button asChild variant="sera-secondary" size="lg">
-                  <Link to="/collections">
-                    {isNL ? "Bekijk collecties" : "View collections"}
+                <Button asChild variant="atelier" size="lg" className="h-12 border-foreground/30 hover:border-foreground/60">
+                  <Link to="/contact">
+                    {isNL ? 'Plan vrijblijvend gesprek' : 'Schedule free consultation'}
                   </Link>
                 </Button>
               </div>
+              
+              {/* Trust line */}
+              <p className="text-sm text-muted-foreground">
+                {isNL ? 'Reactie binnen 48 uur — geen verplichtingen.' : 'Response within 48 hours — no obligations.'}
+              </p>
             </div>
             
-            {/* Image */}
-            <div className="order-1 lg:order-2 image-reveal">
+            {/* Image with caption */}
+            <div className="order-1 lg:order-2 relative">
               <div className="aspect-[4/5] bg-muted overflow-hidden">
                 <img
                   src={bespokeHero}
@@ -164,86 +222,181 @@ const Bespoke = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
+              <p className="absolute -bottom-8 right-0 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* WAAROM - Proof Grid */}
-      <section className="py-20 lg:py-24 bg-secondary/20">
+      {/* ============================================
+          2) INTRO SECTION
+          ============================================ */}
+      <section className="py-16 lg:py-20">
         <div className="container mx-auto px-6 lg:px-12">
-          <ProofGrid items={proofItems} className="max-w-6xl mx-auto" />
-        </div>
-      </section>
-
-      {/* WERKWIJZE - Process Timeline */}
-      <section className="py-24 lg:py-32">
-        <div className="container mx-auto px-6 lg:px-12">
-          {/* Section header */}
-          <div className="flex items-center gap-6 mb-16 lg:mb-20">
-            <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">{isNL ? 'Werkwijze' : 'Process'}</span>
-            <Hairline className="flex-1" />
-          </div>
-
-          <div className="max-w-xl mx-auto text-center mb-16">
-            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground">
-              {isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
-            </h2>
-          </div>
-          
-          {/* Bespoke Timeline */}
-          <div className="border-t border-b" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
-            <BespokeTimeline steps={processSteps} className="max-w-6xl mx-auto" />
-          </div>
-        </div>
-      </section>
-
-      {/* Editorial Statement */}
-      <section className="py-16 lg:py-20 bg-secondary/20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="font-serif text-display-sm text-foreground leading-[1.2]">
+          <Hairline className="mb-12" />
+          <div className="max-w-3xl">
+            <h2 className="font-serif text-display-sm text-foreground mb-6">
               {isNL 
-                ? "De steen bepaalt het karakter. Wij vertalen het naar uw ruimte."
-                : "The stone defines the character. We translate it to your space."}
+                ? "Online atelier voor maatwerk natuursteenmeubels"
+                : "Online atelier for bespoke natural stone furniture"}
+            </h2>
+            <p className="text-body-lg text-muted-foreground leading-relaxed">
+              {isNL 
+                ? "SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Steenkeuze en afwerking stemmen we samen af tijdens de intake."
+                : "SERA NORR is an online atelier for bespoke furniture in natural stone (travertine, marble and selected stone types). Stone choice and finish are aligned together during the intake."}
             </p>
           </div>
         </div>
       </section>
 
-      {/* MATERIALEN - Editorial Split */}
+      {/* ============================================
+          3) PROOF GRID (4 kernpunten)
+          ============================================ */}
+      <section className="py-16 lg:py-20 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <ProofGrid items={proofItems} className="max-w-6xl mx-auto" />
+        </div>
+      </section>
+
+      {/* ============================================
+          4) MAATWERK OP AANVRAAG
+          ============================================ */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center gap-6 mb-16">
+            <Hairline className="flex-1" />
+            <MicroLabel>{isNL ? 'MAATWERK' : 'BESPOKE'}</MicroLabel>
+            <Hairline className="flex-1" />
+          </div>
+          
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-6">
+              {isNL ? "Maatwerk op aanvraag" : "Bespoke on request"}
+            </h2>
+            <p className="text-body-lg text-muted-foreground leading-relaxed mb-6">
+              {isNL 
+                ? "Elke SERA NORR piece wordt op maat gemaakt. Materiaal, maatvoering, randafwerking, onderstel en levering/plaatsing bepalen de uiteindelijke prijs. Na een korte intake ontvang je een voorstel op maat."
+                : "Every SERA NORR piece is made to measure. Material, dimensions, edge finish, base and delivery/installation determine the final price. After a short intake you receive a tailored proposal."}
+            </p>
+            <p className="text-body-md text-foreground/80 font-medium">
+              {isNL 
+                ? "Prijs op aanvraag — op basis van steenkeuze, maatvoering, afwerking en levering/plaatsing."
+                : "Price on request — based on stone choice, dimensions, finish and delivery/installation."}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          5) USE CASES (Editorial Matrix)
+          ============================================ */}
+      <section className="py-20 lg:py-24 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-foreground/8">
+            {useCases.map((item, index) => (
+              <div 
+                key={index} 
+                className="bg-secondary/20 p-8 lg:p-10"
+              >
+                <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+                  {item.title}
+                </h3>
+                <p className="text-body-sm text-muted-foreground leading-relaxed mb-6">
+                  {item.description}
+                </p>
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
+                    {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {item.format}
+                  </p>
+                  <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
+                    {item.material}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* CTA + Footnote */}
+          <div className="text-center mt-12">
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
+              <Button asChild variant="atelier-filled" size="lg">
+                <a href="#offerte">
+                  {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+              <Button asChild variant="atelier" size="lg">
+                <Link to="/collections">
+                  {isNL ? 'Bekijk voorbeelden' : 'View examples'}
+                </Link>
+              </Button>
+            </div>
+            <p className="text-body-sm text-muted-foreground max-w-xl mx-auto">
+              {isNL 
+                ? "Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie."
+                : "Calacatta Viola & rare stone types on request. Prices excl. VAT. Delivery & installation depending on location."}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          7) DONKERE CTA BAND
+          ============================================ */}
+      <section className="py-20 lg:py-24 bg-foreground">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="font-serif text-display-sm text-background mb-4">
+              {isNL ? "Vertaal dit naar uw ruimte." : "Translate this to your space."}
+            </h2>
+            <p className="text-body-lg text-background/70 mb-8">
+              {isNL 
+                ? "Deel uw afmetingen en voorkeuren — wij maken een voorstel op maat."
+                : "Share your dimensions and preferences — we create a tailored proposal."}
+            </p>
+            <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
+              <a href="#offerte">
+                {isNL ? 'Ontvang voorstel' : 'Receive proposal'}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          8) MATERIALEN & AFWERKING
+          ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Image placeholder */}
-            <div className="aspect-[4/5] bg-secondary/30 flex items-center justify-center border" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
-              <div className="text-center p-8">
-                <p className="font-serif text-2xl text-foreground mb-2">
-                  {isNL ? "Travertin & marmer" : "Travertine & marble"}
-                </p>
-                <p className="text-body-sm text-muted-foreground">
-                  {isNL ? "Geselecteerde steensoorten" : "Selected stone types"}
-                </p>
-              </div>
+            {/* Image */}
+            <div className="aspect-[4/5] bg-muted overflow-hidden">
+              <img
+                src={otherStonesMaterials}
+                alt={isNL ? "Natuursteen materialen" : "Natural stone materials"}
+                className="w-full h-full object-cover"
+              />
             </div>
             
             {/* Content */}
             <div>
-              <p className="micro-label mb-6">
-                {isNL ? 'Materialen' : 'Materials'}
-              </p>
+              <MicroLabel className="mb-6 block">
+                {isNL ? 'MATERIALEN' : 'MATERIALS'}
+              </MicroLabel>
               <h2 className="font-serif text-display-sm text-foreground mb-5">
-                {isNL ? "Steenkeuze op maat" : "Stone selection on request"}
+                {isNL ? "Materialen & afwerking" : "Materials & finish"}
               </h2>
-              <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-md">
+              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-md">
                 {isNL 
-                  ? "Steenkeuze, afwerking en details stemmen we samen af tijdens de intake."
-                  : "Stone choice, finish and details are aligned together during the intake."}
+                  ? "Steenkeuze, afwerking en details stemmen we samen af tijdens de intake. U ontvangt advies op basis van uw ruimte en gebruik."
+                  : "Stone choice, finish and details are aligned together during the intake. You receive advice based on your space and usage."}
               </p>
               <Button asChild variant="sera-secondary" size="lg">
                 <Link to="/materials">
-                  {isNL ? "Bekijk materialen" : "View materials"}
+                  {isNL ? "Bekijk een selectie stenen" : "View a selection of stones"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -252,19 +405,163 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* ============================================
+          9) TRAJECT / TIMELINE + WAT U ONTVANGT
+          ============================================ */}
       <section className="py-24 lg:py-32 bg-secondary/20">
         <div className="container mx-auto px-6 lg:px-12">
           {/* Section header */}
           <div className="flex items-center gap-6 mb-16 lg:mb-20">
             <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">FAQ</span>
+            <MicroLabel>{isNL ? 'HET TRAJECT' : 'THE PROCESS'}</MicroLabel>
+            <Hairline className="flex-1" />
+          </div>
+
+          <div className="max-w-xl mx-auto text-center mb-16">
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
+              {isNL ? "Van idee tot realisatie" : "From idea to realization"}
+            </h2>
+            <p className="text-body-md text-muted-foreground">
+              {isNL 
+                ? "Ons traject is ontworpen voor maximale transparantie en een soepele ervaring."
+                : "Our process is designed for maximum transparency and a smooth experience."}
+            </p>
+          </div>
+          
+          {/* Timeline with side panel layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+            {/* Timeline (2 cols) */}
+            <div className="lg:col-span-2 border-t border-b" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
+              <BespokeTimeline steps={processSteps} className="max-w-full" />
+            </div>
+            
+            {/* Side panel: Wat u ontvangt */}
+            <div className="relative border border-foreground/8 p-8 lg:p-10 bg-background">
+              <MicroLabel className="mb-6 block">
+                {isNL ? 'WAT U ONTVANGT' : 'WHAT YOU RECEIVE'}
+              </MicroLabel>
+              <div className="space-y-6">
+                {deliverables.map((item, index) => (
+                  <div key={index} className="flex gap-4">
+                    <item.icon className="h-5 w-5 text-foreground/40 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-serif text-base text-foreground mb-1">{item.title}</h4>
+                      <p className="text-body-sm text-muted-foreground">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          10) HOE WILT U BEGINNEN? (Two panels)
+          ============================================ */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Lead time note */}
+          <p className="text-center text-body-sm text-muted-foreground mb-8">
+            {isNL 
+              ? "Gemiddelde doorlooptijd: 12–16 weken (afhankelijk van steenkeuze en locatie)"
+              : "Average lead time: 12–16 weeks (depending on stone choice and location)"}
+          </p>
+          
+          <div className="max-w-xl mx-auto text-center mb-12">
+            <h2 className="font-serif text-display-sm text-foreground mb-4">
+              {isNL ? "Hoe wilt u beginnen?" : "How would you like to start?"}
+            </h2>
+            <p className="text-body-md text-muted-foreground">
+              {isNL 
+                ? "Kies de aanpak die bij u past. Alle opties zijn vrijblijvend."
+                : "Choose the approach that suits you. All options are non-binding."}
+            </p>
+          </div>
+          
+          {/* Two bespoke panels */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-foreground/8 max-w-4xl mx-auto">
+            {/* Option 1: Vrijblijvend gesprek */}
+            <div className="bg-background p-10 lg:p-12">
+              <div className="flex items-center gap-3 mb-6">
+                <Phone className="h-5 w-5 text-foreground/40" />
+              </div>
+              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+                {isNL ? "Vrijblijvend gesprek" : "Free consultation"}
+              </h3>
+              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4">
+                {isNL 
+                  ? "Telefonisch of via videocall. Binnen 2 werkdagen reactie."
+                  : "By phone or video call. Response within 2 business days."}
+              </p>
+              <p className="text-xs text-muted-foreground/70 mb-8">
+                {isNL 
+                  ? "Geschikt als u nog twijfelt over formaat of steensoort."
+                  : "Suitable if you're still unsure about size or stone type."}
+              </p>
+              <Button asChild variant="atelier" size="lg" className="w-full justify-center">
+                <Link to="/contact">
+                  {isNL ? 'Plan een gesprek' : 'Schedule a call'}
+                </Link>
+              </Button>
+            </div>
+            
+            {/* Option 2: Offerte aanvragen (meest gekozen) */}
+            <div className="bg-background p-10 lg:p-12 relative">
+              <div className="absolute top-4 right-4">
+                <span className="inline-block px-3 py-1 bg-foreground text-background text-[10px] uppercase tracking-[0.15em]">
+                  {isNL ? 'Meest gekozen' : 'Most popular'}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 mb-6">
+                <FileText className="h-5 w-5 text-foreground/40" />
+              </div>
+              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+                {isNL ? "Offerte aanvragen" : "Request a quote"}
+              </h3>
+              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4">
+                {isNL 
+                  ? "Binnen 48 uur een voorstel met schetsen en offerte."
+                  : "Within 48 hours a proposal with sketches and quote."}
+              </p>
+              <p className="text-xs text-muted-foreground/70 mb-8">
+                {isNL 
+                  ? "Geschikt als u al een richting of maat in gedachten heeft."
+                  : "Suitable if you already have a direction or size in mind."}
+              </p>
+              <Button asChild variant="atelier-filled" size="lg" className="w-full justify-center">
+                <a href="#offerte">
+                  {isNL ? 'Vraag offerte aan' : 'Request a quote'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </div>
+          </div>
+          
+          {/* Micro line */}
+          <p className="text-center text-body-sm text-muted-foreground mt-8">
+            {isNL 
+              ? "Online atelier — materiaalkeuze en details stemmen we samen af. Geen verplichtingen."
+              : "Online atelier — material choice and details are aligned together. No obligations."}
+          </p>
+        </div>
+      </section>
+
+      {/* ============================================
+          11) FAQ Section
+          ============================================ */}
+      <section className="py-24 lg:py-32 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Section header */}
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <MicroLabel>{isNL ? 'VEELGESTELDE VRAGEN' : 'FAQ'}</MicroLabel>
             <Hairline className="flex-1" />
           </div>
 
           <div className="max-w-xl mx-auto text-center mb-12">
             <h2 className="font-serif text-display-sm text-foreground">
-              {isNL ? "Veelgestelde vragen" : "Frequently asked questions"}
+              {isNL ? "Alles over ons maatwerkproces" : "Everything about our bespoke process"}
             </h2>
           </div>
 
@@ -274,7 +571,7 @@ const Bespoke = () => {
                 <AccordionItem 
                   key={index} 
                   value={`item-${index + 1}`} 
-                  className="border-t bg-background px-0"
+                  className="border-t bg-background/50 px-0"
                   style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}
                 >
                   <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-6 px-6">
@@ -292,15 +589,17 @@ const Bespoke = () => {
         </div>
       </section>
 
-      {/* Inquiry Form */}
+      {/* ============================================
+          INQUIRY FORM
+          ============================================ */}
       <section id="offerte" className="py-24 lg:py-32 bg-foreground text-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">
-              <p className="micro-label text-background/50 mb-4">
-                {isNL ? 'Offerte aanvragen' : 'Request quote'}
-              </p>
+              <MicroLabel className="text-background/50 mb-4 block">
+                {isNL ? 'OFFERTE AANVRAGEN' : 'REQUEST QUOTE'}
+              </MicroLabel>
               <h2 className="font-serif text-display-sm mb-4">
                 {isNL ? 'Start uw project' : 'Start your project'}
               </h2>
@@ -314,7 +613,7 @@ const Bespoke = () => {
             <form onSubmit={handleSubmit} onFocus={handleFormFocus} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="bespoke-name" className="block micro-label text-background/50 mb-3">
+                  <label htmlFor="bespoke-name" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
                     {t('bespoke.formName')} *
                   </label>
                   <Input
@@ -328,7 +627,7 @@ const Bespoke = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="bespoke-email" className="block micro-label text-background/50 mb-3">
+                  <label htmlFor="bespoke-email" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
                     {t('bespoke.formEmail')} *
                   </label>
                   <Input
@@ -345,7 +644,7 @@ const Bespoke = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="bespoke-phone" className="block micro-label text-background/50 mb-3">
+                  <label htmlFor="bespoke-phone" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
                     {isNL ? 'Telefoon' : 'Phone'}
                   </label>
                   <Input
@@ -358,7 +657,7 @@ const Bespoke = () => {
                   />
                 </div>
                 <div>
-                  <label className="block micro-label text-background/50 mb-3">
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
                     {t('bespoke.formProjectType')} *
                   </label>
                   <Select 
@@ -380,7 +679,7 @@ const Bespoke = () => {
               </div>
 
               <div>
-                <label htmlFor="bespoke-dimensions" className="block micro-label text-background/50 mb-3">
+                <label htmlFor="bespoke-dimensions" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
                   {isNL ? 'Gewenste afmetingen' : 'Desired dimensions'}
                 </label>
                 <Input
@@ -394,7 +693,7 @@ const Bespoke = () => {
               </div>
 
               <div>
-                <label htmlFor="bespoke-message" className="block micro-label text-background/50 mb-3">
+                <label htmlFor="bespoke-message" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
                   {t('bespoke.formVision')} *
                 </label>
                 <Textarea
@@ -412,7 +711,7 @@ const Bespoke = () => {
 
               {/* File Upload */}
               <div>
-                <label className="block micro-label text-background/50 mb-3">
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
                   {isNL ? 'Referentiebeelden (optioneel)' : 'Reference images (optional)'}
                 </label>
                 <div 
