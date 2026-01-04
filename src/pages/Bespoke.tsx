@@ -165,39 +165,26 @@ const Bespoke = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
             {/* Left: Content column */}
             <div className="order-2 lg:order-1 lg:col-span-5 lg:pt-4">
-              <MicroLabel className="mb-5 block">
+              <MicroLabel className="mb-4 block">
                 {isNL ? 'MAATWERK ATELIER' : 'BESPOKE ATELIER'}
               </MicroLabel>
               
-              {/* H1 with controlled typography and intentional line breaks */}
-              <h1 className="font-serif text-[2rem] sm:text-[2.5rem] lg:text-[2.75rem] text-foreground leading-[1.15] tracking-[-0.01em] mb-5 max-w-md">
-                {isNL ? (
-                  <>
-                    Maatwerk in natuursteen
-                    <br className="hidden sm:block" />
-                    <span className="sm:hidden"> — </span>
-                    <span className="hidden sm:inline"> — </span>
-                    ontworpen voor uw ruimte
-                  </>
-                ) : (
-                  <>
-                    Bespoke natural stone
-                    <br className="hidden sm:block" />
-                    <span className="sm:hidden"> — </span>
-                    <span className="hidden sm:inline"> — </span>
-                    designed for your space
-                  </>
-                )}
+              {/* H1 with controlled typography */}
+              <h1 className="font-serif text-[1.875rem] sm:text-[2.25rem] lg:text-[2.5rem] text-foreground leading-[1.15] tracking-[-0.01em] mb-4 max-w-md">
+                {isNL 
+                  ? "Maatwerk in natuursteen — ontworpen voor uw ruimte"
+                  : "Bespoke natural stone — designed for your space"
+                }
               </h1>
               
-              <p className="text-base text-muted-foreground leading-relaxed mb-6 max-w-sm">
+              <p className="text-base text-muted-foreground leading-relaxed mb-5 max-w-sm">
                 {isNL 
                   ? "Van eerste schets tot plaatsing. Een zorgvuldig traject met materiaalkeuze, visualisaties en white-glove levering."
                   : "From first sketch to installation. A careful process with material selection, visualizations and white-glove delivery."}
               </p>
               
               {/* Premium micro-tags */}
-              <div className="flex flex-wrap gap-2 mb-7">
+              <div className="flex flex-wrap gap-2 mb-6">
                 {[
                   isNL ? 'Prijs op aanvraag' : 'Price on request',
                   isNL ? '12–16 weken' : '12–16 weeks',
@@ -205,7 +192,7 @@ const Bespoke = () => {
                 ].map((chip) => (
                   <span 
                     key={chip}
-                    className="inline-flex items-center px-3 py-1 border border-foreground/15 text-[11px] uppercase tracking-[0.1em] text-muted-foreground"
+                    className="inline-flex items-center px-2.5 py-1 border border-foreground/12 text-[10px] uppercase tracking-[0.1em] text-muted-foreground"
                   >
                     {chip}
                   </span>
@@ -214,13 +201,13 @@ const Bespoke = () => {
 
               {/* CTA rail */}
               <div className="flex flex-col sm:flex-row gap-3 mb-3">
-                <Button asChild variant="atelier-filled" size="default" className="h-11 px-6">
+                <Button asChild variant="sera-primary" size="default" className="h-11 px-6">
                   <a href="#offerte" onClick={trackProposal}>
                     {isNL ? 'Ontvang voorstel' : 'Get proposal'}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-                <Button asChild variant="atelier" size="default" className="h-11 px-6 border-foreground/25 hover:border-foreground/50">
+                <Button asChild variant="sera-secondary" size="default" className="h-11 px-6">
                   <Link to="/contact">
                     {isNL ? 'Plan gesprek' : 'Schedule call'}
                   </Link>
@@ -233,11 +220,10 @@ const Bespoke = () => {
               </p>
             </div>
             
-            {/* Right: Image column with editorial framing */}
+            {/* Right: Image column */}
             <div className="order-1 lg:order-2 lg:col-span-7">
               <div className="relative">
-                {/* Image with subtle framing */}
-                <div className="aspect-[4/5] lg:aspect-[5/6] bg-muted overflow-hidden border border-foreground/5 shadow-sm">
+                <div className="aspect-[4/5] lg:aspect-[5/6] bg-muted overflow-hidden border border-foreground/5">
                   <img
                     src={bespokeHero}
                     alt={isNL ? "SERA NORR maatwerk natuursteen meubels" : "SERA NORR bespoke natural stone furniture"}
@@ -263,7 +249,7 @@ const Bespoke = () => {
         <div className="container mx-auto px-6 lg:px-12">
           <Hairline className="mb-12" />
           <div className="max-w-3xl">
-            <h2 className="font-serif text-display-sm text-foreground mb-6">
+            <h2 className="font-serif text-display-sm text-foreground mb-5">
               {isNL 
                 ? "Online atelier voor maatwerk natuursteenmeubels"
                 : "Online atelier for bespoke natural stone furniture"}
@@ -280,7 +266,7 @@ const Bespoke = () => {
       {/* ============================================
           3) PROOF GRID (4 kernpunten)
           ============================================ */}
-      <section className="py-16 lg:py-20 bg-secondary/20">
+      <section className="py-16 lg:py-20 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
           <ProofGrid items={proofItems} className="max-w-6xl mx-auto" />
         </div>
@@ -291,17 +277,17 @@ const Bespoke = () => {
           ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex items-center gap-6 mb-16">
+          <div className="flex items-center gap-6 mb-12 lg:mb-16">
             <Hairline className="flex-1" />
             <MicroLabel>{isNL ? 'MAATWERK' : 'BESPOKE'}</MicroLabel>
             <Hairline className="flex-1" />
           </div>
           
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-6">
+          <div className="max-w-3xl">
+            <h2 className="font-serif text-display-sm text-foreground mb-5">
               {isNL ? "Maatwerk op aanvraag" : "Bespoke on request"}
             </h2>
-            <p className="text-body-lg text-muted-foreground leading-relaxed mb-6">
+            <p className="text-body-lg text-muted-foreground leading-relaxed mb-5">
               {isNL 
                 ? "Elke SERA NORR piece wordt op maat gemaakt. Materiaal, maatvoering, randafwerking, onderstel en levering/plaatsing bepalen de uiteindelijke prijs. Na een korte intake ontvang je een voorstel op maat."
                 : "Every SERA NORR piece is made to measure. Material, dimensions, edge finish, base and delivery/installation determine the final price. After a short intake you receive a tailored proposal."}
@@ -318,25 +304,25 @@ const Bespoke = () => {
       {/* ============================================
           5) USE CASES (Editorial Matrix)
           ============================================ */}
-      <section className="py-20 lg:py-24 bg-secondary/20">
+      <section className="py-20 lg:py-24 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-foreground/8">
             {useCases.map((item, index) => (
               <div 
                 key={index} 
-                className="bg-secondary/20 p-8 lg:p-10"
+                className="bg-background p-8 lg:p-10"
               >
-                <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+                <h3 className="font-serif text-xl text-foreground mb-2">
                   {item.title}
                 </h3>
-                <p className="text-body-sm text-muted-foreground leading-relaxed mb-6">
+                <p className="text-body-sm text-muted-foreground leading-relaxed mb-5">
                   {item.description}
                 </p>
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
-                    {isNL ? 'Voorbeeldformaat' : 'Example dimensions'}: {item.format}
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70">
+                    {isNL ? 'Voorbeeldformaat' : 'Example'}: {item.format}
                   </p>
-                  <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70">
                     {item.material}
                   </p>
                 </div>
@@ -345,21 +331,21 @@ const Bespoke = () => {
           </div>
           
           {/* CTA + Footnote */}
-          <div className="text-center mt-12">
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
-              <Button asChild variant="atelier-filled" size="lg">
+          <div className="mt-12">
+            <div className="flex flex-wrap gap-3 mb-5">
+              <Button asChild variant="sera-primary" size="default" className="h-11 px-6">
                 <a href="#offerte">
                   {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>
-              <Button asChild variant="atelier" size="lg">
+              <Button asChild variant="sera-secondary" size="default" className="h-11 px-6">
                 <Link to="/collections">
                   {isNL ? 'Bekijk voorbeelden' : 'View examples'}
                 </Link>
               </Button>
             </div>
-            <p className="text-body-sm text-muted-foreground max-w-xl mx-auto">
+            <p className="text-body-sm text-muted-foreground max-w-xl">
               {isNL 
                 ? "Calacatta Viola & zeldzame steensoorten op aanvraag. Prijzen excl. btw. Levering & plaatsing afhankelijk van locatie."
                 : "Calacatta Viola & rare stone types on request. Prices excl. VAT. Delivery & installation depending on location."}
@@ -369,20 +355,20 @@ const Bespoke = () => {
       </section>
 
       {/* ============================================
-          7) DONKERE CTA BAND
+          6) DONKERE CTA BAND
           ============================================ */}
       <section className="py-20 lg:py-24 bg-foreground">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="max-w-xl">
             <h2 className="font-serif text-display-sm text-background mb-4">
               {isNL ? "Vertaal dit naar uw ruimte." : "Translate this to your space."}
             </h2>
-            <p className="text-body-lg text-background/70 mb-8">
+            <p className="text-body-lg text-background/70 mb-7">
               {isNL 
                 ? "Deel uw afmetingen en voorkeuren — wij maken een voorstel op maat."
                 : "Share your dimensions and preferences — we create a tailored proposal."}
             </p>
-            <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
+            <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-11 px-6">
               <a href="#offerte">
                 {isNL ? 'Ontvang voorstel' : 'Receive proposal'}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -393,11 +379,11 @@ const Bespoke = () => {
       </section>
 
       {/* ============================================
-          8) MATERIALEN & AFWERKING
+          7) MATERIALEN & AFWERKING
           ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Image */}
             <div className="aspect-[4/5] bg-muted overflow-hidden">
               <img
@@ -409,18 +395,18 @@ const Bespoke = () => {
             
             {/* Content */}
             <div>
-              <MicroLabel className="mb-6 block">
+              <MicroLabel className="mb-4 block">
                 {isNL ? 'MATERIALEN' : 'MATERIALS'}
               </MicroLabel>
-              <h2 className="font-serif text-display-sm text-foreground mb-5">
+              <h2 className="font-serif text-display-sm text-foreground mb-4">
                 {isNL ? "Materialen & afwerking" : "Materials & finish"}
               </h2>
-              <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-md">
+              <p className="text-body-lg text-muted-foreground leading-relaxed mb-7 max-w-md">
                 {isNL 
                   ? "Steenkeuze, afwerking en details stemmen we samen af tijdens de intake. U ontvangt advies op basis van uw ruimte en gebruik."
                   : "Stone choice, finish and details are aligned together during the intake. You receive advice based on your space and usage."}
               </p>
-              <Button asChild variant="sera-secondary" size="lg">
+              <Button asChild variant="sera-secondary" size="default" className="h-11 px-6">
                 <Link to="/materials">
                   {isNL ? "Bekijk een selectie stenen" : "View a selection of stones"}
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -432,19 +418,19 @@ const Bespoke = () => {
       </section>
 
       {/* ============================================
-          9) TRAJECT / TIMELINE + WAT U ONTVANGT
+          8) TRAJECT / TIMELINE + WAT U ONTVANGT
           ============================================ */}
-      <section className="py-24 lg:py-32 bg-secondary/20">
+      <section className="py-24 lg:py-32 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
           {/* Section header */}
-          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+          <div className="flex items-center gap-6 mb-12 lg:mb-16">
             <Hairline className="flex-1" />
             <MicroLabel>{isNL ? 'HET TRAJECT' : 'THE PROCESS'}</MicroLabel>
             <Hairline className="flex-1" />
           </div>
 
-          <div className="max-w-xl mx-auto text-center mb-16">
-            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
+          <div className="max-w-lg mb-12">
+            <h2 className="font-serif text-display-sm text-foreground mb-3">
               {isNL ? "Van idee tot realisatie" : "From idea to realization"}
             </h2>
             <p className="text-body-md text-muted-foreground">
@@ -455,18 +441,18 @@ const Bespoke = () => {
           </div>
           
           {/* Timeline with side panel layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12">
             {/* Timeline (2 cols) */}
-            <div className="lg:col-span-2 border-t border-b" style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}>
+            <div className="lg:col-span-2 border-t border-b border-foreground/8">
               <BespokeTimeline steps={processSteps} className="max-w-full" />
             </div>
             
             {/* Side panel: Wat u ontvangt */}
             <div className="relative border border-foreground/8 p-8 lg:p-10 bg-background">
-              <MicroLabel className="mb-6 block">
+              <MicroLabel className="mb-5 block">
                 {isNL ? 'WAT U ONTVANGT' : 'WHAT YOU RECEIVE'}
               </MicroLabel>
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {deliverables.map((item, index) => (
                   <div key={index} className="flex gap-4">
                     <item.icon className="h-5 w-5 text-foreground/40 shrink-0 mt-0.5" />
@@ -483,19 +469,19 @@ const Bespoke = () => {
       </section>
 
       {/* ============================================
-          10) HOE WILT U BEGINNEN? (Two panels)
+          9) HOE WILT U BEGINNEN? (Two panels)
           ============================================ */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
           {/* Lead time note */}
-          <p className="text-center text-body-sm text-muted-foreground mb-8">
+          <p className="text-body-sm text-muted-foreground mb-6">
             {isNL 
               ? "Gemiddelde doorlooptijd: 12–16 weken (afhankelijk van steenkeuze en locatie)"
               : "Average lead time: 12–16 weeks (depending on stone choice and location)"}
           </p>
           
-          <div className="max-w-xl mx-auto text-center mb-12">
-            <h2 className="font-serif text-display-sm text-foreground mb-4">
+          <div className="max-w-lg mb-10">
+            <h2 className="font-serif text-display-sm text-foreground mb-3">
               {isNL ? "Hoe wilt u beginnen?" : "How would you like to start?"}
             </h2>
             <p className="text-body-md text-muted-foreground">
@@ -506,26 +492,26 @@ const Bespoke = () => {
           </div>
           
           {/* Two bespoke panels */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-foreground/8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-foreground/8 max-w-4xl">
             {/* Option 1: Vrijblijvend gesprek */}
-            <div className="bg-background p-10 lg:p-12">
-              <div className="flex items-center gap-3 mb-6">
+            <div className="bg-background p-8 lg:p-10">
+              <div className="flex items-center gap-3 mb-5">
                 <Phone className="h-5 w-5 text-foreground/40" />
               </div>
-              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+              <h3 className="font-serif text-xl text-foreground mb-2">
                 {isNL ? "Vrijblijvend gesprek" : "Free consultation"}
               </h3>
-              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4">
+              <p className="text-body-sm text-muted-foreground leading-relaxed mb-3">
                 {isNL 
                   ? "Telefonisch of via videocall. Binnen 2 werkdagen reactie."
                   : "By phone or video call. Response within 2 business days."}
               </p>
-              <p className="text-xs text-muted-foreground/70 mb-8">
+              <p className="text-xs text-muted-foreground/70 mb-7">
                 {isNL 
                   ? "Geschikt als u nog twijfelt over formaat of steensoort."
                   : "Suitable if you're still unsure about size or stone type."}
               </p>
-              <Button asChild variant="atelier" size="lg" className="w-full justify-center">
+              <Button asChild variant="sera-secondary" size="default" className="w-full justify-center h-11">
                 <Link to="/contact">
                   {isNL ? 'Plan een gesprek' : 'Schedule a call'}
                 </Link>
@@ -533,29 +519,29 @@ const Bespoke = () => {
             </div>
             
             {/* Option 2: Offerte aanvragen (meest gekozen) */}
-            <div className="bg-background p-10 lg:p-12 relative">
+            <div className="bg-background p-8 lg:p-10 relative">
               <div className="absolute top-4 right-4">
-                <span className="inline-block px-3 py-1 bg-foreground text-background text-[10px] uppercase tracking-[0.15em]">
+                <span className="inline-block px-2.5 py-1 bg-foreground text-background text-[9px] uppercase tracking-[0.15em]">
                   {isNL ? 'Meest gekozen' : 'Most popular'}
                 </span>
               </div>
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-5">
                 <FileText className="h-5 w-5 text-foreground/40" />
               </div>
-              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+              <h3 className="font-serif text-xl text-foreground mb-2">
                 {isNL ? "Offerte aanvragen" : "Request a quote"}
               </h3>
-              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4">
+              <p className="text-body-sm text-muted-foreground leading-relaxed mb-3">
                 {isNL 
                   ? "Binnen 48 uur een voorstel met schetsen en offerte."
                   : "Within 48 hours a proposal with sketches and quote."}
               </p>
-              <p className="text-xs text-muted-foreground/70 mb-8">
+              <p className="text-xs text-muted-foreground/70 mb-7">
                 {isNL 
                   ? "Geschikt als u al een richting of maat in gedachten heeft."
                   : "Suitable if you already have a direction or size in mind."}
               </p>
-              <Button asChild variant="atelier-filled" size="lg" className="w-full justify-center">
+              <Button asChild variant="sera-primary" size="default" className="w-full justify-center h-11">
                 <a href="#offerte">
                   {isNL ? 'Vraag offerte aan' : 'Request a quote'}
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -565,7 +551,7 @@ const Bespoke = () => {
           </div>
           
           {/* Micro line */}
-          <p className="text-center text-body-sm text-muted-foreground mt-8">
+          <p className="text-body-sm text-muted-foreground mt-7">
             {isNL 
               ? "Online atelier — materiaalkeuze en details stemmen we samen af. Geen verplichtingen."
               : "Online atelier — material choice and details are aligned together. No obligations."}
@@ -574,42 +560,41 @@ const Bespoke = () => {
       </section>
 
       {/* ============================================
-          11) FAQ Section
+          10) FAQ Section
           ============================================ */}
-      <section className="py-24 lg:py-32 bg-secondary/20">
+      <section className="py-24 lg:py-32 bg-secondary/30">
         <div className="container mx-auto px-6 lg:px-12">
           {/* Section header */}
-          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+          <div className="flex items-center gap-6 mb-12 lg:mb-16">
             <Hairline className="flex-1" />
             <MicroLabel>{isNL ? 'VEELGESTELDE VRAGEN' : 'FAQ'}</MicroLabel>
             <Hairline className="flex-1" />
           </div>
 
-          <div className="max-w-xl mx-auto text-center mb-12">
+          <div className="max-w-lg mb-10">
             <h2 className="font-serif text-display-sm text-foreground">
               {isNL ? "Alles over ons maatwerkproces" : "Everything about our bespoke process"}
             </h2>
           </div>
 
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl">
             <Accordion type="single" collapsible className="space-y-0">
               {faqItems.map((faq, index) => (
                 <AccordionItem 
                   key={index} 
                   value={`item-${index + 1}`} 
-                  className="border-t bg-background/50 px-0"
-                  style={{ borderColor: 'hsl(var(--foreground) / 0.08)' }}
+                  className="border-t border-foreground/8 bg-background/50 px-0"
                 >
-                  <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-6 px-6">
+                  <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-5 px-5">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground text-body-sm pb-6 px-6">
+                  <AccordionContent className="text-muted-foreground text-body-sm pb-5 px-5">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
               ))}
               {/* Bottom border */}
-              <div className="h-px" style={{ backgroundColor: 'hsl(var(--foreground) / 0.08)' }} />
+              <div className="h-px bg-foreground/8" />
             </Accordion>
           </div>
         </div>
@@ -620,13 +605,13 @@ const Bespoke = () => {
           ============================================ */}
       <section id="offerte" className="py-24 lg:py-32 bg-foreground text-background scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-xl mx-auto">
+          <div className="max-w-xl">
             {/* Header */}
-            <div className="text-center mb-12">
+            <div className="mb-10">
               <MicroLabel className="text-background/50 mb-4 block">
                 {isNL ? 'OFFERTE AANVRAGEN' : 'REQUEST QUOTE'}
               </MicroLabel>
-              <h2 className="font-serif text-display-sm mb-4">
+              <h2 className="font-serif text-display-sm mb-3">
                 {isNL ? 'Start uw project' : 'Start your project'}
               </h2>
               <p className="text-background/70 text-body-md">
@@ -636,10 +621,10 @@ const Bespoke = () => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} onFocus={handleFormFocus} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} onFocus={handleFormFocus} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label htmlFor="bespoke-name" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
+                  <label htmlFor="bespoke-name" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-2">
                     {t('bespoke.formName')} *
                   </label>
                   <Input
@@ -648,12 +633,12 @@ const Bespoke = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-11"
                     placeholder={t('bespoke.formNamePlaceholder')}
                   />
                 </div>
                 <div>
-                  <label htmlFor="bespoke-email" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
+                  <label htmlFor="bespoke-email" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-2">
                     {t('bespoke.formEmail')} *
                   </label>
                   <Input
@@ -662,15 +647,15 @@ const Bespoke = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
-                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-11"
                     placeholder={t('bespoke.formEmailPlaceholder')}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label htmlFor="bespoke-phone" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
+                  <label htmlFor="bespoke-phone" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-2">
                     {isNL ? 'Telefoon' : 'Phone'}
                   </label>
                   <Input
@@ -678,19 +663,19 @@ const Bespoke = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
+                    className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-11"
                     placeholder="+31 6 12345678"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-2">
                     {t('bespoke.formProjectType')} *
                   </label>
                   <Select 
                     value={formData.projectType} 
                     onValueChange={(value) => setFormData({ ...formData, projectType: value })}
                   >
-                    <SelectTrigger className="bg-background/10 border-background/20 text-background focus:border-background/40 [&>span]:text-background/40 h-12">
+                    <SelectTrigger className="bg-background/10 border-background/20 text-background focus:border-background/40 [&>span]:text-background/40 h-11">
                       <SelectValue placeholder={isNL ? 'Selecteer type' : 'Select type'} />
                     </SelectTrigger>
                     <SelectContent className="bg-foreground border-background/20">
@@ -705,7 +690,7 @@ const Bespoke = () => {
               </div>
 
               <div>
-                <label htmlFor="bespoke-dimensions" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
+                <label htmlFor="bespoke-dimensions" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-2">
                   {isNL ? 'Gewenste afmetingen' : 'Desired dimensions'}
                 </label>
                 <Input
@@ -713,13 +698,13 @@ const Bespoke = () => {
                   type="text"
                   value={formData.dimensions}
                   onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
-                  className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-12"
+                  className="bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40 h-11"
                   placeholder={isNL ? 'bijv. L120 × B80 × H45 cm' : 'e.g. L120 × W80 × H45 cm'}
                 />
               </div>
 
               <div>
-                <label htmlFor="bespoke-message" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
+                <label htmlFor="bespoke-message" className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-2">
                   {t('bespoke.formVision')} *
                 </label>
                 <Textarea
@@ -737,11 +722,11 @@ const Bespoke = () => {
 
               {/* File Upload */}
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-3">
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-background/50 mb-2">
                   {isNL ? 'Referentiebeelden (optioneel)' : 'Reference images (optional)'}
                 </label>
                 <div 
-                  className="border border-dashed border-background/20 py-6 px-4 text-center cursor-pointer hover:border-background/40 transition-colors"
+                  className="border border-dashed border-background/20 py-5 px-4 cursor-pointer hover:border-background/40 transition-colors"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <input
@@ -755,7 +740,7 @@ const Bespoke = () => {
                     }}
                   />
                   <Upload className="h-5 w-5 mx-auto mb-2 text-background/50" />
-                  <p className="text-body-sm text-background/60">
+                  <p className="text-body-sm text-background/60 text-center">
                     {fileName || (isNL ? 'Klik om bestand te uploaden' : 'Click to upload file')}
                   </p>
                 </div>
@@ -764,14 +749,14 @@ const Bespoke = () => {
               <Button 
                 type="submit" 
                 variant="sera-primary" 
-                size="lg"
-                className="w-full bg-background text-foreground hover:bg-background/95"
+                size="default"
+                className="w-full bg-background text-foreground hover:bg-background/95 h-11"
               >
                 {isNL ? 'Verstuur aanvraag' : 'Submit request'}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
 
-              <p className="text-center text-background/50 text-body-sm">
+              <p className="text-background/50 text-body-sm">
                 {isNL 
                   ? 'U ontvangt binnen 24 uur een bevestiging.'
                   : 'You will receive a confirmation within 24 hours.'}
