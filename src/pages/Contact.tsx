@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, MapPin, Clock } from "lucide-react";
+import { Mail, MapPin, Clock, ArrowRight } from "lucide-react";
 import { SEOHead, localBusinessSchema, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { Hairline } from "@/components/ui/hairline";
 import { trackLeadSubmit } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
-import { SectionBand } from "@/components/ui/section-band";
 
 const Contact = () => {
   const { t, i18n } = useTranslation();
@@ -144,209 +144,216 @@ const Contact = () => {
       />
 
       {/* Hero */}
-      <section className="pt-32 lg:pt-40 pb-16 lg:pb-24 bg-background">
+      <section className="pt-28 lg:pt-36 pb-16 lg:pb-20 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <Breadcrumbs className="mb-8" />
+          <Breadcrumbs className="mb-8 opacity-60 text-[10px]" />
           
-          <header className="max-w-3xl">
-            <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">
-              Contact
-            </p>
-            <h1 className="font-serif text-display-lg text-foreground mb-8">
+          <div className="max-w-3xl">
+            <p className="micro-label mb-6">Contact</p>
+            <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
               {isNL ? 'Laten We Beginnen' : "Let's Begin"}
             </h1>
-            <p className="text-muted-foreground text-body-lg leading-relaxed">
+            <p className="text-body-lg text-muted-foreground leading-relaxed max-w-2xl">
               {isNL
                 ? 'Of u nu interesse heeft in onze collecties of een maatwerkopdracht overweegt—we verwelkomen uw vraag.'
                 : "Whether you're interested in our collections or considering a bespoke commission—we welcome your inquiry."}
             </p>
-          </header>
+          </div>
         </div>
       </section>
 
       {/* Contact Grid */}
-      <SectionBand variant="sand" size="lg">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-          {/* Contact Info */}
-          <div>
-            <h2 className="font-serif text-display-sm text-foreground mb-12">
-              {isNL ? 'Het Atelier' : 'The Atelier'}
-            </h2>
+      <section className="py-24 lg:py-32 bg-secondary/20">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? 'Neem contact op' : 'Get in touch'}</span>
+            <Hairline className="flex-1" />
+          </div>
 
-            <address className="space-y-10 not-italic">
-              <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-border/50 rounded-sm">
-                  <MapPin className="w-5 h-5 text-muted-foreground" aria-hidden="true" strokeWidth={1.5} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+            {/* Contact Info */}
+            <div>
+              <h2 className="font-serif text-display-sm text-foreground mb-12">
+                {isNL ? 'Het Atelier' : 'The Atelier'}
+              </h2>
+
+              <address className="space-y-10 not-italic">
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-foreground/10">
+                    <MapPin className="w-5 h-5 text-muted-foreground" aria-hidden="true" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <h3 className="editorial-caption-label mb-2">
+                      {isNL ? 'Online Atelier' : 'Online Atelier'}
+                    </h3>
+                    <p className="text-body-md text-muted-foreground leading-relaxed">
+                      {isNL ? 'Ontworpen in Nederland' : 'Designed in the Netherlands'}<br />
+                      {isNL ? 'Persoonlijke begeleiding op afstand' : 'Personal guidance remotely'}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
-                    {isNL ? 'Online Atelier' : 'Online Atelier'}
-                  </h3>
-                  <p className="text-muted-foreground text-body-md leading-relaxed">
-                    {isNL ? 'Ontworpen in Nederland' : 'Designed in the Netherlands'}<br />
-                    {isNL ? 'Persoonlijke begeleiding op afstand' : 'Personal guidance remotely'}
-                  </p>
+
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-foreground/10">
+                    <Mail className="w-5 h-5 text-muted-foreground" aria-hidden="true" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <h3 className="editorial-caption-label mb-2">E-mail</h3>
+                    <a 
+                      href="mailto:atelier@seranorr.com" 
+                      className="text-body-md text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      atelier@seranorr.com
+                    </a>
+                  </div>
                 </div>
+
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-foreground/10">
+                    <Clock className="w-5 h-5 text-muted-foreground" aria-hidden="true" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <h3 className="editorial-caption-label mb-2">
+                      {isNL ? 'Reactietijd' : 'Response Time'}
+                    </h3>
+                    <p className="text-body-md text-muted-foreground leading-relaxed">
+                      {isNL ? 'Binnen 48 uur' : 'Within 48 hours'}<br />
+                      {isNL ? 'Maandag – Vrijdag' : 'Monday – Friday'}
+                    </p>
+                  </div>
+                </div>
+              </address>
+
+              <div className="mt-12 pt-12 border-t border-foreground/8">
+                <p className="text-body-sm text-muted-foreground leading-relaxed">
+                  {isNL
+                    ? 'Als online atelier begeleiden we u door het volledige ontwerpproces op afstand. Via foto\'s, video en gedetailleerde visualisaties zorgen we dat u precies weet wat u kunt verwachten.'
+                    : 'As an online atelier, we guide you through the complete design process remotely. Through photos, video and detailed visualizations, we ensure you know exactly what to expect.'}
+                </p>
               </div>
+            </div>
 
-              <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-border/50 rounded-sm">
-                  <Mail className="w-5 h-5 text-muted-foreground" aria-hidden="true" strokeWidth={1.5} />
+            {/* Contact Form */}
+            <div className="bg-background p-8 lg:p-10 border border-foreground/8">
+              <h2 className="font-serif text-xl lg:text-2xl text-foreground mb-8">
+                {isNL ? 'Neem Contact Op' : 'Get in Touch'}
+              </h2>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Honeypot field - hidden from users, visible to bots */}
+                <div className="absolute -left-[9999px]" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    type="text"
+                    name="website"
+                    value={formData.honeypot}
+                    onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className="block editorial-caption-label mb-2">
+                      {isNL ? 'Naam' : 'Name'} *
+                    </label>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
+                      maxLength={100}
+                      className="bg-background border-foreground/15 focus:border-foreground"
+                      placeholder={isNL ? 'Uw naam' : 'Your name'}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block editorial-caption-label mb-2">
+                      E-mail *
+                    </label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                      maxLength={255}
+                      className="bg-background border-foreground/15 focus:border-foreground"
+                      placeholder="uw@email.com"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
-                    E-mail
-                  </h3>
-                  <a 
-                    href="mailto:atelier@seranorr.com" 
-                    className="text-muted-foreground hover:text-foreground transition-colors text-body-md link-underline"
+                  <label htmlFor="subject" className="block editorial-caption-label mb-2">
+                    {isNL ? 'Onderwerp' : 'Subject'}
+                  </label>
+                  <Input
+                    id="subject"
+                    type="text"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    maxLength={200}
+                    className="bg-background border-foreground/15 focus:border-foreground"
+                    placeholder={isNL ? 'Collecties, Maatwerk, Algemene vraag...' : 'Collections, Bespoke, General inquiry...'}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block editorial-caption-label mb-2">
+                    {isNL ? 'Bericht' : 'Message'} *
+                  </label>
+                  <Textarea
+                    id="message"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    rows={6}
+                    maxLength={5000}
+                    className="bg-background border-foreground/15 focus:border-foreground resize-none"
+                    placeholder={isNL ? 'Hoe kunnen we u helpen?' : 'How can we help you?'}
+                  />
+                </div>
+
+                <div className="pt-4">
+                  <Button 
+                    type="submit" 
+                    variant="sera-primary" 
+                    size="lg" 
+                    className="w-full md:w-auto"
+                    disabled={isSubmitting}
                   >
-                    atelier@seranorr.com
-                  </a>
+                    {isSubmitting 
+                      ? (isNL ? 'Verzenden...' : 'Sending...') 
+                      : (isNL ? 'Verstuur Bericht' : 'Send Message')}
+                    {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" />}
+                  </Button>
                 </div>
-              </div>
-
-              <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center border border-border/50 rounded-sm">
-                  <Clock className="w-5 h-5 text-muted-foreground" aria-hidden="true" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <h3 className="font-sans text-xs uppercase tracking-wider text-foreground mb-2">
-                    {isNL ? 'Reactietijd' : 'Response Time'}
-                  </h3>
-                  <p className="text-muted-foreground text-body-md leading-relaxed">
-                    {isNL ? 'Binnen 48 uur' : 'Within 48 hours'}<br />
-                    {isNL ? 'Maandag – Vrijdag' : 'Monday – Friday'}
-                  </p>
-                </div>
-              </div>
-            </address>
-
-            <div className="mt-12 pt-12 border-t border-border/40">
-              <p className="text-muted-foreground text-body-sm leading-relaxed">
-                {isNL
-                  ? 'Als online atelier begeleiden we u door het volledige ontwerpproces op afstand. Via foto\'s, video en gedetailleerde visualisaties zorgen we dat u precies weet wat u kunt verwachten.'
-                  : 'As an online atelier, we guide you through the complete design process remotely. Through photos, video and detailed visualizations, we ensure you know exactly what to expect.'}
-              </p>
+              </form>
             </div>
           </div>
-
-          {/* Contact Form */}
-          <div>
-            <h2 className="font-serif text-display-sm text-foreground mb-12">
-              {isNL ? 'Neem Contact Op' : 'Get in Touch'}
-            </h2>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Honeypot field - hidden from users, visible to bots */}
-              <div className="absolute -left-[9999px]" aria-hidden="true">
-                <label htmlFor="website">Website</label>
-                <input
-                  id="website"
-                  type="text"
-                  name="website"
-                  value={formData.honeypot}
-                  onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
-                  tabIndex={-1}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                    {isNL ? 'Naam' : 'Name'} *
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    maxLength={100}
-                    className="bg-background border-border/50 focus:border-foreground"
-                    placeholder={isNL ? 'Uw naam' : 'Your name'}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                    E-mail *
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    maxLength={255}
-                    className="bg-background border-border/50 focus:border-foreground"
-                    placeholder="uw@email.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                  {isNL ? 'Onderwerp' : 'Subject'}
-                </label>
-                <Input
-                  id="subject"
-                  type="text"
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  maxLength={200}
-                  className="bg-background border-border/50 focus:border-foreground"
-                  placeholder={isNL ? 'Collecties, Maatwerk, Algemene vraag...' : 'Collections, Bespoke, General inquiry...'}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block font-sans text-xs uppercase tracking-wider text-muted-foreground mb-2">
-                  {isNL ? 'Bericht' : 'Message'} *
-                </label>
-                <Textarea
-                  id="message"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                  rows={6}
-                  maxLength={5000}
-                  className="bg-background border-border/50 focus:border-foreground resize-none"
-                  placeholder={isNL ? 'Hoe kunnen we u helpen?' : 'How can we help you?'}
-                />
-              </div>
-
-              <div className="pt-4">
-                <Button 
-                  type="submit" 
-                  variant="atelier-filled" 
-                  size="lg" 
-                  className="w-full md:w-auto"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting 
-                    ? (isNL ? 'Verzenden...' : 'Sending...') 
-                    : (isNL ? 'Verstuur Bericht' : 'Send Message')}
-                </Button>
-              </div>
-            </form>
-          </div>
         </div>
-      </SectionBand>
+      </section>
 
       {/* Quote Section */}
-      <SectionBand variant="default" size="lg">
-        <figure className="max-w-3xl mx-auto text-center">
-          <blockquote className="font-serif text-display-sm text-foreground mb-6 italic">
-            {isNL 
-              ? '"De beste objecten zijn zij die stil spreken maar niet kunnen worden genegeerd."'
-              : '"The best objects are those that speak quietly but cannot be ignored."'}
-          </blockquote>
-          <figcaption className="font-sans text-xs uppercase tracking-[0.25em] text-muted-foreground">
-            — Sera Norr Atelier
-          </figcaption>
-        </figure>
-      </SectionBand>
+      <section className="py-20 lg:py-28 bg-foreground text-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <figure className="max-w-3xl mx-auto text-center">
+            <blockquote className="font-serif text-display-sm text-background mb-6 italic">
+              {isNL 
+                ? '"De beste objecten zijn zij die stil spreken maar niet kunnen worden genegeerd."'
+                : '"The best objects are those that speak quietly but cannot be ignored."'}
+            </blockquote>
+            <figcaption className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/60">
+              — Sera Norr Atelier
+            </figcaption>
+          </figure>
+        </div>
+      </section>
     </Layout>
   );
 };
