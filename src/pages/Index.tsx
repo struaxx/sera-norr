@@ -141,29 +141,29 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/20 to-transparent" />
         </div>
         
-        {/* Content rail - left-aligned on desktop */}
+        {/* Content rail - centered */}
         <div className="relative z-10 w-full pb-20 lg:pb-24">
           <div className="container mx-auto px-6 lg:px-12">
-            <div className="max-w-2xl">
+            <div className="max-w-2xl mx-auto text-center">
               {/* Micro-label */}
               <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/60 mb-4">
                 {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
               </p>
               
-              {/* H1 - controlled size */}
-              <h1 className="font-serif font-normal text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-background mb-4 leading-[1.05] tracking-[-0.02em]">
+              {/* H1 - centered and bold */}
+              <h1 className="font-serif font-semibold text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-background mb-4 leading-[1.05] tracking-[-0.02em]">
                 {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
               </h1>
               
               {/* Subcopy - short */}
-              <p className="font-sans text-base lg:text-lg text-background/80 max-w-md mb-8">
+              <p className="font-sans text-base lg:text-lg text-background/80 max-w-md mx-auto mb-8">
                 {isNL 
                   ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
                   : "Travertine, marble and selected stone types. Made to measure."}
               </p>
               
               {/* CTA rail - two buttons */}
-              <div className="flex flex-wrap gap-3 mb-8">
+              <div className="flex flex-wrap justify-center gap-3 mb-8">
                 <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-7">
                   <Link to="/collections">
                     {isNL ? "Ontdek collecties" : "Discover collections"}
@@ -178,7 +178,7 @@ const Index = () => {
               </div>
               
               {/* Trust rail - typographic, minimal */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/50">
+              <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/50">
                 <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
                 <span className="hidden sm:inline text-background/30">·</span>
                 <span>{isNL ? '5 jaar garantie' : '5 year warranty'}</span>
@@ -383,22 +383,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* ============================================
-          EDITORIAL STATEMENT
-          ============================================ */}
-      <section className="py-20 lg:py-28 bg-secondary/30">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="font-serif font-semibold text-display-sm text-foreground leading-[1.25]">
-              {isNL 
-                ? "Elk meubel is uniek. De steen bepaalt het karakter — wij vertalen het naar uw ruimte."
-                : "Every piece is unique. The stone defines the character — we translate it to your space."}
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* ============================================
           WAAROM SERA NORR - Proof grid
           ============================================ */}
