@@ -11,6 +11,7 @@ import { BespokeTimeline, BespokeTimelineStep } from "@/components/ui/bespoke-ti
 import { ProofGrid } from "@/components/ui/proof-grid";
 import { ActionPanel } from "@/components/ui/action-panel";
 import { Hairline } from "@/components/ui/hairline";
+import { CollectionCard } from "@/components/ui/collection-card";
 import { usePageTracking, useCTATracking } from "@/hooks/use-tracking";
 import heroImage from "@/assets/hero-homepage.png";
 
@@ -233,52 +234,19 @@ const Index = () => {
           ) : collections.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
               {collections.slice(0, 2).map((collection, index) => (
-                <Link
+                <CollectionCard
                   key={collection.node.id}
-                  to={`/collections/${collection.node.handle}`}
-                  className={`group block ${index === 0 ? 'lg:mt-0' : 'lg:mt-16'}`}
-                >
-                  {/* Image with subtle hover */}
-                  <div className="image-reveal mb-5">
-                    <div className="aspect-[4/5] bg-muted overflow-hidden">
-                      {collection.node.image ? (
-                        <img
-                          src={collection.node.image.url}
-                          alt={collection.node.image.altText || collection.node.title}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-secondary/50 flex items-center justify-center">
-                          <span className="text-muted-foreground font-serif text-2xl">{collection.node.title}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Editorial caption */}
-                  <div className="space-y-2">
-                    <p className="text-[11px] font-sans font-medium uppercase tracking-[0.15em] text-muted-foreground/60">
-                      {isNL ? 'Collectie' : 'Collection'}
-                    </p>
-                    <h3 className="font-serif text-xl lg:text-2xl text-foreground">
-                      {collection.node.title}
-                    </h3>
-                    <p className="text-body-sm text-muted-foreground max-w-xs">
-                      {getCollectionDescription(collection.node.handle)}
-                    </p>
-                    
-                    {/* Price tag + CTA */}
-                    <div className="pt-3 flex items-center gap-4">
-                      <span className="inline-flex items-center px-2.5 py-1 border border-foreground/12 text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
-                        {isNL ? 'Prijs op aanvraag' : 'Price on request'}
-                      </span>
-                      <span className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.1em] text-foreground group-hover:gap-3 transition-all duration-300">
-                        {isNL ? "Ontdek" : "Discover"}
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </span>
-                    </div>
-                  </div>
-                </Link>
+                  id={collection.node.id}
+                  handle={collection.node.handle}
+                  title={collection.node.title}
+                  imageUrl={collection.node.image?.url}
+                  imageAlt={collection.node.image?.altText || collection.node.title}
+                  description={getCollectionDescription(collection.node.handle)}
+                  collectionLabel={isNL ? 'Collectie' : 'Collection'}
+                  priceLabel={isNL ? 'Prijs op aanvraag' : 'Price on request'}
+                  ctaLabel={isNL ? 'Ontdek' : 'Discover'}
+                  index={index}
+                />
               ))}
             </div>
           ) : (
