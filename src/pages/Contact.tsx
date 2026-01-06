@@ -292,7 +292,7 @@ const Contact = () => {
                   ? 'Wilt u direct een projectdossier samenstellen? ' 
                   : 'Want to create a project dossier directly? '}
                 <Link 
-                  to="/maatwerk" 
+                  to="/bespoke" 
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80 transition-colors"
                 >
                   {isNL ? 'Start uw project' : 'Start your project'}
