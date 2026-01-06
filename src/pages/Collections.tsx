@@ -11,6 +11,7 @@ import { ConfiguratorTeaser } from "@/components/homepage";
 import { LookbookFilters, LookbookGrid, type FilterState } from "@/components/collections";
 import vantaFallback from "@/assets/vanta-collection.jpg";
 import terraFallback from "@/assets/terra-collection.jpg";
+import heroImage from "@/assets/hero-vanta.jpg";
 
 const Collections = () => {
   const { i18n } = useTranslation();
@@ -23,12 +24,12 @@ const Collections = () => {
   });
 
   const seoTitle = isNL 
-    ? "Collecties | SERA NORR — Curated Lookbook voor Natuursteen Maatwerk"
-    : "Collections | SERA NORR — Curated Lookbook for Natural Stone Bespoke";
+    ? "Collecties | SERA NORR — Signature Collecties voor Natuursteen Maatwerk"
+    : "Collections | SERA NORR — Signature Collections for Natural Stone Bespoke";
 
   const seoDescription = isNL
-    ? "Ontdek de SERA NORR signature archive: vormen, verhoudingen en materialen als inspiratie voor uw maatwerk project."
-    : "Discover the SERA NORR signature archive: shapes, proportions and materials as inspiration for your bespoke project.";
+    ? "Ontdek de SERA NORR signature collecties: vormen, verhoudingen en materialen als richting voor uw maatwerk project."
+    : "Discover the SERA NORR signature collections: shapes, proportions and materials as direction for your bespoke project.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -47,189 +48,169 @@ const Collections = () => {
       />
 
       {/* ========================================
-          HERO + POSITIONERING
+          SECTION 1 — HERO (split, visueel)
           ======================================== */}
       <section className="pt-28 lg:pt-36 pb-16 lg:pb-20 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
           <Breadcrumbs className="mb-8 opacity-60 text-[10px]" />
           
-          <div className="max-w-3xl">
-            <p className="micro-label mb-6">
-              {isNL ? 'Collecties' : 'Collections'}
-            </p>
-            <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
-              {isNL ? "Signature Archive" : "Signature Archive"}
-            </h1>
-            <p className="text-body-lg text-muted-foreground leading-relaxed max-w-2xl mb-4">
-              {isNL 
-                ? "Dit is geen webshop. Dit zijn voorbeelden van vormen, verhoudingen en materialen waar wij achter staan — bedoeld als inspiratie voor uw maatwerk project."
-                : "This is not a webshop. These are examples of shapes, proportions and materials we stand behind — meant as inspiration for your bespoke project."}
-            </p>
-            <p className="text-body-md text-muted-foreground/70 mb-10">
-              {isNL 
-                ? "Alles wordt op maat gemaakt. Geen voorraad."
-                : "Everything is made to measure. No stock."}
-            </p>
-            <Button asChild variant="sera-primary" size="lg">
-              <Link to="/bespoke">
-                {isNL ? "Start uw project" : "Start your project"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Left: Content */}
+            <div className="order-2 lg:order-1">
+              <p className="micro-label mb-6">
+                {isNL ? 'Collecties' : 'Collections'}
+              </p>
+              <h1 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
+                {isNL ? "Signature Collecties" : "Signature Collections"}
+              </h1>
+              <p className="text-body-md text-muted-foreground leading-relaxed max-w-md mb-3">
+                {isNL 
+                  ? "Een selectie richtingen waar we als atelier achter staan. Ontworpen om te vertalen naar uw ruimte."
+                  : "A selection of directions we stand behind as an atelier. Designed to translate to your space."}
+              </p>
+              <p className="text-body-sm text-muted-foreground/60 mb-8">
+                {isNL 
+                  ? "Elk stuk wordt op maat gemaakt, op aanvraag."
+                  : "Every piece is made to measure, on request."}
+              </p>
+              <Button asChild variant="sera-primary" size="lg">
+                <Link to="/bespoke">
+                  {isNL ? "Start uw project" : "Start your project"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Right: Editorial Image */}
+            <div className="order-1 lg:order-2">
+              <div className="aspect-[4/5] lg:aspect-[3/4] bg-muted overflow-hidden">
+                <img
+                  src={heroImage}
+                  alt={isNL ? "SERA NORR natuursteen interieur" : "SERA NORR natural stone interior"}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ========================================
-          VANTA COLLECTIE SPOTLIGHT
+          SECTION 2 — COLLECTIE SPOTLIGHT (side by side)
           ======================================== */}
-      <section className="py-24 lg:py-32">
+      <section className="py-20 lg:py-28 bg-secondary/20">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex items-center gap-6 mb-16 lg:mb-20">
-            <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">01</span>
-            <Hairline className="flex-1" />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Image */}
-            <div className="image-reveal">
-              <Link to="/collections/vanta">
-                <div className="aspect-[3/4] bg-muted overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            
+            {/* VANTA Card */}
+            <div className="group">
+              <Link to="/collections/vanta" className="block">
+                <div className="aspect-[4/5] bg-muted overflow-hidden mb-6 relative">
                   <img
                     src={vantaFallback}
                     alt={isNL ? "VANTA collectie - Calacatta Viola marmer" : "VANTA collection - Calacatta Viola marble"}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
                   />
                 </div>
               </Link>
-            </div>
-
-            {/* Content */}
-            <div>
-              <p className="editorial-caption-label mb-4">
+              <p className="editorial-caption-label mb-2">
                 Calacatta Viola
               </p>
-              <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
+              <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
                 VANTA
               </h2>
-              <p className="text-body-md text-muted-foreground leading-relaxed mb-6 max-w-md">
+              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4 max-w-sm">
                 {isNL 
-                  ? "Rijke paarse adering in zeldzaam Italiaans marmer. Elk stuk is uniek."
-                  : "Rich purple veining in rare Italian marble. Every piece is unique."}
+                  ? "Rijke adering in Italiaans marmer — sculpturaal en uitgesproken."
+                  : "Rich veining in Italian marble — sculptural and expressive."}
               </p>
               
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-10">
+              <div className="flex flex-wrap gap-2 mb-6">
                 <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Materiaal: Calacatta Viola" : "Material: Calacatta Viola"}
+                  Calacatta Viola
                 </span>
                 <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Gevoel: Sculpturaal" : "Feel: Sculptural"}
+                  {isNL ? "Marmer" : "Marble"}
                 </span>
                 <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Statement" : "Statement"}
+                  Statement
                 </span>
               </div>
 
-              <Button asChild variant="sera-secondary" size="lg">
+              <Button asChild variant="sera-secondary" size="default">
                 <Link to="/collections/vanta">
                   {isNL ? "Ontdek VANTA" : "Discover VANTA"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ========================================
-          TERRA COLLECTIE SPOTLIGHT
-          ======================================== */}
-      <section className="py-24 lg:py-32 bg-secondary/20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex items-center gap-6 mb-16 lg:mb-20">
-            <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">02</span>
-            <Hairline className="flex-1" />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Content */}
-            <div className="order-2 lg:order-1">
-              <p className="editorial-caption-label mb-4">
+            {/* TERRA Card */}
+            <div className="group">
+              <Link to="/collections/terra" className="block">
+                <div className="aspect-[4/5] bg-muted overflow-hidden mb-6 relative">
+                  <img
+                    src={terraFallback}
+                    alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
+                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                  />
+                </div>
+              </Link>
+              <p className="editorial-caption-label mb-2">
                 Travertin
               </p>
-              <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
+              <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
                 TERRA
               </h2>
-              <p className="text-body-md text-muted-foreground leading-relaxed mb-6 max-w-md">
+              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4 max-w-sm">
                 {isNL 
-                  ? "Warme beigetinten en tijdloze texturen. Natuurlijk travertin gevormd door eeuwen."
-                  : "Warm beige tones and timeless textures. Natural travertine formed over centuries."}
+                  ? "Warme beigetinten en tijdloze textuur — rustig en natuurlijk."
+                  : "Warm beige tones and timeless texture — calm and natural."}
               </p>
               
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-10">
+              <div className="flex flex-wrap gap-2 mb-6">
                 <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Materiaal: Travertin" : "Material: Travertine"}
+                  Travertin
                 </span>
                 <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Gevoel: Rustig" : "Feel: Calm"}
+                  {isNL ? "Warm" : "Warm"}
                 </span>
                 <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
                   {isNL ? "Tijdloos" : "Timeless"}
                 </span>
               </div>
 
-              <Button asChild variant="sera-secondary" size="lg">
+              <Button asChild variant="sera-secondary" size="default">
                 <Link to="/collections/terra">
                   {isNL ? "Ontdek TERRA" : "Discover TERRA"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
-
-            {/* Image */}
-            <div className="order-1 lg:order-2 image-reveal">
-              <Link to="/collections/terra">
-                <div className="aspect-[3/4] bg-muted overflow-hidden">
-                  <img
-                    src={terraFallback}
-                    alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
 
       {/* ========================================
-          LOOKBOOK GRID + FILTERS
+          SECTION 3 & 4 — LOOKBOOK GRID + FILTERS
           ======================================== */}
-      <section className="py-24 lg:py-32">
+      <section className="py-20 lg:py-28">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex items-center gap-6 mb-12">
-            <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">{isNL ? "Selectie ontwerpen" : "Selected designs"}</span>
-            <Hairline className="flex-1" />
-          </div>
-
-          <div className="mb-12">
-            <h2 className="font-serif text-display-sm text-foreground mb-4">
-              {isNL ? "Ontdek onze vormtaal" : "Explore our design language"}
+          <div className="mb-10">
+            <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
+              {isNL ? "Atelier selectie" : "Atelier selection"}
             </h2>
-            <p className="text-body-md text-muted-foreground max-w-xl">
+            <p className="text-body-sm text-muted-foreground max-w-lg">
               {isNL 
-                ? "Blader door onze signature ontwerpen. Elk stuk kan naar uw specificaties worden gemaakt."
-                : "Browse through our signature designs. Every piece can be made to your specifications."}
+                ? "Vormen, details en combinaties — als vertrekpunt voor maatwerk."
+                : "Shapes, details and combinations — as starting point for bespoke."}
             </p>
           </div>
 
           {/* Filters */}
-          <div className="mb-12">
+          <div className="mb-10">
             <LookbookFilters isNL={isNL} onFilterChange={setFilters} />
           </div>
 
@@ -239,29 +220,26 @@ const Collections = () => {
       </section>
 
       {/* ========================================
-          BRIDGE: VERTAAL DIT NAAR UW RUIMTE
+          SECTION 5 — BRIDGE NAAR MAATWERK
           ======================================== */}
-      <section className="py-24 lg:py-32 bg-secondary/20">
+      <section className="py-20 lg:py-28 bg-secondary/20">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <p className="micro-label mb-4">
-                {isNL ? 'Maatwerk' : 'Bespoke'}
-              </p>
-              <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
+            <div className="text-center mb-10">
+              <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
                 {isNL ? "Vertaal dit naar uw ruimte" : "Translate this to your space"}
               </h2>
-              <p className="text-body-md text-muted-foreground max-w-lg mx-auto">
+              <p className="text-body-sm text-muted-foreground max-w-md mx-auto">
                 {isNL 
-                  ? "Gebruik onze ontwerpen als startpunt. Wij finetunen samen tot perfectie."
-                  : "Use our designs as a starting point. We fine-tune together to perfection."}
+                  ? "Kies een richting — wij werken het uit in uw afmeting en afwerking."
+                  : "Choose a direction — we work it out in your dimensions and finish."}
               </p>
             </div>
 
             {/* 3-step preview */}
             <ConfiguratorTeaser isNL={isNL} />
 
-            <p className="text-center text-xs text-muted-foreground/60 mt-6">
+            <p className="text-center text-xs text-muted-foreground/50 mt-6">
               {isNL ? "Indicatief. We finetunen samen." : "Indicative. We fine-tune together."}
             </p>
           </div>
@@ -269,19 +247,14 @@ const Collections = () => {
       </section>
 
       {/* ========================================
-          EINDSECTIE CTA
+          SECTION 6 — EINDSECTIE CTA
           ======================================== */}
-      <section className="py-24 lg:py-32 bg-foreground text-background">
+      <section className="py-20 lg:py-28 bg-foreground text-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-serif text-display-sm lg:text-display-md text-background mb-4">
+          <div className="max-w-xl mx-auto text-center">
+            <h2 className="font-serif text-display-xs lg:text-display-sm text-background mb-8">
               {isNL ? "Klaar om te beginnen?" : "Ready to start?"}
             </h2>
-            <p className="text-background/70 text-body-md mb-10 max-w-md mx-auto">
-              {isNL 
-                ? "Laat ons weten wat u zoekt. Wij vertalen uw wensen naar een concreet voorstel."
-                : "Let us know what you're looking for. We'll translate your wishes into a concrete proposal."}
-            </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
                 <Link to="/bespoke">
@@ -291,7 +264,7 @@ const Collections = () => {
               </Button>
               <Link 
                 to="/contact" 
-                className="text-sm uppercase tracking-[0.1em] text-background/60 hover:text-background transition-colors"
+                className="text-sm uppercase tracking-[0.1em] text-background/50 hover:text-background transition-colors"
               >
                 {isNL ? "Neem contact op" : "Contact us"}
               </Link>
