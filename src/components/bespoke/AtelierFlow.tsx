@@ -273,8 +273,8 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
             {currentStep === 3 && (
               <div className="space-y-8">
                 {/* Shape selection */}
-                <div>
-                  <label className="text-xs uppercase tracking-[0.15em] text-muted-foreground block mb-4">
+                <div role="group" aria-labelledby="shape-label">
+                  <label id="shape-label" className="text-xs uppercase tracking-[0.15em] text-foreground/70 block mb-4">
                     {isNL ? 'Vorm' : 'Shape'}
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -287,11 +287,12 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                       <button
                         key={option.id}
                         onClick={() => updateData('shape', option.id)}
+                        aria-pressed={data.shape === option.id}
                         className={cn(
-                          "px-4 py-2 text-sm border transition-all duration-200",
+                          "px-4 py-2 min-h-[44px] text-sm border transition-all duration-200",
                           data.shape === option.id
                             ? "border-foreground bg-foreground text-background"
-                            : "border-foreground/10 hover:border-foreground/30"
+                            : "border-foreground/20 hover:border-foreground/40"
                         )}
                       >
                         {option.label}
@@ -304,71 +305,90 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                 {data.shape === 'round' ? (
                   <div className="space-y-6">
                     <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm text-muted-foreground">{isNL ? 'Diameter' : 'Diameter'}</span>
+                      <label id="diameter-label" className="flex justify-between mb-2">
+                        <span className="text-sm text-foreground/70">{isNL ? 'Diameter' : 'Diameter'}</span>
                         <span className="text-sm font-medium">{data.dimensions.diameter} cm</span>
-                      </div>
+                      </label>
                       <Slider
                         value={[data.dimensions.diameter]}
                         onValueChange={(v) => updateDimensions('diameter', v[0])}
                         min={40}
                         max={200}
                         step={5}
+                        aria-labelledby="diameter-label"
+                        className="touch-pan-y"
                       />
                     </div>
                     <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm text-muted-foreground">{isNL ? 'Hoogte' : 'Height'}</span>
+                      <label id="height-round-label" className="flex justify-between mb-2">
+                        <span className="text-sm text-foreground/70">{isNL ? 'Hoogte' : 'Height'}</span>
                         <span className="text-sm font-medium">{data.dimensions.height} cm</span>
-                      </div>
+                      </label>
                       <Slider
                         value={[data.dimensions.height]}
                         onValueChange={(v) => updateDimensions('height', v[0])}
                         min={30}
                         max={80}
                         step={5}
+                        aria-labelledby="height-round-label"
+                        className="touch-pan-y"
                       />
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-6">
                     <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm text-muted-foreground">{isNL ? 'Lengte' : 'Length'}</span>
+                      <label id="length-label" className="flex justify-between mb-2">
+                        <span className="text-sm text-foreground/70">{isNL ? 'Lengte' : 'Length'}</span>
                         <span className="text-sm font-medium">{data.dimensions.length} cm</span>
-                      </div>
+                      </label>
                       <Slider
                         value={[data.dimensions.length]}
                         onValueChange={(v) => updateDimensions('length', v[0])}
                         min={60}
                         max={300}
                         step={10}
+                        aria-labelledby="length-label"
+                        aria-valuemin={60}
+                        aria-valuemax={300}
+                        aria-valuenow={data.dimensions.length}
+                        className="touch-pan-y"
                       />
                     </div>
                     <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm text-muted-foreground">{isNL ? 'Breedte' : 'Width'}</span>
+                      <label id="width-label" className="flex justify-between mb-2">
+                        <span className="text-sm text-foreground/70">{isNL ? 'Breedte' : 'Width'}</span>
                         <span className="text-sm font-medium">{data.dimensions.width} cm</span>
-                      </div>
+                      </label>
                       <Slider
                         value={[data.dimensions.width]}
                         onValueChange={(v) => updateDimensions('width', v[0])}
                         min={40}
                         max={150}
                         step={5}
+                        aria-labelledby="width-label"
+                        aria-valuemin={40}
+                        aria-valuemax={150}
+                        aria-valuenow={data.dimensions.width}
+                        className="touch-pan-y"
                       />
                     </div>
                     <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm text-muted-foreground">{isNL ? 'Hoogte' : 'Height'}</span>
+                      <label id="height-label" className="flex justify-between mb-2">
+                        <span className="text-sm text-foreground/70">{isNL ? 'Hoogte' : 'Height'}</span>
                         <span className="text-sm font-medium">{data.dimensions.height} cm</span>
-                      </div>
+                      </label>
                       <Slider
                         value={[data.dimensions.height]}
                         onValueChange={(v) => updateDimensions('height', v[0])}
                         min={30}
                         max={80}
                         step={5}
+                        aria-labelledby="height-label"
+                        aria-valuemin={30}
+                        aria-valuemax={80}
+                        aria-valuenow={data.dimensions.height}
+                        className="touch-pan-y"
                       />
                     </div>
                   </div>
@@ -380,11 +400,11 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
             {currentStep === 4 && (
               <div className="space-y-8">
                 {/* Stone selection */}
-                <div>
-                  <label className="text-xs uppercase tracking-[0.15em] text-muted-foreground block mb-4">
+                <div role="group" aria-labelledby="stone-label">
+                  <label id="stone-label" className="text-xs uppercase tracking-[0.15em] text-foreground/70 block mb-4">
                     {isNL ? 'Steensoort' : 'Stone type'}
                   </label>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                     {[
                       { id: 'calacatta-viola' as const, label: 'Calacatta Viola', color: '#F5F0F5' },
                       { id: 'travertin' as const, label: 'Travertin', color: '#E8DFD0' },
@@ -393,20 +413,22 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                       <button
                         key={option.id}
                         onClick={() => updateData('stone', option.id)}
+                        aria-pressed={data.stone === option.id}
                         className={cn(
-                          "p-4 border transition-all duration-200 flex items-center gap-4",
+                          "p-4 min-h-[56px] border transition-all duration-200 flex items-center gap-4",
                           data.stone === option.id
                             ? "border-foreground"
-                            : "border-foreground/10 hover:border-foreground/30"
+                            : "border-foreground/20 hover:border-foreground/40"
                         )}
                       >
                         <div
-                          className="w-10 h-10 rounded-full border border-foreground/10"
+                          className="w-10 h-10 flex-shrink-0 rounded-full border border-foreground/10"
                           style={{ backgroundColor: option.color }}
+                          aria-hidden="true"
                         />
                         <span className="text-sm">{option.label}</span>
                         {data.stone === option.id && (
-                          <Check className="w-4 h-4 ml-auto" />
+                          <Check className="w-4 h-4 ml-auto" aria-hidden="true" />
                         )}
                       </button>
                     ))}
@@ -414,8 +436,8 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                 </div>
 
                 {/* Finish selection */}
-                <div>
-                  <label className="text-xs uppercase tracking-[0.15em] text-muted-foreground block mb-4">
+                <div role="group" aria-labelledby="finish-label">
+                  <label id="finish-label" className="text-xs uppercase tracking-[0.15em] text-foreground/70 block mb-4">
                     {isNL ? 'Afwerking' : 'Finish'}
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -427,11 +449,12 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                       <button
                         key={option.id}
                         onClick={() => updateData('finish', option.id)}
+                        aria-pressed={data.finish === option.id}
                         className={cn(
-                          "px-4 py-2 text-sm border transition-all duration-200",
+                          "px-4 py-2 min-h-[44px] text-sm border transition-all duration-200",
                           data.finish === option.id
                             ? "border-foreground bg-foreground text-background"
-                            : "border-foreground/10 hover:border-foreground/30"
+                            : "border-foreground/20 hover:border-foreground/40"
                         )}
                       >
                         {option.label}
@@ -591,18 +614,21 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
           {isNL ? "Vorige" : "Previous"}
         </Button>
         
-        {currentStep < TOTAL_STEPS ? (
+        {currentStep < TOTAL_STEPS && canProceed() ? (
           <Button
             variant="sera-primary"
             onClick={nextStep}
-            disabled={!canProceed()}
             className="gap-2"
           >
             {isNL ? "Volgende" : "Next"}
             <ChevronRight className="w-4 h-4" />
           </Button>
+        ) : currentStep < TOTAL_STEPS ? (
+          <p className="text-sm text-foreground/60 italic">
+            {isNL ? "Maak eerst een keuze" : "Please make a selection"}
+          </p>
         ) : (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-foreground/60">
             {isNL ? "Bekijk uw dossier hieronder" : "View your dossier below"}
           </div>
         )}
