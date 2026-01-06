@@ -134,7 +134,7 @@ const Collections = () => {
                   {isNL ? "Marmer" : "Marble"}
                 </span>
                 <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  Statement
+                  {isNL ? "Uitgesproken" : "Statement"}
                 </span>
               </div>
 

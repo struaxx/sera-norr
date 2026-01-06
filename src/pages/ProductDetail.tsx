@@ -242,11 +242,9 @@ const ProductDetail = () => {
                 <USPBullets variant="horizontal" className="text-xs" />
               </div>
 
-              {product.description && (
-                <p className="text-muted-foreground text-body-md leading-relaxed mb-6">
-                  {product.description}
-                </p>
-              )}
+              {/* Note: Product descriptions from Shopify are currently English only.
+                  For consistent NL experience, consider adding translated descriptions in Shopify 
+                  or maintaining a local translation mapping */}
 
               {/* Primary CTA - Request Proposal */}
               <Button

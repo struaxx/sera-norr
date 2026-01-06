@@ -398,11 +398,7 @@ const CollectionDetail = () => {
                             {product.node.title}
                           </Link>
                         </h3>
-                        {product.node.description && (
-                          <p className="text-muted-foreground text-sm line-clamp-2">
-                            {product.node.description}
-                          </p>
-                        )}
+                        {/* Shopify descriptions hidden - not available in NL */}
                       </div>
                       {price && (
                         <p className="font-sans text-sm text-muted-foreground whitespace-nowrap">
