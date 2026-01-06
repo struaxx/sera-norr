@@ -62,7 +62,6 @@ const Bespoke = () => {
       // Track submission
       trackLeadSubmit('bespoke', { 
         productType: flowData.productType,
-        direction: flowData.direction,
         stone: flowData.stone,
       });
       trackFormSubmit('bespoke');
