@@ -244,9 +244,30 @@ const Contact = () => {
                         <SelectValue placeholder={isNL ? 'Selecteer onderwerp' : 'Select subject'} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="algemeen">{isNL ? 'Algemene vraag' : 'General inquiry'}</SelectItem>
-                        <SelectItem value="maatwerk">{isNL ? 'Maatwerk' : 'Bespoke'}</SelectItem>
-                        <SelectItem value="samenwerking">{isNL ? 'Samenwerking' : 'Collaboration'}</SelectItem>
+                        <SelectItem value="algemeen">
+                          <div className="flex flex-col items-start">
+                            <span>{isNL ? 'Algemene vraag' : 'General inquiry'}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {isNL ? 'Vragen over collectie, levering of atelier' : 'Questions about collection, delivery or atelier'}
+                            </span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="maatwerk">
+                          <div className="flex flex-col items-start">
+                            <span>{isNL ? 'Maatwerk' : 'Bespoke'}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {isNL ? 'Ontwerp op maat: afmetingen, materialen, afwerking' : 'Custom design: dimensions, materials, finish'}
+                            </span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="samenwerking">
+                          <div className="flex flex-col items-start">
+                            <span>{isNL ? 'Samenwerking' : 'Collaboration'}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {isNL ? 'Voor architecten, interieurontwerpers & projectontwikkelaars' : 'For architects, interior designers & developers'}
+                            </span>
+                          </div>
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
