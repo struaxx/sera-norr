@@ -179,11 +179,6 @@ export function LookbookGrid({ isNL, filters }: LookbookGridProps) {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild variant="sera-secondary" size="lg">
-                  <Link to={`/collections/${selectedItem.collection.toLowerCase()}`}>
-                    {isNL ? "Bekijk collectie" : "View collection"}
-                  </Link>
-                </Button>
               </div>
             </motion.div>
           </motion.div>
