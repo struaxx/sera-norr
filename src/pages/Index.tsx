@@ -8,12 +8,10 @@ import { ArrowRight } from "lucide-react";
 import { SEOHead, baseSchema } from "@/components/seo";
 import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BespokeTimeline, BespokeTimelineStep } from "@/components/ui/bespoke-timeline";
-import { ProofGrid } from "@/components/ui/proof-grid";
-import { ActionPanel } from "@/components/ui/action-panel";
 import { Hairline } from "@/components/ui/hairline";
 import { CollectionCard } from "@/components/ui/collection-card";
-import { usePageTracking, useCTATracking } from "@/hooks/use-tracking";
+import { ConfiguratorTeaser, ValuePillars } from "@/components/homepage";
+import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import heroImage from "@/assets/hero-homepage.png";
 
@@ -22,7 +20,6 @@ const Index = () => {
   const isNL = i18n.language === 'nl';
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [loading, setLoading] = useState(true);
-  const { trackProposal } = useCTATracking();
   
   usePageTracking();
 
@@ -52,60 +49,6 @@ const Index = () => {
     ? "SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel"
     : "SERA NORR, online atelier, bespoke natural stone furniture, travertine table, custom marble table, Calacatta Viola, stone dining table";
 
-  // Process steps - Bespoke Timeline
-  const processSteps: BespokeTimelineStep[] = isNL ? [
-    { 
-      number: '01', 
-      title: 'Consultatie', 
-      description: 'Vrijblijvend gesprek over uw wensen, ruimte en steenvoorkeur.', 
-      tag: 'Binnen 24 uur reactie' 
-    },
-    { 
-      number: '02', 
-      title: 'Voorstel & visualisatie', 
-      description: 'Schets, materiaalopties en offerte op maat.', 
-      tag: 'Voorstel in 48 uur' 
-    },
-    { 
-      number: '03', 
-      title: 'Productie & levering', 
-      description: 'Vakkundige productie en white-glove plaatsing.', 
-      tag: '12–16 weken' 
-    },
-  ] : [
-    { 
-      number: '01', 
-      title: 'Consultation', 
-      description: 'No-obligation conversation about your wishes, space and stone preference.', 
-      tag: 'Response within 24 hours' 
-    },
-    { 
-      number: '02', 
-      title: 'Proposal & visualization', 
-      description: 'Sketch, material options and tailored quote.', 
-      tag: 'Proposal in 48 hours' 
-    },
-    { 
-      number: '03', 
-      title: 'Production & delivery', 
-      description: 'Expert production and white-glove installation.', 
-      tag: '12–16 weeks' 
-    },
-  ];
-
-  // Proof items - Waarom SERA NORR
-  const proofItems = isNL ? [
-    { title: '5 jaar garantie', description: 'Op constructie en materiaal.' },
-    { title: 'White-glove levering', description: 'Plaatsing op locatie in NL/BE.' },
-    { title: 'Ontworpen in Nederland', description: 'Elk stuk uniek en op maat.' },
-    { title: 'Geselecteerde materialen', description: 'Travertin, marmer, natuursteen.' },
-  ] : [
-    { title: '5 year warranty', description: 'On construction and materials.' },
-    { title: 'White-glove delivery', description: 'Installation on location in NL/BE.' },
-    { title: 'Designed in Netherlands', description: 'Each piece unique and bespoke.' },
-    { title: 'Selected materials', description: 'Travertine, marble, natural stone.' },
-  ];
-
   // Get Dutch description for collections
   const getCollectionDescription = (handle: string) => {
     const handleLower = handle.toLowerCase();
@@ -130,7 +73,7 @@ const Index = () => {
       />
 
       {/* ============================================
-          HERO - Cinematic full-screen with refined content rail
+          HERO - Single CTA: Start uw project
           ============================================ */}
       <section className="relative h-screen flex items-end overflow-hidden">
         {/* Background image */}
@@ -140,11 +83,11 @@ const Index = () => {
             alt={isNL ? "SERA NORR - Luxe stenen meubels op maat" : "SERA NORR - Luxury bespoke stone furniture"}
             className="w-full h-full object-cover"
           />
-          {/* Gradient overlay for text readability */}
+          {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/20 to-transparent" />
         </div>
         
-        {/* Content rail - centered */}
+        {/* Content - centered */}
         <div className="relative z-10 w-full pb-20 lg:pb-24">
           <div className="container mx-auto px-6 lg:px-12">
             <div className="max-w-2xl mx-auto text-center">
@@ -153,40 +96,33 @@ const Index = () => {
                 {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
               </p>
               
-              {/* H1 - centered and bold */}
+              {/* H1 */}
               <h1 className="font-serif font-semibold text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-background mb-4 leading-[1.05] tracking-[-0.02em]">
                 {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
               </h1>
               
-              {/* Subcopy - short */}
+              {/* Subcopy */}
               <p className="font-sans text-base lg:text-lg text-background/80 max-w-md mx-auto mb-8">
                 {isNL 
                   ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
                   : "Travertine, marble and selected stone types. Made to measure."}
               </p>
               
-              {/* CTA rail - two buttons */}
-              <div className="flex flex-wrap justify-center gap-3 mb-8">
-                <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-7">
-                  <Link to="/collections">
-                    {isNL ? "Ontdek collecties" : "Discover collections"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="sera-secondary" size="default" className="border-background/30 text-background hover:border-background/50 hover:bg-background/5 h-12 px-7">
-                  <Link to="/bespoke" onClick={trackProposal}>
-                    {isNL ? "Vraag voorstel aan" : "Request proposal"}
-                  </Link>
-                </Button>
-              </div>
+              {/* Single primary CTA */}
+              <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
+                <Link to="/bespoke">
+                  {isNL ? "Start uw project" : "Start your project"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
               
-              {/* Trust rail - typographic, minimal */}
-              <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/50">
+              {/* Trust rail */}
+              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/50">
                 <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
                 <span className="hidden sm:inline text-background/30">·</span>
-                <span>{isNL ? '5 jaar garantie' : '5 year warranty'}</span>
+                <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
                 <span className="hidden sm:inline text-background/30">·</span>
-                <span>{isNL ? 'White-glove levering' : 'White-glove delivery'}</span>
+                <span>{isNL ? '8–12 weken' : '8–12 weeks'}</span>
               </div>
             </div>
           </div>
@@ -200,7 +136,12 @@ const Index = () => {
       </section>
 
       {/* ============================================
-          COLLECTIES - Editorial asymmetric grid
+          INTRO - Short, scannable
+          ============================================ */}
+      <IntroSection isNL={isNL} />
+
+      {/* ============================================
+          COLLECTIES - With single "Ontdek collecties" CTA
           ============================================ */}
       <CollectiesSection 
         collections={collections}
@@ -210,32 +151,53 @@ const Index = () => {
       />
 
       {/* ============================================
-          HOE KUNNEN WIJ HELPEN - Editorial split
+          CONFIGURATOR TEASER - Interactive 3-step
           ============================================ */}
-      <HelpSection isNL={isNL} trackProposal={trackProposal} />
+      <ConfiguratorSection isNL={isNL} />
 
       {/* ============================================
-          WERKWIJZE - Timeline with ghost numbers
+          WAAROM SERA NORR - Value Pillars (unified block)
           ============================================ */}
-      <ProcessSection isNL={isNL} processSteps={processSteps} trackProposal={trackProposal} />
+      <ValuePillars isNL={isNL} />
 
       {/* ============================================
-          WAAROM SERA NORR - Proof grid
-          ============================================ */}
-      <ProofSection isNL={isNL} proofItems={proofItems} />
-
-      {/* ============================================
-          ONDERHOUD & BESCHERMING
+          CARE - Advice only, no warranty
           ============================================ */}
       <CareSection isNL={isNL} />
 
       {/* ============================================
-          FINAL CTA BAND
+          FINAL CTA - "Neem contact op"
           ============================================ */}
       <FinalCTASection isNL={isNL} />
     </Layout>
   );
 };
+
+// ============================================
+// INTRO SECTION
+// ============================================
+function IntroSection({ isNL }: { isNL: boolean }) {
+  const { ref, isInView, variants } = useScrollReveal();
+
+  return (
+    <section className="py-20 lg:py-28" ref={ref}>
+      <div className="container mx-auto px-6 lg:px-12">
+        <motion.div 
+          className="max-w-2xl mx-auto text-center"
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <p className="font-serif text-xl lg:text-2xl text-foreground leading-relaxed">
+            {isNL 
+              ? "Wij ontwerpen en vervaardigen meubels in natuursteen. Elk stuk is uniek, op maat gemaakt en geleverd met white-glove service."
+              : "We design and craft furniture in natural stone. Each piece is unique, made to measure and delivered with white-glove service."}
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
 // ============================================
 // COLLECTIES SECTION
@@ -254,7 +216,7 @@ function CollectiesSection({
   const { ref, isInView, variants } = useScrollReveal();
 
   return (
-    <section className="py-24 lg:py-32" ref={ref}>
+    <section className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         {/* Section header */}
         <motion.div 
@@ -319,15 +281,16 @@ function CollectiesSection({
           </p>
         )}
 
+        {/* Single secondary CTA */}
         <motion.div 
-          className="mt-16 lg:mt-20"
+          className="mt-16 lg:mt-20 text-center"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
           <Button asChild variant="sera-secondary" size="lg">
             <Link to="/collections">
-              {isNL ? "Bekijk alle collecties" : "View all collections"}
+              {isNL ? "Ontdek collecties" : "Discover collections"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -338,85 +301,9 @@ function CollectiesSection({
 }
 
 // ============================================
-// HELP SECTION
+// CONFIGURATOR SECTION
 // ============================================
-function HelpSection({ isNL, trackProposal }: { isNL: boolean; trackProposal: () => void }) {
-  const { ref, isInView, variants } = useScrollReveal();
-
-  return (
-    <section className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
-      <div className="container mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          {/* Left: Intro column */}
-          <motion.div 
-            className="lg:col-span-5"
-            variants={variants.slideInLeft}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-          >
-            <p className="micro-label mb-5">
-              {isNL ? 'Hoe kunnen wij helpen?' : 'How can we help?'}
-            </p>
-            <h2 className="font-serif text-display-sm text-foreground mb-5">
-              {isNL ? "Uw visie, onze expertise" : "Your vision, our expertise"}
-            </h2>
-            <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-sm">
-              {isNL 
-                ? "Wij helpen u bij elke stap — van eerste idee tot plaatsing in uw interieur."
-                : "We guide you every step — from initial idea to installation in your interior."}
-            </p>
-            <Button asChild variant="sera-primary" size="default" className="h-12 px-7">
-              <Link to="/bespoke" onClick={trackProposal}>
-                {isNL ? "Start uw project" : "Start your project"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </motion.div>
-          
-          {/* Right: Action panels */}
-          <motion.div 
-            className="lg:col-span-7"
-            variants={variants.slideInRight}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-          >
-            <div className="space-y-px">
-              <ActionPanel
-                label={isNL ? 'Collectie' : 'Collection'}
-                title={isNL ? "Kies uit onze collectie" : "Choose from our collection"}
-                description={isNL ? "Ontdek bestaande ontwerpen in travertin en marmer." : "Discover existing designs in travertine and marble."}
-                ctaText={isNL ? "Bekijk collecties" : "View collections"}
-                ctaLink="/collections"
-                className="bg-background"
-              />
-              <ActionPanel
-                label={isNL ? 'Maatwerk' : 'Bespoke'}
-                title={isNL ? "Laat iets unieks maken" : "Have something unique made"}
-                description={isNL ? "Op maat naar uw wensen, afmetingen en steenkeuze." : "Tailored to your wishes, dimensions and stone choice."}
-                ctaText={isNL ? "Vraag voorstel" : "Request proposal"}
-                ctaLink="/voorstel"
-                className="bg-background"
-              />
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ============================================
-// PROCESS SECTION
-// ============================================
-function ProcessSection({ 
-  isNL, 
-  processSteps, 
-  trackProposal 
-}: { 
-  isNL: boolean; 
-  processSteps: BespokeTimelineStep[]; 
-  trackProposal: () => void;
-}) {
+function ConfiguratorSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
   return (
@@ -430,83 +317,32 @@ function ProcessSection({
           animate={isInView ? "visible" : "hidden"}
         >
           <Hairline className="flex-1" />
-          <span className="micro-label shrink-0">{isNL ? 'Werkwijze' : 'Process'}</span>
+          <span className="micro-label shrink-0">{isNL ? 'Uw project' : 'Your project'}</span>
           <Hairline className="flex-1" />
         </motion.div>
 
         <motion.div 
-          className="max-w-lg mb-16"
+          className="max-w-lg mb-12"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <h2 className="font-serif text-display-sm lg:text-display-md text-foreground">
-            {isNL ? "Van gesprek tot plaatsing" : "From conversation to installation"}
+          <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
+            {isNL ? "Start uw project" : "Start your project"}
           </h2>
-        </motion.div>
-        
-        {/* Timeline */}
-        <motion.div 
-          className="border-t border-b border-foreground/8"
-          variants={variants.fadeUp}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <BespokeTimeline steps={processSteps} className="max-w-6xl mx-auto" />
-        </motion.div>
-        
-        <motion.div 
-          className="mt-16"
-          variants={variants.fadeUp}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <Button asChild variant="sera-primary" size="default" className="h-12 px-7">
-            <Link to="/bespoke" onClick={trackProposal}>
-              {isNL ? "Start uw project" : "Start your project"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-// ============================================
-// PROOF SECTION
-// ============================================
-function ProofSection({ 
-  isNL, 
-  proofItems 
-}: { 
-  isNL: boolean; 
-  proofItems: { title: string; description: string }[];
-}) {
-  const { ref, isInView, variants } = useScrollReveal();
-
-  return (
-    <section className="py-24 lg:py-32" ref={ref}>
-      <div className="container mx-auto px-6 lg:px-12">
-        {/* Section header */}
-        <motion.div 
-          className="flex items-center gap-6 mb-16 lg:mb-20"
-          variants={variants.fadeIn}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <Hairline className="flex-1" />
-          <span className="micro-label shrink-0">{isNL ? 'Waarom SERA NORR' : 'Why SERA NORR'}</span>
-          <Hairline className="flex-1" />
+          <p className="text-body-md text-muted-foreground">
+            {isNL 
+              ? "Drie stappen naar uw unieke stuk. Kies type, afmetingen en steensoort."
+              : "Three steps to your unique piece. Choose type, dimensions and stone."}
+          </p>
         </motion.div>
 
-        {/* Proof Grid */}
         <motion.div
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <ProofGrid items={proofItems} className="max-w-6xl mx-auto" />
+          <ConfiguratorTeaser isNL={isNL} />
         </motion.div>
       </div>
     </section>
@@ -514,10 +350,20 @@ function ProofSection({
 }
 
 // ============================================
-// CARE SECTION
+// CARE SECTION - Advice only, no warranty
 // ============================================
 function CareSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
+
+  const careTips = isNL ? [
+    { number: '01', text: 'Vlekbescherming & impregnatie' },
+    { number: '02', text: 'Dagelijkse reiniging met milde zeep' },
+    { number: '03', text: 'Langdurige schoonheid door eenvoudig onderhoud' },
+  ] : [
+    { number: '01', text: 'Stain protection & impregnation' },
+    { number: '02', text: 'Daily cleaning with mild soap' },
+    { number: '03', text: 'Long-lasting beauty through simple care' },
+  ];
 
   return (
     <section className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
@@ -534,7 +380,7 @@ function CareSection({ isNL }: { isNL: boolean }) {
         </motion.div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-          {/* Left: Content + bullets + CTAs */}
+          {/* Left: Content */}
           <motion.div
             variants={variants.slideInLeft}
             initial="hidden"
@@ -543,45 +389,35 @@ function CareSection({ isNL }: { isNL: boolean }) {
             <h2 className="font-serif text-display-sm text-foreground mb-4">
               {isNL ? "Onderhoud & bescherming" : "Care & protection"}
             </h2>
-            <p className="text-body-lg text-muted-foreground leading-relaxed mb-8 max-w-md">
+            <p className="text-body-md text-muted-foreground leading-relaxed mb-8 max-w-md">
               {isNL 
-                ? "Natuursteen blijft het mooist met de juiste bescherming en eenvoudig onderhoud. Wij adviseren wat past bij uw gebruik en kunnen bescherming meenemen in het voorstel."
-                : "Natural stone stays most beautiful with the right protection and simple maintenance. We advise what suits your usage and can include protection in the proposal."}
+                ? "Natuursteen vraagt weinig onderhoud. Met de juiste bescherming en eenvoudige verzorging blijft uw stuk jarenlang mooi."
+                : "Natural stone requires little maintenance. With proper protection and simple care, your piece stays beautiful for years."}
             </p>
             
-            {/* Bullets with hairline separators */}
-            <div className="space-y-0 border-t border-foreground/8 mb-10">
-              {[
-                isNL ? 'Vlekbescherming & impregnatie' : 'Stain protection & impregnation',
-                isNL ? 'Eenvoudige dagelijkse care' : 'Simple daily care',
-                isNL ? 'Langdurige schoonheid' : 'Long-lasting beauty',
-              ].map((bullet, index) => (
-                <div key={index} className="py-4 border-b border-foreground/8 flex items-center gap-4">
+            {/* Care tips - 3 bullets */}
+            <div className="space-y-0 border-t border-foreground/8 mb-8">
+              {careTips.map((tip) => (
+                <div key={tip.number} className="py-4 border-b border-foreground/8 flex items-center gap-4">
                   <span className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50 w-5">
-                    0{index + 1}
+                    {tip.number}
                   </span>
-                  <span className="text-body-md text-foreground">{bullet}</span>
+                  <span className="text-body-md text-foreground">{tip.text}</span>
                 </div>
               ))}
             </div>
             
-            {/* CTA rail */}
-            <div className="flex flex-wrap items-center gap-4">
-              <Button asChild variant="sera-primary" size="default" className="h-11 px-6">
-                <Link to="/care">
-                  {isNL ? 'Lees over care' : 'Read about care'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="sera-secondary" size="default" className="h-11 px-6">
-                <Link to="/voorstel">
-                  {isNL ? 'Ontvang voorstel' : 'Get proposal'}
-                </Link>
-              </Button>
-            </div>
+            {/* Text link only - not counted as CTA */}
+            <Link 
+              to="/care" 
+              className="inline-flex items-center gap-2 text-sm text-foreground hover:text-foreground/70 transition-colors group"
+            >
+              {isNL ? 'Lees meer over onderhoud' : 'Read more about care'}
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </motion.div>
           
-          {/* Right: Visual module - architectural feel */}
+          {/* Right: Visual */}
           <motion.div 
             className="relative hidden lg:block"
             variants={variants.slideInRight}
@@ -591,18 +427,12 @@ function CareSection({ isNL }: { isNL: boolean }) {
             <div className="aspect-[4/3] bg-gradient-to-br from-background to-secondary/50 border border-foreground/5 flex items-center justify-center">
               <div className="text-center p-10">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 block mb-3">
-                  {isNL ? 'BESCHERMING INBEGREPEN' : 'PROTECTION INCLUDED'}
+                  {isNL ? 'ADVIES OP MAAT' : 'TAILORED ADVICE'}
                 </span>
                 <p className="font-serif text-xl text-foreground/80">
-                  {isNL ? '5 jaar garantie' : '5 year warranty'}
+                  {isNL ? 'Wij adviseren wat past bij uw gebruik' : 'We advise what suits your usage'}
                 </p>
               </div>
-            </div>
-            {/* Caption */}
-            <div className="mt-3">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
-                {isNL ? 'Op aanvraag in het voorstel' : 'On request in the proposal'}
-              </span>
             </div>
           </motion.div>
         </div>
@@ -612,7 +442,7 @@ function CareSection({ isNL }: { isNL: boolean }) {
 }
 
 // ============================================
-// FINAL CTA SECTION
+// FINAL CTA SECTION - "Neem contact op" only
 // ============================================
 function FinalCTASection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
@@ -621,7 +451,7 @@ function FinalCTASection({ isNL }: { isNL: boolean }) {
     <section className="py-20 lg:py-28 bg-foreground text-background" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         <motion.div 
-          className="max-w-xl"
+          className="max-w-xl mx-auto text-center"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
@@ -631,22 +461,15 @@ function FinalCTASection({ isNL }: { isNL: boolean }) {
           </h2>
           <p className="text-background/70 text-body-md mb-8">
             {isNL 
-              ? "Plan een vrijblijvend gesprek of bekijk onze voorbeelden."
-              : "Schedule a no-obligation conversation or view our examples."}
+              ? "Plan een vrijblijvend gesprek. Wij reageren snel."
+              : "Schedule a no-obligation conversation. We respond quickly."}
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-7">
-              <Link to="/contact">
-                {isNL ? "Neem contact op" : "Get in touch"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="sera-secondary" size="default" className="border-background/30 text-background hover:border-background/50 h-12 px-7">
-              <Link to="/lookbook">
-                {isNL ? "Bekijk lookbook" : "View lookbook"}
-              </Link>
-            </Button>
-          </div>
+          <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
+            <Link to="/contact">
+              {isNL ? "Neem contact op" : "Get in touch"}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
         </motion.div>
       </div>
     </section>
