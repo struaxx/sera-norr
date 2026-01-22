@@ -136,7 +136,7 @@ export function ConfiguratorTeaser({ isNL }: ConfiguratorTeaserProps) {
           </p>
         </div>
         <Button asChild variant="sera-primary" size="default" className="h-12 px-7">
-          <Link to="/bespoke">
+          <Link to="/atelier">
             {isNL ? "Start uw project" : "Start your project"}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>

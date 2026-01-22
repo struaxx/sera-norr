@@ -10,7 +10,7 @@ import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Hairline } from "@/components/ui/hairline";
 import { CollectionCard } from "@/components/ui/collection-card";
-import { ConfiguratorTeaser, ValuePillars } from "@/components/homepage";
+import { ConfiguratorTeaser, ValuePillars, AtelierSteps } from "@/components/homepage";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import heroImage from "@/assets/hero-homepage.png";
@@ -108,13 +108,20 @@ const Index = () => {
                   : "Travertine, marble and selected stone types. Made to measure."}
               </p>
               
-              {/* Single primary CTA */}
-              <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
-                <Link to="/bespoke">
-                  {isNL ? "Start uw project" : "Start your project"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              {/* Dual CTAs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
+                  <Link to="/atelier">
+                    {isNL ? "Ontwerp uw tafel" : "Design your table"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" size="default" className="text-background/80 hover:text-background hover:bg-background/10 h-12 px-6">
+                  <a href="#collecties">
+                    {isNL ? "Ontdek de collecties" : "Discover collections"}
+                  </a>
+                </Button>
+              </div>
               
               {/* Trust rail */}
               <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/50">
@@ -154,6 +161,11 @@ const Index = () => {
           CONFIGURATOR TEASER - Interactive 3-step
           ============================================ */}
       <ConfiguratorSection isNL={isNL} />
+
+      {/* ============================================
+          3-STEP ATELIER INTRO
+          ============================================ */}
+      <AtelierSteps isNL={isNL} />
 
       {/* ============================================
           WAAROM SERA NORR - Value Pillars (unified block)
@@ -216,7 +228,7 @@ function CollectiesSection({
   const { ref, isInView, variants } = useScrollReveal();
 
   return (
-    <section className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
+    <section id="collecties" className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         {/* Section header */}
         <motion.div 

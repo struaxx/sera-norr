@@ -246,14 +246,27 @@ const ProductDetail = () => {
                   For consistent NL experience, consider adding translated descriptions in Shopify 
                   or maintaining a local translation mapping */}
 
-              {/* Primary CTA - Request Proposal */}
+              {/* Primary CTA - Personalize in Atelier */}
               <Button
                 asChild
                 variant="atelier-filled"
                 size="lg"
+                className="w-full mb-3"
+              >
+                <Link to={`/atelier?type=${encodeURIComponent(product.title.toLowerCase().includes('eettafel') || product.title.toLowerCase().includes('dining') ? 'dining' : 'coffee')}`}>
+                  {isNL ? 'Personaliseer dit ontwerp' : 'Personalize this design'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+
+              {/* Secondary CTA - Request Proposal */}
+              <Button
+                asChild
+                variant="sera-secondary"
+                size="lg"
                 className="w-full mb-4"
               >
-                <Link to="/bespoke">
+                <Link to="/contact">
                   {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

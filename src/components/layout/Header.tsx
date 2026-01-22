@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Button } from "@/components/ui/button";
 
 export function Header() {
   const { t } = useTranslation();
@@ -14,10 +15,10 @@ export function Header() {
   // Check if on homepage (transparent header with hero)
   const isHomePage = location.pathname === "/";
 
-  // Simplified navigation: 3 items (cleaner, more premium)
+  // Updated navigation: Collecties, Atelier (replaces Bespoke), Contact
   const navLinks = [
     { name: t('nav.collections'), path: "/collections" },
-    { name: t('nav.bespoke'), path: "/bespoke" },
+    { name: "Atelier", path: "/atelier" },
     { name: t('nav.contact'), path: "/contact" },
   ];
 
@@ -78,8 +79,8 @@ export function Header() {
             SERA NORR
           </Link>
 
-          {/* Right Navigation */}
-          <div className="hidden lg:flex items-center gap-10">
+          {/* Right Navigation with sticky CTA */}
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.slice(2).map((link) => (
               <Link
                 key={link.path}
@@ -97,6 +98,22 @@ export function Header() {
               </Link>
             ))}
             <LanguageSwitcher isLight={isLightText} />
+            
+            {/* Sticky Atelier CTA */}
+            <Button 
+              asChild 
+              variant={isLightText ? "outline" : "sera-primary"}
+              size="sm"
+              className={cn(
+                "h-9 px-4 text-[11px] uppercase tracking-[0.1em]",
+                isLightText && "border-white/40 text-white hover:bg-white hover:text-foreground"
+              )}
+            >
+              <Link to="/atelier">
+                Ontwerp nu
+                <ArrowRight className="ml-1.5 h-3 w-3" />
+              </Link>
+            </Button>
           </div>
 
           <div className="lg:hidden flex items-center gap-3">
