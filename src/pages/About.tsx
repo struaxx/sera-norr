@@ -194,8 +194,8 @@ const About = () => {
                 : 'SERA NORR is an online atelier—our creative space where rare materials are transformed into objects of permanence. Through personal remote guidance, we walk you through every step of the design process.'}
             </p>
             <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
-              <Link to="/bespoke">
-                {isNL ? 'Start uw traject' : 'Start your journey'}
+              <Link to="/atelier">
+                {isNL ? 'Ontwerp uw tafel' : 'Design your table'}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

@@ -340,8 +340,8 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   {isNL 
-                    ? 'Wij nemen binnen 48 uur contact met u op.'
-                    : 'We will contact you within 48 hours.'}
+                    ? 'Wij reageren snel op uw aanvraag.'
+                    : 'We will respond quickly to your request.'}
                 </p>
               </div>
 
@@ -522,8 +522,8 @@ function SuccessScreen({ buildCode, isNL }: { buildCode: string; isNL: boolean }
         </h2>
         <p className="text-muted-foreground">
           {isNL 
-            ? 'Wij nemen binnen 48 uur contact met u op om uw project te bespreken.'
-            : 'We will contact you within 48 hours to discuss your project.'}
+            ? 'Wij nemen snel contact met u op om uw project te bespreken.'
+            : 'We will contact you soon to discuss your project.'}
         </p>
       </div>
 

@@ -44,10 +44,10 @@ const NotFound = () => {
             </p>
             <div className="flex flex-wrap gap-4 justify-center text-sm">
               <Link 
-                to="/bespoke" 
+                to="/atelier" 
                 className="text-foreground/70 hover:text-foreground transition-colors underline underline-offset-4"
               >
-                {isNL ? "Maatwerk" : "Bespoke"}
+                {isNL ? "Atelier" : "Atelier"}
               </Link>
               <Link 
                 to="/materials" 

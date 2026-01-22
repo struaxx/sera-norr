@@ -258,6 +258,11 @@ const ProductDetail = () => {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+              
+              {/* Trust line under CTA */}
+              <p className="text-[11px] text-muted-foreground/50 text-center mb-4">
+                {isNL ? "Prijsindicatie • 8-12 weken • Maatwerk begeleiding" : "Price indication • 8-12 weeks • Bespoke guidance"}
+              </p>
 
               {/* Secondary CTA - Request Proposal */}
               <Button
@@ -284,8 +289,8 @@ const ProductDetail = () => {
                 </p>
                 <p className="text-sm text-muted-foreground mb-4">
                   {isNL 
-                    ? 'Elk stuk wordt op maat gemaakt. Ontvang binnen 48 uur een voorstel met tekening, specificaties en offerte.' 
-                    : 'Every piece is made to measure. Receive a proposal within 48 hours including drawing, specifications and quote.'}
+                    ? 'Elk stuk wordt op maat gemaakt. Ontvang snel een voorstel met tekening, specificaties en offerte.' 
+                    : 'Every piece is made to measure. Receive a quick proposal including drawing, specifications and quote.'}
                 </p>
                 <div className="mb-4">
                   <BespokeTimeline compact />

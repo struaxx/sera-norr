@@ -357,8 +357,8 @@ const Lookbook = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
-                  <Link to="/voorstel">
-                    {isNL ? "Ontvang voorstel binnen 48 uur" : "Receive proposal within 48 hours"}
+                  <Link to="/atelier">
+                    {isNL ? "Ontwerp uw tafel" : "Design your table"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>

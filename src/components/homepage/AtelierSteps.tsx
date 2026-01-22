@@ -89,10 +89,13 @@ export function AtelierSteps({ isNL }: AtelierStepsProps) {
         >
           <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
             <Link to="/atelier">
-              {isNL ? "Start in het atelier" : "Start in the atelier"}
+              {isNL ? "Ontwerp uw tafel" : "Design your table"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
+          <p className="text-[11px] text-background/40 mt-4">
+            {isNL ? "Prijsindicatie • Levertijd • Maatwerk begeleiding" : "Price indication • Lead time • Bespoke guidance"}
+          </p>
         </motion.div>
       </div>
     </section>

@@ -73,7 +73,7 @@ const Index = () => {
       />
 
       {/* ============================================
-          HERO - Single CTA: Start uw project
+          HERO - Dual CTA: Ontwerp uw tafel + Collecties
           ============================================ */}
       <section className="relative h-screen flex items-end overflow-hidden">
         {/* Background image */}

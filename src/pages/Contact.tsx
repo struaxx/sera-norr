@@ -313,10 +313,10 @@ const Contact = () => {
                   ? 'Wilt u direct een projectdossier samenstellen? ' 
                   : 'Want to create a project dossier directly? '}
                 <Link 
-                  to="/bespoke" 
+                  to="/atelier" 
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80 transition-colors"
                 >
-                  {isNL ? 'Start uw project' : 'Start your project'}
+                  {isNL ? 'Ontwerp uw tafel' : 'Design your table'}
                 </Link>
               </p>
             </div>

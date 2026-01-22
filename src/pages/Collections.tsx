@@ -75,10 +75,13 @@ const Collections = () => {
               </p>
               <Button asChild variant="sera-primary" size="lg">
                 <Link to="/atelier">
-                  {isNL ? "Start uw project" : "Start your project"}
+                  {isNL ? "Ontwerp uw tafel" : "Design your table"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+              <p className="text-[11px] text-muted-foreground/50 mt-3">
+                {isNL ? "Prijsindicatie • 8-12 weken • Maatwerk begeleiding" : "Price indication • 8-12 weeks • Bespoke guidance"}
+              </p>
             </div>
 
             {/* Right: Editorial Image */}
@@ -270,7 +273,7 @@ const Collections = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
                 <Link to="/atelier">
-                  {isNL ? "Start uw project" : "Start your project"}
+                  {isNL ? "Ontwerp uw tafel" : "Design your table"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
