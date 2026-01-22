@@ -54,6 +54,29 @@ export {
   getCompletionPercentage,
 } from './validation';
 
+// GPU Detection
+export {
+  detectGPU,
+  getRenderSettings,
+  shouldUseFallback,
+  getCachedGPUInfo,
+  type PerformanceTier,
+} from './gpu-detection';
+
+// 3D Assets
+export {
+  getStoneTextures,
+  getTableModel,
+  getBaseModel,
+  getEnvironmentMap,
+  getFallbackPreview,
+  preloadCriticalAssets,
+  preloadLODInBackground,
+  getMaterialConfig,
+  type TextureQuality,
+  type LODLevel,
+} from './3d-assets';
+
 // Default/Initial State
 export const INITIAL_CONFIGURATOR_STATE: import('./types').ConfiguratorState = {
   currentStep: 0,

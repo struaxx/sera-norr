@@ -15,3 +15,5 @@ verify_jwt = false
 [functions.analytics-dashboard]
 verify_jwt = false
 
+[functions.configurator-api]
+verify_jwt = false
