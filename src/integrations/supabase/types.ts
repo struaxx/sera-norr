@@ -47,6 +47,36 @@ export type Database = {
         }
         Relationships: []
       }
+      configurator_drafts: {
+        Row: {
+          build_code: string
+          configuration: Json
+          created_at: string
+          id: string
+          price_estimate: Json | null
+          session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          build_code: string
+          configuration: Json
+          created_at?: string
+          id?: string
+          price_estimate?: Json | null
+          session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          build_code?: string
+          configuration?: Json
+          created_at?: string
+          id?: string
+          price_estimate?: Json | null
+          session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       form_submissions: {
         Row: {
           created_at: string
