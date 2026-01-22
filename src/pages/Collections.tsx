@@ -74,7 +74,7 @@ const Collections = () => {
                   : "Every piece is made to measure, on request."}
               </p>
               <Button asChild variant="sera-primary" size="lg">
-                <Link to="/bespoke">
+                <Link to="/atelier">
                   {isNL ? "Start uw project" : "Start your project"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -138,12 +138,20 @@ const Collections = () => {
                 </span>
               </div>
 
-              <Button asChild variant="sera-secondary" size="default">
-                <Link to="/collections/vanta">
-                  {isNL ? "Ontdek VANTA" : "Discover VANTA"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild variant="sera-primary" size="default">
+                  <Link to="/atelier?style=vanta">
+                    {isNL ? "Ontwerp in VANTA stijl" : "Design in VANTA style"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="sera-secondary" size="default">
+                  <Link to="/collections/vanta">
+                    {isNL ? "Ontdek VANTA" : "Discover VANTA"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
 
             {/* TERRA Card */}
@@ -182,12 +190,20 @@ const Collections = () => {
                 </span>
               </div>
 
-              <Button asChild variant="sera-secondary" size="default">
-                <Link to="/collections/terra">
-                  {isNL ? "Ontdek TERRA" : "Discover TERRA"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild variant="sera-primary" size="default">
+                  <Link to="/atelier?style=terra">
+                    {isNL ? "Ontwerp in TERRA stijl" : "Design in TERRA style"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="sera-secondary" size="default">
+                  <Link to="/collections/terra">
+                    {isNL ? "Ontdek TERRA" : "Discover TERRA"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -257,7 +273,7 @@ const Collections = () => {
             </h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
-                <Link to="/bespoke">
+                <Link to="/atelier">
                   {isNL ? "Start uw project" : "Start your project"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

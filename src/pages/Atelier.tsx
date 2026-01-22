@@ -62,11 +62,21 @@ function PhaseIndicator({ currentPhase }: { currentPhase: AtelierPhase }) {
 
 export default function Atelier() {
   const [searchParams] = useSearchParams();
-  const { phase, setPhase } = useConfiguratorStore();
+  const { 
+    phase, 
+    setPhase, 
+    setStone, 
+    setProductType,
+    setSelectedCollection 
+  } = useConfiguratorStore();
 
-  // Load saved configuration from URL if present
+  // Load saved configuration or presets from URL
   useEffect(() => {
     const buildCode = searchParams.get('build');
+    const styleParam = searchParams.get('style');
+    const typeParam = searchParams.get('type');
+
+    // Handle build code (saved configuration)
     if (buildCode) {
       loadConfiguration(buildCode).then(result => {
         if (result.success && result.configuration) {
@@ -81,8 +91,41 @@ export default function Atelier() {
           setPhase('configurator');
         }
       });
+      return;
     }
-  }, [searchParams, setPhase]);
+
+    // Handle style preset (from collection pages)
+    if (styleParam) {
+      const styleLower = styleParam.toLowerCase();
+      if (styleLower === 'vanta') {
+        setStone('calacattaViola');
+        setSelectedCollection('vanta');
+      } else if (styleLower === 'terra') {
+        setStone('travertine');
+        setSelectedCollection('terra');
+      }
+      // Skip lookbook, go directly to configurator
+      setPhase('configurator');
+    }
+
+    // Handle type preset (from product pages)
+    if (typeParam) {
+      const typeLower = typeParam.toLowerCase();
+      if (typeLower === 'dining' || typeLower === 'eettafel') {
+        setProductType('dining-table');
+      } else if (typeLower === 'coffee' || typeLower === 'salontafel') {
+        setProductType('coffee-table');
+      } else if (typeLower === 'console') {
+        setProductType('console');
+      } else if (typeLower === 'side' || typeLower === 'bijzettafel') {
+        setProductType('side-table');
+      }
+      // If type is set without style, still skip to configurator
+      if (!styleParam) {
+        setPhase('configurator');
+      }
+    }
+  }, [searchParams, setPhase, setStone, setProductType, setSelectedCollection]);
 
   const handlePhaseTransition = (newPhase: AtelierPhase) => {
     setPhase(newPhase);

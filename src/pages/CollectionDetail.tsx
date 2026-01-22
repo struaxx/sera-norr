@@ -331,6 +331,16 @@ const CollectionDetail = () => {
                   ))}
                 </div>
               )}
+              
+              {/* Primary Atelier CTA */}
+              <div className="mt-8">
+                <Button asChild variant="sera-primary" size="lg">
+                  <Link to={`/atelier?style=${collectionId?.toLowerCase()}`}>
+                    {isEnglish ? `Design in ${collection.title} style` : `Ontwerp in ${collection.title} stijl`}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
             <div className="order-1 lg:order-2 image-reveal">
               <div className="aspect-[4/5] bg-muted">
@@ -440,7 +450,10 @@ const CollectionDetail = () => {
             {t('collections.customDescription').replace('{collection.name}', collection.title)}
           </p>
           <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
-            <Link to="/bespoke">{t('collections.startBespoke')}</Link>
+            <Link to={`/atelier?style=${collectionId?.toLowerCase()}`}>
+              {isEnglish ? `Design in ${collection.title} style` : `Ontwerp in ${collection.title} stijl`}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </section>
