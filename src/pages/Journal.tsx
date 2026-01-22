@@ -242,7 +242,7 @@ export default function Journal() {
               {t("journal.cta.description")}
             </p>
             <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
-              <Link to="/bespoke">
+              <Link to="/atelier">
                 {t("journal.cta.button")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

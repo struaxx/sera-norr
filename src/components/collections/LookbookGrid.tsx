@@ -174,8 +174,8 @@ export function LookbookGrid({ isNL, filters }: LookbookGridProps) {
               {/* Actions */}
               <div className="flex flex-wrap gap-4">
                 <Button asChild variant="sera-primary" size="lg">
-                  <Link to="/bespoke">
-                    {isNL ? "Start uw project" : "Start your project"}
+                  <Link to="/atelier">
+                    {isNL ? "Ontwerp uw tafel" : "Design your table"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>

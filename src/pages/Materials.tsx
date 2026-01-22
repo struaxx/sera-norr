@@ -239,7 +239,7 @@ export default function Materials() {
               {t("materials.cta.description")}
             </p>
             <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
-              <Link to="/bespoke">
+              <Link to="/atelier">
                 {t("materials.cta.button")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

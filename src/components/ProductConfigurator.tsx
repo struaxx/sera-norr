@@ -175,7 +175,7 @@ export function ProductConfigurator({ className }: ProductConfiguratorProps) {
         {/* CTA */}
         <div className="pt-4">
           <Button asChild variant="atelier" size="lg" className="w-full">
-            <Link to="/bespoke">
+            <Link to="/atelier">
               {t('configurator.requestQuote')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

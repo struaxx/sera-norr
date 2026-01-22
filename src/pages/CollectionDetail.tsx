@@ -333,13 +333,21 @@ const CollectionDetail = () => {
               )}
               
               {/* Primary Atelier CTA */}
-              <div className="mt-8">
+              <div className="mt-8 space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  {isEnglish 
+                    ? "Choose this style as starting point for your design."
+                    : "Kies deze stijl als startpunt voor uw ontwerp."}
+                </p>
                 <Button asChild variant="sera-primary" size="lg">
                   <Link to={`/atelier?style=${collectionId?.toLowerCase()}`}>
                     {isEnglish ? `Design in ${collection.title} style` : `Ontwerp in ${collection.title} stijl`}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
+                <p className="text-[11px] text-muted-foreground/50">
+                  {isEnglish ? "Price indication • 8-12 weeks • Bespoke guidance" : "Prijsindicatie • 8-12 weken • Maatwerk begeleiding"}
+                </p>
               </div>
             </div>
             <div className="order-1 lg:order-2 image-reveal">

@@ -209,8 +209,8 @@ const BespokeHero = () => {
               custom={0.75}
             >
               <Button asChild variant="atelier-filled" size="lg" className="h-12">
-                <Link to="/voorstel">
-                  {isNL ? 'Ontvang voorstel binnen 48 uur' : 'Receive proposal within 48 hours'}
+                <Link to="/atelier">
+                  {isNL ? 'Ontwerp uw tafel' : 'Design your table'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -229,7 +229,7 @@ const BespokeHero = () => {
               animate={isTextInView ? "visible" : "hidden"}
               custom={0.85}
             >
-              {isNL ? 'Reactie binnen 48 uur — geen verplichtingen.' : 'Response within 48 hours — no obligations.'}
+              {isNL ? 'Snelle reactie — geen verplichtingen.' : 'Quick response — no obligations.'}
             </motion.p>
           </div>
           

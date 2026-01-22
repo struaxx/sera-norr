@@ -222,7 +222,7 @@ export default function MaterialDetail() {
             {t("materials.cta.description")}
           </p>
           <Link
-            to="/bespoke"
+            to="/atelier"
             className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background font-sans text-xs uppercase tracking-[0.15em] hover:bg-foreground/90 transition-colors"
           >
             {t("materials.cta.button")}
