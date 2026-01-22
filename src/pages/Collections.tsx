@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { Hairline } from "@/components/ui/hairline";
-import { ConfiguratorTeaser } from "@/components/homepage";
+import { AtelierSteps } from "@/components/homepage";
 import { LookbookFilters, LookbookGrid, type FilterState } from "@/components/collections";
 import vantaFallback from "@/assets/vanta-collection.jpg";
 import terraFallback from "@/assets/terra-collection.jpg";
@@ -252,12 +252,8 @@ const Collections = () => {
               </p>
             </div>
 
-            {/* 3-step preview */}
-            <ConfiguratorTeaser isNL={isNL} />
-
-            <p className="text-center text-xs text-muted-foreground/50 mt-6">
-              {isNL ? "Indicatief. We finetunen samen." : "Indicative. We fine-tune together."}
-            </p>
+            {/* Atelier Steps as CTA */}
+            <AtelierSteps isNL={isNL} />
           </div>
         </div>
       </section>

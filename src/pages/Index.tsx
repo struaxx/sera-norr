@@ -10,7 +10,7 @@ import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Hairline } from "@/components/ui/hairline";
 import { CollectionCard } from "@/components/ui/collection-card";
-import { ConfiguratorTeaser, ValuePillars, AtelierSteps } from "@/components/homepage";
+import { ValuePillars, AtelierSteps } from "@/components/homepage";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import heroImage from "@/assets/hero-homepage.png";
@@ -158,12 +158,7 @@ const Index = () => {
       />
 
       {/* ============================================
-          CONFIGURATOR TEASER - Interactive 3-step
-          ============================================ */}
-      <ConfiguratorSection isNL={isNL} />
-
-      {/* ============================================
-          3-STEP ATELIER INTRO
+          3-STEP ATELIER INTRO (Primary funnel entry)
           ============================================ */}
       <AtelierSteps isNL={isNL} />
 
@@ -312,54 +307,6 @@ function CollectiesSection({
   );
 }
 
-// ============================================
-// CONFIGURATOR SECTION
-// ============================================
-function ConfiguratorSection({ isNL }: { isNL: boolean }) {
-  const { ref, isInView, variants } = useScrollReveal();
-
-  return (
-    <section className="py-24 lg:py-32" ref={ref}>
-      <div className="container mx-auto px-6 lg:px-12">
-        {/* Section header */}
-        <motion.div 
-          className="flex items-center gap-6 mb-16 lg:mb-20"
-          variants={variants.fadeIn}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <Hairline className="flex-1" />
-          <span className="micro-label shrink-0">{isNL ? 'Uw project' : 'Your project'}</span>
-          <Hairline className="flex-1" />
-        </motion.div>
-
-        <motion.div 
-          className="max-w-lg mb-12"
-          variants={variants.fadeUp}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
-            {isNL ? "Start uw project" : "Start your project"}
-          </h2>
-          <p className="text-body-md text-muted-foreground">
-            {isNL 
-              ? "Drie stappen naar uw unieke stuk. Kies type, afmetingen en steensoort."
-              : "Three steps to your unique piece. Choose type, dimensions and stone."}
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={variants.fadeUp}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <ConfiguratorTeaser isNL={isNL} />
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
 // ============================================
 // CARE SECTION - Advice only, no warranty
