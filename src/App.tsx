@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
 import Bespoke from "./pages/Bespoke";
+import Atelier from "./pages/Atelier";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/collections/:collectionId" element={<CollectionDetail />} />
           <Route path="/product/:handle" element={<ProductDetail />} />
           <Route path="/bespoke" element={<Bespoke />} />
+          <Route path="/atelier" element={<Atelier />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/journal" element={<Journal />} />
@@ -45,7 +47,6 @@ const App = () => (
           <Route path="/lookbook" element={<Lookbook />} />
           <Route path="/care" element={<Care />} />
           <Route path="/insights" element={<Insights />} />
-          <Route path="*" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieBanner />
