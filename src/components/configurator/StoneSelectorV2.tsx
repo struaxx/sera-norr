@@ -399,21 +399,33 @@ function StoneCard({ stone, isSelected, onClick, isNL }: StoneCardProps) {
         </div>
       )}
 
-      {/* Swatch */}
+      {/* Swatch - Image or Color fallback */}
       <div 
-        className="w-12 h-12 rounded-full border border-border mx-auto mb-3 relative overflow-hidden"
+        className="w-16 h-16 rounded-lg border border-border mx-auto mb-3 relative overflow-hidden"
         style={{ backgroundColor: stone.swatchColor }}
       >
-        {/* Add subtle veining effect for some stones */}
-        {stone.characterTags.includes('veined') && (
-          <div 
-            className="absolute inset-0"
-            style={{
-              background: stone.swatchColor.startsWith('#F') || stone.swatchColor.startsWith('#E')
-                ? 'linear-gradient(135deg, transparent 40%, rgba(100, 100, 100, 0.15) 45%, transparent 50%)'
-                : 'linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.15) 45%, transparent 50%)',
+        {stone.swatchImage ? (
+          <img 
+            src={stone.swatchImage} 
+            alt={stone.name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Hide image on error, show color background
+              e.currentTarget.style.display = 'none';
             }}
           />
+        ) : (
+          /* Add subtle veining effect for some stones without images */
+          stone.characterTags.includes('veined') && (
+            <div 
+              className="absolute inset-0"
+              style={{
+                background: stone.swatchColor.startsWith('#F') || stone.swatchColor.startsWith('#E')
+                  ? 'linear-gradient(135deg, transparent 40%, rgba(100, 100, 100, 0.15) 45%, transparent 50%)'
+                  : 'linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.15) 45%, transparent 50%)',
+              }}
+            />
+          )
         )}
       </div>
 
