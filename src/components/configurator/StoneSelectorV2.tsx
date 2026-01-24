@@ -198,7 +198,7 @@ export function StoneSelectorV2({
       </div>
 
       {/* Stone Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-1">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto pr-1">
         <AnimatePresence mode="popLayout">
           {filteredStones.map((stone) => (
             <StoneCard
@@ -386,22 +386,22 @@ function StoneCard({ stone, isSelected, onClick, isNL }: StoneCardProps) {
       exit={{ opacity: 0, scale: 0.95 }}
       onClick={onClick}
       className={cn(
-        "relative p-3 rounded-sm border transition-all duration-200 text-left group",
+        "relative rounded-sm border transition-all duration-200 text-left group overflow-hidden",
         isSelected 
-          ? "border-foreground bg-foreground/5" 
+          ? "border-foreground ring-1 ring-foreground" 
           : "border-border hover:border-foreground/50"
       )}
     >
       {/* Selected checkmark */}
       {isSelected && (
-        <div className="absolute top-2 right-2 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
-          <Check className="w-3 h-3 text-background" />
+        <div className="absolute top-2 right-2 z-10 w-6 h-6 bg-foreground rounded-full flex items-center justify-center shadow-md">
+          <Check className="w-3.5 h-3.5 text-background" />
         </div>
       )}
 
-      {/* Swatch - Image or Color fallback */}
+      {/* Large Swatch - Image or Color fallback */}
       <div 
-        className="w-16 h-16 rounded-lg border border-border mx-auto mb-3 relative overflow-hidden"
+        className="aspect-square w-full relative"
         style={{ backgroundColor: stone.swatchColor }}
       >
         {stone.swatchImage ? (
@@ -421,41 +421,39 @@ function StoneCard({ stone, isSelected, onClick, isNL }: StoneCardProps) {
               className="absolute inset-0"
               style={{
                 background: stone.swatchColor.startsWith('#F') || stone.swatchColor.startsWith('#E')
-                  ? 'linear-gradient(135deg, transparent 40%, rgba(100, 100, 100, 0.15) 45%, transparent 50%)'
-                  : 'linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.15) 45%, transparent 50%)',
+                  ? 'linear-gradient(135deg, transparent 30%, rgba(100, 100, 100, 0.2) 45%, transparent 60%)'
+                  : 'linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.2) 45%, transparent 60%)',
               }}
             />
           )
         )}
+        
+        {/* Tier badge overlay */}
+        <div className="absolute bottom-2 left-2">
+          <span className={cn(
+            "text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full backdrop-blur-sm",
+            stone.tier === 'icon' 
+              ? "bg-foreground/80 text-background" 
+              : stone.tier === 'atelier'
+                ? "bg-background/80 text-foreground"
+                : "bg-background/60 text-foreground/80"
+          )}>
+            {tierLabel[stone.tier]}
+          </span>
+        </div>
       </div>
 
-      {/* Stone name */}
-      <h4 className="text-sm font-medium text-center mb-1 line-clamp-1">
-        {stone.name}
-      </h4>
+      {/* Info section */}
+      <div className="p-3">
+        {/* Stone name */}
+        <h4 className="text-sm font-medium mb-0.5 line-clamp-1">
+          {stone.name}
+        </h4>
 
-      {/* Collection label */}
-      <p className="text-[9px] uppercase tracking-wider text-muted-foreground text-center mb-1">
-        {collectionLabel[stone.collection]} {isNL ? 'collectie' : 'collection'}
-      </p>
-
-      {/* Short description */}
-      <p className="text-[10px] text-muted-foreground text-center line-clamp-2 mb-2 min-h-[28px]">
-        {stone.shortDescription}
-      </p>
-
-      {/* Tier badge */}
-      <div className="flex justify-center">
-        <span className={cn(
-          "text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full",
-          stone.tier === 'icon' 
-            ? "bg-foreground/10 text-foreground" 
-            : stone.tier === 'atelier'
-              ? "bg-secondary text-muted-foreground"
-              : "bg-secondary/50 text-muted-foreground"
-        )}>
-          {tierLabel[stone.tier]}
-        </span>
+        {/* Collection label */}
+        <p className="text-[9px] uppercase tracking-wider text-muted-foreground">
+          {collectionLabel[stone.collection]}
+        </p>
       </div>
     </motion.button>
   );
