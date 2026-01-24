@@ -1,11 +1,11 @@
 import { useRef, useMemo } from 'react';
 import * as THREE from 'three';
-import type { TableShape, StoneType, FinishType, EdgeProfile, BaseType } from '@/lib/configurator';
-import { STONE_MATERIALS, FINISHES } from '@/lib/configurator';
+import type { TableShape, FinishType, EdgeProfile, BaseType } from '@/lib/configurator';
+import { FINISHES, getStoneById, STONE_LIBRARY } from '@/lib/configurator';
 
 interface TableMeshProps {
   shape: TableShape;
-  stone: StoneType;
+  stone: string; // Now accepts any stone ID from STONE_LIBRARY
   finish: FinishType;
   edgeProfile: EdgeProfile;
   baseType: BaseType;
@@ -21,26 +21,57 @@ interface TableMeshProps {
 // Scale factor: dimensions in cm, scene in meters
 const SCALE = 0.01;
 
+// Convert hex color to THREE.js color with slight variation for realism
+function hexToMaterialColor(hex: string): string {
+  return hex;
+}
+
+// Get material properties based on stone characteristics
+function getStoneMaterialProps(stoneId: string, finishId: FinishType) {
+  const stone = getStoneById(stoneId);
+  const finishConfig = FINISHES.find(f => f.id === finishId) ?? FINISHES[0];
+  
+  if (!stone) {
+    // Fallback for custom or unknown stones
+    return {
+      color: '#9CA3AF',
+      roughness: 0.5 * finishConfig.roughnessMultiplier,
+      metalness: 0,
+    };
+  }
+
+  // Base roughness varies by stone family and tags
+  let baseRoughness = 0.5;
+  if (stone.family === 'marble') {
+    baseRoughness = 0.35; // Marble is naturally smoother
+  } else if (stone.family === 'travertine') {
+    baseRoughness = stone.characterTags.includes('porous') ? 0.65 : 0.55;
+  }
+
+  // Slight metalness for polished stones
+  let metalness = 0;
+  if (finishId === 'polished') {
+    metalness = stone.family === 'marble' ? 0.08 : 0.04;
+  }
+
+  return {
+    color: stone.swatchColor,
+    roughness: baseRoughness * finishConfig.roughnessMultiplier,
+    metalness,
+  };
+}
+
 export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensions }: TableMeshProps) {
   const groupRef = useRef<THREE.Group>(null);
 
-  // Get material configuration
-  const stoneConfig = useMemo(() => 
-    STONE_MATERIALS.find(s => s.id === stone) ?? STONE_MATERIALS[0], 
-    [stone]
-  );
-  
-  const finishConfig = useMemo(() => 
-    FINISHES.find(f => f.id === finish) ?? FINISHES[0], 
-    [finish]
+  // Get material properties from the stone library
+  const materialProps = useMemo(() => 
+    getStoneMaterialProps(stone, finish), 
+    [stone, finish]
   );
 
-  // Calculate final material properties
-  const materialProps = useMemo(() => ({
-    color: stoneConfig.color,
-    roughness: stoneConfig.roughness * finishConfig.roughnessMultiplier,
-    metalness: stoneConfig.metalness,
-  }), [stoneConfig, finishConfig]);
+  // Get stone info for veining effects
+  const stoneInfo = useMemo(() => getStoneById(stone), [stone]);
 
   // Calculate scaled dimensions
   const w = dimensions.length * SCALE;
@@ -49,20 +80,14 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
   const t = dimensions.thickness * SCALE;
   const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
 
-  // Edge profile bevel
-  const bevelEnabled = edgeProfile !== 'straight';
-  const bevelSize = edgeProfile === 'bullnose' ? 0.02 : edgeProfile === 'rounded' ? 0.015 : 0.01;
-
   // Render top geometry based on shape
   const topGeometry = useMemo(() => {
     switch (shape) {
       case 'round':
         return <cylinderGeometry args={[r, r, t, 64]} />;
       case 'oval':
-        // Use a scaled cylinder with ellipse shape
         return <cylinderGeometry args={[1, 1, t, 64]} />;
       case 'organic':
-        // Simplified organic as rounded rectangle for now
         return <boxGeometry args={[w, t, d]} />;
       case 'rectangular':
       default:
@@ -81,7 +106,7 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
 
     switch (baseType) {
       case 'monolith':
-        // Solid pedestal base
+        // Solid pedestal base in stone
         if (shape === 'round') {
           return (
             <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
@@ -98,10 +123,9 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
         );
 
       case 'architectural':
-        // X-frame steel base
+        // Pedestal block base
         return (
           <group>
-            {/* Central X support */}
             <mesh position={[0, legHeight / 2, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
               <boxGeometry args={[0.04, legHeight, Math.min(w, d) * 0.8]} />
               <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
@@ -110,7 +134,6 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
               <boxGeometry args={[0.04, legHeight, Math.min(w, d) * 0.8]} />
               <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
             </mesh>
-            {/* Base plate */}
             <mesh position={[0, 0.01, 0]} castShadow receiveShadow>
               <boxGeometry args={[w * 0.5, 0.02, d * 0.5]} />
               <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
@@ -120,9 +143,8 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
 
       case 'modern':
       default:
-        // Four slim steel legs
+        // Cylindrical steel legs
         if (shape === 'round') {
-          // Circular arrangement of legs
           return (
             <group>
               {[0, 1, 2, 3].map((i) => {
@@ -172,6 +194,31 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
     }
   };
 
+  // Determine if stone has veining (marble or veined tag)
+  const hasVeining = stoneInfo?.family === 'marble' || stoneInfo?.characterTags.includes('veined');
+  
+  // Calculate veining color based on stone
+  const getVeiningColor = () => {
+    if (!stoneInfo) return '#666666';
+    
+    // For dark stones, use lighter veining
+    const isDark = stoneInfo.characterTags.includes('dramatic') || 
+                   stoneInfo.swatchColor.toLowerCase().includes('1a') ||
+                   stoneInfo.swatchColor.toLowerCase().includes('2d');
+    
+    if (isDark) return '#4A4A4A';
+    
+    // For marble, use subtle grey/purple veining
+    if (stoneInfo.family === 'marble') {
+      if (stoneInfo.name.toLowerCase().includes('viola')) return '#8B6B8B';
+      if (stoneInfo.name.toLowerCase().includes('green') || stoneInfo.name.toLowerCase().includes('verde')) return '#2A3A2A';
+      return '#888888';
+    }
+    
+    // For travertine with veins
+    return '#A09080';
+  };
+
   return (
     <group ref={groupRef} position={[0, -0.5, 0]}>
       {/* Table Top */}
@@ -193,16 +240,16 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
       {/* Base */}
       {renderBase()}
 
-      {/* Veining overlay for marble types */}
-      {(stone === 'calacattaViola' || stone === 'neroMarquina') && (
+      {/* Veining overlay for stones with veins */}
+      {hasVeining && (
         <mesh position={[0, h - t / 2 + 0.001, 0]} scale={topScale}>
           {topGeometry}
           <meshStandardMaterial
-            color={stone === 'calacattaViola' ? '#8B6B8B' : '#4A4A4A'}
+            color={getVeiningColor()}
             roughness={0.4}
             metalness={0.1}
             transparent
-            opacity={0.15}
+            opacity={0.12}
             depthWrite={false}
           />
         </mesh>
