@@ -89,21 +89,13 @@ export function StickyDossier({
       {/* Divider */}
       <div className="border-t border-border" />
 
-      {/* Price indication */}
-      <div className="space-y-2">
-        <div className="flex justify-between items-baseline">
-          <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            {isNL ? 'Prijsindicatie' : 'Price indication'}
-          </span>
-          <span className="text-lg font-serif">
-            {config.stone === 'custom' 
-              ? (isNL ? 'Op aanvraag' : 'On request')
-              : formatPriceRange(priceEstimate.priceRange.min, priceEstimate.priceRange.max)
-            }
-          </span>
-        </div>
+      {/* Price note - no specific prices shown */}
+      <div className="space-y-1">
         <p className="text-[10px] text-muted-foreground">
-          {priceEstimate.disclaimer}
+          {isNL 
+            ? 'Definitieve prijs na persoonlijk voorstel'
+            : 'Final price after personal proposal'
+          }
         </p>
       </div>
 
