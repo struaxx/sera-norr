@@ -125,7 +125,7 @@ export async function calculatePriceServer(config: ConfiguratorState): Promise<P
 }
 
 /**
- * Submit quote request
+ * Submit quote request - uses submit-form edge function (reliable)
  */
 export async function requestQuote(request: {
   buildCode: string;
@@ -141,20 +141,39 @@ export async function requestQuote(request: {
   inspirationItems?: string[];
 }): Promise<QuoteResponse> {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/configurator-api?action=quote`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-session-id': getSessionId(),
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+    // Use the reliable submit-form edge function
+    const { data, error } = await supabase.functions.invoke('submit-form', {
+      body: {
+        form_type: 'voorstel',
+        email: request.contact.email,
+        name: request.contact.name,
+        phone: request.contact.phone,
+        subject: `Configurator: ${request.buildCode}`,
+        message: request.contact.notes,
+        metadata: {
+          buildCode: request.buildCode,
+          configuration: request.configuration,
+          priceEstimate: request.priceEstimate,
+          location: request.contact.location,
+          inspirationItems: request.inspirationItems,
         },
-        body: JSON.stringify(request),
-      }
-    );
+      },
+    });
 
-    return await response.json();
+    if (error) {
+      console.error('Request quote error:', error);
+      return { success: false, error: 'Aanvraag kon niet worden verzonden' };
+    }
+
+    // Generate dossier reference
+    const dossierRef = `DOS-${request.buildCode}-${Date.now().toString(36).toUpperCase()}`;
+
+    return {
+      success: true,
+      dossierRef,
+      message: 'Uw aanvraag is ontvangen. Wij nemen binnen 48 uur contact met u op.',
+      estimatedResponse: '48 uur',
+    };
   } catch (err) {
     console.error('Request quote error:', err);
     return { success: false, error: 'Aanvraag kon niet worden verzonden' };

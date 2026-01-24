@@ -17,16 +17,18 @@ const corsHeaders = {
 
 const VALID_PRODUCT_TYPES = ['dining-table', 'coffee-table', 'side-table', 'console'] as const;
 const VALID_SHAPES = ['rectangular', 'round', 'oval', 'square', 'organic'] as const;
-const VALID_STONES = ['travertine', 'calacattaViola', 'verdeAlpi', 'neroMarquina', 'biancoCarrara', 'emperadorDark', 'custom'] as const;
 const VALID_FINISHES = ['honed', 'polished', 'matte'] as const;
 const VALID_EDGE_PROFILES = ['straight', 'beveled', 'rounded', 'bullnose'] as const;
 const VALID_BASE_TYPES = ['modern', 'monolith', 'architectural'] as const;
+
+// Stone validation: allow any string from the 82-stone library (validated by pattern)
+const STONE_ID_PATTERN = /^[a-z0-9-]{2,50}$/;
 
 const DimensionsSchema = z.object({
   length: z.number().min(30).max(500),      // 30cm - 500cm
   width: z.number().min(30).max(300),       // 30cm - 300cm
   height: z.number().min(30).max(120),      // 30cm - 120cm
-  thickness: z.number().min(2).max(10),     // 2cm - 10cm
+  thickness: z.number().min(1).max(10),     // 1cm - 10cm (updated for 20mm/30mm)
   radius: z.number().min(30).max(200).optional(),
 });
 
@@ -41,7 +43,7 @@ const ConfiguratorStateSchema = z.object({
   productType: z.enum(VALID_PRODUCT_TYPES),
   shape: z.enum(VALID_SHAPES),
   dimensions: DimensionsSchema,
-  stone: z.enum(VALID_STONES),
+  stone: z.string().regex(STONE_ID_PATTERN, 'Invalid stone ID format'), // Now accepts all 82 stones
   finish: z.enum(VALID_FINISHES),
   edgeProfile: z.enum(VALID_EDGE_PROFILES),
   baseType: z.enum(VALID_BASE_TYPES),
