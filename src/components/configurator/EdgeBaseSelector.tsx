@@ -46,11 +46,6 @@ export function EdgeProfileSelector({ value, shape, onChange, isNL = true, class
                 <span className="text-xs block">
                   {edge.name[isNL ? 'nl' : 'en']}
                 </span>
-                {edge.priceMultiplier > 1 && (
-                  <span className="text-[10px] text-muted-foreground">
-                    +{Math.round((edge.priceMultiplier - 1) * 100)}%
-                  </span>
-                )}
               </div>
 
               {isSelected && (
@@ -105,11 +100,6 @@ export function BaseSelector({ value, productType, onChange, isNL = true, classN
                   <span className="text-sm font-medium">
                     {base.name[isNL ? 'nl' : 'en']}
                   </span>
-                  {base.priceMultiplier > 1 && (
-                    <span className="text-[10px] px-2 py-0.5 bg-secondary rounded-full text-muted-foreground">
-                      +{Math.round((base.priceMultiplier - 1) * 100)}%
-                    </span>
-                  )}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   {base.description[isNL ? 'nl' : 'en']}
