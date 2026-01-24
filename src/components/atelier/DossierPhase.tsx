@@ -1,5 +1,5 @@
 // ============================================
-// Dossier Phase - Summary & Quote Request
+// Dossier Phase - Summary & Quote Request (V2)
 // ============================================
 
 import { useState } from 'react';
@@ -16,6 +16,7 @@ import {
   Truck,
   Send,
   FileText,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,16 +26,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { useConfiguratorStore } from '@/stores/configurator-store';
 import { 
-  formatPriceRange, 
-  getLeadTimeEstimate,
-  PRODUCT_TYPES,
-  STONE_MATERIALS,
   SHAPES,
   FINISHES,
   EDGE_PROFILES,
   BASES,
-  calculatePriceEstimate,
 } from '@/lib/configurator';
+import { getStoneById } from '@/lib/configurator/stone-library';
+import { calculateModularPrice, formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
 import { requestQuote } from '@/lib/configurator/api';
 
 interface DossierPhaseProps {
@@ -59,13 +57,13 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
     notes: '',
   });
 
-  const priceEstimate = calculatePriceEstimate(config);
-  const leadTime = getLeadTimeEstimate(config);
+  const priceEstimate = calculateModularPrice(config);
+  const leadTime = getModularLeadTime(config);
   const currentBuildCode = buildCode || generateBuildCode();
 
-  // Get display names
-  const productName = PRODUCT_TYPES.find(p => p.id === config.productType)?.name[isNL ? 'nl' : 'en'];
-  const stoneName = STONE_MATERIALS.find(s => s.id === config.stone)?.name[isNL ? 'nl' : 'en'];
+  // Get display names from stone library
+  const stone = getStoneById(config.stone);
+  const stoneName = stone?.name || (config.stone === 'custom' ? (isNL ? 'Steen op aanvraag' : 'Stone on request') : config.stone);
   const shapeName = SHAPES.find(s => s.id === config.shape)?.name[isNL ? 'nl' : 'en'];
   const finishName = FINISHES.find(f => f.id === config.finish)?.name[isNL ? 'nl' : 'en'];
   const edgeName = EDGE_PROFILES.find(e => e.id === config.edgeProfile)?.name[isNL ? 'nl' : 'en'];
@@ -74,6 +72,8 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const dimensionString = config.shape === 'round' && config.dimensions.radius
     ? `⌀${config.dimensions.radius * 2} × H${config.dimensions.height} cm`
     : `${config.dimensions.length} × ${config.dimensions.width} × H${config.dimensions.height} cm`;
+
+  const thicknessString = `${config.dimensions.thickness * 10}mm`;
 
   const handleCopyLink = async () => {
     const shareUrl = `${window.location.origin}/atelier?build=${currentBuildCode}`;
@@ -106,9 +106,9 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         buildCode: currentBuildCode,
         configuration: config,
         priceEstimate: {
-          min: priceEstimate.priceRange.min,
-          max: priceEstimate.priceRange.max,
-          total: priceEstimate.totalEstimate,
+          min: priceEstimate.vanafPrice,
+          max: priceEstimate.vanafPrice,
+          total: priceEstimate.vanafPrice,
         },
         contact: {
           ...contact,
@@ -181,7 +181,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                       SERA NORR Dossier
                     </span>
                   </div>
-                  <h2 className="text-xl font-serif">{productName} — {shapeName}</h2>
+                  <h2 className="text-xl font-serif">{shapeName} — {stoneName}</h2>
                   <p className="text-sm text-muted-foreground mt-1 font-mono">
                     #{currentBuildCode}
                   </p>
@@ -204,16 +204,20 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
             {/* Specifications */}
             <div className="p-6 space-y-4">
               <DossierRow 
+                label={isNL ? 'Vorm' : 'Shape'} 
+                value={shapeName || ''} 
+              />
+              <DossierRow 
                 label={isNL ? 'Afmetingen' : 'Dimensions'} 
                 value={dimensionString} 
               />
               <DossierRow 
                 label={isNL ? 'Bladdikte' : 'Thickness'} 
-                value={`${config.dimensions.thickness} cm`} 
+                value={thicknessString} 
               />
               <DossierRow 
                 label={isNL ? 'Steensoort' : 'Stone'} 
-                value={stoneName || ''} 
+                value={stoneName} 
               />
               <DossierRow 
                 label={isNL ? 'Afwerking' : 'Finish'} 
@@ -229,9 +233,10 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               />
             </div>
 
-            {/* Service & Delivery - Included */}
-            <div className="p-6 border-t border-border">
-              <div className="mb-4">
+            {/* Service & Delivery - Info Only (Included) */}
+            <div className="p-6 border-t border-border bg-secondary/10">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="w-4 h-4 text-muted-foreground" />
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                   {isNL ? 'Service & levering (inbegrepen)' : 'Service & delivery (included)'}
                 </span>
@@ -260,17 +265,14 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               </p>
             </div>
 
-            {/* Price Summary */}
-            <div className="bg-secondary/20 p-6 border-t border-border">
+            {/* Price Summary - Vanaf Price */}
+            <div className="bg-foreground/5 p-6 border-t border-border">
               <div className="flex justify-between items-baseline mb-2">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  {isNL ? 'Prijsindicatie' : 'Price indication'}
+                  {isNL ? 'Vanaf' : 'From'}
                 </span>
                 <span className="text-2xl font-serif">
-                  {config.stone === 'custom' 
-                    ? (isNL ? 'Op aanvraag' : 'On request')
-                    : formatPriceRange(priceEstimate.priceRange.min, priceEstimate.priceRange.max)
-                  }
+                  {formatVanafPrice(priceEstimate.vanafPrice)}
                 </span>
               </div>
               <p className="text-[10px] text-muted-foreground">
@@ -294,7 +296,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
             <TrustCard 
               icon={<Truck className="w-5 h-5" />}
               title={isNL ? 'Bezorging' : 'Delivery'}
-              value={isNL ? 'Met zorg' : 'White-glove'}
+              value={isNL ? 'Inbegrepen' : 'Included'}
             />
             <TrustCard 
               icon={<MapPin className="w-5 h-5" />}
@@ -337,8 +339,8 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   {isNL 
-                    ? 'Wij reageren snel op uw aanvraag.'
-                    : 'We will respond quickly to your request.'}
+                    ? 'Wij nemen binnen 24 uur contact met u op.'
+                    : 'We will contact you within 24 hours.'}
                 </p>
               </div>
 
@@ -379,7 +381,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </div>
 
                 <div>
-                  <Label htmlFor="location">{isNL ? 'Postcode / Land' : 'Postcode / Country'} *</Label>
+                  <Label htmlFor="location">{isNL ? 'Postcode' : 'Postcode'} *</Label>
                   <Input 
                     id="location"
                     value={contact.location}
@@ -401,7 +403,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </div>
               </div>
 
-              {/* Soft CTA - Consultation only (no sample kit) */}
+              {/* Soft CTA - Consultation only */}
               <div className="border-t border-border pt-6 space-y-4">
                 <div className="flex items-start gap-3">
                   <Checkbox 
@@ -502,8 +504,8 @@ function SuccessScreen({ buildCode, isNL }: { buildCode: string; isNL: boolean }
         </h2>
         <p className="text-muted-foreground">
           {isNL 
-            ? 'Wij nemen snel contact met u op om uw project te bespreken.'
-            : 'We will contact you soon to discuss your project.'}
+            ? 'Wij nemen binnen 24 uur contact met u op om uw project te bespreken.'
+            : 'We will contact you within 24 hours to discuss your project.'}
         </p>
       </div>
 

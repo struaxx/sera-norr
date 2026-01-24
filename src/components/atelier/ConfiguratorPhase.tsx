@@ -1,27 +1,24 @@
 // ============================================
-// Configurator Phase - 3D Builder
+// Configurator Phase - 3D Builder (Sales-Ready V2)
 // ============================================
 
-import { Suspense, lazy, useMemo } from 'react';
+import { Suspense, lazy, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useConfiguratorStore } from '@/stores/configurator-store';
-import { 
-  ShapeSelector, 
-  ProductTypeSelector 
-} from '@/components/configurator/ShapeSelector';
-import { DimensionSliders } from '@/components/configurator/DimensionSliders';
+import { ShapeSelector } from '@/components/configurator/ShapeSelector';
+import { DimensionPresets, ThicknessSelector, type DimensionPreset } from '@/components/configurator/DimensionPresets';
 import { StoneSelectorV2, FinishSelector } from '@/components/configurator/StoneSelectorV2';
 import { EdgeProfileSelector, BaseSelector } from '@/components/configurator/EdgeBaseSelector';
 import { StickyDossier } from '@/components/configurator/StickyDossier';
 import { 
   shouldUseFallback, 
   getFallbackPreview,
-  calculatePriceEstimate,
 } from '@/lib/configurator';
+import { calculateModularPrice } from '@/lib/configurator/pricing-v2';
 
 // Lazy load 3D viewer
 const ConfiguratorViewer = lazy(() => 
@@ -68,7 +65,20 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const { config, resetConfig } = useConfiguratorStore();
   
   const useFallback = useMemo(() => shouldUseFallback(), []);
-  const priceEstimate = useMemo(() => calculatePriceEstimate(config), [config]);
+  const priceEstimate = useMemo(() => calculateModularPrice(config), [config]);
+
+  const handleDimensionPresetSelect = useCallback((preset: DimensionPreset) => {
+    const store = useConfiguratorStore.getState();
+    store.setDimension('length', preset.length);
+    store.setDimension('width', preset.width);
+    if (preset.radius) {
+      store.setDimension('radius', preset.radius);
+    }
+  }, []);
+
+  const handleThicknessChange = useCallback((thickness: number) => {
+    useConfiguratorStore.getState().setDimension('thickness', thickness);
+  }, []);
 
   const handleRequestQuote = () => {
     onContinue();
@@ -124,7 +134,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             
             {/* Trust badge under viewer */}
             <div className="mt-4 flex items-center justify-center gap-6 text-xs text-muted-foreground">
-              <span>🇮🇹 Italiaans marmer</span>
+              <span>🇮🇹 Italiaans vakmanschap</span>
               <span>•</span>
               <span>🇳🇱 Ontworpen in NL</span>
               <span>•</span>
@@ -134,23 +144,11 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
         </div>
 
         {/* Right Column - Configuration Panels */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* Product Type */}
-          <ConfigPanel 
-            title={isNL ? 'Type meubel' : 'Furniture type'}
-            step={1}
-          >
-            <ProductTypeSelector 
-              value={config.productType}
-              onChange={(type) => useConfiguratorStore.getState().setProductType(type)}
-              isNL={isNL}
-            />
-          </ConfigPanel>
-
-          {/* Shape */}
+        <div className="lg:col-span-5 space-y-5">
+          {/* Step 1: Shape */}
           <ConfigPanel 
             title={isNL ? 'Vorm' : 'Shape'}
-            step={2}
+            step={1}
           >
             <ShapeSelector 
               value={config.shape}
@@ -160,28 +158,34 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
-          {/* Dimensions */}
+          {/* Step 2: Dimensions (Fixed presets) */}
           <ConfigPanel 
-            title={isNL ? 'Afmetingen' : 'Dimensions'}
-            step={3}
+            title={isNL ? 'Afmeting' : 'Size'}
+            step={2}
           >
-            <DimensionSliders 
-              dimensions={config.dimensions}
-              productType={config.productType}
+            <DimensionPresets 
               shape={config.shape}
-              onChange={(newDimensions) => {
-                const store = useConfiguratorStore.getState();
-                Object.entries(newDimensions).forEach(([key, value]) => {
-                  if (value !== undefined) {
-                    store.setDimension(key as any, value);
-                  }
-                });
-              }}
+              currentLength={config.dimensions.length}
+              currentWidth={config.dimensions.width}
+              currentRadius={config.dimensions.radius}
+              onSelect={handleDimensionPresetSelect}
               isNL={isNL}
             />
           </ConfigPanel>
 
-          {/* Stone - Full 82-stone library */}
+          {/* Step 3: Thickness (20mm / 30mm) */}
+          <ConfigPanel 
+            title={isNL ? 'Bladdikte' : 'Thickness'}
+            step={3}
+          >
+            <ThicknessSelector 
+              value={config.dimensions.thickness}
+              onChange={handleThicknessChange}
+              isNL={isNL}
+            />
+          </ConfigPanel>
+
+          {/* Step 4: Stone - Full 82-stone library */}
           <ConfigPanel 
             title={isNL ? 'Steensoort' : 'Stone type'}
             step={4}
@@ -193,7 +197,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
-          {/* Finish */}
+          {/* Step 5: Finish */}
           <ConfigPanel 
             title={isNL ? 'Afwerking' : 'Finish'}
             step={5}
@@ -205,7 +209,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
-          {/* Edge Profile */}
+          {/* Step 6: Edge Profile */}
           <ConfigPanel 
             title={isNL ? 'Randprofiel' : 'Edge profile'}
             step={6}
@@ -218,7 +222,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
-          {/* Base */}
+          {/* Step 7: Base */}
           <ConfigPanel 
             title={isNL ? 'Onderstel' : 'Base'}
             step={7}
@@ -231,8 +235,8 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
-          {/* Sticky Dossier Summary */}
-          <StickyDossier 
+          {/* Sticky Dossier Summary - Updated with "vanaf" price */}
+          <StickyDossierV2 
             config={config}
             priceEstimate={priceEstimate}
             onRequestQuote={handleRequestQuote}
@@ -279,7 +283,7 @@ function ConfigPanel({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: step * 0.05 }}
+      transition={{ delay: step * 0.03 }}
       className="bg-background border border-border rounded-sm p-5 space-y-4"
     >
       <div className="flex items-center justify-between">
@@ -296,6 +300,92 @@ function ConfigPanel({
         )}
       </div>
       {children}
+    </motion.div>
+  );
+}
+
+// Updated Sticky Dossier with "vanaf" pricing
+import { getStoneById } from '@/lib/configurator/stone-library';
+import { SHAPES, BASES } from '@/lib/configurator/config';
+import type { ModularPriceEstimate } from '@/lib/configurator/pricing-v2';
+import { formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
+
+interface StickyDossierV2Props {
+  config: import('@/lib/configurator/types').ConfiguratorState;
+  priceEstimate: ModularPriceEstimate;
+  onRequestQuote: () => void;
+  isNL?: boolean;
+}
+
+function StickyDossierV2({ config, priceEstimate, onRequestQuote, isNL = true }: StickyDossierV2Props) {
+  const stone = getStoneById(config.stone);
+  const shapeName = SHAPES.find(s => s.id === config.shape)?.name[isNL ? 'nl' : 'en'];
+  const baseName = BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'];
+  const leadTime = getModularLeadTime(config);
+
+  // Dimension string
+  const dimensionString = config.shape === 'round' && config.dimensions.radius
+    ? `⌀${config.dimensions.radius * 2} cm`
+    : `${config.dimensions.length} × ${config.dimensions.width} cm`;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="sticky bottom-4 bg-background border border-foreground/20 rounded-sm p-5 shadow-lg"
+    >
+      {/* Summary */}
+      <div className="space-y-3 mb-4">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">
+              {isNL ? 'Uw selectie' : 'Your selection'}
+            </p>
+            <h4 className="text-sm font-medium">
+              {stone?.name || (isNL ? 'Steen op aanvraag' : 'Stone on request')}
+            </h4>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-muted-foreground mb-1">
+              {isNL ? 'Vanaf' : 'From'}
+            </p>
+            <p className="text-lg font-serif">
+              {formatVanafPrice(priceEstimate.vanafPrice)}
+            </p>
+          </div>
+        </div>
+
+        {/* Quick specs */}
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          <span>{shapeName}</span>
+          <span>•</span>
+          <span>{dimensionString}</span>
+          <span>•</span>
+          <span>{config.dimensions.thickness * 10}mm</span>
+          <span>•</span>
+          <span>{baseName}</span>
+        </div>
+
+        {/* Lead time */}
+        <p className="text-[10px] text-muted-foreground">
+          {isNL ? `Levertijd: ${leadTime.min}-${leadTime.max} weken` : `Lead time: ${leadTime.min}-${leadTime.max} weeks`}
+        </p>
+      </div>
+
+      {/* CTA */}
+      <Button 
+        variant="atelier"
+        className="w-full"
+        onClick={onRequestQuote}
+      >
+        {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
+        <ArrowRight className="w-4 h-4 ml-2" />
+      </Button>
+
+      {/* Disclaimer */}
+      <p className="text-[10px] text-center text-muted-foreground mt-3">
+        {priceEstimate.disclaimer}
+      </p>
     </motion.div>
   );
 }

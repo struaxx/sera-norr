@@ -97,21 +97,22 @@ interface ConfiguratorStore {
 const defaultConfig: ConfiguratorState = {
   currentStep: 0,
   productType: 'dining-table',
-  shape: 'rectangular',
+  shape: 'oval',
   dimensions: {
     length: 200,
     width: 100,
     height: 75,
-    thickness: 4,
+    thickness: 2, // 20mm default
+    radius: 75,
   },
-  stone: 'travertine',
+  stone: 'tiramisu', // Default to signature travertine
   finish: 'honed',
   edgeProfile: 'straight',
   baseType: 'modern',
   extras: {
     sealer: false,
-    delivery: false,
-    installation: false,
+    delivery: true,
+    installation: true,
     sampleKit: false,
   },
   spacePhotos: [],
