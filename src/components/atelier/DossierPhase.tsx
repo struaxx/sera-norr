@@ -2,25 +2,20 @@
 // Dossier Phase - Summary & Quote Request
 // ============================================
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
 import { 
   ArrowLeft, 
   Download, 
   Link2, 
   Check, 
   Phone, 
-  Mail, 
   MapPin,
   Clock,
   Shield,
   Truck,
-  Package,
   Send,
-  Copy,
   FileText,
-  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,7 +33,6 @@ import {
   FINISHES,
   EDGE_PROFILES,
   BASES,
-  EXTRAS_PRICING,
   calculatePriceEstimate,
 } from '@/lib/configurator';
 import { requestQuote } from '@/lib/configurator/api';
@@ -55,7 +49,6 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [wantsSamples, setWantsSamples] = useState(false);
   const [wantsCall, setWantsCall] = useState(false);
   
   const [contact, setContact] = useState({
@@ -119,7 +112,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         },
         contact: {
           ...contact,
-          notes: `${contact.notes}${wantsSamples ? '\n\n[Wil sample kit ontvangen]' : ''}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}`,
+          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
         },
         inspirationItems: inspirationItems.map(i => i.id),
       });
@@ -234,35 +227,37 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 label={isNL ? 'Onderstel' : 'Base'} 
                 value={baseName || ''} 
               />
-              
-              {/* Extras */}
-              {(config.extras.sealer || config.extras.delivery || config.extras.installation) && (
-                <>
-                  <div className="border-t border-border pt-4 mt-4">
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                      {isNL ? 'Extra opties' : 'Extras'}
-                    </span>
-                  </div>
-                  {config.extras.sealer && (
-                    <DossierRow 
-                      label={EXTRAS_PRICING.sealer.name[isNL ? 'nl' : 'en']} 
-                      value={`€${EXTRAS_PRICING.sealer.price}`} 
-                    />
-                  )}
-                  {config.extras.delivery && (
-                    <DossierRow 
-                      label={EXTRAS_PRICING.delivery.name[isNL ? 'nl' : 'en']} 
-                      value={`€${EXTRAS_PRICING.delivery.price}`} 
-                    />
-                  )}
-                  {config.extras.installation && (
-                    <DossierRow 
-                      label={EXTRAS_PRICING.installation.name[isNL ? 'nl' : 'en']} 
-                      value={`€${EXTRAS_PRICING.installation.price}`} 
-                    />
-                  )}
-                </>
-              )}
+            </div>
+
+            {/* Service & Delivery - Included */}
+            <div className="p-6 border-t border-border">
+              <div className="mb-4">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  {isNL ? 'Service & levering (inbegrepen)' : 'Service & delivery (included)'}
+                </span>
+              </div>
+              <div className="space-y-3 text-sm text-muted-foreground">
+                <p>
+                  {isNL 
+                    ? 'White-glove levering tot in de ruimte, inclusief uitpakken, plaatsing en nivelleren.'
+                    : 'White-glove delivery to your space, including unpacking, placement and leveling.'}
+                </p>
+                <p>
+                  {isNL 
+                    ? 'Verpakkingsmateriaal nemen we mee retour.'
+                    : 'We take all packaging material with us.'}
+                </p>
+                <p>
+                  {isNL 
+                    ? 'Onderhoudsadvies ontvang je bij oplevering.'
+                    : 'Care instructions are provided upon delivery.'}
+                </p>
+              </div>
+              <p className="text-[11px] text-muted-foreground/70 mt-4 italic">
+                {isNL 
+                  ? 'Impregneren is op aanvraag mogelijk, afhankelijk van de steensoort.'
+                  : 'Impregnation is available on request, depending on the stone type.'}
+              </p>
             </div>
 
             {/* Price Summary */}
@@ -406,27 +401,8 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </div>
               </div>
 
-              {/* Soft CTAs */}
+              {/* Soft CTA - Consultation only (no sample kit) */}
               <div className="border-t border-border pt-6 space-y-4">
-                <div className="flex items-start gap-3">
-                  <Checkbox 
-                    id="samples" 
-                    checked={wantsSamples}
-                    onCheckedChange={(checked) => setWantsSamples(checked === true)}
-                  />
-                  <div>
-                    <Label htmlFor="samples" className="text-sm cursor-pointer">
-                      <Package className="w-4 h-4 inline mr-2" />
-                      {isNL ? 'Stuur mij een sample kit' : 'Send me a sample kit'}
-                    </Label>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {isNL 
-                        ? `Materiaalstalen per post (€${EXTRAS_PRICING.sampleKit.price})`
-                        : `Material samples by mail (€${EXTRAS_PRICING.sampleKit.price})`}
-                    </p>
-                  </div>
-                </div>
-
                 <div className="flex items-start gap-3">
                   <Checkbox 
                     id="call" 

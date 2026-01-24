@@ -16,7 +16,6 @@ import {
 import { DimensionSliders } from '@/components/configurator/DimensionSliders';
 import { StoneSelectorV2, FinishSelector } from '@/components/configurator/StoneSelectorV2';
 import { EdgeProfileSelector, BaseSelector } from '@/components/configurator/EdgeBaseSelector';
-import { ExtrasSelector } from '@/components/configurator/ExtrasSelector';
 import { StickyDossier } from '@/components/configurator/StickyDossier';
 import { 
   shouldUseFallback, 
@@ -228,24 +227,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               value={config.baseType}
               productType={config.productType}
               onChange={(base) => useConfiguratorStore.getState().setBaseType(base)}
-              isNL={isNL}
-            />
-          </ConfigPanel>
-
-          {/* Extras */}
-          <ConfigPanel 
-            title={isNL ? 'Extra opties' : 'Extras'}
-            step={8}
-            isOptional
-          >
-            <ExtrasSelector 
-              extras={config.extras}
-              onChange={(newExtras) => {
-                const store = useConfiguratorStore.getState();
-                Object.entries(newExtras).forEach(([key, value]) => {
-                  store.setExtra(key as any, value);
-                });
-              }}
               isNL={isNL}
             />
           </ConfigPanel>
