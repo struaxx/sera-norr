@@ -5,7 +5,7 @@
 import { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Package, Phone } from 'lucide-react';
+import { RotateCcw, Phone } from 'lucide-react';
 import { Layout } from '@/components/layout';
 import { SEOHead } from '@/components/seo';
 import { Button } from '@/components/ui/button';
@@ -78,17 +78,10 @@ function PhaseIndicator({ currentPhase, onReset }: { currentPhase: AtelierPhase;
   );
 }
 
-// Help sidebar component
+// Help sidebar component - Only consultation option (no sample kit)
 function HelpSidebar({ isNL }: { isNL: boolean }) {
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2">
-      <Link
-        to="/contact?subject=sample-kit"
-        className="flex items-center gap-2 px-4 py-2.5 bg-background border border-foreground/10 text-sm text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors shadow-sm"
-      >
-        <Package className="w-4 h-4" />
-        <span className="hidden sm:inline">{isNL ? "Vraag sample kit" : "Request sample kit"}</span>
-      </Link>
+    <div className="fixed bottom-6 right-6 z-40">
       <Link
         to="/contact?subject=advies"
         className="flex items-center gap-2 px-4 py-2.5 bg-background border border-foreground/10 text-sm text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors shadow-sm"
