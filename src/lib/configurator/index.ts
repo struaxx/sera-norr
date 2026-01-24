@@ -56,13 +56,27 @@ export {
   type StoneLibraryEntry,
 } from './stone-library';
 
-// Pricing Engine
+// Pricing Engine (Legacy)
 export {
   calculatePriceEstimate,
   formatPrice,
   formatPriceRange,
   getLeadTimeEstimate,
 } from './pricing';
+
+// Pricing Engine V2 (Modular "Vanaf" system)
+export {
+  calculateModularPrice,
+  formatVanafPrice,
+  getModularLeadTime,
+  STONE_BASE_PRICES,
+  SIZE_UPLIFTS,
+  THICKNESS_UPLIFTS,
+  BASE_UPLIFTS,
+  FINISH_UPLIFTS,
+  EDGE_UPLIFTS,
+  type ModularPriceEstimate,
+} from './pricing-v2';
 
 // Validation Engine
 export {
@@ -95,26 +109,26 @@ export {
   type LODLevel,
 } from './3d-assets';
 
-// Default/Initial State
+// Default/Initial State - Updated with 20mm default thickness
 export const INITIAL_CONFIGURATOR_STATE: import('./types').ConfiguratorState = {
   currentStep: 0,
   productType: 'dining-table',
-  shape: 'rectangular',
+  shape: 'oval',
   dimensions: {
     length: 200,
     width: 100,
     height: 75,
-    thickness: 4,
-    radius: 100,
+    thickness: 2, // 20mm default
+    radius: 75,
   },
-  stone: 'travertine',
+  stone: 'tiramisu', // Default to signature travertine
   finish: 'honed',
   edgeProfile: 'straight',
   baseType: 'modern',
   extras: {
     sealer: false,
     delivery: true,
-    installation: false,
+    installation: true,
     sampleKit: false,
   },
   spacePhotos: [],

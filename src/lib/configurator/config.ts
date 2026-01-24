@@ -142,13 +142,14 @@ export const EDGE_PROFILES: EdgeProfileConfig[] = [
 ];
 
 // Base Configuration - 3 styles for v1: Cylindrical, Sculpted Cone, Pedestal Block
+// Updated with premium descriptions
 export const BASES: BaseConfig[] = [
   {
     id: 'modern',
     name: { nl: 'Cylindrical', en: 'Cylindrical' },
     description: {
-      nl: 'Slanke cilindrische stalen poten — minimalistisch profiel',
-      en: 'Slim cylindrical steel legs — minimalist profile',
+      nl: 'Slanke cilindrische basis in gepoedercoat staal — tijdloos minimalistisch',
+      en: 'Slim cylindrical base in powder-coated steel — timelessly minimal',
     },
     priceMultiplier: 1.0,
     compatibleProducts: ['dining-table', 'coffee-table', 'console', 'side-table', 'desk'],
@@ -157,20 +158,20 @@ export const BASES: BaseConfig[] = [
     id: 'monolith',
     name: { nl: 'Sculpted Cone', en: 'Sculpted Cone' },
     description: {
-      nl: 'Gebeeldhouwde kegelvorm in steen — statement piece',
-      en: 'Sculpted cone shape in stone — statement piece',
+      nl: 'Sculptuurlijk kegelvorm onderstel in dezelfde steen — statement piece',
+      en: 'Sculptural cone base in matching stone — statement piece',
     },
-    priceMultiplier: 1.8,
+    priceMultiplier: 1.35,
     compatibleProducts: ['dining-table', 'coffee-table', 'console', 'side-table'],
   },
   {
     id: 'architectural',
     name: { nl: 'Pedestal Block', en: 'Pedestal Block' },
     description: {
-      nl: 'Massieve sokkel — architecturale basis',
-      en: 'Solid pedestal — architectural base',
+      nl: 'Massieve sokkel met architecturale lijnen — bold presence',
+      en: 'Solid pedestal with architectural lines — bold presence',
     },
-    priceMultiplier: 1.4,
+    priceMultiplier: 1.2,
     compatibleProducts: ['dining-table', 'coffee-table', 'desk'],
   },
 ];
