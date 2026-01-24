@@ -125,6 +125,90 @@ function TexturedTableTop({
   );
 }
 
+// Textured cone base - same marble texture as the top
+function TexturedConeBase({ 
+  texturePath, 
+  materialProps, 
+  dimensions,
+  shape,
+}: { 
+  texturePath: string;
+  materialProps: { color: string; roughness: number; metalness: number };
+  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
+  shape: TableShape;
+}) {
+  const w = dimensions.length * SCALE;
+  const d = dimensions.width * SCALE;
+  const h = dimensions.height * SCALE;
+  const t = dimensions.thickness * SCALE;
+  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
+  const legHeight = h - t;
+
+  // Load texture with proper settings
+  const texture = useTexture(texturePath);
+  
+  // Configure texture for cone
+  useMemo(() => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    
+    // Scale for base
+    const textureScale = 0.5;
+    texture.repeat.set(2, 1.5);
+  }, [texture]);
+
+  // Calculate cone dimensions based on table shape
+  const topRadius = shape === 'round' ? r * 0.55 : Math.min(w, d) * 0.35;
+  const bottomRadius = shape === 'round' ? r * 0.35 : Math.min(w, d) * 0.22;
+
+  return (
+    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
+      <cylinderGeometry args={[topRadius, bottomRadius, legHeight, 48]} />
+      <meshStandardMaterial
+        map={texture}
+        roughness={materialProps.roughness}
+        metalness={materialProps.metalness}
+        envMapIntensity={1.2}
+      />
+    </mesh>
+  );
+}
+
+// Color-only cone base
+function ColorConeBase({ 
+  materialProps, 
+  dimensions,
+  shape,
+}: { 
+  materialProps: { color: string; roughness: number; metalness: number };
+  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
+  shape: TableShape;
+}) {
+  const w = dimensions.length * SCALE;
+  const d = dimensions.width * SCALE;
+  const h = dimensions.height * SCALE;
+  const t = dimensions.thickness * SCALE;
+  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
+  const legHeight = h - t;
+
+  // Calculate cone dimensions based on table shape
+  const topRadius = shape === 'round' ? r * 0.55 : Math.min(w, d) * 0.35;
+  const bottomRadius = shape === 'round' ? r * 0.35 : Math.min(w, d) * 0.22;
+
+  return (
+    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
+      <cylinderGeometry args={[topRadius, bottomRadius, legHeight, 48]} />
+      <meshStandardMaterial
+        color={materialProps.color}
+        roughness={materialProps.roughness}
+        metalness={materialProps.metalness}
+        envMapIntensity={1.2}
+      />
+    </mesh>
+  );
+}
+
 // Fallback component without texture
 function ColorTableTop({ 
   materialProps, 
@@ -201,10 +285,31 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
 
     switch (baseType) {
       case 'monolith':
+        // Sculpted Cone - uses same marble texture as tabletop
+        if (materialProps.texturePath) {
+          return (
+            <TexturedConeBase 
+              texturePath={materialProps.texturePath}
+              materialProps={materialProps}
+              dimensions={dimensions}
+              shape={shape}
+            />
+          );
+        }
+        return (
+          <ColorConeBase 
+            materialProps={materialProps}
+            dimensions={dimensions}
+            shape={shape}
+          />
+        );
+
+      case 'architectural':
+        // Pedestal Block - solid stone block
         if (shape === 'round') {
           return (
             <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-              <cylinderGeometry args={[r * 0.4, r * 0.5, legHeight, 32]} />
+              <boxGeometry args={[r * 0.7, legHeight, r * 0.7]} />
               <meshStandardMaterial 
                 color={materialProps.color} 
                 roughness={materialProps.roughness}
@@ -215,7 +320,7 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
         }
         return (
           <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-            <boxGeometry args={[w * 0.3, legHeight, d * 0.6]} />
+            <boxGeometry args={[w * 0.3, legHeight, d * 0.5]} />
             <meshStandardMaterial 
               color={materialProps.color} 
               roughness={materialProps.roughness}
@@ -224,26 +329,9 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
           </mesh>
         );
 
-      case 'architectural':
-        return (
-          <group>
-            <mesh position={[0, legHeight / 2, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
-              <boxGeometry args={[0.04, legHeight, Math.min(w, d) * 0.8]} />
-              <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
-            </mesh>
-            <mesh position={[0, legHeight / 2, 0]} rotation={[0, -Math.PI / 4, 0]} castShadow>
-              <boxGeometry args={[0.04, legHeight, Math.min(w, d) * 0.8]} />
-              <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
-            </mesh>
-            <mesh position={[0, 0.01, 0]} castShadow receiveShadow>
-              <boxGeometry args={[w * 0.5, 0.02, d * 0.5]} />
-              <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
-            </mesh>
-          </group>
-        );
-
       case 'modern':
       default:
+        // Cylindrical - modern metal legs
         if (shape === 'round') {
           return (
             <group>
