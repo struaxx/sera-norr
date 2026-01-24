@@ -3,38 +3,139 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { Hairline } from "@/components/ui/hairline";
-import { AtelierSteps } from "@/components/homepage";
-import { LookbookFilters, LookbookGrid, type FilterState } from "@/components/collections";
-import vantaFallback from "@/assets/vanta-collection.jpg";
-import terraFallback from "@/assets/terra-collection.jpg";
-import heroImage from "@/assets/hero-vanta.jpg";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+// Lookbook item type
+interface LookbookItem {
+  id: string;
+  name: string;
+  collection: "VANTA" | "TERRA";
+  stone: string;
+  type: string;
+  shape: string;
+  feel: string;
+  description: string;
+  aspectRatio: "portrait" | "landscape" | "square";
+  size: "normal" | "large" | "tall";
+}
 
 const Collections = () => {
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
-  const [filters, setFilters] = useState<FilterState>({
-    stone: null,
-    type: null,
-    shape: null,
-    search: "",
-  });
+  const [selectedItem, setSelectedItem] = useState<LookbookItem | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   const seoTitle = isNL 
-    ? "Collecties | SERA NORR — Signature Collecties voor Natuursteen Maatwerk"
-    : "Collections | SERA NORR — Signature Collections for Natural Stone Bespoke";
+    ? "Collecties | SERA NORR — Lookbook & Inspiratie"
+    : "Collections | SERA NORR — Lookbook & Inspiration";
 
   const seoDescription = isNL
-    ? "Ontdek de SERA NORR signature collecties: vormen, verhoudingen en materialen als richting voor uw maatwerk project."
-    : "Discover the SERA NORR signature collections: shapes, proportions and materials as direction for your bespoke project.";
+    ? "Ontdek de SERA NORR lookbook: sculptural stone furniture in travertin en marmer. Inspiratie voor uw maatwerk project."
+    : "Discover the SERA NORR lookbook: sculptural stone furniture in travertine and marble. Inspiration for your bespoke project.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: isNL ? 'Collecties' : 'Collections', url: '/collections' },
   ]);
+
+  // Lookbook items with varied sizes for Pinterest masonry effect
+  const items: LookbookItem[] = isNL ? [
+    { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Ovaal", feel: "Sculpturaal", description: "Monumentale eettafel met krachtige, ronde basis en ellipsvormig blad.", aspectRatio: "portrait", size: "large" },
+    { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rechthoek", feel: "Statement", description: "Console met massieve blokbasis, gedefinieerd door paarse adering.", aspectRatio: "landscape", size: "normal" },
+    { id: "3", name: "Rondo Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Rond", feel: "Rustig", description: "Gestapelde ringen vormen een organische salontafel in warm travertin.", aspectRatio: "square", size: "normal" },
+    { id: "4", name: "Linea Dining", collection: "TERRA", stone: "Travertin", type: "Eettafel", shape: "Rechthoek", feel: "Rustig", description: "Langwerpige eettafel met strakke lijnen en natuurlijke textuur.", aspectRatio: "landscape", size: "large" },
+    { id: "5", name: "Onda Side", collection: "VANTA", stone: "Calacatta Viola", type: "Overig", shape: "Organisch", feel: "Sculpturaal", description: "Golvende bijzettafel geïnspireerd op natuurlijke erosie.", aspectRatio: "portrait", size: "tall" },
+    { id: "6", name: "Terra Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Minimale console met zwevend blad op massieve steunpunten.", aspectRatio: "landscape", size: "normal" },
+    { id: "7", name: "Viola Oval", collection: "VANTA", stone: "Calacatta Viola", type: "Salontafel", shape: "Ovaal", feel: "Statement", description: "Lage salontafel met dramatische viola-marmer adering.", aspectRatio: "square", size: "large" },
+    { id: "8", name: "Cube Media", collection: "TERRA", stone: "Travertin", type: "TV-meubel", shape: "Rechthoek", feel: "Rustig", description: "Media console met gestapelde volumes en open niches.", aspectRatio: "landscape", size: "normal" },
+    { id: "9", name: "Monolith Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Rechthoek", feel: "Statement", description: "Massieve rechthoekige tafel met sculpturale aanwezigheid.", aspectRatio: "portrait", size: "normal" },
+    { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Organisch", feel: "Rustig", description: "Asymmetrische salontafel geïnspireerd door rivierkeien.", aspectRatio: "square", size: "normal" },
+    { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Console met boogvormige uitsparing en klassieke proporties.", aspectRatio: "landscape", size: "normal" },
+    { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Overig", shape: "Rechthoek", feel: "Sculpturaal", description: "Multifunctioneel blokobject voor zitplaats of sculptuur.", aspectRatio: "portrait", size: "tall" },
+  ] : [
+    { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Oval", feel: "Sculptural", description: "Monumental dining table with powerful round base and elliptical top.", aspectRatio: "portrait", size: "large" },
+    { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rectangle", feel: "Statement", description: "Console with massive block base, defined by purple veining.", aspectRatio: "landscape", size: "normal" },
+    { id: "3", name: "Rondo Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Round", feel: "Calm", description: "Stacked rings form an organic coffee table in warm travertine.", aspectRatio: "square", size: "normal" },
+    { id: "4", name: "Linea Dining", collection: "TERRA", stone: "Travertine", type: "Dining table", shape: "Rectangle", feel: "Calm", description: "Elongated dining table with clean lines and natural texture.", aspectRatio: "landscape", size: "large" },
+    { id: "5", name: "Onda Side", collection: "VANTA", stone: "Calacatta Viola", type: "Other", shape: "Organic", feel: "Sculptural", description: "Undulating side table inspired by natural erosion.", aspectRatio: "portrait", size: "tall" },
+    { id: "6", name: "Terra Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Minimal console with floating top on massive supports.", aspectRatio: "landscape", size: "normal" },
+    { id: "7", name: "Viola Oval", collection: "VANTA", stone: "Calacatta Viola", type: "Coffee table", shape: "Oval", feel: "Statement", description: "Low coffee table with dramatic viola marble veining.", aspectRatio: "square", size: "large" },
+    { id: "8", name: "Cube Media", collection: "TERRA", stone: "Travertine", type: "TV unit", shape: "Rectangle", feel: "Calm", description: "Media console with stacked volumes and open niches.", aspectRatio: "landscape", size: "normal" },
+    { id: "9", name: "Monolith Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Rectangle", feel: "Statement", description: "Massive rectangular table with sculptural presence.", aspectRatio: "portrait", size: "normal" },
+    { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Organic", feel: "Calm", description: "Asymmetric coffee table inspired by river pebbles.", aspectRatio: "square", size: "normal" },
+    { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Console with arched cutout and classical proportions.", aspectRatio: "landscape", size: "normal" },
+    { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Other", shape: "Rectangle", feel: "Sculptural", description: "Multifunctional block object for seating or sculpture.", aspectRatio: "portrait", size: "tall" },
+  ];
+
+  // Filter options
+  const filterOptions = [
+    { id: "all", label: isNL ? "Alles" : "All" },
+    { id: "VANTA", label: "VANTA" },
+    { id: "TERRA", label: "TERRA" },
+    { id: "dining", label: isNL ? "Eettafels" : "Dining" },
+    { id: "coffee", label: isNL ? "Salontafels" : "Coffee" },
+    { id: "console", label: isNL ? "Consoles" : "Consoles" },
+  ];
+
+  // Filter items
+  const filteredItems = items.filter((item) => {
+    if (!activeFilter || activeFilter === "all") return true;
+    if (activeFilter === "VANTA" || activeFilter === "TERRA") {
+      return item.collection === activeFilter;
+    }
+    if (activeFilter === "dining") {
+      return item.type.toLowerCase().includes("dining") || item.type.toLowerCase().includes("eettafel");
+    }
+    if (activeFilter === "coffee") {
+      return item.type.toLowerCase().includes("coffee") || item.type.toLowerCase().includes("salontafel");
+    }
+    if (activeFilter === "console") {
+      return item.type.toLowerCase().includes("console");
+    }
+    return true;
+  });
+
+  // Get aspect ratio class
+  const getAspectClass = (item: LookbookItem) => {
+    if (item.size === "large") {
+      return item.aspectRatio === "portrait" ? "row-span-2" : "col-span-2";
+    }
+    if (item.size === "tall") {
+      return "row-span-2";
+    }
+    return "";
+  };
+
+  const getHeightClass = (item: LookbookItem) => {
+    if (item.size === "tall" || (item.size === "large" && item.aspectRatio === "portrait")) {
+      return "aspect-[3/5]";
+    }
+    if (item.size === "large" && item.aspectRatio === "landscape") {
+      return "aspect-[16/9]";
+    }
+    if (item.aspectRatio === "square") {
+      return "aspect-square";
+    }
+    if (item.aspectRatio === "landscape") {
+      return "aspect-[4/3]";
+    }
+    return "aspect-[3/4]";
+  };
+
+  const Tag = ({ label, variant = "default" }: { label: string; variant?: "default" | "collection" }) => (
+    <span className={cn(
+      "px-2.5 py-1 text-[9px] uppercase tracking-[0.15em]",
+      variant === "collection" 
+        ? "bg-foreground/5 text-foreground/80" 
+        : "border border-foreground/10 text-muted-foreground"
+    )}>
+      {label}
+    </span>
+  );
 
   return (
     <Layout>
@@ -48,229 +149,156 @@ const Collections = () => {
       />
 
       {/* ========================================
-          SECTION 1 — HERO (split, visueel)
+          LOOKBOOK HEADER (minimal)
           ======================================== */}
-      <section className="pt-28 lg:pt-36 pb-16 lg:pb-20 bg-background">
+      <section className="pt-28 lg:pt-36 pb-8 lg:pb-12 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <Breadcrumbs className="mb-8 opacity-60 text-[10px]" />
+          <Breadcrumbs className="mb-6 opacity-60 text-[10px]" />
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left: Content */}
-            <div className="order-2 lg:order-1">
-              <p className="micro-label mb-6">
-                {isNL ? 'Collecties' : 'Collections'}
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div>
+              <p className="micro-label mb-3">
+                {isNL ? 'Lookbook' : 'Lookbook'}
               </p>
-              <h1 className="font-serif text-display-sm lg:text-display-md text-foreground mb-5">
-                {isNL ? "Signature Collecties" : "Signature Collections"}
+              <h1 className="font-serif text-display-xs lg:text-display-sm text-foreground">
+                {isNL ? "Collecties" : "Collections"}
               </h1>
-              <p className="text-body-md text-muted-foreground leading-relaxed max-w-md mb-3">
-                {isNL 
-                  ? "Een selectie richtingen waar we als atelier achter staan. Ontworpen om te vertalen naar uw ruimte."
-                  : "A selection of directions we stand behind as an atelier. Designed to translate to your space."}
-              </p>
-              <p className="text-body-sm text-muted-foreground/60 mb-8">
-                {isNL 
-                  ? "Elk stuk wordt op maat gemaakt, op aanvraag."
-                  : "Every piece is made to measure, on request."}
-              </p>
-              <Button asChild variant="sera-primary" size="lg">
-                <Link to="/atelier">
-                  {isNL ? "Ontwerp uw tafel" : "Design your table"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <p className="text-[11px] text-muted-foreground/50 mt-3">
-                {isNL ? "Prijsindicatie • 8-12 weken • Maatwerk begeleiding" : "Price indication • 8-12 weeks • Bespoke guidance"}
-              </p>
             </div>
-
-            {/* Right: Editorial Image */}
-            <div className="order-1 lg:order-2">
-              <div className="aspect-[4/5] lg:aspect-[3/4] bg-muted overflow-hidden">
-                <img
-                  src={heroImage}
-                  alt={isNL ? "SERA NORR natuursteen interieur" : "SERA NORR natural stone interior"}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================
-          SECTION 2 — COLLECTIE SPOTLIGHT (side by side)
-          ======================================== */}
-      <section className="py-20 lg:py-28 bg-secondary/20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             
-            {/* VANTA Card */}
-            <div className="group">
-              <Link to="/collections/vanta" className="block">
-                <div className="aspect-[4/5] bg-muted overflow-hidden mb-6 relative">
-                  <img
-                    src={vantaFallback}
-                    alt={isNL ? "VANTA collectie - Calacatta Viola marmer" : "VANTA collection - Calacatta Viola marble"}
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                  />
-                </div>
+            {/* CTA */}
+            <Button asChild variant="sera-primary" size="default">
+              <Link to="/atelier">
+                {isNL ? "Ontwerp uw tafel" : "Design your table"}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              <p className="editorial-caption-label mb-2">
-                Calacatta Viola
-              </p>
-              <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
-                VANTA
-              </h2>
-              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4 max-w-sm">
-                {isNL 
-                  ? "Rijke adering in Italiaans marmer — sculpturaal en uitgesproken."
-                  : "Rich veining in Italian marble — sculptural and expressive."}
-              </p>
-              
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  Calacatta Viola
-                </span>
-                <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Marmer" : "Marble"}
-                </span>
-                <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Uitgesproken" : "Statement"}
-                </span>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <Button asChild variant="sera-primary" size="default">
-                  <Link to="/atelier?style=vanta">
-                    {isNL ? "Ontwerp in VANTA stijl" : "Design in VANTA style"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="sera-secondary" size="default">
-                  <Link to="/collections/vanta">
-                    {isNL ? "Ontdek VANTA" : "Discover VANTA"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-
-            {/* TERRA Card */}
-            <div className="group">
-              <Link to="/collections/terra" className="block">
-                <div className="aspect-[4/5] bg-muted overflow-hidden mb-6 relative">
-                  <img
-                    src={terraFallback}
-                    alt={isNL ? "TERRA collectie - Travertin meubels" : "TERRA collection - Travertine furniture"}
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                  />
-                </div>
-              </Link>
-              <p className="editorial-caption-label mb-2">
-                Travertin
-              </p>
-              <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
-                TERRA
-              </h2>
-              <p className="text-body-sm text-muted-foreground leading-relaxed mb-4 max-w-sm">
-                {isNL 
-                  ? "Warme beigetinten en tijdloze textuur — rustig en natuurlijk."
-                  : "Warm beige tones and timeless texture — calm and natural."}
-              </p>
-              
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  Travertin
-                </span>
-                <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Warm" : "Warm"}
-                </span>
-                <span className="px-3 py-1 text-[10px] uppercase tracking-[0.12em] border border-foreground/10 text-muted-foreground">
-                  {isNL ? "Tijdloos" : "Timeless"}
-                </span>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <Button asChild variant="sera-primary" size="default">
-                  <Link to="/atelier?style=terra">
-                    {isNL ? "Ontwerp in TERRA stijl" : "Design in TERRA style"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="sera-secondary" size="default">
-                  <Link to="/collections/terra">
-                    {isNL ? "Ontdek TERRA" : "Discover TERRA"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
+            </Button>
           </div>
         </div>
       </section>
 
       {/* ========================================
-          SECTION 3 & 4 — LOOKBOOK GRID + FILTERS
+          FILTER BAR (sticky)
           ======================================== */}
-      <section className="py-20 lg:py-28">
+      <section className="sticky top-16 lg:top-20 z-30 bg-background/95 backdrop-blur-sm border-y border-foreground/5">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="mb-10">
-            <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
-              {isNL ? "Atelier selectie" : "Atelier selection"}
-            </h2>
-            <p className="text-body-sm text-muted-foreground max-w-lg">
-              {isNL 
-                ? "Vormen, details en combinaties — als vertrekpunt voor maatwerk."
-                : "Shapes, details and combinations — as starting point for bespoke."}
-            </p>
+          <div className="flex items-center gap-3 py-4 overflow-x-auto scrollbar-hide">
+            {filterOptions.map((filter) => (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id === "all" ? null : filter.id)}
+                className={cn(
+                  "px-4 py-2 text-[11px] uppercase tracking-[0.12em] whitespace-nowrap transition-all duration-300 border",
+                  (activeFilter === filter.id || (filter.id === "all" && !activeFilter))
+                    ? "bg-foreground text-background border-foreground"
+                    : "bg-transparent text-foreground/60 border-foreground/10 hover:border-foreground/25 hover:text-foreground"
+                )}
+              >
+                {filter.label}
+              </button>
+            ))}
           </div>
-
-          {/* Filters */}
-          <div className="mb-10">
-            <LookbookFilters isNL={isNL} onFilterChange={setFilters} />
-          </div>
-
-          {/* Grid */}
-          <LookbookGrid isNL={isNL} filters={filters} />
         </div>
       </section>
 
       {/* ========================================
-          SECTION 5 — BRIDGE NAAR MAATWERK
+          PINTEREST MASONRY GRID
           ======================================== */}
-      <section className="py-20 lg:py-28 bg-secondary/20">
+      <section className="py-8 lg:py-12 bg-background min-h-screen">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 auto-rows-[minmax(200px,auto)]">
+            <AnimatePresence mode="popLayout">
+              {filteredItems.map((item, index) => (
+                <motion.button
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ 
+                    duration: 0.4, 
+                    delay: index * 0.03,
+                    layout: { duration: 0.4 }
+                  }}
+                  onClick={() => setSelectedItem(item)}
+                  className={cn(
+                    "group text-left focus:outline-none relative overflow-hidden",
+                    getAspectClass(item)
+                  )}
+                >
+                  {/* Image placeholder with collection-based color */}
+                  <div className={cn(
+                    "w-full h-full min-h-[240px] overflow-hidden relative",
+                    getHeightClass(item),
+                    item.collection === "VANTA" 
+                      ? "bg-gradient-to-br from-secondary/60 via-secondary/40 to-secondary/20" 
+                      : "bg-gradient-to-br from-[#E8DFD0]/60 via-[#E8DFD0]/40 to-[#E8DFD0]/20"
+                  )}>
+                    {/* Collection watermark */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-[10px] lg:text-xs uppercase tracking-[0.25em] text-foreground/10 font-medium">
+                        {item.collection}
+                      </span>
+                    </div>
+                    
+                    {/* Hover overlay with info */}
+                    <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/80 transition-all duration-500 flex flex-col justify-end p-4 lg:p-5">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-4 group-hover:translate-y-0">
+                        <p className="text-[9px] uppercase tracking-[0.2em] text-background/60 mb-1.5">
+                          {item.collection}
+                        </p>
+                        <h3 className="font-serif text-base lg:text-lg text-background mb-2">
+                          {item.name}
+                        </h3>
+                        <div className="flex flex-wrap gap-1.5">
+                          <span className="px-2 py-0.5 text-[8px] uppercase tracking-[0.1em] bg-background/10 text-background/80">
+                            {item.type}
+                          </span>
+                          <span className="px-2 py-0.5 text-[8px] uppercase tracking-[0.1em] bg-background/10 text-background/80">
+                            {item.stone}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.button>
+              ))}
+            </AnimatePresence>
+          </div>
+
+          {/* Empty state */}
+          {filteredItems.length === 0 && (
+            <div className="text-center py-20">
+              <p className="text-muted-foreground text-sm">
+                {isNL ? "Geen ontwerpen gevonden." : "No designs found."}
+              </p>
+              <button
+                onClick={() => setActiveFilter(null)}
+                className="mt-4 text-xs uppercase tracking-[0.1em] text-foreground underline underline-offset-4"
+              >
+                {isNL ? "Bekijk alles" : "View all"}
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ========================================
+          BOTTOM CTA BAR
+          ======================================== */}
+      <section className="py-16 lg:py-20 bg-foreground text-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div>
+              <h2 className="font-serif text-display-xs text-background mb-2">
                 {isNL ? "Vertaal dit naar uw ruimte" : "Translate this to your space"}
               </h2>
-              <p className="text-body-sm text-muted-foreground max-w-md mx-auto">
+              <p className="text-background/60 text-sm max-w-md">
                 {isNL 
-                  ? "Kies een richting — wij werken het uit in uw afmeting en afwerking."
-                  : "Choose a direction — we work it out in your dimensions and finish."}
+                  ? "Elk stuk wordt op maat gemaakt. Start uw ontwerp in de atelier."
+                  : "Every piece is made to measure. Start your design in the atelier."}
               </p>
             </div>
-
-            {/* Atelier Steps as CTA */}
-            <AtelierSteps isNL={isNL} />
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================
-          SECTION 6 — EINDSECTIE CTA
-          ======================================== */}
-      <section className="py-20 lg:py-28 bg-foreground text-background">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-xl mx-auto text-center">
-            <h2 className="font-serif text-display-xs lg:text-display-sm text-background mb-8">
-              {isNL ? "Klaar om te beginnen?" : "Ready to start?"}
-            </h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-wrap gap-4">
               <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
                 <Link to="/atelier">
                   {isNL ? "Ontwerp uw tafel" : "Design your table"}
@@ -279,7 +307,7 @@ const Collections = () => {
               </Button>
               <Link 
                 to="/contact" 
-                className="text-sm uppercase tracking-[0.1em] text-background/50 hover:text-background transition-colors"
+                className="inline-flex items-center text-sm uppercase tracking-[0.1em] text-background/50 hover:text-background transition-colors"
               >
                 {isNL ? "Neem contact op" : "Contact us"}
               </Link>
@@ -287,6 +315,75 @@ const Collections = () => {
           </div>
         </div>
       </section>
+
+      {/* ========================================
+          DETAIL OVERLAY (modal)
+          ======================================== */}
+      <AnimatePresence>
+        {selectedItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:p-8"
+            onClick={() => setSelectedItem(null)}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-background/98 backdrop-blur-sm" />
+            
+            {/* Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-lg w-full bg-background border border-foreground/10 p-8 lg:p-10"
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setSelectedItem(null)}
+                className="absolute top-5 right-5 p-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Collection label */}
+              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 block">
+                {selectedItem.collection} {isNL ? "Collectie" : "Collection"}
+              </span>
+
+              {/* Title */}
+              <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-4">
+                {selectedItem.name}
+              </h2>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                <Tag label={selectedItem.stone} />
+                <Tag label={selectedItem.type} />
+                <Tag label={selectedItem.shape} />
+                <Tag label={selectedItem.feel} />
+              </div>
+
+              {/* Description */}
+              <p className="text-body-md text-muted-foreground leading-relaxed mb-8">
+                {selectedItem.description}
+              </p>
+
+              {/* Actions */}
+              <div className="flex flex-wrap gap-4">
+                <Button asChild variant="sera-primary" size="lg">
+                  <Link to={`/atelier?style=${selectedItem.collection.toLowerCase()}`}>
+                    {isNL ? "Ontwerp in deze stijl" : "Design in this style"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 };
