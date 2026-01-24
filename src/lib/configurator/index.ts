@@ -38,6 +38,24 @@ export {
   LEAD_TIME,
 } from './config';
 
+// Stone Library (NEW - Full catalog from PDFs)
+export {
+  STONE_LIBRARY,
+  getStonesByFamily,
+  getStonesByCollection,
+  getStonesByTier,
+  getStonesByTags,
+  searchStones,
+  getStoneById,
+  mapToLegacyStoneConfig,
+  STONE_LIBRARY_STATS,
+  type StoneFamily,
+  type StoneTier,
+  type StoneCollection,
+  type CharacterTag,
+  type StoneLibraryEntry,
+} from './stone-library';
+
 // Pricing Engine
 export {
   calculatePriceEstimate,
