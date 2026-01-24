@@ -6,7 +6,7 @@
 export type TableShape = 'rectangular' | 'oval' | 'round' | 'organic';
 
 // Stone Types
-export type StoneType = 'travertine' | 'calacattaViola' | 'verdeAlpi' | 'neroMarquina' | 'custom';
+export type StoneType = 'travertine' | 'calacattaViola' | 'neroMarquina' | 'verdeAlpi' | 'biancoCarrara' | 'emperadorDark' | 'custom';
 
 // Finish Types
 export type FinishType = 'honed' | 'polished' | 'matte';

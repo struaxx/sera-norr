@@ -13,11 +13,11 @@ import type {
   ProductType,
 } from './types';
 
-// Stone Materials Configuration
+// Stone Materials Configuration - 6 stones for v1
 export const STONE_MATERIALS: StoneMaterialConfig[] = [
   {
     id: 'travertine',
-    name: { nl: 'Italiaans Travertin', en: 'Italian Travertine' },
+    name: { nl: 'Travertine Tiramisu', en: 'Travertine Tiramisu' },
     color: '#E8DFD0',
     roughness: 0.6,
     metalness: 0,
@@ -36,6 +36,16 @@ export const STONE_MATERIALS: StoneMaterialConfig[] = [
     available: true,
   },
   {
+    id: 'neroMarquina',
+    name: { nl: 'Nero Marquina', en: 'Nero Marquina' },
+    color: '#1A1A1A',
+    roughness: 0.35,
+    metalness: 0.05,
+    collection: 'other',
+    priceMultiplier: 1.6,
+    available: true,
+  },
+  {
     id: 'verdeAlpi',
     name: { nl: 'Verde Alpi', en: 'Verde Alpi' },
     color: '#2D4A3E',
@@ -46,13 +56,23 @@ export const STONE_MATERIALS: StoneMaterialConfig[] = [
     available: true,
   },
   {
-    id: 'neroMarquina',
-    name: { nl: 'Nero Marquina', en: 'Nero Marquina' },
-    color: '#1A1A1A',
+    id: 'biancoCarrara',
+    name: { nl: 'Bianco Carrara', en: 'Bianco Carrara' },
+    color: '#F0F0F0',
     roughness: 0.35,
-    metalness: 0.05,
+    metalness: 0.03,
     collection: 'other',
-    priceMultiplier: 1.6,
+    priceMultiplier: 1.4,
+    available: true,
+  },
+  {
+    id: 'emperadorDark',
+    name: { nl: 'Emperador Dark', en: 'Emperador Dark' },
+    color: '#3D2B1F',
+    roughness: 0.45,
+    metalness: 0.02,
+    collection: 'other',
+    priceMultiplier: 1.5,
     available: true,
   },
   {
@@ -121,34 +141,34 @@ export const EDGE_PROFILES: EdgeProfileConfig[] = [
   },
 ];
 
-// Base Configuration
+// Base Configuration - 3 styles for v1: Cylindrical, Sculpted Cone, Pedestal Block
 export const BASES: BaseConfig[] = [
   {
     id: 'modern',
-    name: { nl: 'Modern', en: 'Modern' },
+    name: { nl: 'Cylindrical', en: 'Cylindrical' },
     description: {
-      nl: 'Slanke stalen poten met minimalistisch profiel',
-      en: 'Slim steel legs with minimalist profile',
+      nl: 'Slanke cilindrische stalen poten — minimalistisch profiel',
+      en: 'Slim cylindrical steel legs — minimalist profile',
     },
     priceMultiplier: 1.0,
     compatibleProducts: ['dining-table', 'coffee-table', 'console', 'side-table', 'desk'],
   },
   {
     id: 'monolith',
-    name: { nl: 'Monoliet', en: 'Monolith' },
+    name: { nl: 'Sculpted Cone', en: 'Sculpted Cone' },
     description: {
-      nl: 'Massieve stenen sokkel, volledig in materiaal',
-      en: 'Solid stone pedestal, fully in material',
+      nl: 'Gebeeldhouwde kegelvorm in steen — statement piece',
+      en: 'Sculpted cone shape in stone — statement piece',
     },
     priceMultiplier: 1.8,
     compatibleProducts: ['dining-table', 'coffee-table', 'console', 'side-table'],
   },
   {
     id: 'architectural',
-    name: { nl: 'Architecturaal', en: 'Architectural' },
+    name: { nl: 'Pedestal Block', en: 'Pedestal Block' },
     description: {
-      nl: 'Staal met sculptural vormgeving',
-      en: 'Steel with sculptural design',
+      nl: 'Massieve sokkel — architecturale basis',
+      en: 'Solid pedestal — architectural base',
     },
     priceMultiplier: 1.4,
     compatibleProducts: ['dining-table', 'coffee-table', 'desk'],
@@ -242,7 +262,7 @@ export const DIMENSION_CONSTRAINTS: Record<ProductType, DimensionConstraints> = 
 // Extras pricing (in EUR)
 export const EXTRAS_PRICING = {
   sealer: { price: 150, name: { nl: 'Steenimpregnatie', en: 'Stone sealer' } },
-  delivery: { price: 295, name: { nl: 'White-glove bezorging', en: 'White-glove delivery' } },
+  delivery: { price: 295, name: { nl: 'Bezorging met zorg', en: 'White-glove delivery' } },
   installation: { price: 195, name: { nl: 'Professionele plaatsing', en: 'Professional installation' } },
   sampleKit: { price: 45, name: { nl: 'Materiaal sample kit', en: 'Material sample kit' } },
 };

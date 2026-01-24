@@ -85,7 +85,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
       >
         <div>
           <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 block">
-            {isNL ? 'Stap 2 van 3' : 'Step 2 of 3'}
+            {isNL ? 'Stap 1 van 2' : 'Step 1 of 2'}
           </span>
           <h1 className="text-2xl md:text-3xl font-serif">
             {isNL ? 'Stel uw stuk samen' : 'Design your piece'}
@@ -267,7 +267,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
           onClick={onBack}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          {isNL ? 'Terug naar inspiratie' : 'Back to inspiration'}
+          {isNL ? 'Reset ontwerp' : 'Reset design'}
         </Button>
         
         <Button 
