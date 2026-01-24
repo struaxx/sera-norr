@@ -1,24 +1,24 @@
 // ============================================
-// Atelier Page - Complete 3-Phase Flow
+// Atelier Page - 2-Phase Flow (Ontwerp → Dossier)
 // ============================================
 
 import { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, HelpCircle, Package, Phone } from 'lucide-react';
+import { RotateCcw, Package, Phone } from 'lucide-react';
 import { Layout } from '@/components/layout';
 import { SEOHead } from '@/components/seo';
 import { Button } from '@/components/ui/button';
 import { useConfiguratorStore, type AtelierPhase } from '@/stores/configurator-store';
-import { LookbookPhase, ConfiguratorPhase, DossierPhase } from '@/components/atelier';
+import { ConfiguratorPhase, DossierPhase } from '@/components/atelier';
 import { loadConfiguration } from '@/lib/configurator/api';
+import { PRESETS } from '@/lib/configurator/presets';
 
-// Phase indicator component with reset
+// Phase indicator component with reset - NOW 2 STEPS ONLY
 function PhaseIndicator({ currentPhase, onReset }: { currentPhase: AtelierPhase; onReset: () => void }) {
   const phases: { id: AtelierPhase; label: string; step: number }[] = [
-    { id: 'lookbook', label: 'Inspiratie', step: 1 },
-    { id: 'configurator', label: 'Ontwerp', step: 2 },
-    { id: 'dossier', label: 'Dossier', step: 3 },
+    { id: 'configurator', label: 'Ontwerp', step: 1 },
+    { id: 'dossier', label: 'Dossier', step: 2 },
   ];
 
   const currentIndex = phases.findIndex(p => p.id === currentPhase);
@@ -106,16 +106,18 @@ export default function Atelier() {
     phase, 
     setPhase, 
     setStone, 
+    setShape,
     setProductType,
+    setDimension,
+    setBaseType,
     setSelectedCollection,
     reset
   } = useConfiguratorStore();
 
-  // Reset function - clears state and goes to step 1
+  // Reset function - clears state and goes to step 1 (now configurator)
   const handleReset = () => {
     reset();
-    setPhase('lookbook');
-    // Clear URL params
+    setPhase('configurator');
     setSearchParams({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -125,13 +127,34 @@ export default function Atelier() {
     const buildCode = searchParams.get('build');
     const styleParam = searchParams.get('style');
     const typeParam = searchParams.get('type');
+    const presetParam = searchParams.get('preset');
 
-    // If no params, always start at lookbook (step 1)
+    // Handle preset (Quick Pick)
+    if (presetParam) {
+      const preset = PRESETS.find(p => p.id === presetParam);
+      if (preset) {
+        setStone(preset.stone);
+        setShape(preset.shape);
+        setProductType(preset.productType);
+        setBaseType(preset.baseType);
+        if (preset.shape === 'round' && preset.dimensions.radius) {
+          setDimension('radius', preset.dimensions.radius);
+        } else {
+          setDimension('length', preset.dimensions.length);
+          setDimension('width', preset.dimensions.width);
+        }
+        setDimension('height', preset.dimensions.height);
+        setPhase('configurator');
+      }
+      return;
+    }
+
+    // If no params, always start at configurator (step 1)
     if (!buildCode && !styleParam && !typeParam) {
-      // Only reset to lookbook if coming fresh (not from internal navigation)
+      // Always go to configurator now (no lookbook phase)
       const hasInternalNav = sessionStorage.getItem('atelier-internal-nav');
       if (!hasInternalNav) {
-        setPhase('lookbook');
+        setPhase('configurator');
       }
       return;
     }
@@ -140,14 +163,12 @@ export default function Atelier() {
     if (buildCode) {
       loadConfiguration(buildCode).then(result => {
         if (result.success && result.configuration) {
-          // Restore configuration
           const store = useConfiguratorStore.getState();
           Object.entries(result.configuration).forEach(([key, value]) => {
             if (key in store.config) {
               (store.config as any)[key] = value;
             }
           });
-          // Jump to configurator if loading saved build
           setPhase('configurator');
         }
       });
@@ -164,7 +185,6 @@ export default function Atelier() {
         setStone('travertine');
         setSelectedCollection('terra');
       }
-      // Skip lookbook, go directly to configurator
       setPhase('configurator');
     }
 
@@ -180,23 +200,19 @@ export default function Atelier() {
       } else if (typeLower === 'side' || typeLower === 'bijzettafel') {
         setProductType('side-table');
       }
-      // If type is set without style, still skip to configurator
       if (!styleParam) {
         setPhase('configurator');
       }
     }
-  }, [searchParams, setPhase, setStone, setProductType, setSelectedCollection]);
+  }, [searchParams, setPhase, setStone, setShape, setProductType, setDimension, setBaseType, setSelectedCollection]);
 
   const handlePhaseTransition = (newPhase: AtelierPhase) => {
-    // Mark internal navigation
     sessionStorage.setItem('atelier-internal-nav', 'true');
     setPhase(newPhase);
-    // Scroll to top on phase change
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Determine language
-  const isNL = true; // Could be from i18n context
+  const isNL = true;
 
   return (
     <Layout>
@@ -213,7 +229,7 @@ export default function Atelier() {
           {/* Help sidebar */}
           <HelpSidebar isNL={isNL} />
 
-          {/* Phase Content */}
+          {/* Phase Content - Now only 2 phases */}
           <AnimatePresence mode="wait">
             <motion.div
               key={phase}
@@ -222,16 +238,9 @@ export default function Atelier() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {phase === 'lookbook' && (
-                <LookbookPhase 
-                  onContinue={() => handlePhaseTransition('configurator')}
-                  isNL={true}
-                />
-              )}
-
               {phase === 'configurator' && (
                 <ConfiguratorPhase 
-                  onBack={() => handlePhaseTransition('lookbook')}
+                  onBack={handleReset}
                   onContinue={() => handlePhaseTransition('dossier')}
                   isNL={true}
                 />

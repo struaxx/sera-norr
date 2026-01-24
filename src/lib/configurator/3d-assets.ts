@@ -234,6 +234,20 @@ export function getMaterialConfig(
       normalScale: 0.9,
       aoIntensity: 0.5,
     },
+    biancoCarrara: {
+      color: '#F0F0F0',
+      baseRoughness: 0.35,
+      metalness: 0.02,
+      normalScale: 0.85,
+      aoIntensity: 0.55,
+    },
+    emperadorDark: {
+      color: '#3D2B1F',
+      baseRoughness: 0.45,
+      metalness: 0.02,
+      normalScale: 1.0,
+      aoIntensity: 0.7,
+    },
     custom: {
       color: '#9CA3AF',
       baseRoughness: 0.5,

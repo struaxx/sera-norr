@@ -96,9 +96,11 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!contact.name || !contact.email) {
+    // Validate required fields: naam, email, postcode, telefoon
+    if (!contact.name || !contact.email || !contact.location || !contact.phone) {
       toast({
-        title: isNL ? 'Vul uw gegevens in' : 'Enter your details',
+        title: isNL ? 'Vul alle verplichte velden in' : 'Fill in all required fields',
+        description: isNL ? 'Naam, email, postcode en telefoon zijn verplicht' : 'Name, email, postcode and phone are required',
         variant: 'destructive',
       });
       return;
@@ -155,7 +157,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         className="text-center max-w-2xl mx-auto"
       >
         <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-4 block">
-          {isNL ? 'Stap 3 van 3' : 'Step 3 of 3'}
+          {isNL ? 'Stap 2 van 2' : 'Step 2 of 2'}
         </span>
         <h1 className="text-3xl md:text-4xl font-serif mb-4">
           {isNL ? 'Uw Project Dossier' : 'Your Project Dossier'}
@@ -297,7 +299,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
             <TrustCard 
               icon={<Truck className="w-5 h-5" />}
               title={isNL ? 'Bezorging' : 'Delivery'}
-              value={isNL ? 'White-glove' : 'White-glove'}
+              value={isNL ? 'Met zorg' : 'White-glove'}
             />
             <TrustCard 
               icon={<MapPin className="w-5 h-5" />}
@@ -370,23 +372,25 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </div>
 
                 <div>
-                  <Label htmlFor="phone">{isNL ? 'Telefoon' : 'Phone'}</Label>
+                  <Label htmlFor="phone">{isNL ? 'Telefoon' : 'Phone'} *</Label>
                   <Input 
                     id="phone"
                     type="tel"
                     value={contact.phone}
                     onChange={(e) => setContact(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="+31 6 12345678"
+                    required
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="location">{isNL ? 'Locatie / Postcode' : 'Location / Postcode'}</Label>
+                  <Label htmlFor="location">{isNL ? 'Postcode / Land' : 'Postcode / Country'} *</Label>
                   <Input 
                     id="location"
                     value={contact.location}
                     onChange={(e) => setContact(prev => ({ ...prev, location: e.target.value }))}
-                    placeholder={isNL ? 'Voor bezorgkosten berekening' : 'For delivery cost calculation'}
+                    placeholder={isNL ? 'bijv. 1017 Amsterdam' : 'e.g. 1017 Amsterdam'}
+                    required
                   />
                 </div>
 
