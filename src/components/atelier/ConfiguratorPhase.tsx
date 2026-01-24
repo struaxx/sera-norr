@@ -14,7 +14,7 @@ import {
   ProductTypeSelector 
 } from '@/components/configurator/ShapeSelector';
 import { DimensionSliders } from '@/components/configurator/DimensionSliders';
-import { StoneSelector, FinishSelector } from '@/components/configurator/StoneSelector';
+import { StoneSelectorV2, FinishSelector } from '@/components/configurator/StoneSelectorV2';
 import { EdgeProfileSelector, BaseSelector } from '@/components/configurator/EdgeBaseSelector';
 import { ExtrasSelector } from '@/components/configurator/ExtrasSelector';
 import { StickyDossier } from '@/components/configurator/StickyDossier';
@@ -182,12 +182,12 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
-          {/* Stone */}
+          {/* Stone - Full 82-stone library */}
           <ConfigPanel 
             title={isNL ? 'Steensoort' : 'Stone type'}
             step={4}
           >
-            <StoneSelector 
+            <StoneSelectorV2 
               value={config.stone}
               onChange={(stone) => useConfiguratorStore.getState().setStone(stone)}
               isNL={isNL}

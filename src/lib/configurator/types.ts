@@ -5,8 +5,8 @@
 // Shape Types
 export type TableShape = 'rectangular' | 'oval' | 'round' | 'organic';
 
-// Stone Types
-export type StoneType = 'travertine' | 'calacattaViola' | 'neroMarquina' | 'verdeAlpi' | 'biancoCarrara' | 'emperadorDark' | 'custom';
+// Stone Types - Legacy types plus extended library support
+export type StoneType = 'travertine' | 'calacattaViola' | 'neroMarquina' | 'verdeAlpi' | 'biancoCarrara' | 'emperadorDark' | 'custom' | (string & {});
 
 // Finish Types
 export type FinishType = 'honed' | 'polished' | 'matte';
