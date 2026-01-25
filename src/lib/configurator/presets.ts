@@ -23,13 +23,13 @@ export interface ConfiguratorPreset {
 
 export const PRESETS: ConfiguratorPreset[] = [
   {
-    id: 'viola-oval-cylinder-200',
+    id: 'viola-ovale-cylinder-200',
     name: { 
-      nl: 'Viola Oval Cylinder 200', 
+      nl: 'Viola Ovale Cylinder 200', 
       en: 'Viola Oval Cylinder 200' 
     },
     stone: 'calacattaViola',
-    shape: 'oval',
+    shape: 'ovale',
     productType: 'dining-table',
     baseType: 'modern', // Cylindrical = modern steel
     dimensions: {
@@ -58,13 +58,13 @@ export const PRESETS: ConfiguratorPreset[] = [
     priceFrom: 6200,
   },
   {
-    id: 'nero-oval-block-220',
+    id: 'nero-ellips-block-220',
     name: { 
-      nl: 'Nero Oval Block 220', 
-      en: 'Nero Oval Block 220' 
+      nl: 'Nero Ellips Block 220', 
+      en: 'Nero Ellipse Block 220' 
     },
     stone: 'neroMarquina',
-    shape: 'oval',
+    shape: 'ellips',
     productType: 'dining-table',
     baseType: 'architectural', // Pedestal Block = architectural
     dimensions: {
@@ -111,13 +111,13 @@ export const PRESETS: ConfiguratorPreset[] = [
     priceFrom: 9200,
   },
   {
-    id: 'tiramisu-oval-block-240',
+    id: 'tiramisu-ovale-block-240',
     name: { 
-      nl: 'Tiramisu Oval Block 240', 
+      nl: 'Tiramisu Ovale Block 240', 
       en: 'Tiramisu Oval Block 240' 
     },
     stone: 'travertine',
-    shape: 'oval',
+    shape: 'ovale',
     productType: 'dining-table',
     baseType: 'architectural',
     dimensions: {
@@ -146,13 +146,13 @@ export const PRESETS: ConfiguratorPreset[] = [
     priceFrom: 6800,
   },
   {
-    id: 'verde-oval-cone-200',
+    id: 'verde-ellips-cone-200',
     name: { 
-      nl: 'Verde Oval Cone 200', 
-      en: 'Verde Oval Cone 200' 
+      nl: 'Verde Ellips Cone 200', 
+      en: 'Verde Ellipse Cone 200' 
     },
     stone: 'verdeAlpi',
-    shape: 'oval',
+    shape: 'ellips',
     productType: 'dining-table',
     baseType: 'monolith',
     dimensions: {

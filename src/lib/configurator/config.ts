@@ -109,35 +109,35 @@ export const FINISHES: FinishConfig[] = [
   },
 ];
 
-// Edge Profile Configuration
+// Edge Profile Configuration - Updated for new shapes
 export const EDGE_PROFILES: EdgeProfileConfig[] = [
   {
     id: 'straight',
     name: { nl: 'Recht', en: 'Straight' },
     icon: '▬',
     priceMultiplier: 1.0,
-    compatibleShapes: ['rectangular', 'oval', 'round', 'organic'],
+    compatibleShapes: ['ellips', 'ovale', 'round', 'corner', 'cut-corner'],
   },
   {
     id: 'beveled',
     name: { nl: 'Afgeschuind', en: 'Beveled' },
     icon: '◢',
     priceMultiplier: 1.1,
-    compatibleShapes: ['rectangular', 'oval', 'round'],
+    compatibleShapes: ['ellips', 'ovale', 'round', 'corner', 'cut-corner'],
   },
   {
     id: 'rounded',
     name: { nl: 'Afgerond', en: 'Rounded' },
     icon: '◠',
     priceMultiplier: 1.15,
-    compatibleShapes: ['rectangular', 'oval', 'round', 'organic'],
+    compatibleShapes: ['ellips', 'ovale', 'round', 'corner', 'cut-corner'],
   },
   {
     id: 'bullnose',
     name: { nl: 'Bullnose', en: 'Bullnose' },
     icon: '⌓',
     priceMultiplier: 1.25,
-    compatibleShapes: ['rectangular', 'oval', 'round'],
+    compatibleShapes: ['ellips', 'ovale', 'round', 'corner', 'cut-corner'],
   },
 ];
 
@@ -176,52 +176,110 @@ export const BASES: BaseConfig[] = [
   },
 ];
 
-// Product Type Configuration
+// Product Type Configuration - Updated for new shapes
 export const PRODUCT_TYPES: ProductTypeConfig[] = [
   {
     id: 'dining-table',
     name: { nl: 'Eettafel', en: 'Dining Table' },
     icon: '🍽️',
-    defaultDimensions: { length: 200, width: 100, height: 75, thickness: 4 },
-    compatibleShapes: ['rectangular', 'oval', 'round', 'organic'],
+    defaultDimensions: { length: 200, width: 100, height: 75, thickness: 2 },
+    compatibleShapes: ['ellips', 'ovale', 'round', 'corner', 'cut-corner'],
   },
   {
     id: 'coffee-table',
     name: { nl: 'Salontafel', en: 'Coffee Table' },
     icon: '☕',
-    defaultDimensions: { length: 120, width: 70, height: 40, thickness: 3 },
-    compatibleShapes: ['rectangular', 'oval', 'round', 'organic'],
+    defaultDimensions: { length: 120, width: 70, height: 40, thickness: 2 },
+    compatibleShapes: ['ellips', 'ovale', 'round', 'corner', 'cut-corner'],
   },
   {
     id: 'console',
     name: { nl: 'Console', en: 'Console' },
     icon: '🪞',
-    defaultDimensions: { length: 140, width: 40, height: 85, thickness: 3 },
-    compatibleShapes: ['rectangular', 'oval'],
+    defaultDimensions: { length: 140, width: 40, height: 85, thickness: 2 },
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
   },
   {
     id: 'side-table',
     name: { nl: 'Bijzettafel', en: 'Side Table' },
     icon: '🛋️',
     defaultDimensions: { length: 50, width: 50, height: 55, thickness: 2 },
-    compatibleShapes: ['rectangular', 'round', 'organic'],
+    compatibleShapes: ['round', 'corner', 'cut-corner'],
   },
   {
     id: 'desk',
     name: { nl: 'Bureau', en: 'Desk' },
     icon: '💼',
-    defaultDimensions: { length: 160, width: 80, height: 75, thickness: 3 },
-    compatibleShapes: ['rectangular'],
+    defaultDimensions: { length: 160, width: 80, height: 75, thickness: 2 },
+    compatibleShapes: ['corner', 'cut-corner'],
   },
 ];
 
-// Shape Configuration
-export const SHAPES: { id: TableShape; name: { nl: string; en: string }; icon: string }[] = [
-  { id: 'rectangular', name: { nl: 'Rechthoek', en: 'Rectangular' }, icon: '▬' },
-  { id: 'oval', name: { nl: 'Ovaal', en: 'Oval' }, icon: '⬭' },
-  { id: 'round', name: { nl: 'Rond', en: 'Round' }, icon: '●' },
-  { id: 'organic', name: { nl: 'Organisch', en: 'Organic' }, icon: '◯' },
+// Shape Configuration - 5 new shapes (no more organic)
+export const SHAPES: { id: TableShape; name: { nl: string; en: string }; icon: string; description?: { nl: string; en: string } }[] = [
+  { 
+    id: 'ellips', 
+    name: { nl: 'Ellips', en: 'Ellipse' }, 
+    icon: '⬬',
+    description: { nl: 'Zacht afgeronde ellipsvorm', en: 'Soft rounded ellipse shape' }
+  },
+  { 
+    id: 'ovale', 
+    name: { nl: 'Ovale', en: 'Oval' }, 
+    icon: '⬭',
+    description: { nl: 'Klassieke ovale vorm', en: 'Classic oval shape' }
+  },
+  { 
+    id: 'round', 
+    name: { nl: 'Round', en: 'Round' }, 
+    icon: '●',
+    description: { nl: 'Perfect cirkelvormig', en: 'Perfect circular' }
+  },
+  { 
+    id: 'corner', 
+    name: { nl: 'Corner', en: 'Corner' }, 
+    icon: '▬',
+    description: { nl: 'Rechthoek met scherpe hoeken', en: 'Rectangle with sharp corners' }
+  },
+  { 
+    id: 'cut-corner', 
+    name: { nl: 'Cut Corner', en: 'Cut Corner' }, 
+    icon: '⬡',
+    description: { nl: 'Rechthoek met afgeschuinde hoeken', en: 'Rectangle with chamfered corners' }
+  },
 ];
+
+// Size presets per shape (replaces sliders)
+export const SHAPE_SIZE_PRESETS: Record<TableShape, { length: number; width: number; radius?: number; label: string }[]> = {
+  'ellips': [
+    { length: 200, width: 100, label: '200×100' },
+    { length: 220, width: 100, label: '220×100' },
+    { length: 240, width: 110, label: '240×110' },
+    { length: 260, width: 110, label: '260×110' },
+  ],
+  'ovale': [
+    { length: 200, width: 100, label: '200×100' },
+    { length: 220, width: 100, label: '220×100' },
+    { length: 240, width: 110, label: '240×110' },
+    { length: 260, width: 110, label: '260×110' },
+  ],
+  'round': [
+    { length: 120, width: 120, radius: 60, label: 'Ø120' },
+    { length: 130, width: 130, radius: 65, label: 'Ø130' },
+    { length: 150, width: 150, radius: 75, label: 'Ø150' },
+    { length: 160, width: 160, radius: 80, label: 'Ø160' },
+  ],
+  'corner': [
+    { length: 200, width: 100, label: '200×100' },
+    { length: 220, width: 100, label: '220×100' },
+    { length: 240, width: 100, label: '240×100' },
+  ],
+  'cut-corner': [
+    { length: 200, width: 100, label: '200×100' },
+    { length: 220, width: 100, label: '220×100' },
+    { length: 240, width: 100, label: '240×100' },
+  ],
+};
 
 // Dimension constraints per product type
 export const DIMENSION_CONSTRAINTS: Record<ProductType, DimensionConstraints> = {

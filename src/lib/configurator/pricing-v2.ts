@@ -25,25 +25,29 @@ export const STONE_BASE_PRICES: Record<string, number> = {
 
 // Size uplift factors (relative to 200x100 base)
 export const SIZE_UPLIFTS: Record<string, number> = {
-  // Oval
-  'oval-200x100': 1.0,
-  'oval-220x100': 1.12,
-  'oval-240x110': 1.28,
-  'oval-260x110': 1.40,
+  // Ellips
+  'ellips-200x100': 1.0,
+  'ellips-220x100': 1.12,
+  'ellips-240x110': 1.28,
+  'ellips-260x110': 1.40,
+  // Ovale
+  'ovale-200x100': 1.0,
+  'ovale-220x100': 1.12,
+  'ovale-240x110': 1.28,
+  'ovale-260x110': 1.40,
   // Round
   'round-120': 0.72,
   'round-130': 0.85,
   'round-150': 1.0,
   'round-160': 1.15,
-  // Rectangle
-  'rect-200x100': 1.0,
-  'rect-220x100': 1.10,
-  'rect-240x100': 1.20,
-  // Organic (same as oval)
-  'organic-200x100': 1.05,
-  'organic-220x100': 1.18,
-  'organic-240x110': 1.35,
-  'organic-260x110': 1.48,
+  // Corner (baseline)
+  'corner-200x100': 1.0,
+  'corner-220x100': 1.10,
+  'corner-240x100': 1.20,
+  // Cut-corner (small uplift for extra machining)
+  'cut-corner-200x100': 1.05,
+  'cut-corner-220x100': 1.15,
+  'cut-corner-240x100': 1.26,
 };
 
 // Thickness uplift
@@ -152,7 +156,7 @@ function getSizeKey(config: ConfiguratorState): string {
     return `round-${diameter}`;
   }
   
-  return `${shape === 'organic' ? 'organic' : shape}-${dimensions.length}x${dimensions.width}`;
+  return `${shape}-${dimensions.length}x${dimensions.width}`;
 }
 
 /**
@@ -175,14 +179,14 @@ export function formatVanafPrice(price: number, locale: string = 'nl-NL'): strin
 export function getModularLeadTime(config: ConfiguratorState): { min: number; max: number } {
   const stone = getStoneById(config.stone);
   const isIcon = stone?.tier === 'icon';
-  const isOrganic = config.shape === 'organic';
+  const isCutCorner = config.shape === 'cut-corner';
   const isCustom = config.stone === 'custom';
   
   if (isCustom) {
     return { min: 16, max: 24 };
   }
   
-  if (isIcon || isOrganic) {
+  if (isIcon || isCutCorner) {
     return { min: 14, max: 18 };
   }
   

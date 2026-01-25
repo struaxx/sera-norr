@@ -97,7 +97,7 @@ interface ConfiguratorStore {
 const defaultConfig: ConfiguratorState = {
   currentStep: 0,
   productType: 'dining-table',
-  shape: 'oval',
+  shape: 'ovale', // Default to classic oval
   dimensions: {
     length: 200,
     width: 100,

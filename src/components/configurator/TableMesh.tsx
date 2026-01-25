@@ -59,19 +59,50 @@ function getStoneMaterialProps(stoneId: string, finishId: FinishType) {
   };
 }
 
-// Separate component for textured table top
+// Create cut-corner (chamfered) geometry
+function createCutCornerShape(width: number, depth: number, chamferSize: number = 0.15): THREE.Shape {
+  const shape = new THREE.Shape();
+  const hw = width / 2;
+  const hd = depth / 2;
+  const chamfer = Math.min(hw, hd) * chamferSize;
+  
+  // Start from top-right, going counter-clockwise
+  shape.moveTo(hw - chamfer, hd);
+  shape.lineTo(-hw + chamfer, hd);
+  shape.lineTo(-hw, hd - chamfer);
+  shape.lineTo(-hw, -hd + chamfer);
+  shape.lineTo(-hw + chamfer, -hd);
+  shape.lineTo(hw - chamfer, -hd);
+  shape.lineTo(hw, -hd + chamfer);
+  shape.lineTo(hw, hd - chamfer);
+  shape.closePath();
+  
+  return shape;
+}
+
+// Create ellipse shape
+function createEllipseShape(width: number, depth: number): THREE.Shape {
+  const shape = new THREE.Shape();
+  const hw = width / 2;
+  const hd = depth / 2;
+  
+  // Create ellipse with bezier curves
+  shape.absellipse(0, 0, hw, hd, 0, Math.PI * 2, false, 0);
+  
+  return shape;
+}
+
+// Separate component for textured table top with proper geometry
 function TexturedTableTop({ 
   texturePath, 
   materialProps, 
   shape, 
   dimensions,
-  topScale,
 }: { 
   texturePath: string;
   materialProps: { color: string; roughness: number; metalness: number };
   shape: TableShape;
   dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
-  topScale: [number, number, number];
 }) {
   const w = dimensions.length * SCALE;
   const d = dimensions.width * SCALE;
@@ -89,7 +120,6 @@ function TexturedTableTop({
     texture.colorSpace = THREE.SRGBColorSpace;
     
     // Scale texture to fit table dimensions realistically
-    // Assume texture represents ~60cm of real stone
     const textureScale = 0.6;
     texture.repeat.set(
       (dimensions.length / 100) / textureScale,
@@ -97,28 +127,68 @@ function TexturedTableTop({
     );
   }, [texture, dimensions.length, dimensions.width]);
 
-  const topGeometry = useMemo(() => {
+  const geometry = useMemo(() => {
+    const extrudeSettings = {
+      depth: t,
+      bevelEnabled: false,
+    };
+
     switch (shape) {
       case 'round':
-        return <cylinderGeometry args={[r, r, t, 64]} />;
-      case 'oval':
-        return <cylinderGeometry args={[1, 1, t, 64]} />;
-      case 'organic':
-        return <boxGeometry args={[w, t, d]} />;
-      case 'rectangular':
+        // Perfect circle
+        return new THREE.CylinderGeometry(r, r, t, 64);
+      
+      case 'ellips':
+        // Soft ellipse - use ExtrudeGeometry for proper UV mapping
+        const ellipseShape = createEllipseShape(w, d);
+        return new THREE.ExtrudeGeometry(ellipseShape, extrudeSettings);
+      
+      case 'ovale':
+        // Classic oval - slightly different eccentricity
+        // Using cylinder with oval scaling for smooth appearance
+        return new THREE.CylinderGeometry(1, 1, t, 64);
+      
+      case 'cut-corner':
+        // Rectangle with chamfered corners
+        const cutCornerShape = createCutCornerShape(w, d, 0.12);
+        return new THREE.ExtrudeGeometry(cutCornerShape, extrudeSettings);
+      
+      case 'corner':
       default:
-        return <boxGeometry args={[w, t, d]} />;
+        // Sharp rectangle
+        return new THREE.BoxGeometry(w, t, d);
     }
   }, [shape, w, d, t, r]);
 
+  // Calculate position and scale based on shape
+  const getPositionAndScale = (): { position: [number, number, number]; scale: [number, number, number]; rotation: [number, number, number] } => {
+    switch (shape) {
+      case 'round':
+        return { position: [0, h - t / 2, 0], scale: [1, 1, 1], rotation: [0, 0, 0] };
+      case 'ovale':
+        // Scale cylinder to create oval
+        return { position: [0, h - t / 2, 0], scale: [w / 2, 1, d / 2], rotation: [0, 0, 0] };
+      case 'ellips':
+      case 'cut-corner':
+        // Extruded shapes need rotation to be horizontal
+        return { position: [0, h - t, 0], scale: [1, 1, 1], rotation: [-Math.PI / 2, 0, 0] };
+      case 'corner':
+      default:
+        return { position: [0, h - t / 2, 0], scale: [1, 1, 1], rotation: [0, 0, 0] };
+    }
+  };
+
+  const { position, scale, rotation } = getPositionAndScale();
+
   return (
     <mesh 
-      position={[0, h - t / 2, 0]} 
-      scale={topScale}
+      position={position} 
+      scale={scale}
+      rotation={rotation}
       castShadow 
       receiveShadow
+      geometry={geometry}
     >
-      {topGeometry}
       <meshStandardMaterial
         map={texture}
         roughness={materialProps.roughness}
@@ -266,9 +336,6 @@ function TexturedCylinderBase({
     </mesh>
   );
 }
-// Note: ColorConeBase, ColorPedestalBase, ColorCylinderBase, and ColorTableTop 
-// have been removed as we now always use seamless textures via get3DTexture()
-// which provides a fallback texture when no specific texture is available.
 
 export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensions }: TableMeshProps) {
   const groupRef = useRef<THREE.Group>(null);
@@ -280,16 +347,7 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
 
   const stoneInfo = useMemo(() => getStoneById(stone), [stone]);
 
-  const w = dimensions.length * SCALE;
-  const d = dimensions.width * SCALE;
-  const h = dimensions.height * SCALE;
-  const t = dimensions.thickness * SCALE;
-  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
-
-  const topScale = shape === 'oval' ? [w / 2, 1, d / 2] as [number, number, number] : [1, 1, 1] as [number, number, number];
-
   // Base rendering - all base types use stone texture
-  // texturePath is always available via get3DTexture fallback
   const renderBase = () => {
     const texturePath = materialProps.texturePath;
 
@@ -330,40 +388,6 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
     }
   };
 
-  const hasVeining = stoneInfo?.family === 'marble' || stoneInfo?.characterTags.includes('veined');
-  
-  const getVeiningColor = () => {
-    if (!stoneInfo) return '#666666';
-    
-    const isDark = stoneInfo.characterTags.includes('dramatic') || 
-                   stoneInfo.swatchColor.toLowerCase().includes('1a') ||
-                   stoneInfo.swatchColor.toLowerCase().includes('2d');
-    
-    if (isDark) return '#4A4A4A';
-    
-    if (stoneInfo.family === 'marble') {
-      if (stoneInfo.name.toLowerCase().includes('viola')) return '#8B6B8B';
-      if (stoneInfo.name.toLowerCase().includes('green') || stoneInfo.name.toLowerCase().includes('verde')) return '#2A3A2A';
-      return '#888888';
-    }
-    
-    return '#A09080';
-  };
-
-  const topGeometry = useMemo(() => {
-    switch (shape) {
-      case 'round':
-        return <cylinderGeometry args={[r, r, t, 64]} />;
-      case 'oval':
-        return <cylinderGeometry args={[1, 1, t, 64]} />;
-      case 'organic':
-        return <boxGeometry args={[w, t, d]} />;
-      case 'rectangular':
-      default:
-        return <boxGeometry args={[w, t, d]} />;
-    }
-  }, [shape, w, d, t, r]);
-
   return (
     <group ref={groupRef} position={[0, -0.5, 0]}>
       {/* Table Top - always with seamless texture */}
@@ -372,7 +396,6 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
         materialProps={materialProps}
         shape={shape}
         dimensions={dimensions}
-        topScale={topScale}
       />
 
       {/* Base - same stone texture as top */}

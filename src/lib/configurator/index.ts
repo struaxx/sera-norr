@@ -32,6 +32,7 @@ export {
   BASES,
   PRODUCT_TYPES,
   SHAPES,
+  SHAPE_SIZE_PRESETS,
   DIMENSION_CONSTRAINTS,
   EXTRAS_PRICING,
   BASE_PRICE_PER_SQM,
@@ -117,11 +118,11 @@ export {
   QA_TOP_10_STONES,
 } from './texture-resolver';
 
-// Default/Initial State - Updated with 20mm default thickness
+// Default/Initial State - Updated with 20mm default thickness and new shapes
 export const INITIAL_CONFIGURATOR_STATE: import('./types').ConfiguratorState = {
   currentStep: 0,
   productType: 'dining-table',
-  shape: 'oval',
+  shape: 'ovale', // Default to classic oval
   dimensions: {
     length: 200,
     width: 100,
