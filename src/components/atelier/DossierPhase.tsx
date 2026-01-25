@@ -304,8 +304,8 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
             />
             <TrustCard 
               icon={<MapPin className="w-5 h-5" />}
-              title={isNL ? 'Materiaal' : 'Material'}
-              value={isNL ? 'Italië' : 'Italy'}
+              title={isNL ? 'Oorsprong' : 'Origin'}
+              value={isNL ? 'Ontworpen in NL' : 'Designed in NL'}
             />
           </div>
 
