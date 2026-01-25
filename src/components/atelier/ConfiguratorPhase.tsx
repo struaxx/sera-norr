@@ -135,11 +135,11 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             
             {/* Trust badge under viewer */}
             <div className="mt-4 flex items-center justify-center gap-6 text-xs text-muted-foreground">
-              <span>🇮🇹 Italiaans vakmanschap</span>
+              <span>{isNL ? 'Handgemaakt op bestelling' : 'Handmade to order'}</span>
               <span>•</span>
-              <span>🇳🇱 Ontworpen in NL</span>
+              <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
               <span>•</span>
-              <span>2 jaar garantie</span>
+              <span>{isNL ? '2 jaar garantie' : '2-year warranty'}</span>
             </div>
           </motion.div>
         </div>
