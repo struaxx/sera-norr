@@ -57,6 +57,20 @@ export {
   type StoneLibraryEntry,
 } from './stone-library';
 
+// Leg Library (NEW - Meraki-style base selection)
+export {
+  LEG_LIBRARY,
+  LEG_CATEGORY_LABELS,
+  getLegById,
+  getLegsByCategory,
+  getActiveLegs,
+  isLegCompatible,
+  getLegPriceUplift,
+  mapLegToLegacyBase,
+  type LegCategory,
+  type LegStyle,
+} from './leg-library';
+
 // Pricing Engine (Legacy)
 export {
   calculatePriceEstimate,
@@ -133,7 +147,8 @@ export const INITIAL_CONFIGURATOR_STATE: import('./types').ConfiguratorState = {
   stone: 'tiramisu', // Default to signature travertine
   finish: 'honed',
   edgeProfile: 'straight',
-  baseType: 'modern',
+  baseType: 'modern', // Legacy
+  legStyle: 'pillar-leg', // New leg library default
   extras: {
     sealer: false,
     delivery: true,

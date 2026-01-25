@@ -32,6 +32,7 @@ import {
   BASES,
 } from '@/lib/configurator';
 import { getStoneById } from '@/lib/configurator/stone-library';
+import { getLegById } from '@/lib/configurator/leg-library';
 import { calculateModularPrice, formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
 import { requestQuote } from '@/lib/configurator/api';
 
@@ -67,7 +68,10 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const shapeName = SHAPES.find(s => s.id === config.shape)?.name[isNL ? 'nl' : 'en'];
   const finishName = FINISHES.find(f => f.id === config.finish)?.name[isNL ? 'nl' : 'en'];
   const edgeName = EDGE_PROFILES.find(e => e.id === config.edgeProfile)?.name[isNL ? 'nl' : 'en'];
-  const baseName = BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'];
+  
+  // Use new leg library if legStyle is set, otherwise fall back to legacy BASES
+  const leg = config.legStyle ? getLegById(config.legStyle) : null;
+  const baseName = leg?.name || BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'];
 
   const dimensionString = config.shape === 'round' && config.dimensions.radius
     ? `⌀${config.dimensions.radius * 2} × H${config.dimensions.height} cm`
