@@ -152,30 +152,118 @@ function TexturedConeBase({
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.colorSpace = THREE.SRGBColorSpace;
-    
-    // Scale for base
-    const textureScale = 0.5;
-    texture.repeat.set(2, 1.5);
+    texture.repeat.set(2, 2);
   }, [texture]);
 
-  // Calculate cone dimensions based on table shape
-  const topRadius = shape === 'round' ? r * 0.55 : Math.min(w, d) * 0.35;
-  const bottomRadius = shape === 'round' ? r * 0.35 : Math.min(w, d) * 0.22;
+  // Calculate cone dimensions - larger and more prominent
+  const topRadius = shape === 'round' ? r * 0.6 : Math.min(w, d) * 0.4;
+  const bottomRadius = shape === 'round' ? r * 0.38 : Math.min(w, d) * 0.25;
 
   return (
     <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[topRadius, bottomRadius, legHeight, 48]} />
+      <cylinderGeometry args={[topRadius, bottomRadius, legHeight, 64]} />
       <meshStandardMaterial
         map={texture}
         roughness={materialProps.roughness}
         metalness={materialProps.metalness}
-        envMapIntensity={1.2}
+        envMapIntensity={1.4}
       />
     </mesh>
   );
 }
 
-// Color-only cone base
+// Textured pedestal base - solid stone block with texture
+function TexturedPedestalBase({ 
+  texturePath, 
+  materialProps, 
+  dimensions,
+  shape,
+}: { 
+  texturePath: string;
+  materialProps: { color: string; roughness: number; metalness: number };
+  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
+  shape: TableShape;
+}) {
+  const w = dimensions.length * SCALE;
+  const d = dimensions.width * SCALE;
+  const h = dimensions.height * SCALE;
+  const t = dimensions.thickness * SCALE;
+  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
+  const legHeight = h - t;
+
+  // Load texture
+  const texture = useTexture(texturePath);
+  
+  useMemo(() => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.repeat.set(1.5, 2);
+  }, [texture]);
+
+  // Larger, more prominent pedestal
+  const blockWidth = shape === 'round' ? r * 0.75 : w * 0.35;
+  const blockDepth = shape === 'round' ? r * 0.75 : d * 0.55;
+
+  return (
+    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
+      <boxGeometry args={[blockWidth, legHeight, blockDepth]} />
+      <meshStandardMaterial
+        map={texture}
+        roughness={materialProps.roughness}
+        metalness={materialProps.metalness}
+        envMapIntensity={1.4}
+      />
+    </mesh>
+  );
+}
+
+// Textured cylinder base - modern cylindrical stone
+function TexturedCylinderBase({ 
+  texturePath, 
+  materialProps, 
+  dimensions,
+  shape,
+}: { 
+  texturePath: string;
+  materialProps: { color: string; roughness: number; metalness: number };
+  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
+  shape: TableShape;
+}) {
+  const w = dimensions.length * SCALE;
+  const d = dimensions.width * SCALE;
+  const h = dimensions.height * SCALE;
+  const t = dimensions.thickness * SCALE;
+  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
+  const legHeight = h - t;
+
+  // Load texture
+  const texture = useTexture(texturePath);
+  
+  useMemo(() => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.repeat.set(2, 2);
+  }, [texture]);
+
+  // Single central cylinder
+  const cylinderRadius = shape === 'round' ? r * 0.45 : Math.min(w, d) * 0.28;
+
+  return (
+    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
+      <cylinderGeometry args={[cylinderRadius, cylinderRadius, legHeight, 64]} />
+      <meshStandardMaterial
+        map={texture}
+        roughness={materialProps.roughness}
+        metalness={materialProps.metalness}
+        envMapIntensity={1.4}
+      />
+    </mesh>
+  );
+}
+
+// Color-only cone base (fallback)
 function ColorConeBase({ 
   materialProps, 
   dimensions,
@@ -192,18 +280,82 @@ function ColorConeBase({
   const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
   const legHeight = h - t;
 
-  // Calculate cone dimensions based on table shape
-  const topRadius = shape === 'round' ? r * 0.55 : Math.min(w, d) * 0.35;
-  const bottomRadius = shape === 'round' ? r * 0.35 : Math.min(w, d) * 0.22;
+  const topRadius = shape === 'round' ? r * 0.6 : Math.min(w, d) * 0.4;
+  const bottomRadius = shape === 'round' ? r * 0.38 : Math.min(w, d) * 0.25;
 
   return (
     <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[topRadius, bottomRadius, legHeight, 48]} />
+      <cylinderGeometry args={[topRadius, bottomRadius, legHeight, 64]} />
       <meshStandardMaterial
         color={materialProps.color}
         roughness={materialProps.roughness}
         metalness={materialProps.metalness}
-        envMapIntensity={1.2}
+        envMapIntensity={1.4}
+      />
+    </mesh>
+  );
+}
+
+// Color-only pedestal base (fallback)
+function ColorPedestalBase({ 
+  materialProps, 
+  dimensions,
+  shape,
+}: { 
+  materialProps: { color: string; roughness: number; metalness: number };
+  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
+  shape: TableShape;
+}) {
+  const w = dimensions.length * SCALE;
+  const d = dimensions.width * SCALE;
+  const h = dimensions.height * SCALE;
+  const t = dimensions.thickness * SCALE;
+  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
+  const legHeight = h - t;
+
+  const blockWidth = shape === 'round' ? r * 0.75 : w * 0.35;
+  const blockDepth = shape === 'round' ? r * 0.75 : d * 0.55;
+
+  return (
+    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
+      <boxGeometry args={[blockWidth, legHeight, blockDepth]} />
+      <meshStandardMaterial
+        color={materialProps.color}
+        roughness={materialProps.roughness}
+        metalness={materialProps.metalness}
+        envMapIntensity={1.4}
+      />
+    </mesh>
+  );
+}
+
+// Color-only cylinder base (fallback)
+function ColorCylinderBase({ 
+  materialProps, 
+  dimensions,
+  shape,
+}: { 
+  materialProps: { color: string; roughness: number; metalness: number };
+  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
+  shape: TableShape;
+}) {
+  const w = dimensions.length * SCALE;
+  const d = dimensions.width * SCALE;
+  const h = dimensions.height * SCALE;
+  const t = dimensions.thickness * SCALE;
+  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
+  const legHeight = h - t;
+
+  const cylinderRadius = shape === 'round' ? r * 0.45 : Math.min(w, d) * 0.28;
+
+  return (
+    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
+      <cylinderGeometry args={[cylinderRadius, cylinderRadius, legHeight, 64]} />
+      <meshStandardMaterial
+        color={materialProps.color}
+        roughness={materialProps.roughness}
+        metalness={materialProps.metalness}
+        envMapIntensity={1.4}
       />
     </mesh>
   );
@@ -277,26 +429,21 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
 
   const topScale = shape === 'oval' ? [w / 2, 1, d / 2] as [number, number, number] : [1, 1, 1] as [number, number, number];
 
-  // Base rendering
+  // Base rendering - all base types use stone texture
   const renderBase = () => {
-    const legHeight = h - t;
-    const legWidth = 0.06;
-    const legInset = 0.1;
+    const hasTexture = !!materialProps.texturePath;
 
     switch (baseType) {
       case 'monolith':
-        // Sculpted Cone - uses same marble texture as tabletop
-        if (materialProps.texturePath) {
-          return (
-            <TexturedConeBase 
-              texturePath={materialProps.texturePath}
-              materialProps={materialProps}
-              dimensions={dimensions}
-              shape={shape}
-            />
-          );
-        }
-        return (
+        // Sculpted Cone - elegant tapered stone base
+        return hasTexture ? (
+          <TexturedConeBase 
+            texturePath={materialProps.texturePath!}
+            materialProps={materialProps}
+            dimensions={dimensions}
+            shape={shape}
+          />
+        ) : (
           <ColorConeBase 
             materialProps={materialProps}
             dimensions={dimensions}
@@ -305,78 +452,38 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
         );
 
       case 'architectural':
-        // Pedestal Block - solid stone block
-        if (shape === 'round') {
-          return (
-            <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-              <boxGeometry args={[r * 0.7, legHeight, r * 0.7]} />
-              <meshStandardMaterial 
-                color={materialProps.color} 
-                roughness={materialProps.roughness}
-                metalness={materialProps.metalness}
-              />
-            </mesh>
-          );
-        }
-        return (
-          <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-            <boxGeometry args={[w * 0.3, legHeight, d * 0.5]} />
-            <meshStandardMaterial 
-              color={materialProps.color} 
-              roughness={materialProps.roughness}
-              metalness={materialProps.metalness}
-            />
-          </mesh>
+        // Pedestal Block - solid rectangular stone base
+        return hasTexture ? (
+          <TexturedPedestalBase 
+            texturePath={materialProps.texturePath!}
+            materialProps={materialProps}
+            dimensions={dimensions}
+            shape={shape}
+          />
+        ) : (
+          <ColorPedestalBase 
+            materialProps={materialProps}
+            dimensions={dimensions}
+            shape={shape}
+          />
         );
 
       case 'modern':
       default:
-        // Cylindrical - modern metal legs
-        if (shape === 'round') {
-          return (
-            <group>
-              {[0, 1, 2, 3].map((i) => {
-                const angle = (i * Math.PI) / 2;
-                const legRadius = r * 0.7;
-                return (
-                  <mesh
-                    key={i}
-                    position={[
-                      Math.cos(angle) * legRadius,
-                      legHeight / 2,
-                      Math.sin(angle) * legRadius,
-                    ]}
-                    castShadow
-                  >
-                    <boxGeometry args={[legWidth, legHeight, legWidth]} />
-                    <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
-                  </mesh>
-                );
-              })}
-            </group>
-          );
-        }
-
-        const positions = [
-          [-w / 2 + legInset, 0, -d / 2 + legInset],
-          [w / 2 - legInset, 0, -d / 2 + legInset],
-          [-w / 2 + legInset, 0, d / 2 - legInset],
-          [w / 2 - legInset, 0, d / 2 - legInset],
-        ];
-
-        return (
-          <group>
-            {positions.map((pos, i) => (
-              <mesh
-                key={i}
-                position={[pos[0], legHeight / 2, pos[2]]}
-                castShadow
-              >
-                <boxGeometry args={[legWidth, legHeight, legWidth]} />
-                <meshStandardMaterial color="#1A1A1A" roughness={0.4} metalness={0.8} />
-              </mesh>
-            ))}
-          </group>
+        // Cylindrical - single stone cylinder base
+        return hasTexture ? (
+          <TexturedCylinderBase 
+            texturePath={materialProps.texturePath!}
+            materialProps={materialProps}
+            dimensions={dimensions}
+            shape={shape}
+          />
+        ) : (
+          <ColorCylinderBase 
+            materialProps={materialProps}
+            dimensions={dimensions}
+            shape={shape}
+          />
         );
     }
   };
