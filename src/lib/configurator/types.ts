@@ -53,8 +53,11 @@ export interface ConfiguratorState {
   finish: FinishType;
   edgeProfile: EdgeProfile;
   
-  // Base
+  // Base (legacy)
   baseType: BaseType;
+  
+  // Leg style (new library)
+  legStyle?: string;
   
   // Extras
   extras: {

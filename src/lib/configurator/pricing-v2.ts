@@ -6,6 +6,7 @@
 import type { ConfiguratorState } from './types';
 import { FINISHES, EDGE_PROFILES, BASES } from './config';
 import { getStoneById, type StoneLibraryEntry } from './stone-library';
+import { getLegPriceUplift } from './leg-library';
 
 // ============================================
 // PRICE CONFIGURATION
@@ -56,7 +57,7 @@ export const THICKNESS_UPLIFTS: Record<number, number> = {
   3: 1.25,  // 30mm premium
 };
 
-// Base type uplifts
+// Base type uplifts (LEGACY - kept for backward compatibility)
 export const BASE_UPLIFTS: Record<string, number> = {
   'modern': 1.0,        // Cylindrical (included)
   'monolith': 1.35,     // Sculpted Cone
@@ -87,6 +88,7 @@ export interface ModularPriceEstimate {
   sizeUplift: number;
   thicknessUplift: number;
   baseUplift: number;
+  legPriceUplift: number; // NEW: Leg-specific flat uplift
   finishUplift: number;
   edgeUplift: number;
   totalMultiplier: number;
@@ -114,8 +116,17 @@ export function calculateModularPrice(config: ConfiguratorState): ModularPriceEs
   // Thickness uplift
   const thicknessUplift = THICKNESS_UPLIFTS[config.dimensions.thickness] || 1.0;
   
-  // Base uplift
-  const baseUplift = BASE_UPLIFTS[config.baseType] || 1.0;
+  // Base/Leg uplift - use new leg library if legStyle is set, otherwise fall back to legacy
+  let baseUplift = 1.0;
+  let legPriceUplift = 0;
+  
+  if (config.legStyle) {
+    // New leg library: flat price uplift
+    legPriceUplift = getLegPriceUplift(config.legStyle);
+  } else {
+    // Legacy: multiplier-based
+    baseUplift = BASE_UPLIFTS[config.baseType] || 1.0;
+  }
   
   // Finish uplift
   const finishUplift = FINISH_UPLIFTS[config.finish] || 1.0;
@@ -123,17 +134,19 @@ export function calculateModularPrice(config: ConfiguratorState): ModularPriceEs
   // Edge uplift
   const edgeUplift = EDGE_UPLIFTS[config.edgeProfile] || 1.0;
   
-  // Total multiplier
+  // Total multiplier (excluding leg flat uplift)
   const totalMultiplier = sizeUplift * thicknessUplift * baseUplift * finishUplift * edgeUplift;
   
-  // Calculate final price
-  const vanafPrice = isCustomStone ? 0 : Math.round((stoneBasePrice * totalMultiplier) / 100) * 100;
+  // Calculate final price: base * multipliers + leg flat uplift
+  const calculatedPrice = isCustomStone ? 0 : (stoneBasePrice * totalMultiplier) + legPriceUplift;
+  const vanafPrice = Math.round(calculatedPrice / 100) * 100;
   
   return {
     stoneBasePrice,
     sizeUplift,
     thicknessUplift,
     baseUplift,
+    legPriceUplift,
     finishUplift,
     edgeUplift,
     totalMultiplier,

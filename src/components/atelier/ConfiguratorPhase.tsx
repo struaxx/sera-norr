@@ -12,9 +12,10 @@ import { useConfiguratorStore } from '@/stores/configurator-store';
 import { ShapeSelector } from '@/components/configurator/ShapeSelector';
 import { DimensionPresets, ThicknessSelector, type DimensionPreset } from '@/components/configurator/DimensionPresets';
 import { StoneSelectorV2, FinishSelector } from '@/components/configurator/StoneSelectorV2';
-import { EdgeProfileSelector, BaseSelector } from '@/components/configurator/EdgeBaseSelector';
+import { EdgeProfileSelector } from '@/components/configurator/EdgeBaseSelector';
+import { LegSelector } from '@/components/configurator/LegSelector';
 import { StickyDossier } from '@/components/configurator/StickyDossier';
-import { 
+import {
   shouldUseFallback, 
   getFallbackPreview,
 } from '@/lib/configurator';
@@ -222,15 +223,17 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
-          {/* Step 7: Base */}
+          {/* Step 7: Leg / Base */}
           <ConfigPanel 
             title={isNL ? 'Onderstel' : 'Base'}
             step={7}
           >
-            <BaseSelector 
-              value={config.baseType}
-              productType={config.productType}
-              onChange={(base) => useConfiguratorStore.getState().setBaseType(base)}
+            <LegSelector 
+              value={config.legStyle || 'pillar-leg'}
+              shape={config.shape}
+              length={config.dimensions.length}
+              diameter={config.shape === 'round' ? (config.dimensions.radius ? config.dimensions.radius * 2 : config.dimensions.length) : undefined}
+              onChange={(legStyle) => useConfiguratorStore.getState().setLegStyle(legStyle)}
               isNL={isNL}
             />
           </ConfigPanel>
@@ -306,6 +309,7 @@ function ConfigPanel({
 
 // Updated Sticky Dossier with "vanaf" pricing
 import { getStoneById } from '@/lib/configurator/stone-library';
+import { getLegById } from '@/lib/configurator/leg-library';
 import { SHAPES, BASES } from '@/lib/configurator/config';
 import type { ModularPriceEstimate } from '@/lib/configurator/pricing-v2';
 import { formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
@@ -320,7 +324,11 @@ interface StickyDossierV2Props {
 function StickyDossierV2({ config, priceEstimate, onRequestQuote, isNL = true }: StickyDossierV2Props) {
   const stone = getStoneById(config.stone);
   const shapeName = SHAPES.find(s => s.id === config.shape)?.name[isNL ? 'nl' : 'en'];
-  const baseName = BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'];
+  
+  // Use new leg library if legStyle is set, otherwise fall back to legacy BASES
+  const leg = config.legStyle ? getLegById(config.legStyle) : null;
+  const baseName = leg?.name || BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'];
+  
   const leadTime = getModularLeadTime(config);
 
   // Dimension string

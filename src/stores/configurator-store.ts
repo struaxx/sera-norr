@@ -65,6 +65,7 @@ interface ConfiguratorStore {
   setFinish: (finish: FinishType) => void;
   setEdgeProfile: (edge: EdgeProfile) => void;
   setBaseType: (base: BaseType) => void;
+  setLegStyle: (legStyle: string) => void;
   setExtra: (key: keyof ConfiguratorState['extras'], value: boolean) => void;
   setContact: (contact: Partial<ConfiguratorState['contact']>) => void;
   
@@ -108,7 +109,8 @@ const defaultConfig: ConfiguratorState = {
   stone: 'tiramisu', // Default to signature travertine
   finish: 'honed',
   edgeProfile: 'straight',
-  baseType: 'modern',
+  baseType: 'modern', // Legacy
+  legStyle: 'pillar-leg', // New leg library default
   extras: {
     sealer: false,
     delivery: true,
@@ -199,6 +201,10 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       
       setBaseType: (base) => set((state) => {
         state.config.baseType = base;
+      }),
+      
+      setLegStyle: (legStyle) => set((state) => {
+        state.config.legStyle = legStyle;
       }),
       
       setExtra: (key, value) => set((state) => {
