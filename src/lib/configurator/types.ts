@@ -3,7 +3,8 @@
 // ============================================
 
 // Shape Types
-export type TableShape = 'rectangular' | 'oval' | 'round' | 'organic';
+// New shape types: ellips, ovale, round, corner, cut-corner
+export type TableShape = 'ellips' | 'ovale' | 'round' | 'corner' | 'cut-corner';
 
 // Stone Types - Legacy types plus extended library support
 export type StoneType = 'travertine' | 'calacattaViola' | 'neroMarquina' | 'verdeAlpi' | 'biancoCarrara' | 'emperadorDark' | 'custom' | (string & {});

@@ -152,12 +152,13 @@ export function validateConfiguration(config: ConfiguratorState, isNL: boolean):
     });
   }
 
-  if (config.shape === 'organic') {
+  // Cut-corner shapes have extra machining
+  if (config.shape === 'cut-corner') {
     warnings.push({
       field: 'shape',
       message: isNL 
-        ? 'Organische vormen worden op maat ontworpen na intake'
-        : 'Organic shapes are custom designed after consultation',
+        ? 'Cut corner vormen hebben extra bewerkingskosten'
+        : 'Cut corner shapes have additional machining costs',
     });
   }
 

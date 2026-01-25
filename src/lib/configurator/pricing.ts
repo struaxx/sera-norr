@@ -25,11 +25,11 @@ export function calculatePriceEstimate(config: ConfiguratorState): PriceEstimate
   if (shape === 'round' && dimensions.radius) {
     // πr² for round tables
     surfaceArea = Math.PI * Math.pow(dimensions.radius / 100, 2);
-  } else if (shape === 'oval') {
-    // π × a × b for oval (approximation)
+  } else if (shape === 'ellips' || shape === 'ovale') {
+    // π × a × b for ellipse/oval (approximation)
     surfaceArea = Math.PI * (dimensions.length / 200) * (dimensions.width / 200);
   } else {
-    // length × width for rectangular and organic
+    // length × width for corner and cut-corner
     surfaceArea = (dimensions.length / 100) * (dimensions.width / 100);
   }
 
@@ -115,13 +115,13 @@ export function formatPriceRange(min: number, max: number, locale: string = 'nl-
 export function getLeadTimeEstimate(config: ConfiguratorState): { min: number; max: number } {
   const { stone, shape, baseType } = config;
   
-  // Custom stone or organic shape = longer lead time
-  if (stone === 'custom' || shape === 'organic') {
+  // Custom stone = longer lead time
+  if (stone === 'custom') {
     return { min: 16, max: 24 };
   }
   
-  // Monolith base = medium complexity
-  if (baseType === 'monolith') {
+  // Cut-corner or monolith base = medium complexity
+  if (baseType === 'monolith' || shape === 'cut-corner') {
     return { min: 14, max: 18 };
   }
   

@@ -15,12 +15,20 @@ export interface DimensionPreset {
   radius?: number;
 }
 
-// OVAL presets
-const OVAL_PRESETS: DimensionPreset[] = [
-  { id: 'oval-200x100', label: '200 × 100 cm', length: 200, width: 100 },
-  { id: 'oval-220x100', label: '220 × 100 cm', length: 220, width: 100 },
-  { id: 'oval-240x110', label: '240 × 110 cm', length: 240, width: 110 },
-  { id: 'oval-260x110', label: '260 × 110 cm', length: 260, width: 110 },
+// ELLIPS presets
+const ELLIPS_PRESETS: DimensionPreset[] = [
+  { id: 'ellips-200x100', label: '200 × 100 cm', length: 200, width: 100 },
+  { id: 'ellips-220x100', label: '220 × 100 cm', length: 220, width: 100 },
+  { id: 'ellips-240x110', label: '240 × 110 cm', length: 240, width: 110 },
+  { id: 'ellips-260x110', label: '260 × 110 cm', length: 260, width: 110 },
+];
+
+// OVALE presets
+const OVALE_PRESETS: DimensionPreset[] = [
+  { id: 'ovale-200x100', label: '200 × 100 cm', length: 200, width: 100 },
+  { id: 'ovale-220x100', label: '220 × 100 cm', length: 220, width: 100 },
+  { id: 'ovale-240x110', label: '240 × 110 cm', length: 240, width: 110 },
+  { id: 'ovale-260x110', label: '260 × 110 cm', length: 260, width: 110 },
 ];
 
 // ROUND presets (diameter = radius * 2)
@@ -31,31 +39,34 @@ const ROUND_PRESETS: DimensionPreset[] = [
   { id: 'round-160', label: 'Ø 160 cm', length: 160, width: 160, radius: 80 },
 ];
 
-// RECTANGLE presets
-const RECTANGLE_PRESETS: DimensionPreset[] = [
-  { id: 'rect-200x100', label: '200 × 100 cm', length: 200, width: 100 },
-  { id: 'rect-220x100', label: '220 × 100 cm', length: 220, width: 100 },
-  { id: 'rect-240x100', label: '240 × 100 cm', length: 240, width: 100 },
+// CORNER presets (rectangle with sharp corners)
+const CORNER_PRESETS: DimensionPreset[] = [
+  { id: 'corner-200x100', label: '200 × 100 cm', length: 200, width: 100 },
+  { id: 'corner-220x100', label: '220 × 100 cm', length: 220, width: 100 },
+  { id: 'corner-240x100', label: '240 × 100 cm', length: 240, width: 100 },
 ];
 
-// ORGANIC presets (same as oval)
-const ORGANIC_PRESETS = OVAL_PRESETS.map(p => ({
-  ...p,
-  id: p.id.replace('oval', 'organic'),
-}));
+// CUT-CORNER presets (rectangle with chamfered corners)
+const CUT_CORNER_PRESETS: DimensionPreset[] = [
+  { id: 'cut-corner-200x100', label: '200 × 100 cm', length: 200, width: 100 },
+  { id: 'cut-corner-220x100', label: '220 × 100 cm', length: 220, width: 100 },
+  { id: 'cut-corner-240x100', label: '240 × 100 cm', length: 240, width: 100 },
+];
 
 export function getPresetsForShape(shape: TableShape): DimensionPreset[] {
   switch (shape) {
-    case 'oval':
-      return OVAL_PRESETS;
+    case 'ellips':
+      return ELLIPS_PRESETS;
+    case 'ovale':
+      return OVALE_PRESETS;
     case 'round':
       return ROUND_PRESETS;
-    case 'rectangular':
-      return RECTANGLE_PRESETS;
-    case 'organic':
-      return ORGANIC_PRESETS;
+    case 'corner':
+      return CORNER_PRESETS;
+    case 'cut-corner':
+      return CUT_CORNER_PRESETS;
     default:
-      return RECTANGLE_PRESETS;
+      return CORNER_PRESETS;
   }
 }
 
