@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useTexture } from '@react-three/drei';
 import type { TableShape, FinishType, EdgeProfile, BaseType } from '@/lib/configurator';
 import { FINISHES, getStoneById } from '@/lib/configurator';
+import { get3DTexture } from '@/lib/configurator/texture-resolver';
 
 interface TableMeshProps {
   shape: TableShape;
@@ -26,12 +27,15 @@ function getStoneMaterialProps(stoneId: string, finishId: FinishType) {
   const stone = getStoneById(stoneId);
   const finishConfig = FINISHES.find(f => f.id === finishId) ?? FINISHES[0];
   
+  // Use the texture resolver to get the correct 3D texture (NOT the swatch!)
+  const seamlessTexturePath = get3DTexture(stoneId);
+  
   if (!stone) {
     return {
       color: '#9CA3AF',
       roughness: 0.5 * finishConfig.roughnessMultiplier,
       metalness: 0,
-      texturePath: null,
+      texturePath: seamlessTexturePath,
     };
   }
 
@@ -51,7 +55,7 @@ function getStoneMaterialProps(stoneId: string, finishId: FinishType) {
     color: stone.swatchColor,
     roughness: baseRoughness * finishConfig.roughnessMultiplier,
     metalness,
-    texturePath: stone.swatchImage || null,
+    texturePath: seamlessTexturePath, // Use seamless texture, NOT swatchImage
   };
 }
 
@@ -262,154 +266,9 @@ function TexturedCylinderBase({
     </mesh>
   );
 }
-
-// Color-only cone base (fallback)
-function ColorConeBase({ 
-  materialProps, 
-  dimensions,
-  shape,
-}: { 
-  materialProps: { color: string; roughness: number; metalness: number };
-  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
-  shape: TableShape;
-}) {
-  const w = dimensions.length * SCALE;
-  const d = dimensions.width * SCALE;
-  const h = dimensions.height * SCALE;
-  const t = dimensions.thickness * SCALE;
-  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
-  const legHeight = h - t;
-
-  const topRadius = shape === 'round' ? r * 0.6 : Math.min(w, d) * 0.4;
-  const bottomRadius = shape === 'round' ? r * 0.38 : Math.min(w, d) * 0.25;
-
-  return (
-    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[topRadius, bottomRadius, legHeight, 64]} />
-      <meshStandardMaterial
-        color={materialProps.color}
-        roughness={materialProps.roughness}
-        metalness={materialProps.metalness}
-        envMapIntensity={1.4}
-      />
-    </mesh>
-  );
-}
-
-// Color-only pedestal base (fallback)
-function ColorPedestalBase({ 
-  materialProps, 
-  dimensions,
-  shape,
-}: { 
-  materialProps: { color: string; roughness: number; metalness: number };
-  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
-  shape: TableShape;
-}) {
-  const w = dimensions.length * SCALE;
-  const d = dimensions.width * SCALE;
-  const h = dimensions.height * SCALE;
-  const t = dimensions.thickness * SCALE;
-  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
-  const legHeight = h - t;
-
-  const blockWidth = shape === 'round' ? r * 0.75 : w * 0.35;
-  const blockDepth = shape === 'round' ? r * 0.75 : d * 0.55;
-
-  return (
-    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-      <boxGeometry args={[blockWidth, legHeight, blockDepth]} />
-      <meshStandardMaterial
-        color={materialProps.color}
-        roughness={materialProps.roughness}
-        metalness={materialProps.metalness}
-        envMapIntensity={1.4}
-      />
-    </mesh>
-  );
-}
-
-// Color-only cylinder base (fallback)
-function ColorCylinderBase({ 
-  materialProps, 
-  dimensions,
-  shape,
-}: { 
-  materialProps: { color: string; roughness: number; metalness: number };
-  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
-  shape: TableShape;
-}) {
-  const w = dimensions.length * SCALE;
-  const d = dimensions.width * SCALE;
-  const h = dimensions.height * SCALE;
-  const t = dimensions.thickness * SCALE;
-  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
-  const legHeight = h - t;
-
-  const cylinderRadius = shape === 'round' ? r * 0.45 : Math.min(w, d) * 0.28;
-
-  return (
-    <mesh position={[0, legHeight / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[cylinderRadius, cylinderRadius, legHeight, 64]} />
-      <meshStandardMaterial
-        color={materialProps.color}
-        roughness={materialProps.roughness}
-        metalness={materialProps.metalness}
-        envMapIntensity={1.4}
-      />
-    </mesh>
-  );
-}
-
-// Fallback component without texture
-function ColorTableTop({ 
-  materialProps, 
-  shape, 
-  dimensions,
-  topScale,
-}: { 
-  materialProps: { color: string; roughness: number; metalness: number };
-  shape: TableShape;
-  dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
-  topScale: [number, number, number];
-}) {
-  const w = dimensions.length * SCALE;
-  const d = dimensions.width * SCALE;
-  const h = dimensions.height * SCALE;
-  const t = dimensions.thickness * SCALE;
-  const r = (dimensions.radius ?? dimensions.width / 2) * SCALE;
-
-  const topGeometry = useMemo(() => {
-    switch (shape) {
-      case 'round':
-        return <cylinderGeometry args={[r, r, t, 64]} />;
-      case 'oval':
-        return <cylinderGeometry args={[1, 1, t, 64]} />;
-      case 'organic':
-        return <boxGeometry args={[w, t, d]} />;
-      case 'rectangular':
-      default:
-        return <boxGeometry args={[w, t, d]} />;
-    }
-  }, [shape, w, d, t, r]);
-
-  return (
-    <mesh 
-      position={[0, h - t / 2, 0]} 
-      scale={topScale}
-      castShadow 
-      receiveShadow
-    >
-      {topGeometry}
-      <meshStandardMaterial
-        color={materialProps.color}
-        roughness={materialProps.roughness}
-        metalness={materialProps.metalness}
-        envMapIntensity={1.2}
-      />
-    </mesh>
-  );
-}
+// Note: ColorConeBase, ColorPedestalBase, ColorCylinderBase, and ColorTableTop 
+// have been removed as we now always use seamless textures via get3DTexture()
+// which provides a fallback texture when no specific texture is available.
 
 export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensions }: TableMeshProps) {
   const groupRef = useRef<THREE.Group>(null);
@@ -430,21 +289,16 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
   const topScale = shape === 'oval' ? [w / 2, 1, d / 2] as [number, number, number] : [1, 1, 1] as [number, number, number];
 
   // Base rendering - all base types use stone texture
+  // texturePath is always available via get3DTexture fallback
   const renderBase = () => {
-    const hasTexture = !!materialProps.texturePath;
+    const texturePath = materialProps.texturePath;
 
     switch (baseType) {
       case 'monolith':
         // Sculpted Cone - elegant tapered stone base
-        return hasTexture ? (
+        return (
           <TexturedConeBase 
-            texturePath={materialProps.texturePath!}
-            materialProps={materialProps}
-            dimensions={dimensions}
-            shape={shape}
-          />
-        ) : (
-          <ColorConeBase 
+            texturePath={texturePath}
             materialProps={materialProps}
             dimensions={dimensions}
             shape={shape}
@@ -453,15 +307,9 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
 
       case 'architectural':
         // Pedestal Block - solid rectangular stone base
-        return hasTexture ? (
+        return (
           <TexturedPedestalBase 
-            texturePath={materialProps.texturePath!}
-            materialProps={materialProps}
-            dimensions={dimensions}
-            shape={shape}
-          />
-        ) : (
-          <ColorPedestalBase 
+            texturePath={texturePath}
             materialProps={materialProps}
             dimensions={dimensions}
             shape={shape}
@@ -471,15 +319,9 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
       case 'modern':
       default:
         // Cylindrical - single stone cylinder base
-        return hasTexture ? (
+        return (
           <TexturedCylinderBase 
-            texturePath={materialProps.texturePath!}
-            materialProps={materialProps}
-            dimensions={dimensions}
-            shape={shape}
-          />
-        ) : (
-          <ColorCylinderBase 
+            texturePath={texturePath}
             materialProps={materialProps}
             dimensions={dimensions}
             shape={shape}
@@ -524,41 +366,17 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
 
   return (
     <group ref={groupRef} position={[0, -0.5, 0]}>
-      {/* Table Top - with texture if available */}
-      {materialProps.texturePath ? (
-        <TexturedTableTop 
-          texturePath={materialProps.texturePath}
-          materialProps={materialProps}
-          shape={shape}
-          dimensions={dimensions}
-          topScale={topScale}
-        />
-      ) : (
-        <ColorTableTop 
-          materialProps={materialProps}
-          shape={shape}
-          dimensions={dimensions}
-          topScale={topScale}
-        />
-      )}
+      {/* Table Top - always with seamless texture */}
+      <TexturedTableTop 
+        texturePath={materialProps.texturePath}
+        materialProps={materialProps}
+        shape={shape}
+        dimensions={dimensions}
+        topScale={topScale}
+      />
 
-      {/* Base */}
+      {/* Base - same stone texture as top */}
       {renderBase()}
-
-      {/* Subtle veining overlay for non-textured stones with veins */}
-      {hasVeining && !materialProps.texturePath && (
-        <mesh position={[0, h - t / 2 + 0.001, 0]} scale={topScale}>
-          {topGeometry}
-          <meshStandardMaterial
-            color={getVeiningColor()}
-            roughness={0.4}
-            metalness={0.1}
-            transparent
-            opacity={0.12}
-            depthWrite={false}
-          />
-        </mesh>
-      )}
     </group>
   );
 }
