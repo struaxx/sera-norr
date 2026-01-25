@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { useTexture } from '@react-three/drei';
 import type { TableShape, FinishType, EdgeProfile, BaseType } from '@/lib/configurator';
 import { FINISHES, getStoneById } from '@/lib/configurator';
-import { get3DTexture } from '@/lib/configurator/texture-resolver';
+import { get3DTexture, getTextureScale } from '@/lib/configurator/texture-resolver';
 
 interface TableMeshProps {
   shape: TableShape;
@@ -27,8 +27,11 @@ function getStoneMaterialProps(stoneId: string, finishId: FinishType) {
   const stone = getStoneById(stoneId);
   const finishConfig = FINISHES.find(f => f.id === finishId) ?? FINISHES[0];
   
-  // Use the texture resolver to get the correct 3D texture (NOT the swatch!)
+  // Use the texture resolver to get the correct 3D seamless texture
   const seamlessTexturePath = get3DTexture(stoneId);
+  
+  // Get the optimal texture scale for this stone
+  const textureScale = getTextureScale(stoneId);
   
   if (!stone) {
     return {
@@ -36,6 +39,7 @@ function getStoneMaterialProps(stoneId: string, finishId: FinishType) {
       roughness: 0.5 * finishConfig.roughnessMultiplier,
       metalness: 0,
       texturePath: seamlessTexturePath,
+      textureScale,
     };
   }
 
@@ -55,7 +59,8 @@ function getStoneMaterialProps(stoneId: string, finishId: FinishType) {
     color: stone.swatchColor,
     roughness: baseRoughness * finishConfig.roughnessMultiplier,
     metalness,
-    texturePath: seamlessTexturePath, // Use seamless texture, NOT swatchImage
+    texturePath: seamlessTexturePath,
+    textureScale,
   };
 }
 
@@ -98,11 +103,13 @@ function TexturedTableTop({
   materialProps, 
   shape, 
   dimensions,
+  textureScale,
 }: { 
   texturePath: string;
   materialProps: { color: string; roughness: number; metalness: number };
   shape: TableShape;
   dimensions: { length: number; width: number; height: number; thickness: number; radius?: number };
+  textureScale: number;
 }) {
   const w = dimensions.length * SCALE;
   const d = dimensions.width * SCALE;
@@ -113,19 +120,19 @@ function TexturedTableTop({
   // Load texture with proper settings
   const texture = useTexture(texturePath);
   
-  // Configure texture
+  // Configure texture for seamless tiling
   useMemo(() => {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.colorSpace = THREE.SRGBColorSpace;
     
-    // Scale texture to fit table dimensions realistically
-    const textureScale = 0.6;
+    // Use stone-specific texture scale from resolver
+    // This ensures each stone's pattern is shown at the correct size
     texture.repeat.set(
       (dimensions.length / 100) / textureScale,
       (dimensions.width / 100) / textureScale
     );
-  }, [texture, dimensions.length, dimensions.width]);
+  }, [texture, dimensions.length, dimensions.width, textureScale]);
 
   const geometry = useMemo(() => {
     const extrudeSettings = {
@@ -396,6 +403,7 @@ export function TableMesh({ shape, stone, finish, edgeProfile, baseType, dimensi
         materialProps={materialProps}
         shape={shape}
         dimensions={dimensions}
+        textureScale={materialProps.textureScale}
       />
 
       {/* Base - same stone texture as top */}
