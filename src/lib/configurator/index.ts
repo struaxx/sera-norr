@@ -97,7 +97,7 @@ export {
 
 // 3D Assets
 export {
-  getStoneTextures,
+  getStoneTextures as getAssetStoneTextures,
   getTableModel,
   getBaseModel,
   getEnvironmentMap,
@@ -108,6 +108,14 @@ export {
   type TextureQuality,
   type LODLevel,
 } from './3d-assets';
+
+// Texture Resolver (Swatch vs 3D separation)
+export {
+  getStoneTextures,
+  get3DTexture,
+  logTextureQA,
+  QA_TOP_10_STONES,
+} from './texture-resolver';
 
 // Default/Initial State - Updated with 20mm default thickness
 export const INITIAL_CONFIGURATOR_STATE: import('./types').ConfiguratorState = {
