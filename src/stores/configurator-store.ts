@@ -38,6 +38,16 @@ export interface CollectionInspiration {
 }
 
 // ============================================
+// Custom Stone Request Type
+// ============================================
+
+export interface CustomStoneRequest {
+  stoneName: string;
+  notes?: string;
+  imageFile?: File;
+}
+
+// ============================================
 // Store Interface
 // ============================================
 
@@ -52,6 +62,10 @@ interface ConfiguratorStore {
   setSelectedCollection: (collection: 'vanta' | 'terra' | 'other' | null) => void;
   addInspiration: (item: CollectionInspiration) => void;
   removeInspiration: (id: string) => void;
+  
+  // Custom stone request
+  customStoneRequest: CustomStoneRequest | null;
+  setCustomStoneRequest: (request: CustomStoneRequest | null) => void;
   
   // Configurator state
   config: ConfiguratorState;
@@ -85,6 +99,10 @@ interface ConfiguratorStore {
   generateDossier: () => DossierSummary;
   buildCode: string | null;
   generateBuildCode: () => string;
+  
+  // Share URL
+  getShareUrl: () => string;
+  loadFromBuildCode: (buildCode: string) => Promise<boolean>;
   
   // Reset
   reset: () => void;
@@ -152,6 +170,10 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       removeInspiration: (id) => set((state) => {
         state.inspirationItems = state.inspirationItems.filter(i => i.id !== id);
       }),
+      
+      // Custom stone request
+      customStoneRequest: null,
+      setCustomStoneRequest: (request) => set({ customStoneRequest: request }),
       
       // Config
       config: defaultConfig,
@@ -292,11 +314,41 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
         };
       },
       
+      // Share URL
+      getShareUrl: () => {
+        const state = get();
+        const code = state.buildCode || state.generateBuildCode();
+        return `${window.location.origin}/atelier?build=${code}`;
+      },
+      
+      loadFromBuildCode: async (buildCode: string) => {
+        try {
+          const { loadConfiguration } = await import('@/lib/configurator/api');
+          const result = await loadConfiguration(buildCode);
+          if (result.success && result.configuration) {
+            set((state) => {
+              Object.entries(result.configuration!).forEach(([key, value]) => {
+                if (key in state.config) {
+                  (state.config as any)[key] = value;
+                }
+              });
+              state.buildCode = buildCode;
+            });
+            return true;
+          }
+          return false;
+        } catch (error) {
+          console.error('Failed to load configuration:', error);
+          return false;
+        }
+      },
+      
       // Reset
       reset: () => set({
         phase: 'lookbook',
         selectedCollection: null,
         inspirationItems: [],
+        customStoneRequest: null,
         config: defaultConfig,
         viewer: defaultViewer,
         buildCode: null,
@@ -304,6 +356,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       
       resetConfig: () => set((state) => {
         state.config = defaultConfig;
+        state.customStoneRequest = null;
         state.buildCode = null;
       }),
     })),
@@ -314,6 +367,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
         phase: state.phase,
         selectedCollection: state.selectedCollection,
         inspirationItems: state.inspirationItems,
+        customStoneRequest: state.customStoneRequest,
         config: state.config,
         buildCode: state.buildCode,
       }),
