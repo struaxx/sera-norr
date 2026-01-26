@@ -1,133 +1,83 @@
 // ============================================
-// Texture Resolver - Premium Stone Print System
+// Texture Resolver - Unified Stone Texture System
 // ============================================
-// This module ensures that:
-// - UI swatches use swatchImage (clean square stone samples)
-// - 3D models use seamlessTexture (proper tileable textures for 3D)
-// - Both are SEPARATE assets with correct visual identity
+// CRITICAL: Swatch and 3D MUST use the SAME texture for visual consistency
+// This ensures what the customer sees in the selector matches the table render
+// Just like the reference image: swatch = product texture = identical
 
 import { getStoneById } from './stone-library';
 
 // ============================================
-// SEAMLESS 3D TEXTURE MAPPING
+// UNIFIED TEXTURE MAPPING
 // ============================================
-// Maps stone IDs to their proper seamless 3D textures
-// These are AI-generated premium textures, NOT PDF screenshots
+// Single source of truth: ONE texture path per stone
+// Used for BOTH the UI swatch AND the 3D model
 
-const SEAMLESS_TEXTURES: Record<string, string> = {
+const STONE_TEXTURES: Record<string, string> = {
   // ============================================
-  // PRIORITY STONES - Premium Generated Textures
+  // TRAVERTINE - Using actual stone photos
   // ============================================
-  
-  // Calacatta Viola - Deep burgundy/purple with dark veins on creamy white
-  'calacatta-viola': '/textures/stones/calacatta-viola-seamless.jpg',
-  
-  // Ivory - Warm beige travertine with soft pores
-  'ivory': '/textures/stones/ivory-seamless.jpg',
-  
-  // Nero Marquina - Deep black with crisp white veining
-  'nero-marquina': '/textures/stones/nero-marquina-seamless.jpg',
-  
-  // Verde Alpi - Deep forest green with white veining
-  'verde-alpi': '/textures/stones/verde-alpi-seamless.jpg',
-  
-  // Bianco Carrara - Classic white-grey with soft veining
-  'bianco-carrara': '/textures/stones/bianco-carrara-seamless.jpg',
-  
-  // Tiramisu - Warm caramel/coffee travertine
-  'tiramisu': '/textures/stones/tiramisu-seamless.jpg',
-  
-  // Cream - Light cream travertine
-  'cream-travertine': '/textures/stones/cream-seamless.jpg',
-  
-  // Super White - Very light travertine
-  'super-white-travertine': '/textures/stones/super-white-seamless.jpg',
+  'gore-gray': '/stones/travertine/gore-gray.jpg',
+  'ivory': '/stones/travertine/ivory.jpg',
+  'super-white-travertine': '/stones/travertine/super-white.jpg',
+  'cream-travertine': '/stones/travertine/cream.jpg',
+  'river-silver': '/stones/travertine/river-silver.jpg',
+  'brown-silver': '/stones/travertine/brown-silver.jpg',
+  'titanium-silver': '/stones/travertine/titanium-silver.jpg',
+  'sbyss-black': '/stones/travertine/sbyss-black.jpg',
+  'golden-coast': '/stones/travertine/golden-coast.jpg',
+  'classic-cloudy': '/stones/travertine/classic-cloudy.jpg',
+  'classic-light': '/stones/travertine/classic-light.jpg',
+  'soft-rome': '/stones/travertine/soft-rome.jpg',
+  'sivas-yellow': '/stones/travertine/sivas-yellow.jpg',
+  'tiramisu': '/stones/travertine/tiramisu.jpg',
+  'swamp-brown': '/stones/travertine/swamp-brown.jpg',
+  'antique-red': '/stones/travertine/antique-red.jpg',
+  'leonardo-travertine': '/stones/travertine/leonardo.jpg',
   
   // ============================================
-  // ADDITIONAL PRIORITY STONES
+  // MARBLE - Using actual stone photos
   // ============================================
-  
-  // Dark Emperador - Dark brown with cream veins
-  'dark-emperador': '/textures/stones/dark-emperador-seamless.jpg',
-  
-  // Gore Gray - Cool sophisticated grey travertine
-  'gore-gray': '/textures/stones/gore-gray-seamless.jpg',
-  
-  // Arabescato Corchia - Dramatic arabesque veining
-  'arabescato-corchia': '/textures/stones/arabescato-corchia-seamless.jpg',
-  
-  // Calacatta Vagli - Bold golden veins
-  'calacatta-vagli': '/textures/stones/calacatta-vagli-seamless.jpg',
-
-  // ============================================
-  // TRAVERTINE - Premium Generated Textures
-  // ============================================
-  'river-silver': '/textures/stones/river-silver-seamless.jpg',
-  'brown-silver': '/textures/stones/brown-silver-seamless.jpg',
-  'titanium-silver': '/textures/stones/titanium-silver-seamless.jpg',
-  'sbyss-black': '/textures/stones/sbyss-black-seamless.jpg',
-  'golden-coast': '/textures/stones/golden-coast-seamless.jpg',
-  'classic-cloudy': '/textures/stones/classic-cloudy-seamless.jpg',
-  'classic-light': '/textures/stones/classic-light-seamless.jpg',
-  'soft-rome': '/textures/stones/soft-rome-seamless.jpg',
-  'sivas-yellow': '/textures/stones/sivas-yellow-seamless.jpg',
-  'swamp-brown': '/textures/stones/swamp-brown-seamless.jpg',
-  'antique-red': '/textures/stones/antique-red-seamless.jpg',
-  'leonardo-travertine': '/textures/stones/leonardo-seamless.jpg',
-  
-  // ============================================
-  // MARBLE - Premium Generated Textures
-  // ============================================
-  'volakas-white': '/textures/stones/volakas-white-seamless.jpg',
+  'calacatta-vagli': '/stones/marble/calacatta-vagli.jpg',
+  'bianco-carrara': '/stones/marble/bianco-carrara.jpg',
+  'volakas-white': '/stones/marble/volakas-white.jpg',
   'super-white-marble': '/stones/marble/super-white-marble.jpg',
-  'panda-white': '/textures/stones/panda-white-seamless.jpg',
+  'panda-white': '/stones/marble/panda-white.jpg',
   'star-white-marble': '/stones/marble/star-white.jpg',
   'wooden-white-marble': '/stones/marble/wooden-white.jpg',
+  'arabescato-corchia': '/stones/marble/arabescato-corchia.jpg',
   'arabescato-vagli': '/stones/marble/arabescato-vagli.jpg',
   'dark-arabescato-orobico': '/stones/marble/dark-arabescato-orobico.jpg',
   'arabella': '/stones/marble/arabella.jpg',
-  'calacatta-rosa': '/textures/stones/calacatta-rosa-seamless.jpg',
+  'calacatta-viola': '/stones/marble/calacatta-viola.jpg',
+  'calacatta-rosa': '/stones/marble/calacatta-rosa.jpg',
   'calacatta-verde-monet': '/stones/marble/calacatta-verde-monet.jpg',
+  'verde-alpi': '/stones/marble/verde-alpi.jpg',
   'amazon-green-quartzite': '/stones/marble/amazon-green.jpg',
   'emerald-jade-marble': '/stones/marble/emerald-jade.jpg',
   'green-onyx': '/stones/marble/green-onyx.jpg',
-  'light-emperador': '/textures/stones/light-emperador-seamless.jpg',
-  'daino-reale': '/textures/stones/daino-reale-seamless.jpg',
-  'moca-cream-limestone': '/textures/stones/moca-cream-seamless.jpg',
-  'taj-mahal': '/textures/stones/taj-mahal-seamless.jpg',
-  'elegant-grey': '/textures/stones/elegant-grey-seamless.jpg',
-  'london-smoke': '/textures/stones/london-smoke-seamless.jpg',
+  'nero-marquina': '/stones/marble/black-marinaci.jpg',
+  'light-emperador': '/stones/marble/light-emperador.jpg',
+  'dark-emperador': '/stones/marble/dark-emperador.jpg',
+  'daino-reale': '/stones/marble/daino-reale.jpg',
+  'moca-cream-limestone': '/stones/marble/moca-cream.jpg',
+  'taj-mahal': '/stones/marble/taj-mahal.jpg',
+  'elegant-grey': '/stones/marble/elegant-grey.jpg',
+  'london-smoke': '/stones/marble/london-smoke.jpg',
   'black-marinaci': '/stones/marble/black-marinaci.jpg',
-  'grand-antique': '/textures/stones/grand-antique-seamless.jpg',
+  'grand-antique': '/stones/marble/grand-antique.jpg',
   'calcite-blue': '/stones/marble/calcite-blue.jpg',
   'ivory-onyx': '/stones/marble/ivory-onyx.jpg',
   'rose-rainbow': '/stones/marble/rose-rainbow.jpg',
 };
 
-// Default placeholder texture for stones without seamless texture
-const PLACEHOLDER_TEXTURE = '/textures/stones/cream-seamless.jpg';
-
-// ============================================
-// TEXTURE QUALITY VALIDATION
-// ============================================
-// Flags images that should NOT be used as 3D textures
-
-const INVALID_3D_TEXTURE_PATTERNS = [
-  'marble-grid-',     // PDF grid screenshots
-  'marble-detail-',   // Detail shots that aren't tileable
-  '-collage',         // Any collage images
-  '-atlas',           // Atlas/sprite sheets
-  '-lifestyle',       // Lifestyle/scene photos
-];
-
-function isValidSeamlessTexture(path: string): boolean {
-  return !INVALID_3D_TEXTURE_PATTERNS.some(pattern => path.includes(pattern));
-}
+// Default fallback texture
+const DEFAULT_TEXTURE = '/stones/travertine/cream.jpg';
 
 // ============================================
 // TEXTURE SCALE CONFIGURATION
 // ============================================
-// Different stones may need different tiling scales
+// Different stones may need different tiling scales for 3D
 
 const TEXTURE_SCALES: Record<string, number> = {
   // Marbles with bold veining - larger scale to show pattern
@@ -140,6 +90,7 @@ const TEXTURE_SCALES: Record<string, number> = {
   'grand-antique': 0.8,
   'calacatta-rosa': 0.8,
   'london-smoke': 0.9,
+  'dark-arabescato-orobico': 0.8,
   
   // Travertines - moderate scale for pore visibility
   'ivory': 0.6,
@@ -163,10 +114,12 @@ const TEXTURE_SCALES: Record<string, number> = {
   // Other marbles - moderate scale
   'volakas-white': 0.7,
   'light-emperador': 0.7,
+  'dark-emperador': 0.7,
   'daino-reale': 0.7,
   'moca-cream-limestone': 0.6,
   'taj-mahal': 0.7,
   'elegant-grey': 0.7,
+  'bianco-carrara': 0.7,
   
   // Default scale
   'default': 0.6,
@@ -177,63 +130,52 @@ const TEXTURE_SCALES: Record<string, number> = {
 // ============================================
 
 export interface TextureSet {
-  swatchImage: string | null;      // For UI selector (clean square sample)
-  seamlessTexture: string | null;  // For 3D model (tileable)
-  isSeamlessValid: boolean;        // Whether texture is proper for 3D
-  textureScale: number;            // UV repeat scale for this stone
+  /** Single texture path used for BOTH swatch and 3D */
+  texture: string;
+  /** Legacy: same as texture for backwards compatibility */
+  swatchImage: string;
+  /** Legacy: same as texture for backwards compatibility */
+  seamlessTexture: string;
+  /** Whether texture file exists */
+  isValid: boolean;
+  /** UV repeat scale for this stone */
+  textureScale: number;
 }
 
 /**
- * Get the correct textures for a stone
- * - swatchImage: for the selector UI (can be cropped sample)
- * - seamlessTexture: for the 3D model (must be tileable)
+ * Get the unified texture for a stone
+ * The SAME texture is used for swatch AND 3D rendering
  */
 export function getStoneTextures(stoneId: string): TextureSet {
   const stone = getStoneById(stoneId);
   
-  if (!stone) {
-    return {
-      swatchImage: null,
-      seamlessTexture: PLACEHOLDER_TEXTURE,
-      isSeamlessValid: true,
-      textureScale: TEXTURE_SCALES['default'],
-    };
-  }
-  
-  // Swatch uses the stone library's swatchImage
-  const swatchImage = stone.swatchImage || null;
-  
-  // 3D texture uses our seamless texture map, or falls back to swatch
-  const seamlessTexture = SEAMLESS_TEXTURES[stoneId] || stone.swatchImage || PLACEHOLDER_TEXTURE;
-  
-  // Validate the texture is proper for 3D
-  const isSeamlessValid = seamlessTexture ? isValidSeamlessTexture(seamlessTexture) : false;
-  
-  // Get texture scale
+  // Get unified texture path
+  const texture = STONE_TEXTURES[stoneId] || stone?.swatchImage || DEFAULT_TEXTURE;
   const textureScale = TEXTURE_SCALES[stoneId] || TEXTURE_SCALES['default'];
   
   return {
-    swatchImage,
-    seamlessTexture,
-    isSeamlessValid,
+    texture,
+    swatchImage: texture,       // Same texture for swatch
+    seamlessTexture: texture,   // Same texture for 3D
+    isValid: true,
     textureScale,
   };
 }
 
 /**
- * Get only the 3D seamless texture for a stone
- * Use this in the 3D viewer to get the correct texture path
+ * Get the 3D texture for a stone
+ * Returns the SAME texture as used in the swatch
  */
 export function get3DTexture(stoneId: string): string {
-  const textures = getStoneTextures(stoneId);
-  
-  // If the seamless texture is invalid, use placeholder
-  if (!textures.isSeamlessValid && textures.seamlessTexture) {
-    console.warn(`[Material QA] Invalid 3D texture for ${stoneId}, using placeholder`);
-    return PLACEHOLDER_TEXTURE;
-  }
-  
-  return textures.seamlessTexture || PLACEHOLDER_TEXTURE;
+  return STONE_TEXTURES[stoneId] || getStoneById(stoneId)?.swatchImage || DEFAULT_TEXTURE;
+}
+
+/**
+ * Get the swatch texture for a stone
+ * Returns the SAME texture as used in 3D
+ */
+export function getSwatchTexture(stoneId: string): string {
+  return get3DTexture(stoneId);
 }
 
 /**
@@ -245,34 +187,35 @@ export function getTextureScale(stoneId: string): number {
 }
 
 /**
- * Check if a stone has a premium generated texture
+ * Check if a stone has a mapped texture
  */
+export function hasTexture(stoneId: string): boolean {
+  return stoneId in STONE_TEXTURES;
+}
+
+// Legacy export for backwards compatibility
 export function hasPremiumTexture(stoneId: string): boolean {
-  const texture = SEAMLESS_TEXTURES[stoneId];
-  return texture?.startsWith('/textures/stones/') || false;
+  return hasTexture(stoneId);
 }
 
 /**
  * Log texture mapping for QA debugging
  */
 export function logTextureQA(stoneIds?: string[]): void {
-  const ids = stoneIds || Object.keys(SEAMLESS_TEXTURES);
+  const ids = stoneIds || Object.keys(STONE_TEXTURES);
   
-  console.log('=== PREMIUM STONE PRINT SYSTEM - QA LOG ===');
-  console.log('Stone Name → Swatch URL → 3D Texture URL → Premium');
+  console.log('=== UNIFIED TEXTURE SYSTEM - QA LOG ===');
+  console.log('Stone Name → Texture URL (swatch = 3D)');
   console.log('');
   
   ids.forEach(id => {
     const stone = getStoneById(id);
-    const textures = getStoneTextures(id);
-    const isPremium = hasPremiumTexture(id);
+    const texture = get3DTexture(id);
+    const scale = getTextureScale(id);
     
     console.log(`${stone?.name || id}:`);
-    console.log(`  Swatch: ${textures.swatchImage || 'NONE'}`);
-    console.log(`  3D Texture: ${textures.seamlessTexture || 'NONE'}`);
-    console.log(`  Premium: ${isPremium ? '✓' : '○'}`);
-    console.log(`  Valid: ${textures.isSeamlessValid ? '✓' : '✗'}`);
-    console.log(`  Scale: ${textures.textureScale}`);
+    console.log(`  Texture: ${texture}`);
+    console.log(`  Scale: ${scale}`);
     console.log('');
   });
 }
@@ -281,47 +224,8 @@ export function logTextureQA(stoneIds?: string[]): void {
 // QA STONE LISTS
 // ============================================
 
-// Priority stones with premium generated textures
-export const QA_PREMIUM_STONES = [
-  'calacatta-viola',
-  'ivory',
-  'nero-marquina',
-  'verde-alpi',
-  'bianco-carrara',
-  'tiramisu',
-  'cream-travertine',
-  'super-white-travertine',
-  'dark-emperador',
-  'gore-gray',
-  'arabescato-corchia',
-  'calacatta-vagli',
-  // New travertines
-  'river-silver',
-  'brown-silver',
-  'titanium-silver',
-  'sbyss-black',
-  'golden-coast',
-  'classic-cloudy',
-  'classic-light',
-  'soft-rome',
-  'sivas-yellow',
-  'swamp-brown',
-  'antique-red',
-  'leonardo-travertine',
-  // New marbles
-  'volakas-white',
-  'panda-white',
-  'light-emperador',
-  'taj-mahal',
-  'elegant-grey',
-  'london-smoke',
-  'grand-antique',
-  'calacatta-rosa',
-  'moca-cream-limestone',
-  'daino-reale',
-];
+export const QA_PREMIUM_STONES = Object.keys(STONE_TEXTURES);
 
-// Original top 10 for backwards compatibility
 export const QA_TOP_10_STONES = [
   'ivory',
   'super-white-travertine', 
