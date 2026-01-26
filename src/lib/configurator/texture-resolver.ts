@@ -56,7 +56,7 @@ const STONE_TEXTURES: Record<string, string> = {
   'amazon-green-quartzite': '/stones/marble/amazon-green.jpg',
   'emerald-jade-marble': '/stones/marble/emerald-jade.jpg',
   'green-onyx': '/stones/marble/green-onyx.jpg',
-  'nero-marquina': '/stones/marble/black-marinaci.jpg',
+  'nero-marquina': '/stones/marble/nero-marquina.jpg',
   'light-emperador': '/stones/marble/light-emperador.jpg',
   'dark-emperador': '/stones/marble/dark-emperador.jpg',
   'daino-reale': '/stones/marble/daino-reale.jpg',
