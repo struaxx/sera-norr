@@ -2,7 +2,7 @@
 // Dossier Phase - Summary & Quote Request (V2)
 // ============================================
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, 
@@ -17,6 +17,7 @@ import {
   Send,
   FileText,
   Sparkles,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,6 +36,8 @@ import { getStoneById } from '@/lib/configurator/stone-library';
 import { getLegById } from '@/lib/configurator/leg-library';
 import { calculateModularPrice, formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
 import { requestQuote } from '@/lib/configurator/api';
+import { downloadDossierPDF } from '@/lib/configurator/pdf-generator';
+import { supabase } from '@/integrations/supabase/client';
 
 interface DossierPhaseProps {
   onBack: () => void;
@@ -43,11 +46,13 @@ interface DossierPhaseProps {
 
 export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const { toast } = useToast();
-  const { config, inspirationItems, generateBuildCode, buildCode } = useConfiguratorStore();
+  const { config, inspirationItems, generateBuildCode, buildCode, customStoneRequest, getShareUrl } = useConfiguratorStore();
   
+  const viewerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [wantsCall, setWantsCall] = useState(false);
   
   const [contact, setContact] = useState({
@@ -64,14 +69,15 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
 
   // Get display names from stone library
   const stone = getStoneById(config.stone);
-  const stoneName = stone?.name || (config.stone === 'custom' ? (isNL ? 'Steen op aanvraag' : 'Stone on request') : config.stone);
-  const shapeName = SHAPES.find(s => s.id === config.shape)?.name[isNL ? 'nl' : 'en'];
-  const finishName = FINISHES.find(f => f.id === config.finish)?.name[isNL ? 'nl' : 'en'];
-  const edgeName = EDGE_PROFILES.find(e => e.id === config.edgeProfile)?.name[isNL ? 'nl' : 'en'];
+  const customStoneName = customStoneRequest?.stoneName;
+  const stoneName = customStoneName || stone?.name || (config.stone === 'custom' ? (isNL ? 'Steen op aanvraag' : 'Stone on request') : config.stone);
+  const shapeName = SHAPES.find(s => s.id === config.shape)?.name[isNL ? 'nl' : 'en'] || '';
+  const finishName = FINISHES.find(f => f.id === config.finish)?.name[isNL ? 'nl' : 'en'] || '';
+  const edgeName = EDGE_PROFILES.find(e => e.id === config.edgeProfile)?.name[isNL ? 'nl' : 'en'] || '';
   
   // Use new leg library if legStyle is set, otherwise fall back to legacy BASES
   const leg = config.legStyle ? getLegById(config.legStyle) : null;
-  const baseName = leg?.name || BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'];
+  const baseName = leg?.name || BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'] || '';
 
   const dimensionString = config.shape === 'round' && config.dimensions.radius
     ? `⌀${config.dimensions.radius * 2} × H${config.dimensions.height} cm`
@@ -80,7 +86,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const thicknessString = `${config.dimensions.thickness * 10}mm`;
 
   const handleCopyLink = async () => {
-    const shareUrl = `${window.location.origin}/atelier?build=${currentBuildCode}`;
+    const shareUrl = getShareUrl();
     await navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -88,6 +94,36 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
       title: isNL ? 'Link gekopieerd' : 'Link copied',
       description: isNL ? 'Deel deze link om uw ontwerp te bewaren' : 'Share this link to save your design',
     });
+  };
+
+  const handleDownloadPDF = async () => {
+    setIsDownloading(true);
+    try {
+      // Try to find the 3D viewer element
+      const viewerElement = document.querySelector('[data-viewer-capture]') as HTMLElement | null;
+      
+      await downloadDossierPDF({
+        config,
+        buildCode: currentBuildCode,
+        customStoneRequest: customStoneName,
+        viewerElement,
+        isNL,
+      });
+      
+      toast({
+        title: isNL ? 'PDF gedownload' : 'PDF downloaded',
+        description: isNL ? 'Uw dossier is opgeslagen' : 'Your dossier has been saved',
+      });
+    } catch (error) {
+      console.error('PDF download error:', error);
+      toast({
+        title: isNL ? 'Download mislukt' : 'Download failed',
+        description: isNL ? 'Probeer het opnieuw' : 'Please try again',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,9 +139,22 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
       return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contact.email)) {
+      toast({
+        title: isNL ? 'Ongeldig e-mailadres' : 'Invalid email address',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      const shareUrl = getShareUrl();
+      
+      // Submit the quote request
       const result = await requestQuote({
         buildCode: currentBuildCode,
         configuration: config,
@@ -116,12 +165,70 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         },
         contact: {
           ...contact,
-          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
+          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}${customStoneName ? `\n\n[Custom steen aanvraag: ${customStoneName}]` : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
         },
         inspirationItems: inspirationItems.map(i => i.id),
       });
 
       if (result.success) {
+        // Send confirmation emails via edge function
+        try {
+          // Customer confirmation
+          await supabase.functions.invoke('send-confirmation-email', {
+            body: {
+              type: 'customer_confirmation',
+              buildCode: currentBuildCode,
+              shareUrl,
+              customerEmail: contact.email,
+              customerName: contact.name,
+              customerPhone: contact.phone,
+              customerPostcode: contact.location,
+              configuration: config,
+              priceEstimate: { vanafPrice: priceEstimate.vanafPrice },
+              stoneName,
+              shapeName,
+              dimensionString,
+              thicknessString,
+              finishName,
+              edgeName,
+              baseName,
+              customStoneRequest: customStoneName,
+              notes: contact.notes,
+              wantsCall,
+              leadTime,
+            },
+          });
+
+          // Admin notification
+          await supabase.functions.invoke('send-confirmation-email', {
+            body: {
+              type: 'admin_notification',
+              buildCode: currentBuildCode,
+              shareUrl,
+              customerEmail: contact.email,
+              customerName: contact.name,
+              customerPhone: contact.phone,
+              customerPostcode: contact.location,
+              configuration: config,
+              priceEstimate: { vanafPrice: priceEstimate.vanafPrice },
+              stoneName,
+              shapeName,
+              dimensionString,
+              thicknessString,
+              finishName,
+              edgeName,
+              baseName,
+              customStoneRequest: customStoneName,
+              notes: contact.notes,
+              wantsCall,
+              leadTime,
+            },
+          });
+        } catch (emailError) {
+          console.error('Email sending error:', emailError);
+          // Don't fail the submission if emails fail
+        }
+
         setIsSubmitted(true);
         toast({
           title: isNL ? 'Aanvraag verzonden' : 'Request submitted',
@@ -142,7 +249,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   };
 
   if (isSubmitted) {
-    return <SuccessScreen buildCode={currentBuildCode} isNL={isNL} />;
+    return <SuccessScreen buildCode={currentBuildCode} shareUrl={getShareUrl()} isNL={isNL} />;
   }
 
   return (
@@ -195,11 +302,18 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                     variant="outline" 
                     size="sm"
                     onClick={handleCopyLink}
+                    title={isNL ? 'Link kopiëren' : 'Copy link'}
                   >
                     {copied ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
                   </Button>
-                  <Button variant="outline" size="sm" disabled>
-                    <Download className="w-4 h-4" />
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleDownloadPDF}
+                    disabled={isDownloading}
+                    title={isNL ? 'Download PDF' : 'Download PDF'}
+                  >
+                    {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                   </Button>
                 </div>
               </div>
@@ -491,7 +605,15 @@ function TrustCard({ icon, title, value }: { icon: React.ReactNode; title: strin
   );
 }
 
-function SuccessScreen({ buildCode, isNL }: { buildCode: string; isNL: boolean }) {
+function SuccessScreen({ buildCode, shareUrl, isNL }: { buildCode: string; shareUrl: string; isNL: boolean }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = async () => {
+    await navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -508,8 +630,8 @@ function SuccessScreen({ buildCode, isNL }: { buildCode: string; isNL: boolean }
         </h2>
         <p className="text-muted-foreground">
           {isNL 
-            ? 'Wij nemen binnen 24 uur contact met u op om uw project te bespreken.'
-            : 'We will contact you within 24 hours to discuss your project.'}
+            ? 'Wij nemen binnen 24 uur contact met u op om uw project te bespreken. U ontvangt een bevestiging per e-mail.'
+            : 'We will contact you within 24 hours to discuss your project. You will receive a confirmation email.'}
         </p>
       </div>
 
@@ -518,6 +640,28 @@ function SuccessScreen({ buildCode, isNL }: { buildCode: string; isNL: boolean }
           {isNL ? 'Uw dossier referentie' : 'Your dossier reference'}
         </div>
         <div className="font-mono text-lg">#{buildCode}</div>
+      </div>
+
+      {/* Share link */}
+      <div className="bg-secondary/10 border border-border rounded-sm p-4">
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">
+          {isNL ? 'Link naar uw ontwerp' : 'Link to your design'}
+        </div>
+        <div className="flex gap-2">
+          <input 
+            type="text" 
+            readOnly 
+            value={shareUrl} 
+            className="flex-1 bg-background border border-border rounded-sm px-3 py-2 text-xs font-mono"
+          />
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleCopyLink}
+          >
+            {copied ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-3 pt-4">

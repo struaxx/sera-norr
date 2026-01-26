@@ -1,5 +1,26 @@
 project_id = "unngatxeencjfnqaqbld"
 
+[functions.analytics-dashboard]
+verify_jwt = false
+
+[functions.configurator-api]
+verify_jwt = false
+
+[functions.identify-user]
+verify_jwt = false
+
+[functions.send-confirmation-email]
+verify_jwt = false
+
+[functions.shopify-storefront]
+verify_jwt = false
+
+[functions.submit-form]
+verify_jwt = false
+
+[functions.track-events]
+verify_jwt = false
+
 [functions.submit-form]
 verify_jwt = false
 

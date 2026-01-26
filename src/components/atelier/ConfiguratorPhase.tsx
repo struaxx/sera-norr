@@ -194,6 +194,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             <StoneSelectorV2 
               value={config.stone}
               onChange={(stone) => useConfiguratorStore.getState().setStone(stone)}
+              onCustomStoneRequest={(request) => useConfiguratorStore.getState().setCustomStoneRequest(request)}
               isNL={isNL}
             />
           </ConfigPanel>
