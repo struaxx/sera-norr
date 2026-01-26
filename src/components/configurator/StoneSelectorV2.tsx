@@ -10,6 +10,7 @@ import {
   type CharacterTag,
   type StoneLibraryEntry 
 } from '@/lib/configurator/stone-library';
+import { getSwatchTexture } from '@/lib/configurator/texture-resolver';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -366,6 +367,9 @@ interface StoneCardProps {
 }
 
 function StoneCard({ stone, isSelected, onClick, isNL }: StoneCardProps) {
+  // Get the UNIFIED texture - same as what 3D uses
+  const textureUrl = getSwatchTexture(stone.id);
+  
   const collectionLabel = {
     terra: 'TERRA',
     vanta: 'VANTA',
@@ -399,33 +403,31 @@ function StoneCard({ stone, isSelected, onClick, isNL }: StoneCardProps) {
         </div>
       )}
 
-      {/* Large Swatch - Image or Color fallback */}
+      {/* Large Swatch - SAME texture as 3D render */}
       <div 
         className="aspect-square w-full relative"
         style={{ backgroundColor: stone.swatchColor }}
       >
-        {stone.swatchImage ? (
-          <img 
-            src={stone.swatchImage} 
-            alt={stone.name}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              // Hide image on error, show color background
-              e.currentTarget.style.display = 'none';
+        <img 
+          src={textureUrl} 
+          alt={stone.name}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            // Hide image on error, show color background
+            e.currentTarget.style.display = 'none';
+          }}
+        />
+        
+        {/* Veining overlay fallback only if no image loads */}
+        {stone.characterTags.includes('veined') && (
+          <div 
+            className="absolute inset-0 pointer-events-none opacity-0"
+            style={{
+              background: stone.swatchColor.startsWith('#F') || stone.swatchColor.startsWith('#E')
+                ? 'linear-gradient(135deg, transparent 30%, rgba(100, 100, 100, 0.2) 45%, transparent 60%)'
+                : 'linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.2) 45%, transparent 60%)',
             }}
           />
-        ) : (
-          /* Add subtle veining effect for some stones without images */
-          stone.characterTags.includes('veined') && (
-            <div 
-              className="absolute inset-0"
-              style={{
-                background: stone.swatchColor.startsWith('#F') || stone.swatchColor.startsWith('#E')
-                  ? 'linear-gradient(135deg, transparent 30%, rgba(100, 100, 100, 0.2) 45%, transparent 60%)'
-                  : 'linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.2) 45%, transparent 60%)',
-              }}
-            />
-          )
         )}
         
         {/* Tier badge overlay */}
