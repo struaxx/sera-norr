@@ -10,7 +10,7 @@ import {
   type CharacterTag,
   type StoneLibraryEntry 
 } from '@/lib/configurator/stone-library';
-import { getSwatchTexture } from '@/lib/configurator/texture-resolver';
+import { getSwatchTexture, hasTexture } from '@/lib/configurator/texture-resolver';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -369,6 +369,7 @@ interface StoneCardProps {
 function StoneCard({ stone, isSelected, onClick, isNL }: StoneCardProps) {
   // Get the UNIFIED texture - same as what 3D uses
   const textureUrl = getSwatchTexture(stone.id);
+  const showTexture = hasTexture(stone.id);
   
   const collectionLabel = {
     terra: 'TERRA',
@@ -408,15 +409,15 @@ function StoneCard({ stone, isSelected, onClick, isNL }: StoneCardProps) {
         className="aspect-square w-full relative"
         style={{ backgroundColor: stone.swatchColor }}
       >
-        <img 
-          src={textureUrl} 
-          alt={stone.name}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            // Hide image on error, show color background
-            e.currentTarget.style.display = 'none';
-          }}
-        />
+        {showTexture && (
+          <img 
+            src={textureUrl} 
+            alt={stone.name}
+            className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        )}
         
         {/* Veining overlay fallback only if no image loads */}
         {stone.characterTags.includes('veined') && (
