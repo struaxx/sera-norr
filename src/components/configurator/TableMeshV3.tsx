@@ -6,12 +6,15 @@
 // - Tabletop origin = center of top surface
 // - Leg pivot = floor contact point (bottom center)
 // - Legs NEVER scale non-uniformly
-// - Clay material for geometry validation
+// - Pedestal/double_pedestal = tapered cones (wider bottom, narrower top)
+// - Stone texture applied to full monolith (top + legs)
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
+import { useTexture } from '@react-three/drei';
 import { mmToM } from '@/lib/configurator/units';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
+import { get3DTexture, getTextureScale } from '@/lib/configurator/texture-resolver';
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
 
 // ============================================
@@ -25,24 +28,57 @@ export interface TableMeshV3Props {
   heightMm: number;
   thicknessMm: number;
   legStyle?: RuleLegStyle;
+  stoneId?: string;
 }
 
 // ============================================
-// CLAY MATERIAL (neutral matte for geometry validation)
+// CONE TAPER RATIO
+// ============================================
+// From the reference photo: bottom is wider, top is narrower
+// Ratio = topRadius / bottomRadius ≈ 0.55
+const CONE_TAPER_RATIO = 0.55;
+
+// ============================================
+// STONE MATERIAL (monolith: same texture on top + legs)
 // ============================================
 
-const CLAY_COLOR = '#C8BEB4';
-const CLAY_ROUGHNESS = 0.85;
-const CLAY_METALNESS = 0;
+function StoneMaterial({ stoneId, repeatX = 2, repeatY = 2 }: { stoneId: string; repeatX?: number; repeatY?: number }) {
+  const texturePath = get3DTexture(stoneId);
+  const texture = useTexture(texturePath);
 
+  useMemo(() => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(repeatX, repeatY);
+    texture.colorSpace = THREE.SRGBColorSpace;
+  }, [texture, repeatX, repeatY]);
+
+  return (
+    <meshStandardMaterial
+      map={texture}
+      roughness={0.35}
+      metalness={0.05}
+      envMapIntensity={1.2}
+    />
+  );
+}
+
+// Fallback clay for stones without textures
 function ClayMaterial() {
   return (
     <meshStandardMaterial
-      color={CLAY_COLOR}
-      roughness={CLAY_ROUGHNESS}
-      metalness={CLAY_METALNESS}
+      color="#C8BEB4"
+      roughness={0.85}
+      metalness={0}
     />
   );
+}
+
+function MonolithMaterial({ stoneId, repeatX, repeatY }: { stoneId?: string; repeatX?: number; repeatY?: number }) {
+  if (stoneId) {
+    return <StoneMaterial stoneId={stoneId} repeatX={repeatX} repeatY={repeatY} />;
+  }
+  return <ClayMaterial />;
 }
 
 // ============================================
@@ -70,13 +106,12 @@ function createTabletopGeometry(
       });
     }
     case 'racetrack': {
-      // Capsule/stadium shape
       const shape2d = new THREE.Shape();
       const hw = lengthM / 2;
       const hd = widthM / 2;
-      const capR = hd; // semicircle radius = half width
+      const capR = hd;
       const straight = hw - capR;
-      
+
       shape2d.moveTo(straight, hd);
       shape2d.lineTo(-straight, hd);
       shape2d.absarc(-straight, 0, capR, Math.PI / 2, -Math.PI / 2, true);
@@ -105,15 +140,12 @@ function getTabletopTransform(
   legHeightM: number,
   thicknessM: number,
 ): { position: [number, number, number]; rotation: [number, number, number] } {
-  // For extruded shapes (oval, racetrack) the geometry is on XY plane, depth along Z
-  // We need to rotate -90° on X to lay flat, then position
   if (shape === 'oval' || shape === 'racetrack') {
     return {
       position: [0, legHeightM + thicknessM, 0],
       rotation: [-Math.PI / 2, 0, 0],
     };
   }
-  // Box-based (rect, square) and cylinder (round) are already correct
   return {
     position: [0, legHeightM + thicknessM / 2, 0],
     rotation: [0, 0, 0],
@@ -124,42 +156,48 @@ function getTabletopTransform(
 // LEG GEOMETRY
 // ============================================
 
-function PedestalLeg({ radiusM, heightM }: { radiusM: number; heightM: number }) {
+/** Tapered cone pedestal — wider at bottom, narrower at top (like the reference photo) */
+function ConePedestalLeg({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
+  const bottomRadius = radiusM;
+  const topRadius = radiusM * CONE_TAPER_RATIO;
+
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[radiusM, radiusM, heightM, 48]} />
-      <ClayMaterial />
+      <cylinderGeometry args={[topRadius, bottomRadius, heightM, 48]} />
+      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
     </mesh>
   );
 }
 
-function FlutedPedestalLeg({ radiusM, heightM }: { radiusM: number; heightM: number }) {
-  // Fluted = cylinder with fewer segments for faceted look
+/** Fluted cone pedestal — faceted tapered cone */
+function FlutedConeLeg({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
+  const bottomRadius = radiusM;
+  const topRadius = radiusM * CONE_TAPER_RATIO;
+
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[radiusM, radiusM * 0.95, heightM, 12, 1]} />
-      <ClayMaterial />
+      <cylinderGeometry args={[topRadius, bottomRadius, heightM, 12, 1]} />
+      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
     </mesh>
   );
 }
 
-function TrestleLeg({ radiusM, heightM, widthM }: { radiusM: number; heightM: number; widthM: number }) {
-  // Trestle = flat slab leg
+function TrestleLeg({ radiusM, heightM, widthM, stoneId }: { radiusM: number; heightM: number; widthM: number; stoneId?: string }) {
   const slabWidth = widthM * 0.7;
   const slabThickness = radiusM * 2;
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
       <boxGeometry args={[slabWidth, heightM, slabThickness]} />
-      <ClayMaterial />
+      <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
     </mesh>
   );
 }
 
-function FourLegSingle({ radiusM, heightM }: { radiusM: number; heightM: number }) {
+function FourLegSingle({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
       <cylinderGeometry args={[radiusM, radiusM, heightM, 16]} />
-      <ClayMaterial />
+      <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={1.5} />
     </mesh>
   );
 }
@@ -168,7 +206,7 @@ function FourLegSingle({ radiusM, heightM }: { radiusM: number; heightM: number 
 // LEG RENDERER (rule-driven placement)
 // ============================================
 
-function LegsGroup({ resolved }: { resolved: ResolvedConfiguration }) {
+function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; stoneId?: string }) {
   const legHeightM = mmToM(resolved.legHeightMm);
   const legRadiusM = mmToM(resolved.legSizeVariant.radiusMm);
   const widthM = mmToM(resolved.widthMm);
@@ -182,16 +220,16 @@ function LegsGroup({ resolved }: { resolved: ResolvedConfiguration }) {
         return (
           <group key={i} position={[xM, 0, zM]}>
             {(resolved.legStyle === 'pedestal' || resolved.legStyle === 'double_pedestal') && (
-              <PedestalLeg radiusM={legRadiusM} heightM={legHeightM} />
+              <ConePedestalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
             {(resolved.legStyle === 'fluted_pedestal' || resolved.legStyle === 'fluted_double') && (
-              <FlutedPedestalLeg radiusM={legRadiusM} heightM={legHeightM} />
+              <FlutedConeLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
             {resolved.legStyle === 'four_legs' && (
-              <FourLegSingle radiusM={legRadiusM} heightM={legHeightM} />
+              <FourLegSingle radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
             {resolved.legStyle === 'trestle' && (
-              <TrestleLeg radiusM={legRadiusM} heightM={legHeightM} widthM={widthM} />
+              <TrestleLeg radiusM={legRadiusM} heightM={legHeightM} widthM={widthM} stoneId={stoneId} />
             )}
           </group>
         );
@@ -218,7 +256,7 @@ function GroundPlane() {
 // ============================================
 
 export function TableMeshV3(props: TableMeshV3Props) {
-  const { shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle } = props;
+  const { shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle, stoneId } = props;
 
   // Resolve configuration through rule engine
   const resolved = useMemo(() =>
@@ -238,6 +276,11 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const widthM = mmToM(widthMm);
   const thicknessM = mmToM(thicknessMm);
   const legHeightM = mmToM(resolved.legHeightMm);
+
+  // Texture repeat based on stone scale and table size
+  const textureScale = stoneId ? getTextureScale(stoneId) : 0.6;
+  const topRepeatX = Math.max(1, lengthM / textureScale);
+  const topRepeatY = Math.max(1, widthM / textureScale);
 
   // Create tabletop geometry
   const topGeometry = useMemo(
@@ -262,7 +305,7 @@ export function TableMeshV3(props: TableMeshV3Props) {
       <GroundPlane />
 
       {/* Legs: pivot at floor (y=0) */}
-      <LegsGroup resolved={resolved} />
+      <LegsGroup resolved={resolved} stoneId={stoneId} />
 
       {/* Tabletop: center of top surface */}
       <mesh
@@ -272,7 +315,7 @@ export function TableMeshV3(props: TableMeshV3Props) {
         castShadow
         receiveShadow
       >
-        <ClayMaterial />
+        <MonolithMaterial stoneId={stoneId} repeatX={topRepeatX} repeatY={topRepeatY} />
       </mesh>
     </group>
   );
