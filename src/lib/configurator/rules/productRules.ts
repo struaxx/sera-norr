@@ -63,9 +63,9 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
     label: 'Double Pedestal',
     labelNL: 'Dubbele Pilaar',
     sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 140, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 180, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 220, heightMm: 730 },
+      { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 180, heightMm: 730 },
     ],
     compatibleShapes: ['oval', 'rect', 'racetrack'],
     minLengthMm: 1600,
