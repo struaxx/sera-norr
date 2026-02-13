@@ -47,7 +47,7 @@ export const STONE_TEXTURE_PATHS: Record<string, string> = {
   // =================
   // MARBLE (seamless)
   // =================
-  'calacatta-viola': '/textures/stones/calacatta-viola-seamless.jpg',
+  'calacatta-viola': '/textures/stones/calacatta-viola-seamless.jpg?v=2',
   'calacatta-vagli': '/textures/stones/calacatta-vagli-seamless.jpg',
   'calacatta-rosa': '/textures/stones/calacatta-rosa-seamless.jpg',
 
