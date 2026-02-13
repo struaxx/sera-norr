@@ -36,7 +36,7 @@ export interface TableMeshV3Props {
 // ============================================
 // From the reference photo: bottom is wider, top is narrower
 // Ratio = topRadius / bottomRadius ≈ 0.55
-const CONE_TAPER_RATIO = 0.55;
+const CONE_TAPER_RATIO = 0.65;
 
 // ============================================
 // STONE MATERIAL (monolith: same texture on top + legs)
