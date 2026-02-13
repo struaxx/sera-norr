@@ -1,29 +1,26 @@
 // ============================================
-// Configurator Phase - 3D Builder (Sales-Ready V2)
+// Configurator Phase V3 - Geometry-First, Rules-Driven
 // ============================================
 
-import { Suspense, lazy, useMemo, useCallback } from 'react';
+import { Suspense, lazy, useMemo, useCallback, useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, RotateCcw, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useConfiguratorStore } from '@/stores/configurator-store';
-import { ShapeSelector } from '@/components/configurator/ShapeSelector';
-import { DimensionPresets, ThicknessSelector, type DimensionPreset } from '@/components/configurator/DimensionPresets';
-import { StoneSelectorV2, FinishSelector } from '@/components/configurator/StoneSelectorV2';
-import { EdgeProfileSelector } from '@/components/configurator/EdgeBaseSelector';
-import { LegSelector } from '@/components/configurator/LegSelector';
-import { StickyDossier } from '@/components/configurator/StickyDossier';
+import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
 import {
-  shouldUseFallback, 
-  getFallbackPreview,
-} from '@/lib/configurator';
-import { calculateModularPrice } from '@/lib/configurator/pricing-v2';
+  type RuleShape,
+  type RuleLegStyle,
+  type TestPreset,
+  SHAPE_DEFINITIONS,
+  LEG_DEFINITIONS,
+  getValidLegStyles,
+} from '@/lib/configurator/rules/productRules';
 
-// Lazy load 3D viewer
-const ConfiguratorViewer = lazy(() => 
-  import('@/components/configurator/ConfiguratorViewer').then(m => ({ default: m.ConfiguratorViewer }))
+// Lazy load V3 viewer
+const ConfiguratorViewerV3 = lazy(() =>
+  import('@/components/configurator/ConfiguratorViewerV3').then(m => ({ default: m.ConfiguratorViewerV3 }))
 );
 
 interface ConfiguratorPhaseProps {
@@ -32,25 +29,7 @@ interface ConfiguratorPhaseProps {
   isNL?: boolean;
 }
 
-// Fallback static preview for low-end devices
-function FallbackPreview({ productType, shape, stone }: { productType: string; shape: string; stone: string }) {
-  const imagePath = getFallbackPreview(productType as any, shape as any, stone as any);
-  
-  return (
-    <div className="w-full aspect-square bg-secondary/20 rounded-sm flex items-center justify-center overflow-hidden">
-      <img 
-        src={imagePath} 
-        alt="Product preview"
-        className="w-full h-full object-cover"
-        onError={(e) => {
-          e.currentTarget.src = '/placeholder.svg';
-        }}
-      />
-    </div>
-  );
-}
-
-// Loading skeleton for 3D viewer
+// Loading skeleton
 function ViewerSkeleton() {
   return (
     <div className="w-full aspect-square bg-secondary/10 rounded-sm flex items-center justify-center">
@@ -62,33 +41,349 @@ function ViewerSkeleton() {
   );
 }
 
+// ============================================
+// SHAPE SELECTOR (new shapes)
+// ============================================
+
+function ShapeSelectorV3({
+  value,
+  onChange,
+  isNL,
+}: {
+  value: RuleShape;
+  onChange: (s: RuleShape) => void;
+  isNL: boolean;
+}) {
+  const ShapeIcon = ({ shape }: { shape: RuleShape }) => {
+    switch (shape) {
+      case 'round':
+        return <svg viewBox="0 0 24 24" className="w-7 h-7" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>;
+      case 'oval':
+        return <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor"><ellipse cx="18" cy="12" rx="16" ry="10" /></svg>;
+      case 'rect':
+        return <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor"><rect x="1" y="2" width="34" height="20" rx="1" /></svg>;
+      case 'racetrack':
+        return <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor"><rect x="1" y="2" width="34" height="20" rx="10" /></svg>;
+      case 'square':
+        return <svg viewBox="0 0 24 24" className="w-7 h-7" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="1" /></svg>;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-5 gap-2">
+      {SHAPE_DEFINITIONS.map(s => (
+        <button
+          key={s.id}
+          onClick={() => onChange(s.id)}
+          className={cn(
+            "relative flex flex-col items-center gap-2 p-3 rounded-sm border transition-all duration-200",
+            value === s.id
+              ? "border-foreground bg-foreground/5"
+              : "border-border hover:border-foreground/50"
+          )}
+        >
+          <ShapeIcon shape={s.id} />
+          <span className="text-[9px] uppercase tracking-wider leading-tight text-center">
+            {isNL ? s.labelNL : s.label}
+          </span>
+          {value === s.id && (
+            <div className="absolute top-1 right-1 w-3.5 h-3.5 bg-foreground rounded-full flex items-center justify-center">
+              <Check className="w-2 h-2 text-background" />
+            </div>
+          )}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ============================================
+// DIMENSION PRESETS (mm-based)
+// ============================================
+
+interface DimPreset {
+  id: string;
+  label: string;
+  lengthMm: number;
+  widthMm: number;
+}
+
+const DIM_PRESETS: Record<RuleShape, DimPreset[]> = {
+  oval: [
+    { id: 'o-1800', label: '1800 × 900', lengthMm: 1800, widthMm: 900 },
+    { id: 'o-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
+    { id: 'o-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
+    { id: 'o-2600', label: '2600 × 1100', lengthMm: 2600, widthMm: 1100 },
+  ],
+  round: [
+    { id: 'r-1000', label: 'Ø 1000', lengthMm: 1000, widthMm: 1000 },
+    { id: 'r-1200', label: 'Ø 1200', lengthMm: 1200, widthMm: 1200 },
+    { id: 'r-1500', label: 'Ø 1500', lengthMm: 1500, widthMm: 1500 },
+    { id: 'r-1600', label: 'Ø 1600', lengthMm: 1600, widthMm: 1600 },
+  ],
+  rect: [
+    { id: 'rc-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
+    { id: 'rc-2200', label: '2200 × 1000', lengthMm: 2200, widthMm: 1000 },
+    { id: 'rc-2400', label: '2400 × 1000', lengthMm: 2400, widthMm: 1000 },
+  ],
+  racetrack: [
+    { id: 'rt-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
+    { id: 'rt-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
+    { id: 'rt-2400', label: '2400 × 1100', lengthMm: 2400, widthMm: 1100 },
+  ],
+  square: [
+    { id: 'sq-1000', label: '1000 × 1000', lengthMm: 1000, widthMm: 1000 },
+    { id: 'sq-1200', label: '1200 × 1200', lengthMm: 1200, widthMm: 1200 },
+    { id: 'sq-1400', label: '1400 × 1400', lengthMm: 1400, widthMm: 1400 },
+  ],
+};
+
+function DimensionPresetsV3({
+  shape,
+  currentLength,
+  currentWidth,
+  onSelect,
+}: {
+  shape: RuleShape;
+  currentLength: number;
+  currentWidth: number;
+  onSelect: (l: number, w: number) => void;
+}) {
+  const presets = DIM_PRESETS[shape] || [];
+
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      {presets.map(p => {
+        const selected = p.lengthMm === currentLength && p.widthMm === currentWidth;
+        return (
+          <button
+            key={p.id}
+            onClick={() => onSelect(p.lengthMm, p.widthMm)}
+            className={cn(
+              "relative flex items-center justify-center py-3 px-4 rounded-sm border transition-all duration-200 text-center",
+              selected ? "border-foreground bg-foreground/5" : "border-border hover:border-foreground/50"
+            )}
+          >
+            <span className="text-sm font-medium tabular-nums">{p.label}mm</span>
+            {selected && (
+              <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-foreground rounded-full flex items-center justify-center">
+                <Check className="w-2.5 h-2.5 text-background" />
+              </div>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================
+// THICKNESS SELECTOR (mm)
+// ============================================
+
+function ThicknessSelectorV3({
+  value,
+  onChange,
+  isNL,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  isNL: boolean;
+}) {
+  const options = [
+    { value: 20, label: '20mm', labelDetail: isNL ? '(standaard)' : '(standard)' },
+    { value: 30, label: '30mm', labelDetail: '' },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      {options.map(o => {
+        const selected = value === o.value;
+        return (
+          <button
+            key={o.value}
+            onClick={() => onChange(o.value)}
+            className={cn(
+              "relative flex items-center justify-center py-3 px-4 rounded-sm border transition-all duration-200 text-center",
+              selected ? "border-foreground bg-foreground/5" : "border-border hover:border-foreground/50"
+            )}
+          >
+            <span className="text-sm font-medium">{o.label} {o.labelDetail}</span>
+            {selected && (
+              <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-foreground rounded-full flex items-center justify-center">
+                <Check className="w-2.5 h-2.5 text-background" />
+              </div>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================
+// LEG STYLE SELECTOR (rules-driven)
+// ============================================
+
+function LegSelectorV3({
+  value,
+  shape,
+  lengthMm,
+  onChange,
+  isNL,
+}: {
+  value: RuleLegStyle;
+  shape: RuleShape;
+  lengthMm: number;
+  onChange: (l: RuleLegStyle) => void;
+  isNL: boolean;
+}) {
+  const validStyles = useMemo(() => getValidLegStyles(shape, lengthMm), [shape, lengthMm]);
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-2">
+        {LEG_DEFINITIONS.map(leg => {
+          const isValid = validStyles.some(v => v.id === leg.id);
+          const isSelected = value === leg.id;
+
+          return (
+            <button
+              key={leg.id}
+              onClick={() => isValid && onChange(leg.id)}
+              disabled={!isValid}
+              className={cn(
+                "relative flex flex-col items-center p-4 rounded-sm border transition-all duration-200 text-center",
+                isSelected
+                  ? "border-foreground bg-foreground/5"
+                  : isValid
+                    ? "border-border hover:border-foreground/50"
+                    : "border-border/50 opacity-40 cursor-not-allowed"
+              )}
+            >
+              <span className="text-xs font-medium">{isNL ? leg.labelNL : leg.label}</span>
+              {leg.priceUplift > 0 && isValid && (
+                <span className="text-[10px] text-muted-foreground mt-1">+€{leg.priceUplift}</span>
+              )}
+              {isSelected && (
+                <div className="absolute top-2 right-2 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
+                  <Check className="w-3 h-3 text-background" />
+                </div>
+              )}
+              {!isValid && (
+                <span className="text-[8px] text-muted-foreground mt-1">{isNL ? 'Niet beschikbaar' : 'Not available'}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// CONFIG PANEL WRAPPER
+// ============================================
+
+function ConfigPanel({
+  title,
+  step,
+  children,
+}: {
+  title: string;
+  step: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: step * 0.03 }}
+      className="bg-background border border-border rounded-sm p-5 space-y-4"
+    >
+      <div className="flex items-center gap-3">
+        <span className="w-6 h-6 rounded-full bg-secondary text-xs flex items-center justify-center">{step}</span>
+        <h3 className="text-sm font-medium">{title}</h3>
+      </div>
+      {children}
+    </motion.div>
+  );
+}
+
+// ============================================
+// MAIN CONFIGURATOR PHASE
+// ============================================
+
 export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: ConfiguratorPhaseProps) {
   const { config, resetConfig } = useConfiguratorStore();
-  
-  const useFallback = useMemo(() => shouldUseFallback(), []);
-  const priceEstimate = useMemo(() => calculateModularPrice(config), [config]);
 
-  const handleDimensionPresetSelect = useCallback((preset: DimensionPreset) => {
-    const store = useConfiguratorStore.getState();
-    store.setDimension('length', preset.length);
-    store.setDimension('width', preset.width);
-    if (preset.radius) {
-      store.setDimension('radius', preset.radius);
+  // Local state for V3 configurator (mm-based, new shape types)
+  const [shape, setShape] = useState<RuleShape>('oval');
+  const [lengthMm, setLengthMm] = useState(2000);
+  const [widthMm, setWidthMm] = useState(1000);
+  const [heightMm, setHeightMm] = useState(750);
+  const [thicknessMm, setThicknessMm] = useState(20);
+  const [legStyle, setLegStyle] = useState<RuleLegStyle>('pedestal');
+  const [resolved, setResolved] = useState<ResolvedConfiguration | null>(null);
+
+  // When shape changes, reset to first preset
+  const handleShapeChange = useCallback((newShape: RuleShape) => {
+    setShape(newShape);
+    const presets = DIM_PRESETS[newShape];
+    if (presets?.[0]) {
+      setLengthMm(presets[0].lengthMm);
+      setWidthMm(presets[0].widthMm);
+    }
+    // Re-resolve leg style
+    const validLegs = getValidLegStyles(newShape, presets?.[0]?.lengthMm ?? lengthMm);
+    if (!validLegs.find(l => l.id === legStyle)) {
+      const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === newShape);
+      setLegStyle(shapeDef?.defaultLegStyle ?? validLegs[0]?.id ?? 'pedestal');
+    }
+  }, [legStyle, lengthMm]);
+
+  const handleDimensionSelect = useCallback((l: number, w: number) => {
+    setLengthMm(l);
+    setWidthMm(w);
+    // Re-resolve leg style if needed
+    const validLegs = getValidLegStyles(shape, l);
+    if (!validLegs.find(leg => leg.id === legStyle)) {
+      const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === shape);
+      setLegStyle(shapeDef?.defaultLegStyle ?? validLegs[0]?.id ?? 'pedestal');
+    }
+  }, [shape, legStyle]);
+
+  const handlePresetLoad = useCallback((preset: TestPreset) => {
+    setShape(preset.shape);
+    setLengthMm(preset.lengthMm);
+    setWidthMm(preset.widthMm);
+    setHeightMm(preset.heightMm);
+    setThicknessMm(preset.thicknessMm);
+    // Let resolver pick the right leg style
+    const validLegs = getValidLegStyles(preset.shape, preset.lengthMm);
+    const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === preset.shape);
+    const defaultLeg = shapeDef?.defaultLegStyle ?? 'pedestal';
+    if (validLegs.find(l => l.id === defaultLeg)) {
+      setLegStyle(defaultLeg);
+    } else {
+      setLegStyle(validLegs[0]?.id ?? 'pedestal');
     }
   }, []);
 
-  const handleThicknessChange = useCallback((thickness: number) => {
-    useConfiguratorStore.getState().setDimension('thickness', thickness);
-  }, []);
-
-  const handleRequestQuote = () => {
-    onContinue();
-  };
+  const handleConfigResolved = useCallback((r: ResolvedConfiguration) => {
+    setResolved(r);
+    // Sync resolved leg style back if auto-switched
+    if (r.wasAutoSwitched && r.legStyle !== legStyle) {
+      setLegStyle(r.legStyle);
+    }
+  }, [legStyle]);
 
   return (
     <div className="space-y-8">
       {/* Header */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center justify-between"
@@ -101,39 +396,48 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             {isNL ? 'Stel uw stuk samen' : 'Design your piece'}
           </h1>
         </div>
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="sm"
-          onClick={resetConfig}
+          onClick={() => {
+            resetConfig();
+            setShape('oval');
+            setLengthMm(2000);
+            setWidthMm(1000);
+            setHeightMm(750);
+            setThicknessMm(20);
+            setLegStyle('pedestal');
+          }}
           className="text-muted-foreground"
         >
           <RotateCcw className="w-4 h-4 mr-2" />
-          {isNL ? 'Reset' : 'Reset'}
+          Reset
         </Button>
       </motion.div>
 
       {/* Main Layout */}
       <div className="grid lg:grid-cols-12 gap-8">
-        {/* Left Column - 3D Viewer */}
+        {/* Left - 3D Viewer */}
         <div className="lg:col-span-7 space-y-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             className="sticky top-24"
           >
-            {useFallback ? (
-              <FallbackPreview 
-                productType={config.productType}
-                shape={config.shape}
-                stone={config.stone}
+            <Suspense fallback={<ViewerSkeleton />}>
+              <ConfiguratorViewerV3
+                shape={shape}
+                lengthMm={lengthMm}
+                widthMm={widthMm}
+                heightMm={heightMm}
+                thicknessMm={thicknessMm}
+                legStyle={legStyle}
+                onConfigResolved={handleConfigResolved}
+                onPresetLoad={handlePresetLoad}
+                isNL={isNL}
               />
-            ) : (
-              <Suspense fallback={<ViewerSkeleton />}>
-                <ConfiguratorViewer config={config} isNL={isNL} />
-              </Suspense>
-            )}
-            
-            {/* Trust badge under viewer */}
+            </Suspense>
+
             <div className="mt-4 flex items-center justify-center gap-6 text-xs text-muted-foreground">
               <span>{isNL ? 'Handgemaakt op bestelling' : 'Handmade to order'}</span>
               <span>•</span>
@@ -144,257 +448,81 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
           </motion.div>
         </div>
 
-        {/* Right Column - Configuration Panels */}
+        {/* Right - Config Panels */}
         <div className="lg:col-span-5 space-y-5">
-          {/* Step 1: Shape */}
-          <ConfigPanel 
-            title={isNL ? 'Vorm' : 'Shape'}
-            step={1}
-          >
-            <ShapeSelector 
-              value={config.shape}
-              productType={config.productType}
-              onChange={(shape) => useConfiguratorStore.getState().setShape(shape)}
+          <ConfigPanel title={isNL ? 'Vorm' : 'Shape'} step={1}>
+            <ShapeSelectorV3 value={shape} onChange={handleShapeChange} isNL={isNL} />
+          </ConfigPanel>
+
+          <ConfigPanel title={isNL ? 'Afmeting' : 'Size'} step={2}>
+            <DimensionPresetsV3
+              shape={shape}
+              currentLength={lengthMm}
+              currentWidth={widthMm}
+              onSelect={handleDimensionSelect}
+            />
+            <p className="text-[10px] text-muted-foreground mt-2">
+              {isNL ? 'Alle maten in millimeters' : 'All dimensions in millimeters'}
+            </p>
+          </ConfigPanel>
+
+          <ConfigPanel title={isNL ? 'Bladdikte' : 'Thickness'} step={3}>
+            <ThicknessSelectorV3 value={thicknessMm} onChange={setThicknessMm} isNL={isNL} />
+          </ConfigPanel>
+
+          <ConfigPanel title={isNL ? 'Onderstel' : 'Base'} step={4}>
+            <LegSelectorV3
+              value={legStyle}
+              shape={shape}
+              lengthMm={lengthMm}
+              onChange={setLegStyle}
               isNL={isNL}
             />
           </ConfigPanel>
 
-          {/* Step 2: Dimensions (Fixed presets) */}
-          <ConfigPanel 
-            title={isNL ? 'Afmeting' : 'Size'}
-            step={2}
+          {/* Summary */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="sticky bottom-4 bg-background border border-foreground/20 rounded-sm p-5 shadow-lg"
           >
-            <DimensionPresets 
-              shape={config.shape}
-              currentLength={config.dimensions.length}
-              currentWidth={config.dimensions.width}
-              currentRadius={config.dimensions.radius}
-              onSelect={handleDimensionPresetSelect}
-              isNL={isNL}
-            />
-          </ConfigPanel>
+            <div className="space-y-3 mb-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">{isNL ? 'Uw selectie' : 'Your selection'}</p>
+                  <h4 className="text-sm font-medium">
+                    {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {lengthMm}×{widthMm}mm
+                  </h4>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                <span>{resolved?.legDefinition?.[isNL ? 'labelNL' : 'label'] ?? legStyle}</span>
+                <span>•</span>
+                <span>{thicknessMm}mm blad</span>
+                <span>•</span>
+                <span>{resolved?.legCount ?? '?'} {isNL ? 'poten' : 'legs'}</span>
+              </div>
+            </div>
 
-          {/* Step 3: Thickness (20mm / 30mm) */}
-          <ConfigPanel 
-            title={isNL ? 'Bladdikte' : 'Thickness'}
-            step={3}
-          >
-            <ThicknessSelector 
-              value={config.dimensions.thickness}
-              onChange={handleThicknessChange}
-              isNL={isNL}
-            />
-          </ConfigPanel>
-
-          {/* Step 4: Stone - Full 82-stone library */}
-          <ConfigPanel 
-            title={isNL ? 'Steensoort' : 'Stone type'}
-            step={4}
-          >
-            <StoneSelectorV2 
-              value={config.stone}
-              onChange={(stone) => useConfiguratorStore.getState().setStone(stone)}
-              onCustomStoneRequest={(request) => useConfiguratorStore.getState().setCustomStoneRequest(request)}
-              isNL={isNL}
-            />
-          </ConfigPanel>
-
-          {/* Step 5: Finish */}
-          <ConfigPanel 
-            title={isNL ? 'Afwerking' : 'Finish'}
-            step={5}
-          >
-            <FinishSelector 
-              value={config.finish}
-              onChange={(finish) => useConfiguratorStore.getState().setFinish(finish)}
-              isNL={isNL}
-            />
-          </ConfigPanel>
-
-          {/* Step 6: Edge Profile */}
-          <ConfigPanel 
-            title={isNL ? 'Randprofiel' : 'Edge profile'}
-            step={6}
-          >
-            <EdgeProfileSelector 
-              value={config.edgeProfile}
-              shape={config.shape}
-              onChange={(edge) => useConfiguratorStore.getState().setEdgeProfile(edge)}
-              isNL={isNL}
-            />
-          </ConfigPanel>
-
-          {/* Step 7: Leg / Base */}
-          <ConfigPanel 
-            title={isNL ? 'Onderstel' : 'Base'}
-            step={7}
-          >
-            <LegSelector 
-              value={config.legStyle || 'pillar-leg'}
-              shape={config.shape}
-              length={config.dimensions.length}
-              diameter={config.shape === 'round' ? (config.dimensions.radius ? config.dimensions.radius * 2 : config.dimensions.length) : undefined}
-              onChange={(legStyle) => useConfiguratorStore.getState().setLegStyle(legStyle)}
-              isNL={isNL}
-            />
-          </ConfigPanel>
-
-          {/* Sticky Dossier Summary - Updated with "vanaf" price */}
-          <StickyDossierV2 
-            config={config}
-            priceEstimate={priceEstimate}
-            onRequestQuote={handleRequestQuote}
-            isNL={isNL}
-          />
+            <Button variant="atelier" className="w-full" onClick={onContinue}>
+              {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </motion.div>
         </div>
       </div>
 
       {/* Navigation */}
       <div className="flex items-center justify-between pt-8 border-t border-border">
-        <Button 
-          variant="ghost"
-          onClick={onBack}
-        >
+        <Button variant="ghost" onClick={onBack}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           {isNL ? 'Reset ontwerp' : 'Reset design'}
         </Button>
-        
-        <Button 
-          variant="atelier"
-          onClick={onContinue}
-        >
+        <Button variant="atelier" onClick={onContinue}>
           {isNL ? 'Bekijk dossier' : 'View dossier'}
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
     </div>
-  );
-}
-
-// Config Panel wrapper component
-function ConfigPanel({ 
-  title, 
-  step, 
-  isOptional = false,
-  children 
-}: { 
-  title: string; 
-  step: number; 
-  isOptional?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: step * 0.03 }}
-      className="bg-background border border-border rounded-sm p-5 space-y-4"
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="w-6 h-6 rounded-full bg-secondary text-xs flex items-center justify-center">
-            {step}
-          </span>
-          <h3 className="text-sm font-medium">{title}</h3>
-        </div>
-        {isOptional && (
-          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-            Optioneel
-          </span>
-        )}
-      </div>
-      {children}
-    </motion.div>
-  );
-}
-
-// Updated Sticky Dossier with "vanaf" pricing
-import { getStoneById } from '@/lib/configurator/stone-library';
-import { getLegById } from '@/lib/configurator/leg-library';
-import { SHAPES, BASES } from '@/lib/configurator/config';
-import type { ModularPriceEstimate } from '@/lib/configurator/pricing-v2';
-import { formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
-
-interface StickyDossierV2Props {
-  config: import('@/lib/configurator/types').ConfiguratorState;
-  priceEstimate: ModularPriceEstimate;
-  onRequestQuote: () => void;
-  isNL?: boolean;
-}
-
-function StickyDossierV2({ config, priceEstimate, onRequestQuote, isNL = true }: StickyDossierV2Props) {
-  const stone = getStoneById(config.stone);
-  const shapeName = SHAPES.find(s => s.id === config.shape)?.name[isNL ? 'nl' : 'en'];
-  
-  // Use new leg library if legStyle is set, otherwise fall back to legacy BASES
-  const leg = config.legStyle ? getLegById(config.legStyle) : null;
-  const baseName = leg?.name || BASES.find(b => b.id === config.baseType)?.name[isNL ? 'nl' : 'en'];
-  
-  const leadTime = getModularLeadTime(config);
-
-  // Dimension string
-  const dimensionString = config.shape === 'round' && config.dimensions.radius
-    ? `⌀${config.dimensions.radius * 2} cm`
-    : `${config.dimensions.length} × ${config.dimensions.width} cm`;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="sticky bottom-4 bg-background border border-foreground/20 rounded-sm p-5 shadow-lg"
-    >
-      {/* Summary */}
-      <div className="space-y-3 mb-4">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">
-              {isNL ? 'Uw selectie' : 'Your selection'}
-            </p>
-            <h4 className="text-sm font-medium">
-              {stone?.name || (isNL ? 'Steen op aanvraag' : 'Stone on request')}
-            </h4>
-          </div>
-          <div className="text-right">
-            <p className="text-xs text-muted-foreground mb-1">
-              {isNL ? 'Vanaf' : 'From'}
-            </p>
-            <p className="text-lg font-serif">
-              {formatVanafPrice(priceEstimate.vanafPrice)}
-            </p>
-          </div>
-        </div>
-
-        {/* Quick specs */}
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-          <span>{shapeName}</span>
-          <span>•</span>
-          <span>{dimensionString}</span>
-          <span>•</span>
-          <span>{config.dimensions.thickness * 10}mm</span>
-          <span>•</span>
-          <span>{baseName}</span>
-        </div>
-
-        {/* Lead time */}
-        <p className="text-[10px] text-muted-foreground">
-          {isNL ? `Levertijd: ${leadTime.min}-${leadTime.max} weken` : `Lead time: ${leadTime.min}-${leadTime.max} weeks`}
-        </p>
-      </div>
-
-      {/* CTA */}
-      <Button 
-        variant="atelier"
-        className="w-full"
-        onClick={onRequestQuote}
-      >
-        {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
-        <ArrowRight className="w-4 h-4 ml-2" />
-      </Button>
-
-      {/* Disclaimer */}
-      <p className="text-[10px] text-center text-muted-foreground mt-3">
-        {priceEstimate.disclaimer}
-      </p>
-    </motion.div>
   );
 }
