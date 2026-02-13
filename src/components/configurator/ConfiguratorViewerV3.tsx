@@ -36,6 +36,7 @@ export interface ConfiguratorViewerV3Props {
   heightMm: number;
   thicknessMm: number;
   legStyle?: RuleLegStyle;
+  stoneId?: string;
   onConfigResolved?: (resolved: ResolvedConfiguration) => void;
   onPresetLoad?: (preset: TestPreset) => void;
   className?: string;
@@ -162,6 +163,7 @@ export function ConfiguratorViewerV3({
   heightMm,
   thicknessMm,
   legStyle,
+  stoneId,
   onConfigResolved,
   onPresetLoad,
   className,
@@ -242,6 +244,7 @@ export function ConfiguratorViewerV3({
             heightMm={heightMm}
             thicknessMm={thicknessMm}
             legStyle={resolved.legStyle}
+            stoneId={stoneId}
           />
           {showDimensions && <DimensionLabels resolved={resolved} />}
           <ContactShadows

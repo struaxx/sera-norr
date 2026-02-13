@@ -326,6 +326,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [heightMm, setHeightMm] = useState(750);
   const [thicknessMm, setThicknessMm] = useState(20);
   const [legStyle, setLegStyle] = useState<RuleLegStyle>('pedestal');
+  const [stoneId, setStoneId] = useState('calacatta-viola');
   const [resolved, setResolved] = useState<ResolvedConfiguration | null>(null);
 
   // When shape changes, reset to first preset
@@ -432,6 +433,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
                 heightMm={heightMm}
                 thicknessMm={thicknessMm}
                 legStyle={legStyle}
+                stoneId={stoneId}
                 onConfigResolved={handleConfigResolved}
                 onPresetLoad={handlePresetLoad}
                 isNL={isNL}
