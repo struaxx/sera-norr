@@ -308,35 +308,46 @@ function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- V-Legs: two flat stone slabs forming < > from top view ---
-// Left placement = < shape, Right placement = > shape (mirrored)
+// --- V-Legs: two thick stone slabs meeting at apex, opening outward < > ---
+// Slabs touch at inner tip and fan outward. No crossing.
 function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
-  const slabThickness = radiusM * 0.6;
-  const slabWidth = radiusM * 3.5;
-  const vAngle = 30 * (Math.PI / 180);
-  const offset = Math.sin(vAngle) * slabWidth * 0.4;
+  const slabThickness = radiusM * 1.2;  // thicker, more substantial
+  const slabLength = radiusM * 5;       // wider slabs
+  const vHalfAngle = 22 * (Math.PI / 180); // tighter V for clean meeting point
+
+  // Each slab pivots from the apex (inner edge toward table center)
+  // Offset each slab along Z so they meet at center, fan outward
+  const pivotOffset = (slabLength / 2) * Math.sin(vHalfAngle);
 
   // cornerIndex 0 = left (<), cornerIndex 1 = right (>)
   const sign = cornerIndex === 0 ? 1 : -1;
 
   return (
     <group>
-      {/* Front slab */}
+      {/* Slab A */}
       <mesh
-        position={[0, heightM / 2, offset]}
-        rotation={[0, sign * vAngle, 0]}
+        position={[
+          sign * (slabLength / 2) * (1 - Math.cos(vHalfAngle)) * 0.5,
+          heightM / 2,
+          pivotOffset
+        ]}
+        rotation={[0, sign * vHalfAngle, 0]}
         castShadow receiveShadow
       >
-        <boxGeometry args={[slabThickness, heightM, slabWidth]} />
+        <boxGeometry args={[slabThickness, heightM, slabLength]} />
         <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
       </mesh>
-      {/* Back slab */}
+      {/* Slab B (mirrored on Z) */}
       <mesh
-        position={[0, heightM / 2, -offset]}
-        rotation={[0, -sign * vAngle, 0]}
+        position={[
+          sign * (slabLength / 2) * (1 - Math.cos(vHalfAngle)) * 0.5,
+          heightM / 2,
+          -pivotOffset
+        ]}
+        rotation={[0, -sign * vHalfAngle, 0]}
         castShadow receiveShadow
       >
-        <boxGeometry args={[slabThickness, heightM, slabWidth]} />
+        <boxGeometry args={[slabThickness, heightM, slabLength]} />
         <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
       </mesh>
     </group>
