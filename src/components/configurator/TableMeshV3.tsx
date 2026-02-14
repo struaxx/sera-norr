@@ -126,18 +126,32 @@ function createTabletopGeometry(
       return geo;
     }
     case 'ovale': {
-      // Stadium/racetrack shape
+      // Stadium/racetrack shape — explicit point-by-point to avoid absarc direction bugs
       const shape2d = new THREE.Shape();
       const hw = lengthM / 2;
       const hd = widthM / 2;
-      const capR = hd;
+      const capR = Math.min(hd, hw); // cap radius = half depth
       const straight = hw - capR;
+      const arcSegments = 32;
 
-      shape2d.moveTo(straight, hd);
-      shape2d.lineTo(-straight, hd);
-      shape2d.absarc(-straight, 0, capR, Math.PI / 2, -Math.PI / 2, true);
-      shape2d.lineTo(straight, -hd);
-      shape2d.absarc(straight, 0, capR, -Math.PI / 2, Math.PI / 2, true);
+      // Start top-left, go clockwise
+      shape2d.moveTo(-straight, hd);
+      shape2d.lineTo(straight, hd);
+
+      // Right semicircle (top to bottom)
+      for (let i = 1; i <= arcSegments; i++) {
+        const angle = Math.PI / 2 - (Math.PI * i / arcSegments);
+        shape2d.lineTo(straight + capR * Math.cos(angle), capR * Math.sin(angle));
+      }
+
+      // Bottom edge (right to left)
+      shape2d.lineTo(-straight, -hd);
+
+      // Left semicircle (bottom to top)
+      for (let i = 1; i <= arcSegments; i++) {
+        const angle = -Math.PI / 2 + (Math.PI * i / arcSegments);
+        shape2d.lineTo(-straight + capR * Math.cos(angle), capR * Math.sin(angle));
+      }
       shape2d.closePath();
 
       const geo = new THREE.ExtrudeGeometry(shape2d, {
