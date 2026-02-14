@@ -388,23 +388,35 @@ function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Curved Legs: slightly curved cylinder using tube geometry ---
-function CurvedLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
+// --- Curved Legs: tulip/trumpet shape — wide base, narrow waist, wide top ---
+function CurvedLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
-    // Subtle outward curve
-    const curveDir = cornerIndex < 2 ? -1 : 1;
-    const xBow = cornerIndex % 2 === 0 ? -0.02 : 0.02;
-    const curve = new THREE.QuadraticBezierCurve3(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(xBow * heightM, heightM * 0.5, curveDir * 0.015 * heightM),
-      new THREE.Vector3(0, heightM, 0),
-    );
-    return new THREE.TubeGeometry(curve, 16, radiusM, 12, false);
-  }, [radiusM, heightM, cornerIndex]);
+    const segments = 32;
+    const points: THREE.Vector2[] = [];
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments; // 0 = bottom, 1 = top
+      // Trumpet curve: wide at bottom, pinch at ~40%, widen at top
+      const baseRadius = radiusM * 2.2;
+      const waistRadius = radiusM * 0.7;
+      const topRadius = radiusM * 1.6;
+      let r: number;
+      if (t < 0.4) {
+        // Bottom to waist: ease in
+        const u = t / 0.4;
+        r = baseRadius + (waistRadius - baseRadius) * (u * u);
+      } else {
+        // Waist to top: ease out
+        const u = (t - 0.4) / 0.6;
+        r = waistRadius + (topRadius - waistRadius) * (1 - (1 - u) * (1 - u));
+      }
+      points.push(new THREE.Vector2(r, t * heightM));
+    }
+    return new THREE.LatheGeometry(points, 48);
+  }, [radiusM, heightM]);
 
   return (
     <mesh geometry={geo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={1.5} />
+      <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
     </mesh>
   );
 }
@@ -451,7 +463,7 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
               <RoundedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
             {style === 'curved_legs' && (
-              <CurvedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} cornerIndex={i} />
+              <CurvedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
           </group>
         );
