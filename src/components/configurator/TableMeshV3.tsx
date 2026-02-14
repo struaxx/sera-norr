@@ -6,8 +6,9 @@
 // - Tabletop origin = center of top surface
 // - Leg pivot = floor contact point (bottom center)
 // - Legs NEVER scale non-uniformly
-// - Pedestal/double_pedestal = tapered cones (wider bottom, narrower top)
 // - Stone texture applied to full monolith (top + legs)
+// AXIS CONVENTION:
+// X = length (longest), Z = width (depth), Y = height (up)
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
@@ -34,8 +35,6 @@ export interface TableMeshV3Props {
 // ============================================
 // CONE TAPER RATIO
 // ============================================
-// From the reference photo: bottom is wider, top is narrower
-// Ratio = topRadius / bottomRadius ≈ 0.55
 const CONE_TAPER_RATIO = 0.65;
 
 // ============================================
@@ -63,7 +62,6 @@ function StoneMaterial({ stoneId, repeatX = 2, repeatY = 2 }: { stoneId: string;
   );
 }
 
-// Fallback clay for stones without textures
 function ClayMaterial() {
   return (
     <meshStandardMaterial
@@ -82,6 +80,26 @@ function MonolithMaterial({ stoneId, repeatX, repeatY }: { stoneId?: string; rep
 }
 
 // ============================================
+// PLANAR UV FIX
+// ============================================
+// After creating ExtrudeGeometry, overwrite UVs with planar top-down projection
+// to eliminate zebra-stripe artifacts.
+
+function applyPlanarUV(geometry: THREE.BufferGeometry, lengthM: number, widthM: number) {
+  const pos = geometry.attributes.position;
+  const uv = geometry.attributes.uv;
+  if (!pos || !uv) return;
+
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    // Map x,y (shape plane) to 0..1 UV
+    uv.setXY(i, x / lengthM + 0.5, y / widthM + 0.5);
+  }
+  uv.needsUpdate = true;
+}
+
+// ============================================
 // TABLETOP GEOMETRY
 // ============================================
 
@@ -96,16 +114,19 @@ function createTabletopGeometry(
       const r = lengthM / 2;
       return new THREE.CylinderGeometry(r, r, thicknessM, 64);
     }
-    case 'oval': {
-      // Ellipse extruded
+    case 'ellips': {
+      // True ellipse
       const ellipse = new THREE.Shape();
       ellipse.absellipse(0, 0, lengthM / 2, widthM / 2, 0, Math.PI * 2, false, 0);
-      return new THREE.ExtrudeGeometry(ellipse, {
+      const geo = new THREE.ExtrudeGeometry(ellipse, {
         depth: thicknessM,
         bevelEnabled: false,
       });
+      applyPlanarUV(geo, lengthM, widthM);
+      return geo;
     }
-    case 'racetrack': {
+    case 'ovale': {
+      // Stadium/racetrack shape
       const shape2d = new THREE.Shape();
       const hw = lengthM / 2;
       const hd = widthM / 2;
@@ -119,15 +140,63 @@ function createTabletopGeometry(
       shape2d.absarc(straight, 0, capR, -Math.PI / 2, Math.PI / 2, true);
       shape2d.closePath();
 
-      return new THREE.ExtrudeGeometry(shape2d, {
+      const geo = new THREE.ExtrudeGeometry(shape2d, {
         depth: thicknessM,
         bevelEnabled: false,
       });
+      applyPlanarUV(geo, lengthM, widthM);
+      return geo;
     }
-    case 'square': {
-      return new THREE.BoxGeometry(lengthM, thicknessM, widthM);
+    case 'corner': {
+      // Rounded rectangle
+      const cornerRadius = Math.min(lengthM, widthM) * 0.05;
+      const rr = new THREE.Shape();
+      const hw = lengthM / 2;
+      const hd = widthM / 2;
+      const cr = cornerRadius;
+
+      rr.moveTo(-hw + cr, -hd);
+      rr.lineTo(hw - cr, -hd);
+      rr.absarc(hw - cr, -hd + cr, cr, -Math.PI / 2, 0, false);
+      rr.lineTo(hw, hd - cr);
+      rr.absarc(hw - cr, hd - cr, cr, 0, Math.PI / 2, false);
+      rr.lineTo(-hw + cr, hd);
+      rr.absarc(-hw + cr, hd - cr, cr, Math.PI / 2, Math.PI, false);
+      rr.lineTo(-hw, -hd + cr);
+      rr.absarc(-hw + cr, -hd + cr, cr, Math.PI, Math.PI * 1.5, false);
+      rr.closePath();
+
+      const geo = new THREE.ExtrudeGeometry(rr, {
+        depth: thicknessM,
+        bevelEnabled: false,
+      });
+      applyPlanarUV(geo, lengthM, widthM);
+      return geo;
     }
-    case 'rect':
+    case 'cut-corner': {
+      // Chamfered rectangle (45° cut corners)
+      const chamfer = Math.min(lengthM, widthM) * 0.1;
+      const cc = new THREE.Shape();
+      const hw = lengthM / 2;
+      const hd = widthM / 2;
+
+      cc.moveTo(-hw + chamfer, -hd);
+      cc.lineTo(hw - chamfer, -hd);
+      cc.lineTo(hw, -hd + chamfer);
+      cc.lineTo(hw, hd - chamfer);
+      cc.lineTo(hw - chamfer, hd);
+      cc.lineTo(-hw + chamfer, hd);
+      cc.lineTo(-hw, hd - chamfer);
+      cc.lineTo(-hw, -hd + chamfer);
+      cc.closePath();
+
+      const geo = new THREE.ExtrudeGeometry(cc, {
+        depth: thicknessM,
+        bevelEnabled: false,
+      });
+      applyPlanarUV(geo, lengthM, widthM);
+      return geo;
+    }
     default: {
       return new THREE.BoxGeometry(lengthM, thicknessM, widthM);
     }
@@ -140,12 +209,14 @@ function getTabletopTransform(
   legHeightM: number,
   thicknessM: number,
 ): { position: [number, number, number]; rotation: [number, number, number] } {
-  if (shape === 'oval' || shape === 'racetrack') {
+  // ExtrudeGeometry shapes need rotation to lie flat (XZ plane)
+  if (shape === 'ellips' || shape === 'ovale' || shape === 'corner' || shape === 'cut-corner') {
     return {
       position: [0, legHeightM + thicknessM, 0],
       rotation: [-Math.PI / 2, 0, 0],
     };
   }
+  // CylinderGeometry (round) is already Y-axis aligned
   return {
     position: [0, legHeightM + thicknessM / 2, 0],
     rotation: [0, 0, 0],
@@ -156,7 +227,6 @@ function getTabletopTransform(
 // LEG GEOMETRY
 // ============================================
 
-/** Tapered cone pedestal — wider at bottom, narrower at top (like the reference photo) */
 function ConePedestalLeg({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
   const bottomRadius = radiusM;
   const topRadius = radiusM * CONE_TAPER_RATIO;
@@ -169,7 +239,6 @@ function ConePedestalLeg({ radiusM, heightM, stoneId }: { radiusM: number; heigh
   );
 }
 
-/** Fluted cone pedestal — faceted tapered cone */
 function FlutedConeLeg({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
   const bottomRadius = radiusM;
   const topRadius = radiusM * CONE_TAPER_RATIO;
@@ -187,7 +256,7 @@ function TrestleLeg({ radiusM, heightM, widthM, stoneId }: { radiusM: number; he
   const slabThickness = radiusM * 2;
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <boxGeometry args={[slabWidth, heightM, slabThickness]} />
+      <boxGeometry args={[slabThickness, heightM, slabWidth]} />
       <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
     </mesh>
   );
@@ -219,10 +288,10 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
 
         return (
           <group key={i} position={[xM, 0, zM]}>
-            {(resolved.legStyle === 'pedestal' || resolved.legStyle === 'double_pedestal') && (
+            {resolved.legStyle === 'pedestal' && (
               <ConePedestalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {(resolved.legStyle === 'fluted_pedestal' || resolved.legStyle === 'fluted_double') && (
+            {resolved.legStyle === 'fluted' && (
               <FlutedConeLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
             {resolved.legStyle === 'four_legs' && (
@@ -258,7 +327,6 @@ function GroundPlane() {
 export function TableMeshV3(props: TableMeshV3Props) {
   const { shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle, stoneId } = props;
 
-  // Resolve configuration through rule engine
   const resolved = useMemo(() =>
     resolveConfiguration({
       shape,
@@ -271,18 +339,15 @@ export function TableMeshV3(props: TableMeshV3Props) {
     [shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle]
   );
 
-  // Convert to meters at scene boundary
   const lengthM = mmToM(lengthMm);
   const widthM = mmToM(widthMm);
   const thicknessM = mmToM(thicknessMm);
   const legHeightM = mmToM(resolved.legHeightMm);
 
-  // Texture repeat based on stone scale and table size
   const textureScale = stoneId ? getTextureScale(stoneId) : 0.6;
   const topRepeatX = Math.max(1, lengthM / textureScale);
   const topRepeatY = Math.max(1, widthM / textureScale);
 
-  // Create tabletop geometry
   const topGeometry = useMemo(
     () => createTabletopGeometry(shape, lengthM, widthM, thicknessM),
     [shape, lengthM, widthM, thicknessM]
@@ -290,24 +355,10 @@ export function TableMeshV3(props: TableMeshV3Props) {
 
   const topTransform = getTabletopTransform(shape, legHeightM, thicknessM);
 
-  // Runtime assertions (dev only)
-  if (process.env.NODE_ENV === 'development') {
-    const topBottomY = topTransform.position[1] - thicknessM / 2;
-    const legTopY = legHeightM;
-    if (Math.abs(topBottomY - legTopY) > 0.001) {
-      console.warn(`[TableMesh] Gap/overlap: topBottom=${topBottomY.toFixed(4)}, legTop=${legTopY.toFixed(4)}`);
-    }
-  }
-
   return (
     <group>
-      {/* Ground plane at y=0 */}
       <GroundPlane />
-
-      {/* Legs: pivot at floor (y=0) */}
       <LegsGroup resolved={resolved} stoneId={stoneId} />
-
-      {/* Tabletop: center of top surface */}
       <mesh
         position={topTransform.position}
         rotation={topTransform.rotation}
@@ -321,6 +372,5 @@ export function TableMeshV3(props: TableMeshV3Props) {
   );
 }
 
-// Re-export resolved type for debug overlay
 export type { ResolvedConfiguration };
 export { resolveConfiguration as resolveForDebug };

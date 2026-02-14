@@ -4,15 +4,17 @@
 // All allowed combinations, placement logic, and constraints
 // are defined here. The UI reads from this; never hardcodes.
 
-export type RuleShape = 'round' | 'oval' | 'rect' | 'racetrack' | 'square';
+// ============================================
+// SHAPES — matches UI TableShape exactly
+// ============================================
 
-export type RuleLegStyle =
-  | 'pedestal'
-  | 'double_pedestal'
-  | 'four_legs'
-  | 'trestle'
-  | 'fluted_pedestal'
-  | 'fluted_double';
+export type RuleShape = 'ellips' | 'round' | 'ovale' | 'corner' | 'cut-corner';
+
+// ============================================
+// LEG STYLES — simplified: 4 styles, auto 1-or-2
+// ============================================
+
+export type RuleLegStyle = 'pedestal' | 'fluted' | 'four_legs' | 'trestle';
 
 // ============================================
 // Leg Size Variants (uniform scale only)
@@ -40,7 +42,7 @@ export interface LegDefinition {
 }
 
 // ============================================
-// LEG DEFINITIONS
+// LEG DEFINITIONS (4 styles)
 // ============================================
 
 export const LEG_DEFINITIONS: LegDefinition[] = [
@@ -49,27 +51,27 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
     label: 'Pedestal',
     labelNL: 'Pilaar',
     sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 150, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 200, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 250, heightMm: 730 },
-      { id: 'XL', label: 'XL', radiusMm: 300, heightMm: 730 },
+      { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
+      { id: 'XL', label: 'XL', radiusMm: 250, heightMm: 730 },
     ],
-    compatibleShapes: ['round', 'oval', 'square', 'racetrack'],
+    compatibleShapes: ['round', 'ellips', 'ovale'],
     minLengthMm: 0,
     priceUplift: 0,
   },
   {
-    id: 'double_pedestal',
-    label: 'Double Pedestal',
-    labelNL: 'Dubbele Pilaar',
+    id: 'fluted',
+    label: 'Fluted',
+    labelNL: 'Gecanneleerd',
     sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 180, heightMm: 730 },
+      { id: 'S', label: 'S', radiusMm: 150, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 200, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 260, heightMm: 730 },
     ],
-    compatibleShapes: ['oval', 'rect', 'racetrack'],
-    minLengthMm: 1600,
-    priceUplift: 250,
+    compatibleShapes: ['round', 'ellips', 'ovale'],
+    minLengthMm: 0,
+    priceUplift: 500,
   },
   {
     id: 'four_legs',
@@ -80,7 +82,7 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
       { id: 'M', label: 'M', radiusMm: 50, heightMm: 730 },
       { id: 'L', label: 'L', radiusMm: 60, heightMm: 730 },
     ],
-    compatibleShapes: ['rect', 'square', 'oval', 'racetrack'],
+    compatibleShapes: ['corner', 'cut-corner', 'ovale', 'ellips'],
     minLengthMm: 0,
     priceUplift: 0,
   },
@@ -92,33 +94,9 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
       { id: 'S', label: 'S', radiusMm: 30, heightMm: 730 },
       { id: 'M', label: 'M', radiusMm: 40, heightMm: 730 },
     ],
-    compatibleShapes: ['rect', 'oval', 'racetrack'],
+    compatibleShapes: ['corner', 'cut-corner', 'ovale', 'ellips'],
     minLengthMm: 1600,
     priceUplift: 350,
-  },
-  {
-    id: 'fluted_pedestal',
-    label: 'Fluted Pedestal',
-    labelNL: 'Gecanneleerde Pilaar',
-    sizeVariants: [
-      { id: 'M', label: 'M', radiusMm: 200, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 260, heightMm: 730 },
-    ],
-    compatibleShapes: ['round', 'oval', 'square'],
-    minLengthMm: 0,
-    priceUplift: 500,
-  },
-  {
-    id: 'fluted_double',
-    label: 'Fluted Double',
-    labelNL: 'Gecanneleerd Dubbel',
-    sizeVariants: [
-      { id: 'M', label: 'M', radiusMm: 160, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
-    ],
-    compatibleShapes: ['oval', 'rect', 'racetrack'],
-    minLengthMm: 1800,
-    priceUplift: 750,
   },
 ];
 
@@ -135,40 +113,41 @@ export interface ShapeDefinition {
 }
 
 export const SHAPE_DEFINITIONS: ShapeDefinition[] = [
+  { id: 'ellips', label: 'Ellipse', labelNL: 'Ellips', defaultLegStyle: 'pedestal' },
   { id: 'round', label: 'Round', labelNL: 'Rond', defaultLegStyle: 'pedestal' },
-  { id: 'oval', label: 'Oval', labelNL: 'Ovaal', defaultLegStyle: 'pedestal' },
-  { id: 'rect', label: 'Rectangle', labelNL: 'Rechthoek', defaultLegStyle: 'four_legs' },
-  { id: 'racetrack', label: 'Racetrack', labelNL: 'Racetrack', defaultLegStyle: 'double_pedestal' },
-  { id: 'square', label: 'Square', labelNL: 'Vierkant', defaultLegStyle: 'pedestal' },
+  { id: 'ovale', label: 'Oval', labelNL: 'Ovale', defaultLegStyle: 'pedestal' },
+  { id: 'corner', label: 'Rectangle', labelNL: 'Rechthoek', defaultLegStyle: 'four_legs' },
+  { id: 'cut-corner', label: 'Cut Corner', labelNL: 'Afgeschuind', defaultLegStyle: 'four_legs' },
 ];
+
+// ============================================
+// AUTO LEG COUNT
+// ============================================
+
+/**
+ * Determine how many legs based on shape + length.
+ * Pedestal/Fluted: 1 for round or small tables, 2 for large ellips/ovale.
+ * Four legs: always 4.
+ * Trestle: always 2.
+ */
+export function determineLegCount(
+  legStyle: RuleLegStyle,
+  shape: RuleShape,
+  lengthMm: number,
+): number {
+  if (legStyle === 'four_legs') return 4;
+  if (legStyle === 'trestle') return 2;
+
+  // Pedestal or Fluted: auto 1 or 2
+  if (shape === 'round') return 1;
+  if ((shape === 'ellips' || shape === 'ovale') && lengthMm >= 2000) return 2;
+  if (shape === 'corner' || shape === 'cut-corner') return 4; // shouldn't happen but fallback
+  return 1;
+}
 
 // ============================================
 // HARD RULES
 // ============================================
-
-/**
- * Hard rule: Oval ≥ 2000mm MUST use 2-leg config.
- * Returns true if the legStyle is forbidden for the given shape+dims.
- */
-export function isForbidden(
-  shape: RuleShape,
-  lengthMm: number,
-  legStyle: RuleLegStyle
-): boolean {
-  // Oval ≥ 2000mm: single pedestal forbidden → must be double
-  if (shape === 'oval' && lengthMm >= 2000) {
-    if (legStyle === 'pedestal' || legStyle === 'fluted_pedestal') {
-      return true;
-    }
-  }
-  // Racetrack ≥ 2000mm same rule
-  if (shape === 'racetrack' && lengthMm >= 2000) {
-    if (legStyle === 'pedestal' || legStyle === 'fluted_pedestal') {
-      return true;
-    }
-  }
-  return false;
-}
 
 /**
  * Get all valid leg styles for a shape+dimensions combo.
@@ -180,7 +159,6 @@ export function getValidLegStyles(
   return LEG_DEFINITIONS.filter(leg => {
     if (!leg.compatibleShapes.includes(shape)) return false;
     if (lengthMm < leg.minLengthMm) return false;
-    if (isForbidden(shape, lengthMm, leg.id)) return false;
     return true;
   });
 }
@@ -191,7 +169,7 @@ export function getValidLegStyles(
  */
 export function chooseLegSizeVariant(
   leg: LegDefinition,
-  shape: RuleShape,
+  _shape: RuleShape,
   lengthMm: number,
   widthMm: number,
 ): LegSizeVariant {
@@ -225,9 +203,9 @@ export interface TestPreset {
 }
 
 export const TEST_PRESETS: TestPreset[] = [
-  { id: 'oval-1800', label: 'Oval 1800×900', shape: 'oval', lengthMm: 1800, widthMm: 900, thicknessMm: 20, heightMm: 750 },
-  { id: 'oval-2200', label: 'Oval 2200×1100', shape: 'oval', lengthMm: 2200, widthMm: 1100, thicknessMm: 20, heightMm: 750, note: 'Must resolve to 2 legs' },
+  { id: 'ellips-1800', label: 'Ellips 1800×900', shape: 'ellips', lengthMm: 1800, widthMm: 900, thicknessMm: 20, heightMm: 750 },
+  { id: 'ellips-2200', label: 'Ellips 2200×1100', shape: 'ellips', lengthMm: 2200, widthMm: 1100, thicknessMm: 20, heightMm: 750, note: 'Auto 2 legs' },
   { id: 'round-1200', label: 'Round Ø1200', shape: 'round', lengthMm: 1200, widthMm: 1200, thicknessMm: 20, heightMm: 750 },
-  { id: 'rect-2400', label: 'Rect 2400×1000', shape: 'rect', lengthMm: 2400, widthMm: 1000, thicknessMm: 20, heightMm: 750 },
-  { id: 'racetrack-2400', label: 'Racetrack 2400×1100', shape: 'racetrack', lengthMm: 2400, widthMm: 1100, thicknessMm: 20, heightMm: 750 },
+  { id: 'corner-2400', label: 'Corner 2400×1000', shape: 'corner', lengthMm: 2400, widthMm: 1000, thicknessMm: 20, heightMm: 750 },
+  { id: 'ovale-2400', label: 'Ovale 2400×1100', shape: 'ovale', lengthMm: 2400, widthMm: 1100, thicknessMm: 20, heightMm: 750 },
 ];
