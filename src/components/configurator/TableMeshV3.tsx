@@ -312,13 +312,12 @@ function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
 // Panels are placed side by side with a gap, NOT overlapping.
 // Each panel is a wide flat slab rotated outward from center.
 function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
-  const slabThickness = radiusM * 0.35; // thin stone panel
-  const slabWidth = radiusM * 4;        // broad panel width
-  const vHalfAngle = 18 * (Math.PI / 180); // subtle V opening
+  const slabThickness = radiusM * 0.5;  // substantial stone panel
+  const slabWidth = radiusM * 5;        // broad panel
+  const vHalfAngle = 38 * (Math.PI / 180); // wider V opening for more spread
 
-  // Position each slab so inner edges touch at center, outer edges fan out
-  // Gap = slabThickness so they don't intersect
-  const gap = slabThickness * 0.6;
+  // Gap between inner edges so they don't cross
+  const gap = slabThickness * 0.3;
 
   // cornerIndex 0 = left (<), cornerIndex 1 = right (>)
   const sign = cornerIndex === 0 ? 1 : -1;
