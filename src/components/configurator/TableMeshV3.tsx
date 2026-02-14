@@ -1,14 +1,8 @@
 // ============================================
 // SERA NORR - Geometry-First 3D Table Mesh (V3)
 // ============================================
-// Rules:
-// - All dimensions in mm, convert at boundary via mmToM
-// - Tabletop origin = center of top surface
-// - Leg pivot = floor contact point (bottom center)
-// - Legs NEVER scale non-uniformly
-// - Stone texture applied to full monolith (top + legs)
-// AXIS CONVENTION:
-// X = length (longest), Z = width (depth), Y = height (up)
+// 9 leg styles, rule-driven placement, monolith textures
+// AXIS: X = length, Z = width, Y = height (up)
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
@@ -33,12 +27,13 @@ export interface TableMeshV3Props {
 }
 
 // ============================================
-// CONE TAPER RATIO
+// CONSTANTS
 // ============================================
 const CONE_TAPER_RATIO = 0.65;
+const HOURGLASS_WAIST_RATIO = 0.4;
 
 // ============================================
-// STONE MATERIAL (monolith: same texture on top + legs)
+// STONE MATERIAL
 // ============================================
 
 function StoneMaterial({ stoneId, repeatX = 2, repeatY = 2 }: { stoneId: string; repeatX?: number; repeatY?: number }) {
@@ -82,8 +77,6 @@ function MonolithMaterial({ stoneId, repeatX, repeatY }: { stoneId?: string; rep
 // ============================================
 // PLANAR UV FIX
 // ============================================
-// After creating ExtrudeGeometry, overwrite UVs with planar top-down projection
-// to eliminate zebra-stripe artifacts.
 
 function applyPlanarUV(geometry: THREE.BufferGeometry, lengthM: number, widthM: number) {
   const pos = geometry.attributes.position;
@@ -93,7 +86,6 @@ function applyPlanarUV(geometry: THREE.BufferGeometry, lengthM: number, widthM: 
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i);
     const y = pos.getY(i);
-    // Map x,y (shape plane) to 0..1 UV
     uv.setXY(i, x / lengthM + 0.5, y / widthM + 0.5);
   }
   uv.needsUpdate = true;
@@ -115,54 +107,38 @@ function createTabletopGeometry(
       return new THREE.CylinderGeometry(r, r, thicknessM, 64);
     }
     case 'ellips': {
-      // True ellipse
       const ellipse = new THREE.Shape();
       ellipse.absellipse(0, 0, lengthM / 2, widthM / 2, 0, Math.PI * 2, false, 0);
-      const geo = new THREE.ExtrudeGeometry(ellipse, {
-        depth: thicknessM,
-        bevelEnabled: false,
-      });
+      const geo = new THREE.ExtrudeGeometry(ellipse, { depth: thicknessM, bevelEnabled: false });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
     case 'ovale': {
-      // Stadium/racetrack shape — explicit point-by-point to avoid absarc direction bugs
       const shape2d = new THREE.Shape();
       const hw = lengthM / 2;
       const hd = widthM / 2;
-      const capR = Math.min(hd, hw); // cap radius = half depth
+      const capR = Math.min(hd, hw);
       const straight = hw - capR;
       const arcSegments = 32;
 
-      // Start top-left, go clockwise
       shape2d.moveTo(-straight, hd);
       shape2d.lineTo(straight, hd);
-
-      // Right semicircle (top to bottom)
       for (let i = 1; i <= arcSegments; i++) {
         const angle = Math.PI / 2 - (Math.PI * i / arcSegments);
         shape2d.lineTo(straight + capR * Math.cos(angle), capR * Math.sin(angle));
       }
-
-      // Bottom edge (right to left)
       shape2d.lineTo(-straight, -hd);
-
-      // Left semicircle (bottom to top, going outward through angle PI)
       for (let i = 1; i <= arcSegments; i++) {
         const angle = -Math.PI / 2 - (Math.PI * i / arcSegments);
         shape2d.lineTo(-straight + capR * Math.cos(angle), capR * Math.sin(angle));
       }
       shape2d.closePath();
 
-      const geo = new THREE.ExtrudeGeometry(shape2d, {
-        depth: thicknessM,
-        bevelEnabled: false,
-      });
+      const geo = new THREE.ExtrudeGeometry(shape2d, { depth: thicknessM, bevelEnabled: false });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
     case 'corner': {
-      // Rounded rectangle
       const cornerRadius = Math.min(lengthM, widthM) * 0.05;
       const rr = new THREE.Shape();
       const hw = lengthM / 2;
@@ -180,15 +156,11 @@ function createTabletopGeometry(
       rr.absarc(-hw + cr, -hd + cr, cr, Math.PI, Math.PI * 1.5, false);
       rr.closePath();
 
-      const geo = new THREE.ExtrudeGeometry(rr, {
-        depth: thicknessM,
-        bevelEnabled: false,
-      });
+      const geo = new THREE.ExtrudeGeometry(rr, { depth: thicknessM, bevelEnabled: false });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
     case 'cut-corner': {
-      // Chamfered rectangle (45° cut corners)
       const chamfer = Math.min(lengthM, widthM) * 0.1;
       const cc = new THREE.Shape();
       const hw = lengthM / 2;
@@ -204,10 +176,7 @@ function createTabletopGeometry(
       cc.lineTo(-hw, -hd + chamfer);
       cc.closePath();
 
-      const geo = new THREE.ExtrudeGeometry(cc, {
-        depth: thicknessM,
-        bevelEnabled: false,
-      });
+      const geo = new THREE.ExtrudeGeometry(cc, { depth: thicknessM, bevelEnabled: false });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
@@ -217,20 +186,17 @@ function createTabletopGeometry(
   }
 }
 
-/** Get position & rotation for the tabletop based on shape type */
 function getTabletopTransform(
   shape: RuleShape,
   legHeightM: number,
   thicknessM: number,
 ): { position: [number, number, number]; rotation: [number, number, number] } {
-  // ExtrudeGeometry shapes need rotation to lie flat (XZ plane)
   if (shape === 'ellips' || shape === 'ovale' || shape === 'corner' || shape === 'cut-corner') {
     return {
       position: [0, legHeightM + thicknessM, 0],
       rotation: [-Math.PI / 2, 0, 0],
     };
   }
-  // CylinderGeometry (round) is already Y-axis aligned
   return {
     position: [0, legHeightM + thicknessM / 2, 0],
     rotation: [0, 0, 0],
@@ -238,48 +204,145 @@ function getTabletopTransform(
 }
 
 // ============================================
-// LEG GEOMETRY
+// LEG GEOMETRY COMPONENTS (9 styles)
 // ============================================
 
-function ConePedestalLeg({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
-  const bottomRadius = radiusM;
-  const topRadius = radiusM * CONE_TAPER_RATIO;
+interface LegProps {
+  radiusM: number;
+  heightM: number;
+  stoneId?: string;
+}
 
+// --- Cylindrical: straight cylinder, equal top/bottom radius ---
+function CylindricalLeg({ radiusM, heightM, stoneId }: LegProps) {
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[topRadius, bottomRadius, heightM, 48]} />
+      <cylinderGeometry args={[radiusM, radiusM, heightM, 48]} />
       <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
     </mesh>
   );
 }
 
-function FlutedConeLeg({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
-  const bottomRadius = radiusM;
-  const topRadius = radiusM * CONE_TAPER_RATIO;
-
+// --- Cylindrical Fluted: 12-sided cylinder ---
+function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[topRadius, bottomRadius, heightM, 12, 1]} />
+      <cylinderGeometry args={[radiusM, radiusM, heightM, 12, 1]} />
       <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
     </mesh>
   );
 }
 
-function TrestleLeg({ radiusM, heightM, widthM, stoneId }: { radiusM: number; heightM: number; widthM: number; stoneId?: string }) {
-  const slabWidth = widthM * 0.7;
-  const slabThickness = radiusM * 2;
+// --- Conical: tapered cone ---
+function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
+  const topRadius = radiusM * CONE_TAPER_RATIO;
   return (
     <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <boxGeometry args={[slabThickness, heightM, slabWidth]} />
-      <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
+      <cylinderGeometry args={[topRadius, radiusM, heightM, 48]} />
+      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
     </mesh>
   );
 }
 
-function FourLegSingle({ radiusM, heightM, stoneId }: { radiusM: number; heightM: number; stoneId?: string }) {
+// --- Hourglass: two mirrored cones, narrow in the middle ---
+function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
+  const waistRadius = radiusM * HOURGLASS_WAIST_RATIO;
+  const halfH = heightM / 2;
   return (
-    <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[radiusM, radiusM, heightM, 16]} />
+    <group position={[0, 0, 0]}>
+      {/* Bottom half: wide bottom -> narrow middle */}
+      <mesh position={[0, halfH / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[waistRadius, radiusM, halfH, 48]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={1} />
+      </mesh>
+      {/* Top half: narrow middle -> wide top */}
+      <mesh position={[0, halfH + halfH / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[radiusM, waistRadius, halfH, 48]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={1} />
+      </mesh>
+    </group>
+  );
+}
+
+// --- Quartet: single central drum base (round tables only) ---
+function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
+  // Low, wide drum
+  const drumHeight = heightM;
+  const drumRadius = radiusM * 1.5;
+  return (
+    <mesh position={[0, drumHeight / 2, 0]} castShadow receiveShadow>
+      <cylinderGeometry args={[drumRadius, drumRadius, drumHeight, 48]} />
+      <MonolithMaterial stoneId={stoneId} repeatX={2} repeatY={2} />
+    </mesh>
+  );
+}
+
+// --- V-Legs: cylinder tilted outward 7 degrees ---
+function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
+  const tiltAngle = 7 * (Math.PI / 180);
+  // Tilt direction based on placement (left/right)
+  const tiltZ = cornerIndex === 0 ? tiltAngle : -tiltAngle;
+
+  return (
+    <group position={[0, heightM / 2, 0]}>
+      <mesh rotation={[0, 0, tiltZ]} castShadow receiveShadow>
+        <cylinderGeometry args={[radiusM * 0.7, radiusM, heightM, 24]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={1.5} />
+      </mesh>
+    </group>
+  );
+}
+
+// --- D-Legs: half-cylinder (D-profile), flat side facing center ---
+function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
+  const geo = useMemo(() => {
+    const g = new THREE.CylinderGeometry(radiusM * 1.5, radiusM * 1.5, heightM, 24, 1, false, 0, Math.PI);
+    return g;
+  }, [radiusM, heightM]);
+
+  // Rotate flat side toward center
+  const rotY = cornerIndex === 0 ? Math.PI / 2 : -Math.PI / 2;
+
+  return (
+    <mesh position={[0, heightM / 2, 0]} rotation={[0, rotY, 0]} geometry={geo} castShadow receiveShadow>
+      <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={1.5} />
+    </mesh>
+  );
+}
+
+// --- Rounded Legs: cylinder with sphere on bottom ---
+function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
+  const cylHeight = heightM - radiusM;
+  return (
+    <group>
+      <mesh position={[0, radiusM + cylHeight / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[radiusM, radiusM, cylHeight, 16]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={1.5} />
+      </mesh>
+      <mesh position={[0, radiusM, 0]} castShadow receiveShadow>
+        <sphereGeometry args={[radiusM, 16, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={0.5} />
+      </mesh>
+    </group>
+  );
+}
+
+// --- Curved Legs: slightly curved cylinder using tube geometry ---
+function CurvedLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
+  const geo = useMemo(() => {
+    // Subtle outward curve
+    const curveDir = cornerIndex < 2 ? -1 : 1;
+    const xBow = cornerIndex % 2 === 0 ? -0.02 : 0.02;
+    const curve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(xBow * heightM, heightM * 0.5, curveDir * 0.015 * heightM),
+      new THREE.Vector3(0, heightM, 0),
+    );
+    return new THREE.TubeGeometry(curve, 16, radiusM, 12, false);
+  }, [radiusM, heightM, cornerIndex]);
+
+  return (
+    <mesh geometry={geo} castShadow receiveShadow>
       <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={1.5} />
     </mesh>
   );
@@ -292,27 +355,42 @@ function FourLegSingle({ radiusM, heightM, stoneId }: { radiusM: number; heightM
 function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; stoneId?: string }) {
   const legHeightM = mmToM(resolved.legHeightMm);
   const legRadiusM = mmToM(resolved.legSizeVariant.radiusMm);
-  const widthM = mmToM(resolved.widthMm);
 
   return (
     <group>
       {resolved.legPlacements.map((placement, i) => {
         const xM = mmToM(placement.x);
         const zM = mmToM(placement.z);
+        const style = resolved.legStyle;
 
         return (
           <group key={i} position={[xM, 0, zM]}>
-            {resolved.legStyle === 'pedestal' && (
-              <ConePedestalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            {style === 'cylindrical' && (
+              <CylindricalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {resolved.legStyle === 'fluted' && (
-              <FlutedConeLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            {style === 'cylindrical_fluted' && (
+              <CylindricalFlutedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {resolved.legStyle === 'four_legs' && (
-              <FourLegSingle radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            {style === 'conical' && (
+              <ConicalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {resolved.legStyle === 'trestle' && (
-              <TrestleLeg radiusM={legRadiusM} heightM={legHeightM} widthM={widthM} stoneId={stoneId} />
+            {style === 'hourglass' && (
+              <HourglassLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            )}
+            {style === 'quartet_legs' && (
+              <QuartetLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            )}
+            {style === 'v_legs' && (
+              <VLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} cornerIndex={i} />
+            )}
+            {style === 'd_legs' && (
+              <DLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} cornerIndex={i} />
+            )}
+            {style === 'rounded_legs' && (
+              <RoundedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            )}
+            {style === 'curved_legs' && (
+              <CurvedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} cornerIndex={i} />
             )}
           </group>
         );

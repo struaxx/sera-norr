@@ -1,5 +1,5 @@
 // ============================================
-// Configurator Phase V3 - Geometry-First, Rules-Driven
+// Configurator Phase V3 - 9 Leg Styles, Rules-Driven
 // ============================================
 
 import { Suspense, lazy, useMemo, useCallback, useState } from 'react';
@@ -16,6 +16,7 @@ import {
   SHAPE_DEFINITIONS,
   LEG_DEFINITIONS,
   getValidLegStyles,
+  isPedestalStyle,
 } from '@/lib/configurator/rules/productRules';
 
 const ConfiguratorViewerV3 = lazy(() =>
@@ -226,7 +227,7 @@ function ThicknessSelectorV3({
 }
 
 // ============================================
-// LEG STYLE SELECTOR (4 styles, auto count)
+// LEG STYLE SELECTOR (9 styles, 2 groups)
 // ============================================
 
 function LegSelectorV3({
@@ -244,43 +245,64 @@ function LegSelectorV3({
 }) {
   const validStyles = useMemo(() => getValidLegStyles(shape, lengthMm), [shape, lengthMm]);
 
-  return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-2">
-        {LEG_DEFINITIONS.map(leg => {
-          const isValid = validStyles.some(v => v.id === leg.id);
-          const isSelected = value === leg.id;
+  const pedestalStyles = LEG_DEFINITIONS.filter(l => l.category === 'pedestal');
+  const fixedStyles = LEG_DEFINITIONS.filter(l => l.category === 'fixed');
 
-          return (
-            <button
-              key={leg.id}
-              onClick={() => isValid && onChange(leg.id)}
-              disabled={!isValid}
-              className={cn(
-                "relative flex flex-col items-center p-4 rounded-sm border transition-all duration-200 text-center",
-                isSelected
-                  ? "border-foreground bg-foreground/5"
-                  : isValid
-                    ? "border-border hover:border-foreground/50"
-                    : "border-border/50 opacity-40 cursor-not-allowed"
-              )}
-            >
-              <span className="text-xs font-medium">{isNL ? leg.labelNL : leg.label}</span>
-              {leg.priceUplift > 0 && isValid && (
-                <span className="text-[10px] text-muted-foreground mt-1">+€{leg.priceUplift}</span>
-              )}
-              {isSelected && (
-                <div className="absolute top-2 right-2 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
-                  <Check className="w-3 h-3 text-background" />
-                </div>
-              )}
-              {!isValid && (
-                <span className="text-[8px] text-muted-foreground mt-1">{isNL ? 'Niet beschikbaar' : 'Not available'}</span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+  const hasPedestalOptions = pedestalStyles.some(l => validStyles.some(v => v.id === l.id));
+  const hasFixedOptions = fixedStyles.some(l => validStyles.some(v => v.id === l.id));
+
+  const renderLegButton = (leg: typeof LEG_DEFINITIONS[number]) => {
+    const isValid = validStyles.some(v => v.id === leg.id);
+    const isSelected = value === leg.id;
+
+    if (!isValid) return null; // Hide invalid options
+
+    return (
+      <button
+        key={leg.id}
+        onClick={() => onChange(leg.id)}
+        className={cn(
+          "relative flex flex-col items-center p-4 rounded-sm border transition-all duration-200 text-center",
+          isSelected
+            ? "border-foreground bg-foreground/5"
+            : "border-border hover:border-foreground/50"
+        )}
+      >
+        <span className="text-xs font-medium">{isNL ? leg.labelNL : leg.label}</span>
+        {leg.priceUplift > 0 && (
+          <span className="text-[10px] text-muted-foreground mt-1">+€{leg.priceUplift}</span>
+        )}
+        {isSelected && (
+          <div className="absolute top-2 right-2 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
+            <Check className="w-3 h-3 text-background" />
+          </div>
+        )}
+      </button>
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      {hasPedestalOptions && (
+        <div className="space-y-2">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            {isNL ? 'Pedestal (1 of 2)' : 'Pedestal (1 or 2)'}
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {pedestalStyles.map(renderLegButton)}
+          </div>
+        </div>
+      )}
+      {hasFixedOptions && (
+        <div className="space-y-2">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            {isNL ? 'Vast' : 'Fixed'}
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {fixedStyles.map(renderLegButton)}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -326,7 +348,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [widthMm, setWidthMm] = useState(1000);
   const [heightMm, setHeightMm] = useState(750);
   const [thicknessMm, setThicknessMm] = useState(20);
-  const [legStyle, setLegStyle] = useState<RuleLegStyle>('pedestal');
+  const [legStyle, setLegStyle] = useState<RuleLegStyle>('cylindrical');
   const [stoneId, setStoneId] = useState('calacatta-viola');
   const [resolved, setResolved] = useState<ResolvedConfiguration | null>(null);
 
@@ -340,7 +362,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
     const validLegs = getValidLegStyles(newShape, presets?.[0]?.lengthMm ?? lengthMm);
     if (!validLegs.find(l => l.id === legStyle)) {
       const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === newShape);
-      setLegStyle(shapeDef?.defaultLegStyle ?? validLegs[0]?.id ?? 'pedestal');
+      setLegStyle(shapeDef?.defaultLegStyle ?? validLegs[0]?.id ?? 'cylindrical');
     }
   }, [legStyle, lengthMm]);
 
@@ -350,7 +372,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
     const validLegs = getValidLegStyles(shape, l);
     if (!validLegs.find(leg => leg.id === legStyle)) {
       const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === shape);
-      setLegStyle(shapeDef?.defaultLegStyle ?? validLegs[0]?.id ?? 'pedestal');
+      setLegStyle(shapeDef?.defaultLegStyle ?? validLegs[0]?.id ?? 'cylindrical');
     }
   }, [shape, legStyle]);
 
@@ -362,11 +384,11 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
     setThicknessMm(preset.thicknessMm);
     const validLegs = getValidLegStyles(preset.shape, preset.lengthMm);
     const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === preset.shape);
-    const defaultLeg = shapeDef?.defaultLegStyle ?? 'pedestal';
+    const defaultLeg = shapeDef?.defaultLegStyle ?? 'cylindrical';
     if (validLegs.find(l => l.id === defaultLeg)) {
       setLegStyle(defaultLeg);
     } else {
-      setLegStyle(validLegs[0]?.id ?? 'pedestal');
+      setLegStyle(validLegs[0]?.id ?? 'cylindrical');
     }
   }, []);
 
@@ -403,7 +425,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             setWidthMm(1000);
             setHeightMm(750);
             setThicknessMm(20);
-            setLegStyle('pedestal');
+            setLegStyle('cylindrical');
           }}
           className="text-muted-foreground"
         >
@@ -498,7 +520,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
                 <span>•</span>
                 <span>{thicknessMm}mm blad</span>
                 <span>•</span>
-                <span>{resolved?.legCount ?? '?'} {isNL ? 'poten' : 'legs'}</span>
+                <span>{resolved?.legCount ?? '?'} {isNL ? (resolved?.legCount === 1 ? 'poot' : 'poten') : 'legs'}</span>
               </div>
             </div>
 
