@@ -388,20 +388,33 @@ function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Curved Legs: smooth concave cone — wide base tapering to narrow top, like photo 2 reference ---
+// --- Curved Legs: concave cone with waist + subtle top flare (matches travertine reference) ---
 function CurvedLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
-    const segments = 48;
+    const segments = 64;
     const points: THREE.Vector2[] = [];
-    // Concave cone: wide at bottom, smooth inward curve, narrow at top
-    const baseRadius = radiusM * 1.8;
-    const topRadius = radiusM * 0.55;
+    // Profile: wide base → concave inward → narrow waist at ~65% → subtle flare to top
+    const baseRadius = radiusM * 1.6;
+    const waistRadius = radiusM * 0.6;
+    const topRadius = radiusM * 1.0;
+    const waistPos = 0.65; // waist at 65% height
+
     for (let i = 0; i <= segments; i++) {
       const t = i / segments; // 0 = bottom, 1 = top
-      // Concave interpolation (ease-out curve makes it narrow quickly then level off)
-      const curve = 1 - Math.pow(1 - t, 2.2);
-      const r = baseRadius + (topRadius - baseRadius) * curve;
-      points.push(new THREE.Vector2(r, t * heightM));
+      let r: number;
+      if (t <= waistPos) {
+        // Base to waist: concave inward curve
+        const u = t / waistPos;
+        // Concave: slow start, fast middle, slow end
+        const curve = Math.pow(u, 0.6);
+        r = baseRadius + (waistRadius - baseRadius) * curve;
+      } else {
+        // Waist to top: subtle outward flare
+        const u = (t - waistPos) / (1 - waistPos);
+        const curve = Math.pow(u, 0.5);
+        r = waistRadius + (topRadius - waistRadius) * curve;
+      }
+      points.push(new THREE.Vector2(Math.max(r, radiusM * 0.2), t * heightM));
     }
     return new THREE.LatheGeometry(points, 48);
   }, [radiusM, heightM]);
