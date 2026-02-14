@@ -308,32 +308,32 @@ function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- V-Legs: two flat stone slabs per placement forming a V from top view ---
-// Each placement = one V-base (2 slabs angled outward from center)
+// --- V-Legs: two flat stone slabs forming < > from top view ---
+// Left placement = < shape, Right placement = > shape (mirrored)
 function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
-  const slabThickness = radiusM * 0.6; // thin stone slab
-  const slabWidth = radiusM * 3.5; // tall/wide slab
-  const slabDepth = heightM * 0.35; // depth into table
-  const vAngle = 35 * (Math.PI / 180); // V-opening angle from center
+  const slabThickness = radiusM * 0.6;
+  const slabWidth = radiusM * 3.5;
+  const vAngle = 30 * (Math.PI / 180);
+  const offset = Math.sin(vAngle) * slabWidth * 0.4;
 
-  // Mirror for left vs right placement
-  const mirror = cornerIndex === 0 ? 1 : -1;
+  // cornerIndex 0 = left (<), cornerIndex 1 = right (>)
+  const sign = cornerIndex === 0 ? 1 : -1;
 
   return (
     <group>
-      {/* Left slab of the V */}
+      {/* Front slab */}
       <mesh
-        position={[0, heightM / 2, mirror * Math.sin(vAngle) * slabDepth * 0.3]}
-        rotation={[0, mirror * vAngle, 0]}
+        position={[0, heightM / 2, offset]}
+        rotation={[0, sign * vAngle, 0]}
         castShadow receiveShadow
       >
         <boxGeometry args={[slabThickness, heightM, slabWidth]} />
         <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
       </mesh>
-      {/* Right slab of the V */}
+      {/* Back slab */}
       <mesh
-        position={[0, heightM / 2, -mirror * Math.sin(vAngle) * slabDepth * 0.3]}
-        rotation={[0, -mirror * vAngle, 0]}
+        position={[0, heightM / 2, -offset]}
+        rotation={[0, -sign * vAngle, 0]}
         castShadow receiveShadow
       >
         <boxGeometry args={[slabThickness, heightM, slabWidth]} />
