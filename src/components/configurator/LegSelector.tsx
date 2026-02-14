@@ -1,5 +1,5 @@
 // ============================================
-// Leg Selector - Meraki-Style Premium UI
+// Leg Selector - Updated for 9-style system
 // ============================================
 
 import { useState, useMemo } from 'react';
@@ -22,80 +22,70 @@ function LegIcon({ legId, className }: { legId: string; className?: string }) {
   const iconClass = cn("w-full h-full", className);
   
   switch (legId) {
-    case 'pillar-leg':
+    case 'cylindrical':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
           <rect x="16" y="8" width="8" height="24" rx="4" />
         </svg>
       );
-    case 'cone-leg':
+    case 'cylindrical_fluted':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M14 32 L20 8 L26 32 Z" />
+          <rect x="14" y="8" width="12" height="24" rx="1" />
+          <line x1="17" y1="8" x2="17" y2="32" />
+          <line x1="20" y1="8" x2="20" y2="32" />
+          <line x1="23" y1="8" x2="23" y2="32" />
         </svg>
       );
-    case 'block-frame':
+    case 'conical':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="8" y="12" width="24" height="20" rx="1" />
-          <line x1="8" y1="20" x2="32" y2="20" />
+          <path d="M14 32 L17 8 L23 8 L26 32 Z" />
         </svg>
       );
-    case 'edge-frame':
+    case 'hourglass':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M8 32 L8 12 L14 12" />
-          <path d="M32 32 L32 12 L26 12" />
-          <line x1="8" y1="32" x2="32" y2="32" />
+          <path d="M14 8 L22 20 L14 32 M26 8 L18 20 L26 32" />
         </svg>
       );
-    case 'rock-beam':
+    case 'quartet_legs':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M6 32 L10 16 L20 20 L30 14 L34 32 Z" />
+          <ellipse cx="20" cy="28" rx="12" ry="4" />
+          <ellipse cx="20" cy="12" rx="10" ry="3" />
+          <line x1="10" y1="12" x2="8" y2="28" />
+          <line x1="30" y1="12" x2="32" y2="28" />
         </svg>
       );
-    case 'hexa-beam':
+    case 'v_legs':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <polygon points="20,8 30,14 30,26 20,32 10,26 10,14" />
+          <path d="M12 8 L16 32" strokeLinecap="round" />
+          <path d="M28 8 L24 32" strokeLinecap="round" />
         </svg>
       );
-    case 'twin-fold':
+    case 'd_legs':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M10 32 L10 16 L20 12 L20 32" />
-          <path d="M20 32 L20 16 L30 12 L30 32" />
+          <path d="M14 8 L14 32 Q20 32 20 20 Q20 8 14 8" />
+          <path d="M26 8 L26 32 Q20 32 20 20 Q20 8 26 8" />
         </svg>
       );
-    case 'angle-corner':
+    case 'rounded_legs':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M8 32 L8 12 L16 12 L16 20" />
-          <path d="M32 32 L32 12 L24 12 L24 20" />
+          <line x1="12" y1="8" x2="12" y2="28" strokeLinecap="round" />
+          <circle cx="12" cy="30" r="2" />
+          <line x1="28" y1="8" x2="28" y2="28" strokeLinecap="round" />
+          <circle cx="28" cy="30" r="2" />
         </svg>
       );
-    case 'twist-base':
+    case 'curved_legs':
       return (
         <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M14 32 Q20 24 26 20 Q14 16 20 8" strokeLinecap="round" />
-        </svg>
-      );
-    case 'slope-base':
-      return (
-        <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M10 32 L10 18 L30 14 L30 32 Z" />
-        </svg>
-      );
-    case 'fluted-base':
-      return (
-        <svg viewBox="0 0 40 40" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <ellipse cx="20" cy="30" rx="10" ry="3" />
-          <ellipse cx="20" cy="10" rx="6" ry="2" />
-          <path d="M14 10 L10 30" />
-          <path d="M17 10 L15 30" />
-          <path d="M23 10 L25 30" />
-          <path d="M26 10 L30 30" />
+          <path d="M12 8 Q10 20 14 32" strokeLinecap="round" />
+          <path d="M28 8 Q30 20 26 32" strokeLinecap="round" />
         </svg>
       );
     default:
@@ -118,7 +108,7 @@ interface CategoryFilterProps {
 }
 
 function CategoryFilter({ value, onChange, isNL = true }: CategoryFilterProps) {
-  const categories: (LegCategory | 'all')[] = ['all', 'core', 'architectural', 'sculptural'];
+  const categories: (LegCategory | 'all')[] = ['all', 'pedestal', 'fixed'];
   
   return (
     <div className="flex gap-1 flex-wrap">
@@ -169,7 +159,6 @@ function LegCard({ leg, isSelected, isCompatible, onSelect, isNL = true }: LegCa
             : "border-border/50 opacity-40 cursor-not-allowed"
       )}
     >
-      {/* Icon */}
       <div className={cn(
         "w-12 h-12 mb-3 transition-colors",
         isSelected ? "text-foreground" : "text-muted-foreground group-hover:text-foreground/70"
@@ -177,29 +166,24 @@ function LegCard({ leg, isSelected, isCompatible, onSelect, isNL = true }: LegCa
         <LegIcon legId={leg.id} />
       </div>
       
-      {/* Name */}
       <span className="text-xs font-medium block">{leg.name}</span>
       
-      {/* Price uplift indicator */}
       {leg.priceUplift > 0 && isCompatible && (
         <span className="text-[10px] text-muted-foreground mt-1">
           +€{leg.priceUplift.toLocaleString('nl-NL')}
         </span>
       )}
 
-      {/* Selected checkmark */}
       {isSelected && (
         <div className="absolute top-2 right-2 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
           <Check className="w-3 h-3 text-background" />
         </div>
       )}
       
-      {/* Category badge - subtle */}
       <span className={cn(
         "absolute bottom-1 left-1 text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded-sm",
-        leg.category === 'core' && "bg-secondary/50 text-muted-foreground",
-        leg.category === 'architectural' && "bg-primary/10 text-primary/70",
-        leg.category === 'sculptural' && "bg-accent/10 text-accent-foreground/70"
+        leg.category === 'pedestal' && "bg-secondary/50 text-muted-foreground",
+        leg.category === 'fixed' && "bg-primary/10 text-primary/70",
       )}>
         {LEG_CATEGORY_LABELS[leg.category][isNL ? 'nl' : 'en']}
       </span>
@@ -232,7 +216,6 @@ export function LegSelector({
 }: LegSelectorProps) {
   const [categoryFilter, setCategoryFilter] = useState<LegCategory | 'all'>('all');
 
-  // Filter legs by category
   const filteredLegs = useMemo(() => {
     const activeLegs = LEG_LIBRARY.filter(leg => leg.isActiveInConfigurator);
     if (categoryFilter === 'all') {
@@ -243,11 +226,9 @@ export function LegSelector({
       .sort((a, b) => a.sortOrder - b.sortOrder);
   }, [categoryFilter]);
 
-  // Check if current selection is still valid
   const selectedLeg = LEG_LIBRARY.find(l => l.id === value);
   const isCurrentValid = selectedLeg && isLegCompatible(value, shape, length, diameter);
 
-  // Incompatibility message
   const incompatibleMessage = useMemo(() => {
     if (!isCurrentValid && selectedLeg) {
       return isNL 
@@ -259,21 +240,18 @@ export function LegSelector({
 
   return (
     <div className={cn("space-y-4", className)}>
-      {/* Category Filter */}
       <CategoryFilter 
         value={categoryFilter}
         onChange={setCategoryFilter}
         isNL={isNL}
       />
 
-      {/* Incompatibility warning */}
       {incompatibleMessage && (
         <p className="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-sm">
           {incompatibleMessage}
         </p>
       )}
 
-      {/* Leg Grid - 2 columns */}
       <div className="grid grid-cols-2 gap-3">
         {filteredLegs.map((leg) => {
           const isCompatible = isLegCompatible(leg.id, shape, length, diameter);
@@ -292,7 +270,6 @@ export function LegSelector({
         })}
       </div>
 
-      {/* Empty state */}
       {filteredLegs.length === 0 && (
         <p className="text-sm text-muted-foreground text-center py-4">
           {isNL ? 'Geen onderstellen in deze categorie' : 'No bases in this category'}

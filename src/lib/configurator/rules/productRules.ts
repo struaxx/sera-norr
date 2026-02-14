@@ -11,10 +11,25 @@
 export type RuleShape = 'ellips' | 'round' | 'ovale' | 'corner' | 'cut-corner';
 
 // ============================================
-// LEG STYLES — simplified: 4 styles, auto 1-or-2
+// LEG STYLES — 9 concrete styles
 // ============================================
 
-export type RuleLegStyle = 'pedestal' | 'fluted' | 'four_legs' | 'trestle';
+export type RuleLegStyle =
+  | 'cylindrical'
+  | 'cylindrical_fluted'
+  | 'conical'
+  | 'hourglass'
+  | 'quartet_legs'
+  | 'v_legs'
+  | 'd_legs'
+  | 'rounded_legs'
+  | 'curved_legs';
+
+// ============================================
+// Leg Category
+// ============================================
+
+export type RuleLegCategory = 'pedestal' | 'fixed';
 
 // ============================================
 // Leg Size Variants (uniform scale only)
@@ -23,80 +38,158 @@ export type RuleLegStyle = 'pedestal' | 'fluted' | 'four_legs' | 'trestle';
 export interface LegSizeVariant {
   id: string;
   label: string;
-  radiusMm: number; // cylinder/pedestal radius
-  heightMm: number; // leg height (table height - top thickness)
+  radiusMm: number;
+  heightMm: number;
 }
 
 export interface LegDefinition {
   id: RuleLegStyle;
   label: string;
   labelNL: string;
-  /** Size variants — use fixed models, never non-uniform scale */
+  category: RuleLegCategory;
+  /** Fixed leg count for 'fixed' category. Pedestal uses auto logic. */
+  fixedLegCount?: 1 | 2 | 4;
   sizeVariants: LegSizeVariant[];
-  /** Which shapes this leg style is allowed with */
   compatibleShapes: RuleShape[];
-  /** Min table length (mm) required for this style. 0 = no minimum */
   minLengthMm: number;
-  /** Price uplift in EUR */
   priceUplift: number;
 }
 
 // ============================================
-// LEG DEFINITIONS (4 styles)
+// LEG DEFINITIONS (9 styles)
 // ============================================
 
 export const LEG_DEFINITIONS: LegDefinition[] = [
+  // === Pedestal (auto 1 or 2) ===
   {
-    id: 'pedestal',
-    label: 'Pedestal',
-    labelNL: 'Pilaar',
+    id: 'cylindrical',
+    label: 'Cylindrical',
+    labelNL: 'Cilindrisch',
+    category: 'pedestal',
     sizeVariants: [
       { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
       { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
       { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
-      { id: 'XL', label: 'XL', radiusMm: 250, heightMm: 730 },
     ],
     compatibleShapes: ['round', 'ellips', 'ovale'],
     minLengthMm: 0,
     priceUplift: 0,
   },
   {
-    id: 'fluted',
-    label: 'Fluted',
+    id: 'cylindrical_fluted',
+    label: 'Cylindrical Fluted',
     labelNL: 'Gecanneleerd',
+    category: 'pedestal',
     sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 150, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 200, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 260, heightMm: 730 },
+      { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
     ],
     compatibleShapes: ['round', 'ellips', 'ovale'],
     minLengthMm: 0,
     priceUplift: 500,
   },
   {
-    id: 'four_legs',
-    label: 'Four Legs',
-    labelNL: 'Vier Poten',
+    id: 'conical',
+    label: 'Conical',
+    labelNL: 'Conisch',
+    category: 'pedestal',
+    sizeVariants: [
+      { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
+    ],
+    compatibleShapes: ['round', 'ellips', 'ovale'],
+    minLengthMm: 0,
+    priceUplift: 250,
+  },
+  {
+    id: 'hourglass',
+    label: 'Hourglass',
+    labelNL: 'Zandloper',
+    category: 'pedestal',
+    sizeVariants: [
+      { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
+    ],
+    compatibleShapes: ['round', 'ellips', 'ovale'],
+    minLengthMm: 0,
+    priceUplift: 400,
+  },
+
+  // === Fixed-count styles ===
+  {
+    id: 'quartet_legs',
+    label: 'Quartet',
+    labelNL: 'Quartet',
+    category: 'fixed',
+    fixedLegCount: 1,
+    sizeVariants: [
+      { id: 'M', label: 'M', radiusMm: 200, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 260, heightMm: 730 },
+    ],
+    compatibleShapes: ['round'],
+    minLengthMm: 0,
+    priceUplift: 350,
+  },
+  {
+    id: 'v_legs',
+    label: 'V-Legs',
+    labelNL: 'V-Poten',
+    category: 'fixed',
+    fixedLegCount: 2,
+    sizeVariants: [
+      { id: 'S', label: 'S', radiusMm: 40, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 50, heightMm: 730 },
+    ],
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
+    minLengthMm: 1600,
+    priceUplift: 450,
+  },
+  {
+    id: 'd_legs',
+    label: 'D-Legs',
+    labelNL: 'D-Poten',
+    category: 'fixed',
+    fixedLegCount: 2,
+    sizeVariants: [
+      { id: 'S', label: 'S', radiusMm: 50, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 60, heightMm: 730 },
+    ],
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
+    minLengthMm: 1600,
+    priceUplift: 500,
+  },
+  {
+    id: 'rounded_legs',
+    label: 'Rounded',
+    labelNL: 'Afgerond',
+    category: 'fixed',
+    fixedLegCount: 4,
     sizeVariants: [
       { id: 'S', label: 'S', radiusMm: 40, heightMm: 730 },
       { id: 'M', label: 'M', radiusMm: 50, heightMm: 730 },
       { id: 'L', label: 'L', radiusMm: 60, heightMm: 730 },
     ],
-    compatibleShapes: ['corner', 'cut-corner', 'ovale', 'ellips'],
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
     minLengthMm: 0,
     priceUplift: 0,
   },
   {
-    id: 'trestle',
-    label: 'Trestle',
-    labelNL: 'Schraag',
+    id: 'curved_legs',
+    label: 'Curved',
+    labelNL: 'Gebogen',
+    category: 'fixed',
+    fixedLegCount: 4,
     sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 30, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 40, heightMm: 730 },
+      { id: 'S', label: 'S', radiusMm: 40, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 50, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 60, heightMm: 730 },
     ],
-    compatibleShapes: ['corner', 'cut-corner', 'ovale', 'ellips'],
-    minLengthMm: 1600,
-    priceUplift: 350,
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
+    minLengthMm: 0,
+    priceUplift: 300,
   },
 ];
 
@@ -108,40 +201,45 @@ export interface ShapeDefinition {
   id: RuleShape;
   label: string;
   labelNL: string;
-  /** Default leg style for this shape */
   defaultLegStyle: RuleLegStyle;
 }
 
 export const SHAPE_DEFINITIONS: ShapeDefinition[] = [
-  { id: 'ellips', label: 'Ellipse', labelNL: 'Ellips', defaultLegStyle: 'pedestal' },
-  { id: 'round', label: 'Round', labelNL: 'Rond', defaultLegStyle: 'pedestal' },
-  { id: 'ovale', label: 'Oval', labelNL: 'Ovale', defaultLegStyle: 'pedestal' },
-  { id: 'corner', label: 'Rectangle', labelNL: 'Rechthoek', defaultLegStyle: 'four_legs' },
-  { id: 'cut-corner', label: 'Cut Corner', labelNL: 'Afgeschuind', defaultLegStyle: 'four_legs' },
+  { id: 'ellips', label: 'Ellipse', labelNL: 'Ellips', defaultLegStyle: 'cylindrical' },
+  { id: 'round', label: 'Round', labelNL: 'Rond', defaultLegStyle: 'cylindrical' },
+  { id: 'ovale', label: 'Oval', labelNL: 'Ovale', defaultLegStyle: 'cylindrical' },
+  { id: 'corner', label: 'Rectangle', labelNL: 'Rechthoek', defaultLegStyle: 'rounded_legs' },
+  { id: 'cut-corner', label: 'Cut Corner', labelNL: 'Afgeschuind', defaultLegStyle: 'rounded_legs' },
 ];
 
 // ============================================
-// AUTO LEG COUNT
+// PEDESTAL STYLE CHECK
 // ============================================
 
-/**
- * Determine how many legs based on shape + length.
- * Pedestal/Fluted: 1 for round or small tables, 2 for large ellips/ovale.
- * Four legs: always 4.
- * Trestle: always 2.
- */
+const PEDESTAL_STYLES: RuleLegStyle[] = ['cylindrical', 'cylindrical_fluted', 'conical', 'hourglass'];
+
+export function isPedestalStyle(style: RuleLegStyle): boolean {
+  return PEDESTAL_STYLES.includes(style);
+}
+
+// ============================================
+// AUTO LEG COUNT (never a UI choice)
+// ============================================
+
 export function determineLegCount(
   legStyle: RuleLegStyle,
   shape: RuleShape,
   lengthMm: number,
 ): number {
-  if (legStyle === 'four_legs') return 4;
-  if (legStyle === 'trestle') return 2;
+  // Fixed-count styles
+  const def = LEG_DEFINITIONS.find(l => l.id === legStyle);
+  if (def?.category === 'fixed' && def.fixedLegCount != null) {
+    return def.fixedLegCount;
+  }
 
-  // Pedestal or Fluted: auto 1 or 2
+  // Pedestal styles: auto 1 or 2
   if (shape === 'round') return 1;
   if ((shape === 'ellips' || shape === 'ovale') && lengthMm >= 2000) return 2;
-  if (shape === 'corner' || shape === 'cut-corner') return 4; // shouldn't happen but fallback
   return 1;
 }
 
@@ -149,9 +247,6 @@ export function determineLegCount(
 // HARD RULES
 // ============================================
 
-/**
- * Get all valid leg styles for a shape+dimensions combo.
- */
 export function getValidLegStyles(
   shape: RuleShape,
   lengthMm: number,
@@ -163,10 +258,6 @@ export function getValidLegStyles(
   });
 }
 
-/**
- * Choose the best size variant for a leg given table dimensions.
- * Picks the largest variant whose radius fits with clearance.
- */
 export function chooseLegSizeVariant(
   leg: LegDefinition,
   _shape: RuleShape,
@@ -174,16 +265,14 @@ export function chooseLegSizeVariant(
   widthMm: number,
 ): LegSizeVariant {
   const halfMinDim = Math.min(lengthMm, widthMm) / 2;
-  const clearance = 80; // minimum mm clearance from edge
+  const clearance = 80;
 
-  // Find largest variant that fits
   const sorted = [...leg.sizeVariants].sort((a, b) => b.radiusMm - a.radiusMm);
   for (const variant of sorted) {
     if (variant.radiusMm + clearance < halfMinDim) {
       return variant;
     }
   }
-  // Fallback to smallest
   return leg.sizeVariants[0];
 }
 

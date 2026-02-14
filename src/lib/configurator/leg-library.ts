@@ -1,205 +1,154 @@
 // ============================================
-// SERA NORR Leg Library - CMS Data
+// SERA NORR Leg Library - Maps to productRules.ts
 // ============================================
+// This file provides CMS-style metadata and helper functions
+// for the 9 leg styles defined in productRules.ts.
 
 import type { TableShape } from './types';
+import type { RuleLegStyle } from './rules/productRules';
+import { LEG_DEFINITIONS } from './rules/productRules';
 
 // ============================================
 // Types
 // ============================================
 
-export type LegCategory = 'core' | 'architectural' | 'sculptural';
+export type LegCategory = 'pedestal' | 'fixed';
 
 export interface LegStyle {
-  id: string;
+  id: RuleLegStyle;
   name: string;
   category: LegCategory;
   descriptionShort: { nl: string; en: string };
-  priceUplift: number; // EUR added to base price
+  priceUplift: number;
   compatibleShapes: TableShape[];
-  minLength?: number; // Minimum length in cm (for non-round)
-  minDiameter?: number; // Minimum diameter in cm (for round)
   isActiveInConfigurator: boolean;
   sortOrder: number;
-  model3DRef?: string; // Optional 3D model reference
 }
 
 // ============================================
-// Leg Library - 11 Styles
+// Leg Library - 9 Styles (synced with productRules)
 // ============================================
 
 export const LEG_LIBRARY: LegStyle[] = [
-  // ============ Core (Group A) ============
+  // === Pedestal ===
   {
-    id: 'pillar-leg',
-    name: 'Pillar Leg',
-    category: 'core',
+    id: 'cylindrical',
+    name: 'Cylindrical',
+    category: 'pedestal',
     descriptionShort: {
-      nl: 'Klassieke cilindrische poot — tijdloos minimaal',
-      en: 'Classic cylindrical leg — timelessly minimal',
+      nl: 'Klassieke cilindrische kolom — tijdloos minimaal',
+      en: 'Classic cylindrical column — timelessly minimal',
     },
     priceUplift: 0,
-    compatibleShapes: ['ellips', 'ovale', 'round', 'corner', 'cut-corner'],
+    compatibleShapes: ['round', 'ellips', 'ovale'],
     isActiveInConfigurator: true,
     sortOrder: 1,
-    model3DRef: 'pillar',
   },
   {
-    id: 'cone-leg',
-    name: 'Cone Leg',
-    category: 'core',
+    id: 'cylindrical_fluted',
+    name: 'Cylindrical Fluted',
+    category: 'pedestal',
+    descriptionShort: {
+      nl: 'Gecanneleerde kolom — klassiek verfijnd',
+      en: 'Fluted column — classically refined',
+    },
+    priceUplift: 500,
+    compatibleShapes: ['round', 'ellips', 'ovale'],
+    isActiveInConfigurator: true,
+    sortOrder: 2,
+  },
+  {
+    id: 'conical',
+    name: 'Conical',
+    category: 'pedestal',
     descriptionShort: {
       nl: 'Tapse kegelvorm — sculptuur en elegantie',
       en: 'Tapered cone shape — sculptural elegance',
     },
     priceUplift: 250,
-    compatibleShapes: ['ellips', 'ovale', 'round'],
-    minLength: 160,
-    minDiameter: 130,
-    isActiveInConfigurator: true,
-    sortOrder: 2,
-    model3DRef: 'cone',
-  },
-  {
-    id: 'block-frame',
-    name: 'Block Frame',
-    category: 'core',
-    descriptionShort: {
-      nl: 'Massieve blokvorm onderstel — architectonisch',
-      en: 'Solid block frame base — architectural',
-    },
-    priceUplift: 400,
-    compatibleShapes: ['corner', 'cut-corner', 'ellips', 'ovale'],
-    minLength: 200,
+    compatibleShapes: ['round', 'ellips', 'ovale'],
     isActiveInConfigurator: true,
     sortOrder: 3,
-    model3DRef: 'block',
   },
   {
-    id: 'edge-frame',
-    name: 'Edge Frame',
-    category: 'core',
+    id: 'hourglass',
+    name: 'Hourglass',
+    category: 'pedestal',
     descriptionShort: {
-      nl: 'Strak frame aan de rand — modern industrieel',
-      en: 'Sleek edge-mounted frame — modern industrial',
+      nl: 'Zandlopervorm — organisch en opvallend',
+      en: 'Hourglass shape — organic and striking',
     },
-    priceUplift: 500,
-    compatibleShapes: ['corner', 'cut-corner'],
-    minLength: 200,
+    priceUplift: 400,
+    compatibleShapes: ['round', 'ellips', 'ovale'],
     isActiveInConfigurator: true,
     sortOrder: 4,
-    model3DRef: 'edge',
   },
 
-  // ============ Architectural (Group B) ============
+  // === Fixed ===
   {
-    id: 'rock-beam',
-    name: 'Rock Beam',
-    category: 'architectural',
+    id: 'quartet_legs',
+    name: 'Quartet',
+    category: 'fixed',
     descriptionShort: {
-      nl: 'Ruwe balkstructuur — statement piece',
-      en: 'Raw beam structure — statement piece',
+      nl: 'Centrale ronde base — voor ronde tafels',
+      en: 'Central round base — for round tables',
     },
-    priceUplift: 650,
-    compatibleShapes: ['corner', 'cut-corner', 'ellips'],
-    minLength: 220,
+    priceUplift: 350,
+    compatibleShapes: ['round'],
     isActiveInConfigurator: true,
     sortOrder: 5,
-    model3DRef: 'rock-beam',
   },
   {
-    id: 'hexa-beam',
-    name: 'Hexa Beam',
-    category: 'architectural',
+    id: 'v_legs',
+    name: 'V-Legs',
+    category: 'fixed',
     descriptionShort: {
-      nl: 'Zeshoekige balken — geometrisch design',
-      en: 'Hexagonal beams — geometric design',
+      nl: 'V-vormige staanders — modern statement',
+      en: 'V-shaped supports — modern statement',
     },
-    priceUplift: 600,
-    compatibleShapes: ['corner', 'cut-corner', 'ellips', 'ovale'],
-    minLength: 200,
+    priceUplift: 450,
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
     isActiveInConfigurator: true,
     sortOrder: 6,
-    model3DRef: 'hexa-beam',
   },
   {
-    id: 'twin-fold',
-    name: 'Twin Fold',
-    category: 'architectural',
+    id: 'd_legs',
+    name: 'D-Legs',
+    category: 'fixed',
     descriptionShort: {
-      nl: 'Dubbele gevouwen plaat — sculpturaal staal',
-      en: 'Double folded plate — sculptural steel',
-    },
-    priceUplift: 550,
-    compatibleShapes: ['corner', 'cut-corner'],
-    minLength: 200,
-    isActiveInConfigurator: true,
-    sortOrder: 7,
-    model3DRef: 'twin-fold',
-  },
-  {
-    id: 'angle-corner',
-    name: 'Angle Corner',
-    category: 'architectural',
-    descriptionShort: {
-      nl: 'Hoekige frame constructie — brutalist',
-      en: 'Angular corner construction — brutalist',
+      nl: 'D-profiel staanders — architectonisch',
+      en: 'D-profile supports — architectural',
     },
     priceUplift: 500,
-    compatibleShapes: ['corner', 'cut-corner'],
-    minLength: 200,
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
+    isActiveInConfigurator: true,
+    sortOrder: 7,
+  },
+  {
+    id: 'rounded_legs',
+    name: 'Rounded',
+    category: 'fixed',
+    descriptionShort: {
+      nl: 'Afgeronde poten — zachte elegantie',
+      en: 'Rounded legs — soft elegance',
+    },
+    priceUplift: 0,
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
     isActiveInConfigurator: true,
     sortOrder: 8,
-    model3DRef: 'angle-corner',
   },
-
-  // ============ Sculptural (Group C) ============
   {
-    id: 'twist-base',
-    name: 'Twist Base',
-    category: 'sculptural',
+    id: 'curved_legs',
+    name: 'Curved',
+    category: 'fixed',
     descriptionShort: {
-      nl: 'Gedraaide sculptuur — organische elegantie',
-      en: 'Twisted sculpture — organic elegance',
+      nl: 'Gebogen poten — organische dynamiek',
+      en: 'Curved legs — organic dynamism',
     },
-    priceUplift: 750,
-    compatibleShapes: ['round', 'ovale'],
-    minLength: 200,
-    minDiameter: 130,
+    priceUplift: 300,
+    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
     isActiveInConfigurator: true,
     sortOrder: 9,
-    model3DRef: 'twist',
-  },
-  {
-    id: 'slope-base',
-    name: 'Slope Base',
-    category: 'sculptural',
-    descriptionShort: {
-      nl: 'Hellende sokkel — architecturale dynamiek',
-      en: 'Sloping pedestal — architectural dynamism',
-    },
-    priceUplift: 650,
-    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
-    minLength: 200,
-    isActiveInConfigurator: true,
-    sortOrder: 10,
-    model3DRef: 'slope',
-  },
-  {
-    id: 'fluted-base',
-    name: 'Fluted Base',
-    category: 'sculptural',
-    descriptionShort: {
-      nl: 'Gegroefde kolom — klassiek verfijnd',
-      en: 'Fluted column — classically refined',
-    },
-    priceUplift: 700,
-    compatibleShapes: ['round', 'ovale'],
-    minLength: 200,
-    minDiameter: 130,
-    isActiveInConfigurator: true,
-    sortOrder: 11,
-    model3DRef: 'fluted',
   },
 ];
 
@@ -222,33 +171,14 @@ export function getActiveLegs(): LegStyle[] {
 }
 
 export function isLegCompatible(
-  legId: string, 
-  shape: TableShape, 
-  length: number, 
-  diameter?: number
+  legId: string,
+  shape: TableShape,
+  length: number,
+  diameter?: number,
 ): boolean {
   const leg = getLegById(legId);
   if (!leg) return false;
-
-  // Check shape compatibility
-  if (!leg.compatibleShapes.includes(shape)) {
-    return false;
-  }
-
-  // Check size requirements
-  if (shape === 'round') {
-    // For round, check diameter (which is length * 2 for radius-based storage, or direct diameter)
-    const effectiveDiameter = diameter || length;
-    if (leg.minDiameter && effectiveDiameter < leg.minDiameter) {
-      return false;
-    }
-  } else {
-    // For non-round shapes, check length
-    if (leg.minLength && length < leg.minLength) {
-      return false;
-    }
-  }
-
+  if (!leg.compatibleShapes.includes(shape)) return false;
   return true;
 }
 
@@ -260,21 +190,10 @@ export function getLegPriceUplift(legId: string): number {
 // Legacy type mapping for backward compatibility
 export type LegType = string;
 
-// Map new leg IDs to legacy base types for backward compatibility
 export function mapLegToLegacyBase(legId: string): 'modern' | 'monolith' | 'architectural' {
   const leg = getLegById(legId);
   if (!leg) return 'modern';
-  
-  switch (leg.category) {
-    case 'core':
-      return legId === 'pillar-leg' ? 'modern' : 'monolith';
-    case 'architectural':
-      return 'architectural';
-    case 'sculptural':
-      return 'monolith';
-    default:
-      return 'modern';
-  }
+  return leg.category === 'pedestal' ? 'monolith' : 'modern';
 }
 
 // ============================================
@@ -282,7 +201,6 @@ export function mapLegToLegacyBase(legId: string): 'modern' | 'monolith' | 'arch
 // ============================================
 
 export const LEG_CATEGORY_LABELS: Record<LegCategory, { nl: string; en: string }> = {
-  core: { nl: 'Basis', en: 'Core' },
-  architectural: { nl: 'Architectonisch', en: 'Architectural' },
-  sculptural: { nl: 'Sculpturaal', en: 'Sculptural' },
+  pedestal: { nl: 'Pedestal', en: 'Pedestal' },
+  fixed: { nl: 'Vast', en: 'Fixed' },
 };

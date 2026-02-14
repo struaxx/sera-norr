@@ -1,8 +1,6 @@
 // ============================================
 // SERA NORR - Configuration Resolver Engine
 // ============================================
-// Input: shape + dims + optional legStyle
-// Output: fully resolved, valid configuration
 
 import {
   type RuleShape,
@@ -26,28 +24,23 @@ export interface LegPlacement {
 }
 
 export interface ResolvedConfiguration {
-  // Identity
   shape: RuleShape;
   lengthMm: number;
   widthMm: number;
   heightMm: number;
   thicknessMm: number;
 
-  // Resolved leg
   legStyle: RuleLegStyle;
   legDefinition: LegDefinition;
   legSizeVariant: LegSizeVariant;
   legCount: number;
   legPlacements: LegPlacement[];
 
-  // Computed values
   clearanceMm: number;
   legHeightMm: number;
 
-  // Validity
   isValid: boolean;
   warnings: string[];
-  /** If the requested leg was auto-switched */
   wasAutoSwitched: boolean;
   autoSwitchReason?: string;
 }
@@ -55,10 +48,6 @@ export interface ResolvedConfiguration {
 // ============================================
 // PLACEMENT FORMULAS
 // ============================================
-// AXIS CONVENTION:
-// X = length axis (horizontal, longest dimension)
-// Z = width axis (depth)
-// Y = height (up)
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
@@ -68,11 +57,11 @@ function computeClearance(legRadiusMm: number): number {
   return Math.max(80, legRadiusMm * 1.2);
 }
 
-function computeSinglePedestalPlacement(): LegPlacement[] {
+function computeSinglePlacement(): LegPlacement[] {
   return [{ x: 0, z: 0 }];
 }
 
-function computeDoublePedestalPlacement(
+function computeTwoLegsPlacement(
   lengthMm: number,
   legRadiusMm: number,
 ): LegPlacement[] {
@@ -103,37 +92,20 @@ function computeFourLegsPlacement(
   ];
 }
 
-function computeTrestlePlacement(
-  lengthMm: number,
-  legRadiusMm: number,
-): LegPlacement[] {
-  const clearance = computeClearance(legRadiusMm);
-  const maxOffset = lengthMm / 2 - clearance - legRadiusMm;
-  const xOffset = clamp(lengthMm * 0.30, 350, maxOffset);
-  return [
-    { x: -xOffset, z: 0 },
-    { x: xOffset, z: 0 },
-  ];
-}
-
 function computePlacements(
-  legStyle: RuleLegStyle,
+  _legStyle: RuleLegStyle,
   legCount: number,
   lengthMm: number,
   widthMm: number,
   legRadiusMm: number,
 ): LegPlacement[] {
-  if (legStyle === 'four_legs') {
+  if (legCount === 4) {
     return computeFourLegsPlacement(lengthMm, widthMm, legRadiusMm);
   }
-  if (legStyle === 'trestle') {
-    return computeTrestlePlacement(lengthMm, legRadiusMm);
+  if (legCount === 2) {
+    return computeTwoLegsPlacement(lengthMm, legRadiusMm);
   }
-  // Pedestal or Fluted: 1 or 2 based on legCount
-  if (legCount === 1) {
-    return computeSinglePedestalPlacement();
-  }
-  return computeDoublePedestalPlacement(lengthMm, legRadiusMm);
+  return computeSinglePlacement();
 }
 
 // ============================================
@@ -181,7 +153,7 @@ export function resolveConfiguration(input: ResolveInput): ResolvedConfiguration
     if (fallback && validStyles.find(l => l.id === fallback)) {
       resolvedStyle = fallback;
     } else {
-      resolvedStyle = validStyles[0]?.id ?? 'pedestal';
+      resolvedStyle = validStyles[0]?.id ?? 'cylindrical';
     }
   } else {
     const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === shape);
@@ -189,7 +161,7 @@ export function resolveConfiguration(input: ResolveInput): ResolvedConfiguration
     if (fallback && validStyles.find(l => l.id === fallback)) {
       resolvedStyle = fallback;
     } else {
-      resolvedStyle = validStyles[0]?.id ?? 'pedestal';
+      resolvedStyle = validStyles[0]?.id ?? 'cylindrical';
     }
   }
 
