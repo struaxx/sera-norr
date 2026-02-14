@@ -1,49 +1,123 @@
 
 
-## Fix Calacatta Viola Texture and Table Proportions
+## Systematische Fix: Vormen, Poten en Textures
 
-### Problem 1: Calacatta Viola texture has bright purple veins
-The current seamless texture at `/textures/stones/calacatta-viola-seamless.jpg` has unrealistic bright purple/magenta veins. Real Calacatta Viola has a warm white/cream base with deep aubergine, dark burgundy, and near-black veining -- NOT bright purple. This needs a new texture that matches the reference photo you provided.
+### Huidige Problemen
 
-**Fix**: Generate a new realistic Calacatta Viola seamless texture with:
-- Warm white/cream base (not pure white)
-- Deep aubergine/dark burgundy veining (almost black in some areas)
-- Subtle grey undertones
-- No bright/neon purple
+**1. Twee losgekoppelde vormensystemen**
+Er zijn twee type-systemen die niet op elkaar aansluiten:
+- `TableShape` (UI): ellips, ovale, round, corner, cut-corner
+- `RuleShape` (3D/rules): round, oval, rect, racetrack, square
 
-### Problem 2: Tabletop proportions are wrong relative to legs
-Looking at your reference photo vs the current render, the issues are:
+De configurator gebruikt `RuleShape` direct, waardoor de vormen die jij aanbiedt niet correct worden weergegeven.
 
-**a) Leg radius is too large** -- The double pedestal legs (radiusMm: 140-220mm) are sized correctly for the real world, but the `chooseLegSizeVariant` function picks the largest variant that fits. For a 2200x1100mm oval, it picks 'L' (220mm radius), making legs 440mm diameter -- nearly half the table width. In the reference photo, the legs are proportionally much thinner relative to the tabletop.
+**2. Poten worden handmatig gekozen (1 of 2)**
+Nu moet de gebruiker kiezen tussen "Pedestal" (1 poot) en "Double Pedestal" (2 poten). Dit moet automatisch gaan op basis van de tafelmaat. Kies je een grote ovaal (>=2000mm), dan worden het automatisch 2 poten. Kies je een ronde tafel, dan 1 poot.
 
-**Fix**: Reduce the double_pedestal size variants:
-- S: 120mm radius (was 140)
-- M: 150mm radius (was 180)
-- L: 180mm radius (was 220)
+**3. Poten staan op de verkeerde as**
+`ExtrudeGeometry` (voor ovaal/racetrack) tekent de lengte langs de X-as, maar de plaatsingscode zet poten langs de Z-as. Hierdoor staan poten aan de zijkant in plaats van aan de uiteinden.
 
-**b) Tabletop thickness appears too thick visually** -- At 20mm real-world thickness, the tabletop should look like a thin elegant slab. The 3D rendering may be making it look proportionally thicker than it should.
+**4. Zebra-strepen textuur**
+`ExtrudeGeometry` genereert slechte UV-coordinaten. De textuur wordt als strepen uitgerekt in plaats van als natuurlijk marmerpatroon.
 
-**c) Cone taper ratio may need tuning** -- Currently `CONE_TAPER_RATIO = 0.55` (top is 55% of bottom). The reference photo shows a more subtle taper, closer to 0.65-0.70.
+---
 
-### Files to change
+### Stap 1: Eenvormig vormensysteem
 
-1. **`/textures/stones/calacatta-viola-seamless.jpg`** -- Replace with realistic texture (deep aubergine veining, not purple)
-2. **`/public/stones/marble/calacatta-viola.jpg`** -- Also replace swatch to match
-3. **`src/lib/configurator/rules/productRules.ts`** -- Reduce double_pedestal radius sizes
-4. **`src/components/configurator/TableMeshV3.tsx`** -- Adjust `CONE_TAPER_RATIO` from 0.55 to ~0.65 for more realistic taper
+De 5 vormen die jullie aanbieden met hun 3D-mapping:
 
-### Technical details
+| Jouw Vorm | 3D Geometrie | Beschrijving |
+|-----------|-------------|-------------|
+| Ellips | Elliptische ExtrudeGeometry | Echte ellips, overal rond |
+| Round | CylinderGeometry | Perfect rond |
+| Ovale | Stadium/Racetrack ExtrudeGeometry | Ovaal met iets rechtere zijdes |
+| Corner | BoxGeometry met radius | Rechthoek met afgeronde hoeken |
+| Cut-corner | Chamfered polygon | Rechthoek met afgeschuinde hoeken |
 
-```text
-productRules.ts changes:
-  double_pedestal sizeVariants:
-    S: radiusMm 140 -> 120
-    M: radiusMm 180 -> 150  
-    L: radiusMm 220 -> 180
+**Actie**: `RuleShape` type aanpassen naar `'ellips' | 'round' | 'ovale' | 'corner' | 'cut-corner'` zodat het exact overeenkomt met de UI. Alle verwijzingen in productRules, resolveConfiguration, TableMeshV3 en ConfiguratorPhase worden aangepast.
 
-TableMeshV3.tsx changes:
-  CONE_TAPER_RATIO: 0.55 -> 0.65
-```
+---
 
-The combination of smaller leg radii and gentler taper will produce a table that looks much closer to the reference photo -- an elegant thin slab sitting on two proportional tapered cone pedestals.
+### Stap 2: Automatische pootlogica (1 of 2)
+
+De gebruiker kiest een potstijl (bijv. "Pedestal" of "Fluted"). Het systeem bepaalt automatisch of het 1 of 2 poten worden:
+
+| Situatie | Aantal poten |
+|----------|-------------|
+| Round (alle maten) | 1 |
+| Ellips < 2000mm | 1 |
+| Ellips >= 2000mm | 2 |
+| Ovale < 2000mm | 1 |
+| Ovale >= 2000mm | 2 |
+| Corner (alle maten) | 4 poten of trestle |
+| Cut-corner (alle maten) | 4 poten of trestle |
+
+**Actie**: 
+- `pedestal` en `double_pedestal` samenvoegen tot 1 stijl "Pedestal" die automatisch 1 of 2 wordt
+- `fluted_pedestal` en `fluted_double` samenvoegen tot 1 stijl "Fluted" die automatisch 1 of 2 wordt
+- De resolver bepaalt het aantal op basis van vorm + afmeting
+- UI toont alleen: Pedestal, Fluted, Four Legs, Trestle (4 opties in plaats van 6)
+
+---
+
+### Stap 3: As-correctie voor pootplaatsing
+
+In `resolveConfiguration.ts` de X/Z assen corrigeren zodat poten aan de uiteinden van de lengte-as staan:
+
+- `computeDoublePedestalPlacement`: offset langs X-as (lengte) ipv Z
+- `computeFourLegsPlacement`: X = lengte-offset, Z = breedte-offset
+- `computeTrestlePlacement`: offset langs X-as (lengte) ipv Z
+- Validatie-checks ook X/Z swappen
+
+---
+
+### Stap 4: UV-mapping fix voor Ellips en Ovale
+
+Voor vormen die `ExtrudeGeometry` gebruiken (Ellips, Ovale):
+- Na het aanmaken van de geometry, de UV-coordinaten handmatig overschrijven met planaire top-down projectie
+- Formule: `u = vertex.x / lengthM + 0.5`, `v = vertex.y / widthM + 0.5`
+- Dit zorgt dat de textuur als een plat vlak over het blad valt, zonder strepen
+
+---
+
+### Stap 5: Cut-corner geometrie toevoegen
+
+Nieuwe geometrie voor de chamfered rectangle (cut-corner):
+- Rechthoek met 45-graden afgeschuinde hoeken
+- Chamfer-grootte proportioneel aan de kleinste zijde (bijv. 10% van de breedte)
+- Zelfde planaire UV-mapping als de andere vormen
+
+---
+
+### Bestanden die wijzigen
+
+1. **`src/lib/configurator/rules/productRules.ts`**
+   - `RuleShape` type wijzigen naar 5 nieuwe vormen
+   - `RuleLegStyle` vereenvoudigen (4 stijlen ipv 6)
+   - `LEG_DEFINITIONS` updaten met auto-count logica
+   - `SHAPE_DEFINITIONS` updaten naar nieuwe vormen
+   - `isForbidden` en `getValidLegStyles` aanpassen
+
+2. **`src/lib/configurator/engine/resolveConfiguration.ts`**
+   - X/Z as-swap in alle placement functies
+   - Nieuwe logica: `determineLegCount(shape, lengthMm)` functie
+   - Placements aanpassen op basis van auto-count
+
+3. **`src/components/configurator/TableMeshV3.tsx`**
+   - `createTabletopGeometry`: cut-corner geometrie toevoegen
+   - UV-fix voor ExtrudeGeometry vormen (planaire projectie)
+   - Shape mapping updaten naar nieuwe namen
+
+4. **`src/components/atelier/ConfiguratorPhase.tsx`**
+   - `ShapeSelectorV3`: nieuwe vormen met correcte iconen
+   - `DIM_PRESETS`: presets per nieuwe vorm
+   - `LegSelectorV3`: 4 stijlen ipv 6
+   - Default state aanpassen
+
+5. **`src/components/configurator/ConfiguratorViewerV3.tsx`**
+   - Shape type-referenties updaten
+
+6. **`src/lib/configurator/types.ts`**
+   - `TableShape` type is al correct (ellips, ovale, round, corner, cut-corner)
+   - Geen wijzigingen nodig
 
