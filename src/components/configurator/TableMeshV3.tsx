@@ -388,27 +388,19 @@ function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Curved Legs: tulip/trumpet shape — wide base, narrow waist, wide top ---
+// --- Curved Legs: smooth concave cone — wide base tapering to narrow top, like photo 2 reference ---
 function CurvedLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
-    const segments = 32;
+    const segments = 48;
     const points: THREE.Vector2[] = [];
+    // Concave cone: wide at bottom, smooth inward curve, narrow at top
+    const baseRadius = radiusM * 1.8;
+    const topRadius = radiusM * 0.55;
     for (let i = 0; i <= segments; i++) {
       const t = i / segments; // 0 = bottom, 1 = top
-      // Trumpet curve: wide at bottom, pinch at ~40%, widen at top
-      const baseRadius = radiusM * 2.2;
-      const waistRadius = radiusM * 0.7;
-      const topRadius = radiusM * 1.6;
-      let r: number;
-      if (t < 0.4) {
-        // Bottom to waist: ease in
-        const u = t / 0.4;
-        r = baseRadius + (waistRadius - baseRadius) * (u * u);
-      } else {
-        // Waist to top: ease out
-        const u = (t - 0.4) / 0.6;
-        r = waistRadius + (topRadius - waistRadius) * (1 - (1 - u) * (1 - u));
-      }
+      // Concave interpolation (ease-out curve makes it narrow quickly then level off)
+      const curve = 1 - Math.pow(1 - t, 2.2);
+      const r = baseRadius + (topRadius - baseRadius) * curve;
       points.push(new THREE.Vector2(r, t * heightM));
     }
     return new THREE.LatheGeometry(points, 48);
@@ -416,7 +408,7 @@ function CurvedLeg({ radiusM, heightM, stoneId }: LegProps) {
 
   return (
     <mesh geometry={geo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
+      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
     </mesh>
   );
 }
