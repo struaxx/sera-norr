@@ -311,8 +311,8 @@ function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
 // --- V-Legs: two thick stone slabs meeting at apex, opening outward < > ---
 // Slabs touch at inner tip and fan outward. No crossing.
 function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
-  const slabThickness = radiusM * 1.2;  // thicker, more substantial
-  const slabLength = radiusM * 5;       // wider slabs
+  const slabThickness = radiusM * 0.4;  // thin like real stone panels
+  const slabLength = radiusM * 7;       // wide broad slabs
   const vHalfAngle = 22 * (Math.PI / 180); // tighter V for clean meeting point
 
   // Each slab pivots from the apex (inner edge toward table center)
