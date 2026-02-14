@@ -244,23 +244,54 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: two mirrored cones, narrow in the middle ---
+// --- Hourglass: organic baluster shape (wide-narrow-bulb-narrow-wide) ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const waistRadius = radiusM * HOURGLASS_WAIST_RATIO;
-  const halfH = heightM / 2;
+  const geo = useMemo(() => {
+    // Lathe profile: series of bulbous curves like reference photo
+    const points: THREE.Vector2[] = [];
+    const segments = 48;
+    const R = radiusM;
+    
+    // Profile from bottom (y=0) to top (y=heightM):
+    // Wide base -> narrow waist -> wide bulb -> narrow neck -> wide top
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments; // 0..1 bottom to top
+      const y = t * heightM;
+      
+      // Organic profile using sin waves
+      // Base bulge (0-0.2), waist (0.2-0.35), belly bulge (0.35-0.65), neck (0.65-0.8), top bulge (0.8-1.0)
+      let r: number;
+      if (t < 0.15) {
+        // Base: wide, slight taper up
+        r = R * (0.95 + 0.05 * Math.cos(t / 0.15 * Math.PI));
+      } else if (t < 0.3) {
+        // Narrow waist
+        const wt = (t - 0.15) / 0.15;
+        r = R * (0.55 + 0.4 * Math.cos(wt * Math.PI));
+      } else if (t < 0.7) {
+        // Central bulb (belly)
+        const bt = (t - 0.3) / 0.4;
+        r = R * (0.55 + 0.5 * Math.sin(bt * Math.PI));
+      } else if (t < 0.85) {
+        // Narrow neck
+        const nt = (t - 0.7) / 0.15;
+        r = R * (0.55 + 0.4 * Math.cos((1 - nt) * Math.PI));
+      } else {
+        // Top: widens to meet tabletop
+        const tt = (t - 0.85) / 0.15;
+        r = R * (0.55 + 0.35 * Math.sin(tt * Math.PI * 0.5));
+      }
+      
+      points.push(new THREE.Vector2(Math.max(r, R * 0.15), y));
+    }
+    
+    return new THREE.LatheGeometry(points, 48);
+  }, [radiusM, heightM]);
+
   return (
-    <group position={[0, 0, 0]}>
-      {/* Bottom half: wide bottom -> narrow middle */}
-      <mesh position={[0, halfH / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[waistRadius, radiusM, halfH, 48]} />
-        <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={1} />
-      </mesh>
-      {/* Top half: narrow middle -> wide top */}
-      <mesh position={[0, halfH + halfH / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[radiusM, waistRadius, halfH, 48]} />
-        <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={1} />
-      </mesh>
-    </group>
+    <mesh geometry={geo} castShadow receiveShadow>
+      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
+    </mesh>
   );
 }
 
