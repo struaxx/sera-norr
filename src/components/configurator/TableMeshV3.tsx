@@ -147,9 +147,9 @@ function createTabletopGeometry(
       // Bottom edge (right to left)
       shape2d.lineTo(-straight, -hd);
 
-      // Left semicircle (bottom to top)
+      // Left semicircle (bottom to top, going outward through angle PI)
       for (let i = 1; i <= arcSegments; i++) {
-        const angle = -Math.PI / 2 + (Math.PI * i / arcSegments);
+        const angle = -Math.PI / 2 - (Math.PI * i / arcSegments);
         shape2d.lineTo(-straight + capR * Math.cos(angle), capR * Math.sin(angle));
       }
       shape2d.closePath();
