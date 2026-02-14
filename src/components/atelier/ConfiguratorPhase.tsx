@@ -18,7 +18,6 @@ import {
   getValidLegStyles,
 } from '@/lib/configurator/rules/productRules';
 
-// Lazy load V3 viewer
 const ConfiguratorViewerV3 = lazy(() =>
   import('@/components/configurator/ConfiguratorViewerV3').then(m => ({ default: m.ConfiguratorViewerV3 }))
 );
@@ -29,7 +28,6 @@ interface ConfiguratorPhaseProps {
   isNL?: boolean;
 }
 
-// Loading skeleton
 function ViewerSkeleton() {
   return (
     <div className="w-full aspect-square bg-secondary/10 rounded-sm flex items-center justify-center">
@@ -42,7 +40,7 @@ function ViewerSkeleton() {
 }
 
 // ============================================
-// SHAPE SELECTOR (new shapes)
+// SHAPE SELECTOR (5 shapes)
 // ============================================
 
 function ShapeSelectorV3({
@@ -58,14 +56,18 @@ function ShapeSelectorV3({
     switch (shape) {
       case 'round':
         return <svg viewBox="0 0 24 24" className="w-7 h-7" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>;
-      case 'oval':
+      case 'ellips':
         return <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor"><ellipse cx="18" cy="12" rx="16" ry="10" /></svg>;
-      case 'rect':
-        return <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor"><rect x="1" y="2" width="34" height="20" rx="1" /></svg>;
-      case 'racetrack':
+      case 'ovale':
         return <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor"><rect x="1" y="2" width="34" height="20" rx="10" /></svg>;
-      case 'square':
-        return <svg viewBox="0 0 24 24" className="w-7 h-7" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="1" /></svg>;
+      case 'corner':
+        return <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor"><rect x="1" y="2" width="34" height="20" rx="3" /></svg>;
+      case 'cut-corner':
+        return (
+          <svg viewBox="0 0 36 24" className="w-7 h-7" fill="currentColor">
+            <polygon points="5,2 31,2 35,6 35,18 31,22 5,22 1,18 1,6" />
+          </svg>
+        );
       default:
         return null;
     }
@@ -111,11 +113,11 @@ interface DimPreset {
 }
 
 const DIM_PRESETS: Record<RuleShape, DimPreset[]> = {
-  oval: [
-    { id: 'o-1800', label: '1800 × 900', lengthMm: 1800, widthMm: 900 },
-    { id: 'o-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
-    { id: 'o-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
-    { id: 'o-2600', label: '2600 × 1100', lengthMm: 2600, widthMm: 1100 },
+  ellips: [
+    { id: 'e-1800', label: '1800 × 900', lengthMm: 1800, widthMm: 900 },
+    { id: 'e-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
+    { id: 'e-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
+    { id: 'e-2600', label: '2600 × 1100', lengthMm: 2600, widthMm: 1100 },
   ],
   round: [
     { id: 'r-1000', label: 'Ø 1000', lengthMm: 1000, widthMm: 1000 },
@@ -123,20 +125,20 @@ const DIM_PRESETS: Record<RuleShape, DimPreset[]> = {
     { id: 'r-1500', label: 'Ø 1500', lengthMm: 1500, widthMm: 1500 },
     { id: 'r-1600', label: 'Ø 1600', lengthMm: 1600, widthMm: 1600 },
   ],
-  rect: [
-    { id: 'rc-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
-    { id: 'rc-2200', label: '2200 × 1000', lengthMm: 2200, widthMm: 1000 },
-    { id: 'rc-2400', label: '2400 × 1000', lengthMm: 2400, widthMm: 1000 },
+  ovale: [
+    { id: 'ov-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
+    { id: 'ov-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
+    { id: 'ov-2400', label: '2400 × 1100', lengthMm: 2400, widthMm: 1100 },
   ],
-  racetrack: [
-    { id: 'rt-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
-    { id: 'rt-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
-    { id: 'rt-2400', label: '2400 × 1100', lengthMm: 2400, widthMm: 1100 },
+  corner: [
+    { id: 'co-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
+    { id: 'co-2200', label: '2200 × 1000', lengthMm: 2200, widthMm: 1000 },
+    { id: 'co-2400', label: '2400 × 1000', lengthMm: 2400, widthMm: 1000 },
   ],
-  square: [
-    { id: 'sq-1000', label: '1000 × 1000', lengthMm: 1000, widthMm: 1000 },
-    { id: 'sq-1200', label: '1200 × 1200', lengthMm: 1200, widthMm: 1200 },
-    { id: 'sq-1400', label: '1400 × 1400', lengthMm: 1400, widthMm: 1400 },
+  'cut-corner': [
+    { id: 'cc-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
+    { id: 'cc-2200', label: '2200 × 1000', lengthMm: 2200, widthMm: 1000 },
+    { id: 'cc-2400', label: '2400 × 1000', lengthMm: 2400, widthMm: 1000 },
   ],
 };
 
@@ -224,7 +226,7 @@ function ThicknessSelectorV3({
 }
 
 // ============================================
-// LEG STYLE SELECTOR (rules-driven)
+// LEG STYLE SELECTOR (4 styles, auto count)
 // ============================================
 
 function LegSelectorV3({
@@ -319,8 +321,7 @@ function ConfigPanel({
 export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: ConfiguratorPhaseProps) {
   const { config, resetConfig } = useConfiguratorStore();
 
-  // Local state for V3 configurator (mm-based, new shape types)
-  const [shape, setShape] = useState<RuleShape>('oval');
+  const [shape, setShape] = useState<RuleShape>('ellips');
   const [lengthMm, setLengthMm] = useState(2000);
   const [widthMm, setWidthMm] = useState(1000);
   const [heightMm, setHeightMm] = useState(750);
@@ -329,7 +330,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [stoneId, setStoneId] = useState('calacatta-viola');
   const [resolved, setResolved] = useState<ResolvedConfiguration | null>(null);
 
-  // When shape changes, reset to first preset
   const handleShapeChange = useCallback((newShape: RuleShape) => {
     setShape(newShape);
     const presets = DIM_PRESETS[newShape];
@@ -337,7 +337,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
       setLengthMm(presets[0].lengthMm);
       setWidthMm(presets[0].widthMm);
     }
-    // Re-resolve leg style
     const validLegs = getValidLegStyles(newShape, presets?.[0]?.lengthMm ?? lengthMm);
     if (!validLegs.find(l => l.id === legStyle)) {
       const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === newShape);
@@ -348,7 +347,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const handleDimensionSelect = useCallback((l: number, w: number) => {
     setLengthMm(l);
     setWidthMm(w);
-    // Re-resolve leg style if needed
     const validLegs = getValidLegStyles(shape, l);
     if (!validLegs.find(leg => leg.id === legStyle)) {
       const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === shape);
@@ -362,7 +360,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
     setWidthMm(preset.widthMm);
     setHeightMm(preset.heightMm);
     setThicknessMm(preset.thicknessMm);
-    // Let resolver pick the right leg style
     const validLegs = getValidLegStyles(preset.shape, preset.lengthMm);
     const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === preset.shape);
     const defaultLeg = shapeDef?.defaultLegStyle ?? 'pedestal';
@@ -375,7 +372,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
 
   const handleConfigResolved = useCallback((r: ResolvedConfiguration) => {
     setResolved(r);
-    // Sync resolved leg style back if auto-switched
     if (r.wasAutoSwitched && r.legStyle !== legStyle) {
       setLegStyle(r.legStyle);
     }
@@ -402,7 +398,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
           size="sm"
           onClick={() => {
             resetConfig();
-            setShape('oval');
+            setShape('ellips');
             setLengthMm(2000);
             setWidthMm(1000);
             setHeightMm(750);
