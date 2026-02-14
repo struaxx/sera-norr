@@ -308,17 +308,36 @@ function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- V-Legs: cylinder tilted outward 7 degrees ---
+// --- V-Legs: two flat stone slabs per placement forming a V from top view ---
+// Each placement = one V-base (2 slabs angled outward from center)
 function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
-  const tiltAngle = 7 * (Math.PI / 180);
-  // Tilt direction based on placement (left/right)
-  const tiltZ = cornerIndex === 0 ? tiltAngle : -tiltAngle;
+  const slabThickness = radiusM * 0.6; // thin stone slab
+  const slabWidth = radiusM * 3.5; // tall/wide slab
+  const slabDepth = heightM * 0.35; // depth into table
+  const vAngle = 35 * (Math.PI / 180); // V-opening angle from center
+
+  // Mirror for left vs right placement
+  const mirror = cornerIndex === 0 ? 1 : -1;
 
   return (
-    <group position={[0, heightM / 2, 0]}>
-      <mesh rotation={[0, 0, tiltZ]} castShadow receiveShadow>
-        <cylinderGeometry args={[radiusM * 0.7, radiusM, heightM, 24]} />
-        <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={1.5} />
+    <group>
+      {/* Left slab of the V */}
+      <mesh
+        position={[0, heightM / 2, mirror * Math.sin(vAngle) * slabDepth * 0.3]}
+        rotation={[0, mirror * vAngle, 0]}
+        castShadow receiveShadow
+      >
+        <boxGeometry args={[slabThickness, heightM, slabWidth]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
+      </mesh>
+      {/* Right slab of the V */}
+      <mesh
+        position={[0, heightM / 2, -mirror * Math.sin(vAngle) * slabDepth * 0.3]}
+        rotation={[0, -mirror * vAngle, 0]}
+        castShadow receiveShadow
+      >
+        <boxGeometry args={[slabThickness, heightM, slabWidth]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
       </mesh>
     </group>
   );
