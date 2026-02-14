@@ -308,46 +308,47 @@ function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- V-Legs: two thick stone slabs meeting at apex, opening outward < > ---
-// Slabs touch at inner tip and fan outward. No crossing.
+// --- V-Legs: two broad stone panels forming a V (< >) from top view ---
+// Panels are placed side by side with a gap, NOT overlapping.
+// Each panel is a wide flat slab rotated outward from center.
 function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
-  const slabThickness = radiusM * 0.4;  // thin like real stone panels
-  const slabLength = radiusM * 7;       // wide broad slabs
-  const vHalfAngle = 22 * (Math.PI / 180); // tighter V for clean meeting point
+  const slabThickness = radiusM * 0.35; // thin stone panel
+  const slabWidth = radiusM * 4;        // broad panel width
+  const vHalfAngle = 18 * (Math.PI / 180); // subtle V opening
 
-  // Each slab pivots from the apex (inner edge toward table center)
-  // Offset each slab along Z so they meet at center, fan outward
-  const pivotOffset = (slabLength / 2) * Math.sin(vHalfAngle);
+  // Position each slab so inner edges touch at center, outer edges fan out
+  // Gap = slabThickness so they don't intersect
+  const gap = slabThickness * 0.6;
 
   // cornerIndex 0 = left (<), cornerIndex 1 = right (>)
   const sign = cornerIndex === 0 ? 1 : -1;
 
   return (
     <group>
-      {/* Slab A */}
+      {/* Slab A - front */}
       <mesh
         position={[
-          sign * (slabLength / 2) * (1 - Math.cos(vHalfAngle)) * 0.5,
+          sign * Math.sin(vHalfAngle) * slabWidth * 0.5,
           heightM / 2,
-          pivotOffset
+          gap + Math.cos(vHalfAngle) * slabWidth * 0.5
         ]}
         rotation={[0, sign * vHalfAngle, 0]}
         castShadow receiveShadow
       >
-        <boxGeometry args={[slabThickness, heightM, slabLength]} />
+        <boxGeometry args={[slabThickness, heightM, slabWidth]} />
         <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
       </mesh>
-      {/* Slab B (mirrored on Z) */}
+      {/* Slab B - back (mirrored on Z) */}
       <mesh
         position={[
-          sign * (slabLength / 2) * (1 - Math.cos(vHalfAngle)) * 0.5,
+          sign * Math.sin(vHalfAngle) * slabWidth * 0.5,
           heightM / 2,
-          -pivotOffset
+          -(gap + Math.cos(vHalfAngle) * slabWidth * 0.5)
         ]}
         rotation={[0, -sign * vHalfAngle, 0]}
         castShadow receiveShadow
       >
-        <boxGeometry args={[slabThickness, heightM, slabLength]} />
+        <boxGeometry args={[slabThickness, heightM, slabWidth]} />
         <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={2} />
       </mesh>
     </group>
