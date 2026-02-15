@@ -329,23 +329,22 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: plinth (70%) + orb collar bulge (30%), single LatheGeometry ---
+// --- Hourglass: sculpted waist profile, single LatheGeometry ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
     const R = radiusM;
     const H = heightM;
 
     // Normalized profile: (yFraction, rFraction)
-    // Plinth: straight cylinder (0–70%), Orb collar: visible bulge (70–100%)
-    // No steps, no hourglass neck, no skinny top cap.
+    // True hourglass silhouette: fuller base/top with a pronounced waist.
     const profile: [number, number][] = [
-      [0.00, 0.96],  // bottom fillet start
-      [0.05, 1.00],  // reach full column radius
-      [0.70, 1.00],  // straight plinth end
-      [0.78, 1.06],  // orb collar rising
-      [0.86, 1.12],  // bulge peak (must be visible)
-      [0.93, 1.06],  // orb tapering
-      [1.00, 1.00],  // meet tabletop: NOT narrow
+      [0.00, 1.04],  // slightly proud foot
+      [0.10, 1.10],  // lower bulge
+      [0.26, 0.92],  // taper down
+      [0.50, 0.62],  // narrow waist
+      [0.74, 0.90],  // recover from waist
+      [0.90, 1.08],  // upper bulge
+      [1.00, 1.00],  // clean tabletop interface
     ];
 
     // Build smooth curve by subdividing between profile points
