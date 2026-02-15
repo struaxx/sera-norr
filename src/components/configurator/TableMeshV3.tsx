@@ -447,28 +447,23 @@ function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
   );
 }
 
-// --- D-Legs: D-profile from top view — mostly cylindrical with one flat chord ---
+// --- D-Legs: half-cylinder — curved outside, flat inside, wider/bigger ---
 function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
   const geo = useMemo(() => {
-    const r = radiusM * 1.5;
-    // D-shape: arc spanning ~240° with a flat chord on one side
+    const r = radiusM * 2.5; // wider/bigger
+    // D-shape from top: half circle (curved outside) + flat chord (inside facing center)
     const shape2d = new THREE.Shape();
-    const arcStart = -Math.PI * 0.67; // ~120° from center
-    const arcEnd = Math.PI * 0.67;    // ~120° from center
     const segments = 32;
 
-    // Start at flat chord top
-    const startX = r * Math.cos(arcStart);
-    const startZ = r * Math.sin(arcStart);
-    shape2d.moveTo(startX, startZ);
+    // Flat side: straight line along Z axis (inner side)
+    shape2d.moveTo(0, -r);
+    shape2d.lineTo(0, r);
 
-    // Arc (the curved side)
+    // Curved side: semicircle (outer side)
     for (let i = 1; i <= segments; i++) {
-      const angle = arcStart + (arcEnd - arcStart) * (i / segments);
+      const angle = Math.PI / 2 - (Math.PI * i / segments);
       shape2d.lineTo(r * Math.cos(angle), r * Math.sin(angle));
     }
-
-    // Close with flat chord
     shape2d.closePath();
 
     const g = new THREE.ExtrudeGeometry(shape2d, {
@@ -479,14 +474,15 @@ function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
     return g;
   }, [radiusM, heightM]);
 
-  // Rotate so flat side faces center, extrude goes upward
-  // ExtrudeGeometry extrudes along Z, we need Y-up
-  const rotY = cornerIndex === 0 ? 0 : Math.PI;
+  // Extrude is along Z → rotate so it goes Y-up
+  // cornerIndex 0 = left end, flat faces right (toward center)
+  // cornerIndex 1 = right end, flat faces left (toward center)
+  const rotZ = cornerIndex === 0 ? 0 : Math.PI;
 
   return (
-    <group rotation={[-Math.PI / 2, 0, rotY]}>
+    <group rotation={[-Math.PI / 2, 0, rotZ]}>
       <mesh geometry={geo} castShadow receiveShadow>
-        <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={1.5} />
+        <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
       </mesh>
     </group>
   );
