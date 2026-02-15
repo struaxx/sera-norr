@@ -6,7 +6,7 @@
 
 import { useMemo, useEffect } from 'react';
 import * as THREE from 'three';
-import { useTexture, useGLTF } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import { mmToM } from '@/lib/configurator/units';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
 import { get3DTexture, getTextureScale } from '@/lib/configurator/texture-resolver';
@@ -329,75 +329,58 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: loaded from GLB model ---
-const HOURGLASS_GLB_PATH = '/models/hourglass-leg.glb';
-
+// --- Hourglass: procedural orb-waist-orb silhouette via LatheGeometry ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const { scene } = useGLTF(HOURGLASS_GLB_PATH);
+  const geo = useMemo(() => {
+    const segments = 80;
+    const points: THREE.Vector2[] = [];
+    const topR = radiusM * 1.3;
+    const bottomR = radiusM * 1.4;
+    const waistR = radiusM * HOURGLASS_WAIST_RATIO;
 
-  const legGeo = useMemo(() => {
-    // Collect all meshes from the GLB
-    const meshes: THREE.Mesh[] = [];
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        meshes.push(child as THREE.Mesh);
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments; // 0 = bottom, 1 = top
+      let r: number;
+
+      if (t < 0.35) {
+        // Bottom orb: bulge out then pinch in
+        const u = t / 0.35;
+        // Sine curve for smooth orb shape
+        r = bottomR * Math.sin(u * Math.PI * 0.5 + Math.PI * 0.5) * 0.85 + waistR * (1 - Math.sin(u * Math.PI * 0.5 + Math.PI * 0.5)) * 0.15;
+        r = bottomR - (bottomR - waistR) * Math.pow(u, 1.8);
+      } else if (t < 0.5) {
+        // Waist: smooth pinch
+        const u = (t - 0.35) / 0.15;
+        r = waistR + (bottomR * 0.15) * (1 - Math.sin(u * Math.PI));
+        r = waistR;
+      } else if (t < 0.65) {
+        // Waist to top orb transition
+        const u = (t - 0.5) / 0.15;
+        r = waistR + (topR - waistR) * Math.pow(u, 2.0);
+      } else {
+        // Top orb: bulge then taper to top
+        const u = (t - 0.65) / 0.35;
+        // Bell curve for top orb
+        const bellPeak = 0.3; // peak at 30% into this section
+        if (u < bellPeak) {
+          r = topR;
+        } else {
+          const falloff = (u - bellPeak) / (1 - bellPeak);
+          r = topR - (topR - radiusM * 0.9) * Math.pow(falloff, 1.5);
+        }
       }
-    });
 
-    if (meshes.length === 0) return null;
-
-    // Find the narrowest mesh (a single leg, not the tabletop)
-    let bestLeg: THREE.Mesh | null = null;
-    let smallestWidth = Infinity;
-
-    for (const m of meshes) {
-      const geo = m.geometry.clone();
-      geo.applyMatrix4(m.matrixWorld);
-      const box = new THREE.Box3().setFromBufferAttribute(geo.attributes.position as THREE.BufferAttribute);
-      const size = new THREE.Vector3();
-      box.getSize(size);
-      const widthXZ = Math.max(size.x, size.z);
-      // Leg = tall relative to width
-      if (size.y > widthXZ * 0.5 && widthXZ < smallestWidth) {
-        smallestWidth = widthXZ;
-        bestLeg = m;
-      }
+      points.push(new THREE.Vector2(Math.max(r, radiusM * 0.15), t * heightM));
     }
-
-    if (!bestLeg) bestLeg = meshes[0];
-
-    // Clone and normalize
-    const geo = bestLeg.geometry.clone();
-    geo.applyMatrix4(bestLeg.matrixWorld);
-
-    const box = new THREE.Box3().setFromBufferAttribute(geo.attributes.position as THREE.BufferAttribute);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-
-    // Center X/Z, bottom at Y=0
-    geo.translate(-center.x, -box.min.y, -center.z);
-
-    // Uniform scale to target height (keeps round cross-section)
-    const scale = heightM / size.y;
-    geo.scale(scale, scale, scale);
-
-    geo.computeVertexNormals();
-    return geo;
-  }, [scene, heightM]);
-
-  if (!legGeo) return null;
+    return new THREE.LatheGeometry(points, 48);
+  }, [radiusM, heightM]);
 
   return (
-    <mesh geometry={legGeo} castShadow receiveShadow>
+    <mesh geometry={geo} castShadow receiveShadow>
       <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
     </mesh>
   );
 }
-
-// Preload GLB
-useGLTF.preload(HOURGLASS_GLB_PATH);
 
 // --- Quartet: single central drum base (round tables only) ---
 function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
