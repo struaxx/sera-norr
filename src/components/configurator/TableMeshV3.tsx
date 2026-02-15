@@ -4,7 +4,7 @@
 // 9 leg styles, rule-driven placement, monolith textures
 // AXIS: X = length, Z = width, Y = height (up)
 
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { useTexture, useGLTF } from '@react-three/drei';
 import { mmToM } from '@/lib/configurator/units';
@@ -332,89 +332,65 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
 // --- Hourglass: loaded from GLB model ---
 const HOURGLASS_GLB_PATH = '/models/hourglass-leg.glb';
 
-function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
+function HourglassFullTable({ 
+  lengthM, widthM, heightM, stoneId 
+}: { 
+  lengthM: number; widthM: number; heightM: number; stoneId?: string 
+}) {
   const { scene } = useGLTF(HOURGLASS_GLB_PATH);
 
-  // Extract a single leg from the full-table GLB
-  const legGeo = useMemo(() => {
-    // Collect all meshes with bounding info
-    const meshes: { mesh: THREE.Mesh; box: THREE.Box3; center: THREE.Vector3; height: number }[] = [];
-    scene.traverse((child) => {
+  const scaledScene = useMemo(() => {
+    const clone = scene.clone(true);
+
+    // Compute bounding box of the GLB model
+    const box = new THREE.Box3().setFromObject(clone);
+    const size = new THREE.Vector3(); box.getSize(size);
+    const center = new THREE.Vector3(); box.getCenter(center);
+
+    // Scale to match configured table dimensions
+    // GLB has its own proportions — scale X to match length, Z to match width, Y to match height
+    const scaleX = lengthM / size.x;
+    const scaleY = heightM / size.y;
+    const scaleZ = widthM / size.z;
+
+    clone.scale.set(scaleX, scaleY, scaleZ);
+
+    // Position: bottom at y=0, centered on x/z
+    clone.position.set(
+      -center.x * scaleX,
+      -box.min.y * scaleY,
+      -center.z * scaleZ
+    );
+
+    return clone;
+  }, [scene, lengthM, widthM, heightM]);
+
+  // Apply stone texture to all meshes
+  const texturePath = get3DTexture(stoneId ?? 'calacatta-viola');
+  const texture = useTexture(texturePath);
+
+  useMemo(() => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(2, 2);
+    texture.colorSpace = THREE.SRGBColorSpace;
+
+    scaledScene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        // Need world-space bounding box
-        mesh.updateWorldMatrix(true, false);
-        const box = new THREE.Box3().setFromObject(mesh);
-        const size = new THREE.Vector3();
-        box.getSize(size);
-        const center = new THREE.Vector3();
-        box.getCenter(center);
-        meshes.push({ mesh, box, center, height: size.y });
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.material = new THREE.MeshStandardMaterial({
+          map: texture,
+          roughness: 0.3,
+          metalness: 0.05,
+          envMapIntensity: 0.6,
+        });
       }
     });
+  }, [scaledScene, texture, stoneId]);
 
-    if (meshes.length === 0) return null;
-
-    // The tabletop is usually the widest/flattest mesh (largest x or z extent, small y).
-    // Legs are taller, narrower. Pick the mesh closest to center (x≈0, z≈0) that isn't the tabletop.
-    // Sort by height descending — legs are tall, tabletop is flat
-    meshes.sort((a, b) => b.height - a.height);
-
-    // Find the tallest mesh that isn't extremely wide (not the tabletop)
-    let legMesh: THREE.Mesh | null = null;
-    for (const m of meshes) {
-      const size = new THREE.Vector3();
-      m.box.getSize(size);
-      // Tabletop: very wide (x or z >> y). Leg: y is dominant dimension
-      if (size.y > size.x * 0.5 && size.y > size.z * 0.5) {
-        legMesh = m.mesh;
-        break;
-      }
-    }
-
-    // Fallback: just pick the first non-widest mesh
-    if (!legMesh) {
-      // Sort by x-extent, pick smallest
-      meshes.sort((a, b) => {
-        const sA = new THREE.Vector3(); a.box.getSize(sA);
-        const sB = new THREE.Vector3(); b.box.getSize(sB);
-        return (sA.x * sA.z) - (sB.x * sB.z);
-      });
-      legMesh = meshes[0].mesh;
-    }
-
-    // Clone geometry and normalize
-    const geo = legMesh.geometry.clone();
-    // Apply the mesh's world transform to the geometry
-    legMesh.updateWorldMatrix(true, false);
-    geo.applyMatrix4(legMesh.matrixWorld);
-
-    // Re-center: bottom at y=0, centered on x/z
-    geo.computeBoundingBox();
-    const gBox = geo.boundingBox!;
-    const gCenter = new THREE.Vector3();
-    gBox.getCenter(gCenter);
-    const gSize = new THREE.Vector3();
-    gBox.getSize(gSize);
-
-    // Translate so bottom is at y=0 and centered on x/z
-    geo.translate(-gCenter.x, -gBox.min.y, -gCenter.z);
-
-    // Scale to match target height
-    const scale = heightM / gSize.y;
-    geo.scale(scale, scale, scale);
-
-    geo.computeVertexNormals();
-    return geo;
-  }, [scene, heightM, radiusM]);
-
-  if (!legGeo) return null;
-
-  return (
-    <mesh geometry={legGeo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
-    </mesh>
-  );
+  return <primitive object={scaledScene} />;
 }
 
 // Preload GLB
@@ -601,9 +577,7 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
             {style === 'conical' && (
               <ConicalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {style === 'hourglass' && (
-              <HourglassLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
-            )}
+            {/* hourglass handled at TableMeshV3 level as full GLB */}
             {style === 'quartet_legs' && (
               <QuartetLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
@@ -662,6 +636,9 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const widthM = mmToM(widthMm);
   const thicknessM = mmToM(thicknessMm);
   const legHeightM = mmToM(resolved.legHeightMm);
+  const totalHeightM = legHeightM + thicknessM;
+
+  const isHourglass = resolved.legStyle === 'hourglass';
 
   const textureScale = stoneId ? getTextureScale(stoneId) : 0.6;
   const topRepeatX = Math.max(1, lengthM / textureScale);
@@ -673,6 +650,21 @@ export function TableMeshV3(props: TableMeshV3Props) {
   );
 
   const topTransform = getTabletopTransform(shape, legHeightM, thicknessM);
+
+  // Hourglass: render full GLB model (includes tabletop + legs)
+  if (isHourglass) {
+    return (
+      <group>
+        <GroundPlane />
+        <HourglassFullTable
+          lengthM={lengthM}
+          widthM={widthM}
+          heightM={totalHeightM}
+          stoneId={stoneId}
+        />
+      </group>
+    );
+  }
 
   return (
     <group>
