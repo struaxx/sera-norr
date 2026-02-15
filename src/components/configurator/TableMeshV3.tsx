@@ -329,23 +329,22 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: cylindrical plinth + carved neck + rounded orb ---
+// --- Hourglass: sculpted waist profile, single LatheGeometry ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
     const R = radiusM;
     const H = heightM;
 
     // Normalized profile: (yFraction, rFraction)
-    // Matches the atelier reference: straight lower drum and a rounded upper orb.
+    // True hourglass silhouette: fuller base/top with a pronounced waist.
     const profile: [number, number][] = [
-      [0.00, 0.98],  // subtle foot chamfer
-      [0.08, 1.00],  // reach full plinth radius
-      [0.62, 1.00],  // straight cylindrical plinth
-      [0.72, 0.88],  // carved neck transition
-      [0.82, 1.04],  // orb starts swelling
-      [0.90, 1.16],  // orb belly
-      [0.96, 1.08],  // taper toward tabletop
-      [1.00, 0.96],  // soft tuck under top
+      [0.00, 1.04],  // slightly proud foot
+      [0.10, 1.10],  // lower bulge
+      [0.26, 0.92],  // taper down
+      [0.50, 0.62],  // narrow waist
+      [0.74, 0.90],  // recover from waist
+      [0.90, 1.08],  // upper bulge
+      [1.00, 1.00],  // clean tabletop interface
     ];
 
     // Build smooth curve by subdividing between profile points
