@@ -6,7 +6,7 @@
 
 import { useMemo, useEffect } from 'react';
 import * as THREE from 'three';
-import { useTexture } from '@react-three/drei';
+import { useTexture, useGLTF } from '@react-three/drei';
 import { mmToM } from '@/lib/configurator/units';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
 import { get3DTexture, getTextureScale } from '@/lib/configurator/texture-resolver';
@@ -329,51 +329,41 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: procedural orb-waist-orb silhouette via LatheGeometry ---
+// --- Hourglass: loaded from GLB (single leg mesh) ---
+const HOURGLASS_GLB = '/models/hourglass-leg-single.glb';
+
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
+  const { scene } = useGLTF(HOURGLASS_GLB);
+
   const geo = useMemo(() => {
-    const segments = 80;
-    const points: THREE.Vector2[] = [];
-    const topR = radiusM * 1.3;
-    const bottomR = radiusM * 1.4;
-    const waistR = radiusM * HOURGLASS_WAIST_RATIO;
-
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments; // 0 = bottom, 1 = top
-      let r: number;
-
-      if (t < 0.35) {
-        // Bottom orb: bulge out then pinch in
-        const u = t / 0.35;
-        // Sine curve for smooth orb shape
-        r = bottomR * Math.sin(u * Math.PI * 0.5 + Math.PI * 0.5) * 0.85 + waistR * (1 - Math.sin(u * Math.PI * 0.5 + Math.PI * 0.5)) * 0.15;
-        r = bottomR - (bottomR - waistR) * Math.pow(u, 1.8);
-      } else if (t < 0.5) {
-        // Waist: smooth pinch
-        const u = (t - 0.35) / 0.15;
-        r = waistR + (bottomR * 0.15) * (1 - Math.sin(u * Math.PI));
-        r = waistR;
-      } else if (t < 0.65) {
-        // Waist to top orb transition
-        const u = (t - 0.5) / 0.15;
-        r = waistR + (topR - waistR) * Math.pow(u, 2.0);
-      } else {
-        // Top orb: bulge then taper to top
-        const u = (t - 0.65) / 0.35;
-        // Bell curve for top orb
-        const bellPeak = 0.3; // peak at 30% into this section
-        if (u < bellPeak) {
-          r = topR;
-        } else {
-          const falloff = (u - bellPeak) / (1 - bellPeak);
-          r = topR - (topR - radiusM * 0.9) * Math.pow(falloff, 1.5);
-        }
+    // Find first mesh in the GLB
+    let mesh: THREE.Mesh | null = null;
+    scene.traverse((child) => {
+      if (!mesh && (child as THREE.Mesh).isMesh) {
+        mesh = child as THREE.Mesh;
       }
+    });
+    if (!mesh) return null;
 
-      points.push(new THREE.Vector2(Math.max(r, radiusM * 0.15), t * heightM));
-    }
-    return new THREE.LatheGeometry(points, 48);
-  }, [radiusM, heightM]);
+    const g = (mesh as THREE.Mesh).geometry.clone();
+    g.applyMatrix4((mesh as THREE.Mesh).matrixWorld);
+
+    // Normalize: center XZ, bottom at Y=0
+    const box = new THREE.Box3().setFromBufferAttribute(g.attributes.position as THREE.BufferAttribute);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    g.translate(-center.x, -box.min.y, -center.z);
+
+    // Uniform scale to match target height
+    const s = heightM / size.y;
+    g.scale(s, s, s);
+    g.computeVertexNormals();
+    return g;
+  }, [scene, heightM]);
+
+  if (!geo) return null;
 
   return (
     <mesh geometry={geo} castShadow receiveShadow>
@@ -381,6 +371,8 @@ function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
     </mesh>
   );
 }
+
+useGLTF.preload(HOURGLASS_GLB);
 
 // --- Quartet: single central drum base (round tables only) ---
 function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
