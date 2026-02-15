@@ -223,13 +223,26 @@ function CylindricalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Cylindrical Fluted: 12-sided cylinder ---
+// --- Cylindrical Fluted: bundled vertical reeds/ridges like classical fluting ---
 function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
+  const fluteCount = 20;
+  const fluteRadius = radiusM * 0.18;
+  const angleStep = (Math.PI * 2) / fluteCount;
+
   return (
-    <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-      <cylinderGeometry args={[radiusM, radiusM, heightM, 12, 1]} />
-      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
-    </mesh>
+    <group>
+      {Array.from({ length: fluteCount }).map((_, i) => {
+        const angle = i * angleStep;
+        const x = Math.cos(angle) * (radiusM - fluteRadius * 0.3);
+        const z = Math.sin(angle) * (radiusM - fluteRadius * 0.3);
+        return (
+          <mesh key={i} position={[x, heightM / 2, z]} castShadow receiveShadow>
+            <cylinderGeometry args={[fluteRadius, fluteRadius, heightM, 8]} />
+            <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={2} />
+          </mesh>
+        );
+      })}
+    </group>
   );
 }
 
