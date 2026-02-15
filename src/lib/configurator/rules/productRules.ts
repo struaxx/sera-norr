@@ -223,7 +223,7 @@ export function determineLegCount(
 
   // Pedestal styles: auto 1 or 2
   if (shape === 'round') return 1;
-  if ((shape === 'ellips' || shape === 'ovale') && lengthMm >= 2000) return 2;
+  if ((shape === 'ellips' || shape === 'ovale' || shape === 'corner' || shape === 'cut-corner') && lengthMm >= 2000) return 2;
   return 1;
 }
 
