@@ -332,78 +332,68 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
 // --- Hourglass: loaded from GLB model ---
 const HOURGLASS_GLB_PATH = '/models/hourglass-leg.glb';
 
-function HourglassLegsOnly({ 
-  lengthM, widthM, legHeightM, stoneId 
-}: { 
-  lengthM: number; widthM: number; legHeightM: number; stoneId?: string 
-}) {
+function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const { scene } = useGLTF(HOURGLASS_GLB_PATH);
 
-  const legsScene = useMemo(() => {
-    const clone = scene.clone(true);
-
-    // Compute bounding box of the GLB model
-    const box = new THREE.Box3().setFromObject(clone);
-    const size = new THREE.Vector3(); box.getSize(size);
-    const center = new THREE.Vector3(); box.getCenter(center);
-
-    // Uniform scale based on height to preserve round proportions
-    const uniformScale = legHeightM / size.y;
-    clone.scale.set(uniformScale, uniformScale, uniformScale);
-
-    // Re-center: bottom at y=0, centered on x/z
-    clone.position.set(
-      -center.x * uniformScale,
-      -box.min.y * uniformScale,
-      -center.z * uniformScale
-    );
-
-    // Now scale X and Z non-uniformly to match table dimensions
-    // but only for the GROUP position, not the geometry itself
-    // Actually we need to stretch x/z to fit the table length/width
-    const scaledSizeX = size.x * uniformScale;
-    const scaledSizeZ = size.z * uniformScale;
-    const stretchX = lengthM / scaledSizeX;
-    const stretchZ = widthM / scaledSizeZ;
-
-    // Apply stretch only to position, not to individual mesh geometry
-    // This keeps legs round but positions them correctly
-    clone.scale.set(uniformScale * stretchX, uniformScale, uniformScale * stretchZ);
-    clone.position.set(
-      -center.x * uniformScale * stretchX,
-      -box.min.y * uniformScale,
-      -center.z * uniformScale * stretchZ
-    );
-
-    return clone;
-  }, [scene, lengthM, widthM, legHeightM]);
-
-  // Apply stone texture to all meshes
-  const texturePath = get3DTexture(stoneId ?? 'calacatta-viola');
-  const texture = useTexture(texturePath);
-
-  useMemo(() => {
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(2, 2);
-    texture.colorSpace = THREE.SRGBColorSpace;
-
-    legsScene.traverse((child) => {
+  const legGeo = useMemo(() => {
+    // Collect all meshes from the GLB
+    const meshes: THREE.Mesh[] = [];
+    scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        mesh.material = new THREE.MeshStandardMaterial({
-          map: texture,
-          roughness: 0.3,
-          metalness: 0.05,
-          envMapIntensity: 0.6,
-        });
+        meshes.push(child as THREE.Mesh);
       }
     });
-  }, [legsScene, texture, stoneId]);
 
-  return <primitive object={legsScene} />;
+    if (meshes.length === 0) return null;
+
+    // Find the narrowest mesh (a single leg, not the tabletop)
+    let bestLeg: THREE.Mesh | null = null;
+    let smallestWidth = Infinity;
+
+    for (const m of meshes) {
+      const geo = m.geometry.clone();
+      geo.applyMatrix4(m.matrixWorld);
+      const box = new THREE.Box3().setFromBufferAttribute(geo.attributes.position as THREE.BufferAttribute);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const widthXZ = Math.max(size.x, size.z);
+      // Leg = tall relative to width
+      if (size.y > widthXZ * 0.5 && widthXZ < smallestWidth) {
+        smallestWidth = widthXZ;
+        bestLeg = m;
+      }
+    }
+
+    if (!bestLeg) bestLeg = meshes[0];
+
+    // Clone and normalize
+    const geo = bestLeg.geometry.clone();
+    geo.applyMatrix4(bestLeg.matrixWorld);
+
+    const box = new THREE.Box3().setFromBufferAttribute(geo.attributes.position as THREE.BufferAttribute);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+
+    // Center X/Z, bottom at Y=0
+    geo.translate(-center.x, -box.min.y, -center.z);
+
+    // Uniform scale to target height (keeps round cross-section)
+    const scale = heightM / size.y;
+    geo.scale(scale, scale, scale);
+
+    geo.computeVertexNormals();
+    return geo;
+  }, [scene, heightM]);
+
+  if (!legGeo) return null;
+
+  return (
+    <mesh geometry={legGeo} castShadow receiveShadow>
+      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
+    </mesh>
+  );
 }
 
 // Preload GLB
@@ -590,7 +580,9 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
             {style === 'conical' && (
               <ConicalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {/* hourglass handled at TableMeshV3 level as full GLB */}
+            {style === 'hourglass' && (
+              <HourglassLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            )}
             {style === 'quartet_legs' && (
               <QuartetLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
@@ -649,9 +641,6 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const widthM = mmToM(widthMm);
   const thicknessM = mmToM(thicknessMm);
   const legHeightM = mmToM(resolved.legHeightMm);
-  const totalHeightM = legHeightM + thicknessM;
-
-  const isHourglass = resolved.legStyle === 'hourglass';
 
   const textureScale = stoneId ? getTextureScale(stoneId) : 0.6;
   const topRepeatX = Math.max(1, lengthM / textureScale);
@@ -663,30 +652,6 @@ export function TableMeshV3(props: TableMeshV3Props) {
   );
 
   const topTransform = getTabletopTransform(shape, legHeightM, thicknessM);
-
-  // Hourglass: render GLB legs + procedural tabletop for correct proportions
-  if (isHourglass) {
-    return (
-      <group>
-        <GroundPlane />
-        <HourglassLegsOnly
-          lengthM={lengthM}
-          widthM={widthM}
-          legHeightM={legHeightM}
-          stoneId={stoneId}
-        />
-        <mesh
-          position={topTransform.position}
-          rotation={topTransform.rotation}
-          geometry={topGeometry}
-          castShadow
-          receiveShadow
-        >
-          <MonolithMaterial stoneId={stoneId} repeatX={topRepeatX} repeatY={topRepeatY} />
-        </mesh>
-      </group>
-    );
-  }
 
   return (
     <group>
