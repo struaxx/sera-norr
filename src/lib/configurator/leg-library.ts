@@ -127,14 +127,14 @@ export const LEG_LIBRARY: LegStyle[] = [
   {
     id: 'rounded_legs',
     name: 'Rounded',
-    category: 'fixed',
+    category: 'pedestal',
     descriptionShort: {
       nl: 'Afgeronde poten — zachte elegantie',
       en: 'Rounded legs — soft elegance',
     },
     priceUplift: 0,
-    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
-    isActiveInConfigurator: true,
+    compatibleShapes: ['round', 'ellips', 'ovale', 'corner', 'cut-corner'],
+    isActiveInConfigurator: false,
     sortOrder: 8,
   },
 ];
