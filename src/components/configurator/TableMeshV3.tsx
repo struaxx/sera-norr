@@ -466,21 +466,20 @@ function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
   );
 }
 
-// --- D-Legs: half-cylinder — curved outside, flat inside, wider/bigger ---
+// --- D-Legs: half-cylinder — curved outside, flat inside ---
 function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
   const geo = useMemo(() => {
-    const r = radiusM * 2.5; // wider/bigger
-    // D-shape from top: half circle (curved outside) + flat chord (inside facing center)
+    const r = radiusM * 3.2; // bigger D-legs
     const shape2d = new THREE.Shape();
     const segments = 32;
 
-    // Flat side: straight line along Z axis (inner side)
+    // Flat side (inner, faces center): straight line along Y axis in 2D
     shape2d.moveTo(0, -r);
     shape2d.lineTo(0, r);
 
-    // Curved side: semicircle (outer side)
+    // Curved side (outer, faces away from center): semicircle going left (negative X)
     for (let i = 1; i <= segments; i++) {
-      const angle = Math.PI / 2 - (Math.PI * i / segments);
+      const angle = Math.PI / 2 + (Math.PI * i / segments);
       shape2d.lineTo(r * Math.cos(angle), r * Math.sin(angle));
     }
     shape2d.closePath();
@@ -493,9 +492,10 @@ function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
     return g;
   }, [radiusM, heightM]);
 
-  // Extrude is along Z → rotate so it goes Y-up
-  // cornerIndex 0 = left end, flat faces right (toward center)
-  // cornerIndex 1 = right end, flat faces left (toward center)
+  // Extrude along Z → rotate -PI/2 on X so it goes Y-up
+  // cornerIndex 0 = left end (negative X), curved faces outward (more negative X)
+  // cornerIndex 1 = right end (positive X), curved faces outward (more positive X)
+  // Flip via PI rotation on Z for the right-side leg
   const rotZ = cornerIndex === 0 ? 0 : Math.PI;
 
   return (
