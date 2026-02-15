@@ -329,65 +329,66 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: wide truncated-cone base, waist, single sphere, narrow neck to top ---
+// --- Hourglass: barrel base + sphere ball touching tabletop (reference photo) ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
     const points: THREE.Vector2[] = [];
     const segments = 80;
     const R = radiusM;
 
-    // Reference: bottom is a wide truncated cone (~45% of height),
-    // then a pinch/waist, a single round ball (~30%), narrow stem to tabletop.
-    const baseR = R * 0.95;    // bottom radius
-    const waistR = R * 0.38;   // narrowest pinch
-    const ballR = R * 0.85;    // ball peak radius
-    const stemR = R * 0.32;    // narrow stem to tabletop
-    const topR = R * 0.42;     // where it meets tabletop (slightly flared)
+    // Reference photo analysis:
+    // - Bottom ~40%: barrel/cylinder shape, very slightly convex (not a cone)
+    // - 40%-50%: smooth waist/neck transition
+    // - 50%-95%: large sphere/ball, nearly as wide as the base
+    // - 95%-100%: ball meets tabletop directly (no visible stem)
 
-    // Zone boundaries (fraction of total height)
-    const zBase = 0.42;    // truncated cone ends here
-    const zWaist = 0.48;   // waist (narrowest)
-    const zBallPeak = 0.65; // ball center
-    const zBallEnd = 0.82; // ball ends / stem begins
+    const baseR = R * 0.88;    // barrel base radius
+    const barrelBulge = R * 0.03; // subtle barrel convexity
+    const waistR = R * 0.42;   // narrowest pinch between base and ball
+    const ballR = R * 0.82;    // ball radius — nearly as wide as base
+    const topR = R * 0.35;     // where ball meets tabletop
+
+    // Zone boundaries
+    const zBaseEnd = 0.38;     // barrel base ends
+    const zWaist = 0.47;       // narrowest point
+    const zBallStart = 0.47;   // ball starts right at waist
+    const zBallEnd = 0.96;     // ball ends very close to top
+    
+    // Ball center for circle calculation
+    const ballCenterT = (zBallStart + zBallEnd) / 2; // ~0.715
+    const ballHalfSpan = (zBallEnd - zBallStart) / 2;
 
     for (let i = 0; i <= segments; i++) {
       const t = i / segments;
       const y = t * heightM;
       let r: number;
 
-      if (t <= zBase) {
-        // Truncated cone: wide at bottom, tapers to waist
-        const bt = t / zBase; // 0..1
-        // Slight convex curve to keep it fleshy, not straight
-        const ease = bt * bt; // quadratic ease-in: stays wide, tapers late
-        r = baseR + (waistR - baseR) * ease;
+      if (t <= zBaseEnd) {
+        // Barrel base: nearly vertical with subtle convex belly
+        const bt = t / zBaseEnd; // 0..1
+        // Barrel convexity peaks at center
+        const belly = Math.sin(bt * Math.PI) * barrelBulge;
+        // Very slight taper toward the waist at the very end
+        const taper = Math.pow(bt, 4); // stays wide, tapers only at end
+        r = baseR + belly - (baseR - waistR) * taper * 0.3;
       } else if (t <= zWaist) {
-        // Quick pinch to waist
-        const wt = (t - zBase) / (zWaist - zBase);
-        const smooth = wt * wt * (3 - 2 * wt);
-        r = baseR + (waistR - baseR) * 1.0 + (waistR - (baseR + (waistR - baseR))) * smooth;
-        // Simplify: already at waistR from base zone end
-        r = waistR;
+        // Smooth transition from base to waist
+        const wt = (t - zBaseEnd) / (zWaist - zBaseEnd);
+        const smooth = wt * wt * (3 - 2 * wt); // smoothstep
+        // Start radius is where the base ended
+        const baseEndR = baseR - (baseR - waistR) * 0.3;
+        r = baseEndR + (waistR - baseEndR) * smooth;
       } else if (t <= zBallEnd) {
-        // Spherical ball
-        const ballSpan = zBallEnd - zWaist;
-        const bt = (t - zWaist) / ballSpan; // 0..1
+        // Spherical ball — use circular cross-section
+        const bt = (t - zBallStart) / (zBallEnd - zBallStart); // 0..1
+        // Sine for smooth sphere profile
         const sinVal = Math.sin(bt * Math.PI);
         r = waistR + (ballR - waistR) * sinVal;
       } else {
-        // Narrow stem to tabletop, slight flare at very top
-        const st = (t - zBallEnd) / (1 - zBallEnd); // 0..1
-        if (st < 0.85) {
-          // Narrow stem
-          const ease = st / 0.85;
-          r = stemR + (stemR - stemR) * ease; // constant stemR
-          r = stemR;
-        } else {
-          // Slight flare at top
-          const ft = (st - 0.85) / 0.15;
-          const ease = ft * ft;
-          r = stemR + (topR - stemR) * ease;
-        }
+        // Tiny cap: ball meets tabletop
+        const ct = (t - zBallEnd) / (1 - zBallEnd);
+        const smooth = ct * ct * (3 - 2 * ct);
+        r = topR + (1 - smooth) * (topR * 0.2);
       }
 
       points.push(new THREE.Vector2(Math.max(r, R * 0.08), y));
