@@ -191,15 +191,19 @@ function getTabletopTransform(
   legHeightM: number,
   thicknessM: number,
 ): { position: [number, number, number]; rotation: [number, number, number] } {
-  if (shape === 'ellips' || shape === 'ovale' || shape === 'corner' || shape === 'cut-corner') {
+  if (shape === 'round') {
+    // CylinderGeometry is centered on its origin
     return {
-      position: [0, legHeightM + thicknessM, 0],
-      rotation: [-Math.PI / 2, 0, 0],
+      position: [0, legHeightM + thicknessM / 2, 0],
+      rotation: [0, 0, 0],
     };
   }
+  // ExtrudeGeometry extrudes from z=0 to z=depth; rotation -PI/2 maps +Z to -Y
+  // So bottom face = position.y - depth, top face = position.y
+  // We want bottom face at legHeightM → position.y = legHeightM + thicknessM
   return {
-    position: [0, legHeightM + thicknessM / 2, 0],
-    rotation: [0, 0, 0],
+    position: [0, legHeightM + thicknessM, 0],
+    rotation: [-Math.PI / 2, 0, 0],
   };
 }
 
@@ -229,8 +233,15 @@ function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
   const fluteRadius = radiusM * 0.18;
   const angleStep = (Math.PI * 2) / fluteCount;
 
+  const coreRadius = radiusM - fluteRadius * 0.6;
+
   return (
     <group>
+      {/* Solid inner core to eliminate gaps */}
+      <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[coreRadius, coreRadius, heightM, 32]} />
+        <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
+      </mesh>
       {Array.from({ length: fluteCount }).map((_, i) => {
         const angle = i * angleStep;
         const x = Math.cos(angle) * (radiusM - fluteRadius * 0.3);
