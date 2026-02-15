@@ -578,7 +578,7 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
 function GroundPlane() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-      <planeGeometry args={[6, 6]} />
+      <planeGeometry args={[100, 100]} />
       <meshStandardMaterial color="#E8E4E0" roughness={0.95} metalness={0} />
     </mesh>
   );
