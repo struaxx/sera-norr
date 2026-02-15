@@ -534,9 +534,14 @@ function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
     return new THREE.LatheGeometry(points, 48);
   }, [domeR, cylinderH]);
 
+  // Scale texture proportionally: ~1 repeat around circumference, height-proportional vertically
+  const circumference = 2 * Math.PI * radiusM;
+  const texRepeatX = Math.max(1, circumference / 0.4);
+  const texRepeatY = Math.max(1, heightM / 0.4);
+
   return (
     <mesh geometry={geo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={2} repeatY={2} />
+      <MonolithMaterial stoneId={stoneId} repeatX={texRepeatX} repeatY={texRepeatY} />
     </mesh>
   );
 }
