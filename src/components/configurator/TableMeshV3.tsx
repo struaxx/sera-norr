@@ -524,43 +524,77 @@ function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Curved Legs: concave cone with waist + subtle top flare (matches travertine reference) ---
-function CurvedLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const geo = useMemo(() => {
-    const segments = 64;
-    const points: THREE.Vector2[] = [];
-    // Profile: wide base → concave inward → narrow waist at ~65% → subtle flare to top
-    const baseRadius = radiusM * 1.6;
-    const waistRadius = radiusM * 0.6;
-    const topRadius = radiusM * 1.0;
-    const waistPos = 0.65; // waist at 65% height
+// --- Curved Legs: GLB model, pivot at top, scaled to height ---
+const CURVED_LEG_GLB = '/models/curved-leg.glb';
 
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments; // 0 = bottom, 1 = top
-      let r: number;
-      if (t <= waistPos) {
-        // Base to waist: concave inward curve
-        const u = t / waistPos;
-        // Concave: slow start, fast middle, slow end
-        const curve = Math.pow(u, 0.6);
-        r = baseRadius + (waistRadius - baseRadius) * curve;
-      } else {
-        // Waist to top: subtle outward flare
-        const u = (t - waistPos) / (1 - waistPos);
-        const curve = Math.pow(u, 0.5);
-        r = waistRadius + (topRadius - waistRadius) * curve;
+function CurvedLeg({ radiusM, heightM, stoneId }: LegProps) {
+  const { scene } = useGLTF(CURVED_LEG_GLB);
+
+  const group = useMemo(() => {
+    const clone = scene.clone(true);
+    const box = new THREE.Box3().setFromObject(clone);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    // Uniform scale to match leg height
+    const s = heightM / size.y;
+    clone.scale.set(s, s, s);
+
+    // Re-center on XZ, sit on y=0
+    clone.updateMatrixWorld(true);
+    const finalBox = new THREE.Box3().setFromObject(clone);
+    const finalCenter = new THREE.Vector3();
+    finalBox.getCenter(finalCenter);
+    clone.position.set(-finalCenter.x, -finalBox.min.y, -finalCenter.z);
+
+    return clone;
+  }, [scene, heightM]);
+
+  // Apply material
+  useEffect(() => {
+    group.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        (child as THREE.Mesh).castShadow = true;
+        (child as THREE.Mesh).receiveShadow = true;
       }
-      points.push(new THREE.Vector2(Math.max(r, radiusM * 0.2), t * heightM));
-    }
-    return new THREE.LatheGeometry(points, 48);
-  }, [radiusM, heightM]);
+    });
+  }, [group]);
 
   return (
-    <mesh geometry={geo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
-    </mesh>
+    <group>
+      <primitive object={group} />
+      <CurvedLegMaterialApplier group={group} stoneId={stoneId} />
+    </group>
   );
 }
+
+function CurvedLegMaterialApplier({ group, stoneId }: { group: THREE.Object3D; stoneId?: string }) {
+  const texturePath = stoneId ? get3DTexture(stoneId) : null;
+  const texture = useTexture(texturePath || get3DTexture('bianco-carrara'));
+
+  useEffect(() => {
+    const tex = texture.clone();
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(2, 2);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.needsUpdate = true;
+
+    const mat = stoneId
+      ? new THREE.MeshStandardMaterial({ map: tex, roughness: 0.35, metalness: 0.05, envMapIntensity: 1.2 })
+      : new THREE.MeshStandardMaterial({ color: '#C8BEB4', roughness: 0.85, metalness: 0 });
+
+    group.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        (child as THREE.Mesh).material = mat;
+      }
+    });
+  }, [group, texture, stoneId]);
+
+  return null;
+}
+
+useGLTF.preload(CURVED_LEG_GLB);
 
 // ============================================
 // LEG RENDERER (rule-driven placement)
