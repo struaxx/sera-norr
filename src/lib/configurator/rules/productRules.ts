@@ -185,6 +185,7 @@ export interface ShapeDefinition {
   label: string;
   labelNL: string;
   defaultLegStyle: RuleLegStyle;
+  isActive?: boolean;
 }
 
 export const SHAPE_DEFINITIONS: ShapeDefinition[] = [
@@ -192,7 +193,7 @@ export const SHAPE_DEFINITIONS: ShapeDefinition[] = [
   { id: 'round', label: 'Round', labelNL: 'Rond', defaultLegStyle: 'cylindrical' },
   { id: 'ovale', label: 'Oval', labelNL: 'Ovale', defaultLegStyle: 'cylindrical' },
   { id: 'corner', label: 'Rectangle', labelNL: 'Rechthoek', defaultLegStyle: 'rounded_legs' },
-  { id: 'cut-corner', label: 'Cut Corner', labelNL: 'Afgeschuind', defaultLegStyle: 'rounded_legs' },
+  { id: 'cut-corner', label: 'Cut Corner', labelNL: 'Afgeschuind', defaultLegStyle: 'rounded_legs', isActive: false },
 ];
 
 // ============================================
