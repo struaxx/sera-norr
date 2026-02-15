@@ -329,57 +329,68 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: wide cylinder base + sphere bulge + taper to top (reference photo) ---
+// --- Hourglass: wide truncated-cone base, waist, single sphere, narrow neck to top ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
     const points: THREE.Vector2[] = [];
-    const segments = 64;
+    const segments = 80;
     const R = radiusM;
-    
-    // Proportions inspired by the reference photo:
-    // Bottom 40%: wide cylinder base, slightly tapered inward at top
-    // 40%-70%: spherical bulge (wider than base)
-    // 70%-100%: tapers to ~60% R to meet tabletop
-    
-    const baseEnd = 0.38;      // where the base cylinder ends
-    const bulgeCenter = 0.55;  // center of the sphere bulge
-    const bulgeHalf = 0.17;    // half-height of the bulge zone
-    const neckStart = 0.72;    // where the neck/taper begins
-    
-    const baseR = R * 0.92;         // base cylinder radius
-    const bulgeR = R * 1.12;        // sphere bulge peak radius
-    const neckR = R * 0.45;         // narrowest point (waist between base and bulge)
-    const topR = R * 0.58;          // top where it meets table
+
+    // Reference: bottom is a wide truncated cone (~45% of height),
+    // then a pinch/waist, a single round ball (~30%), narrow stem to tabletop.
+    const baseR = R * 0.95;    // bottom radius
+    const waistR = R * 0.38;   // narrowest pinch
+    const ballR = R * 0.85;    // ball peak radius
+    const stemR = R * 0.32;    // narrow stem to tabletop
+    const topR = R * 0.42;     // where it meets tabletop (slightly flared)
+
+    // Zone boundaries (fraction of total height)
+    const zBase = 0.42;    // truncated cone ends here
+    const zWaist = 0.48;   // waist (narrowest)
+    const zBallPeak = 0.65; // ball center
+    const zBallEnd = 0.82; // ball ends / stem begins
 
     for (let i = 0; i <= segments; i++) {
       const t = i / segments;
       const y = t * heightM;
       let r: number;
 
-      if (t <= baseEnd) {
-        // Wide base cylinder, very slight taper toward the waist
-        const bt = t / baseEnd;
-        // Smoothly taper from baseR to neckR at the end
-        const taper = bt * bt * bt; // cubic ease — stays wide most of the way
-        r = baseR + (neckR - baseR) * taper;
-      } else if (t <= neckStart) {
-        // Sphere / bulge zone
-        const bt = (t - baseEnd) / (neckStart - baseEnd); // 0..1
-        // Sine bulge: 0→neckR, 0.5→bulgeR, 1→neckR-ish
+      if (t <= zBase) {
+        // Truncated cone: wide at bottom, tapers to waist
+        const bt = t / zBase; // 0..1
+        // Slight convex curve to keep it fleshy, not straight
+        const ease = bt * bt; // quadratic ease-in: stays wide, tapers late
+        r = baseR + (waistR - baseR) * ease;
+      } else if (t <= zWaist) {
+        // Quick pinch to waist
+        const wt = (t - zBase) / (zWaist - zBase);
+        const smooth = wt * wt * (3 - 2 * wt);
+        r = baseR + (waistR - baseR) * 1.0 + (waistR - (baseR + (waistR - baseR))) * smooth;
+        // Simplify: already at waistR from base zone end
+        r = waistR;
+      } else if (t <= zBallEnd) {
+        // Spherical ball
+        const ballSpan = zBallEnd - zWaist;
+        const bt = (t - zWaist) / ballSpan; // 0..1
         const sinVal = Math.sin(bt * Math.PI);
-        r = neckR + (bulgeR - neckR) * sinVal;
+        r = waistR + (ballR - waistR) * sinVal;
       } else {
-        // Top taper: from bulge exit to topR
-        const tt = (t - neckStart) / (1 - neckStart);
-        // Current radius at neckStart exit
-        const exitR = neckR + (bulgeR - neckR) * Math.sin(1.0 * Math.PI); // ≈ neckR
-        const startR = neckR * 1.1;
-        // Smooth ease to topR
-        const ease = tt * tt * (3 - 2 * tt); // smoothstep
-        r = startR + (topR - startR) * ease;
+        // Narrow stem to tabletop, slight flare at very top
+        const st = (t - zBallEnd) / (1 - zBallEnd); // 0..1
+        if (st < 0.85) {
+          // Narrow stem
+          const ease = st / 0.85;
+          r = stemR + (stemR - stemR) * ease; // constant stemR
+          r = stemR;
+        } else {
+          // Slight flare at top
+          const ft = (st - 0.85) / 0.15;
+          const ease = ft * ft;
+          r = stemR + (topR - stemR) * ease;
+        }
       }
 
-      points.push(new THREE.Vector2(Math.max(r, R * 0.12), y));
+      points.push(new THREE.Vector2(Math.max(r, R * 0.08), y));
     }
 
     return new THREE.LatheGeometry(points, 48);
