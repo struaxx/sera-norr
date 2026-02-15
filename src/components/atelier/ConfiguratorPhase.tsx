@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, RotateCcw, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { useConfiguratorStore } from '@/stores/configurator-store';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
 import {
@@ -103,81 +104,99 @@ function ShapeSelectorV3({
 }
 
 // ============================================
-// DIMENSION PRESETS (mm-based)
+// DIMENSION SLIDERS (continuous, mm-based)
 // ============================================
 
-interface DimPreset {
-  id: string;
-  label: string;
-  lengthMm: number;
-  widthMm: number;
-}
-
-const DIM_PRESETS: Record<RuleShape, DimPreset[]> = {
-  ellips: [
-    { id: 'e-1800', label: '1800 × 900', lengthMm: 1800, widthMm: 900 },
-    { id: 'e-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
-    { id: 'e-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
-    { id: 'e-2600', label: '2600 × 1100', lengthMm: 2600, widthMm: 1100 },
-  ],
-  round: [
-    { id: 'r-1000', label: 'Ø 1000', lengthMm: 1000, widthMm: 1000 },
-    { id: 'r-1200', label: 'Ø 1200', lengthMm: 1200, widthMm: 1200 },
-    { id: 'r-1500', label: 'Ø 1500', lengthMm: 1500, widthMm: 1500 },
-    { id: 'r-1600', label: 'Ø 1600', lengthMm: 1600, widthMm: 1600 },
-  ],
-  ovale: [
-    { id: 'ov-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
-    { id: 'ov-2200', label: '2200 × 1100', lengthMm: 2200, widthMm: 1100 },
-    { id: 'ov-2400', label: '2400 × 1100', lengthMm: 2400, widthMm: 1100 },
-  ],
-  corner: [
-    { id: 'co-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
-    { id: 'co-2200', label: '2200 × 1000', lengthMm: 2200, widthMm: 1000 },
-    { id: 'co-2400', label: '2400 × 1000', lengthMm: 2400, widthMm: 1000 },
-  ],
-  'cut-corner': [
-    { id: 'cc-2000', label: '2000 × 1000', lengthMm: 2000, widthMm: 1000 },
-    { id: 'cc-2200', label: '2200 × 1000', lengthMm: 2200, widthMm: 1000 },
-    { id: 'cc-2400', label: '2400 × 1000', lengthMm: 2400, widthMm: 1000 },
-  ],
+const DIM_RANGES: Record<string, { lengthMin: number; lengthMax: number; widthMin: number; widthMax: number }> = {
+  round: { lengthMin: 800, lengthMax: 1800, widthMin: 800, widthMax: 1800 },
+  _default: { lengthMin: 1200, lengthMax: 3000, widthMin: 600, widthMax: 1400 },
 };
 
-function DimensionPresetsV3({
+function DimensionSlidersV3({
   shape,
   currentLength,
   currentWidth,
-  onSelect,
+  onLengthChange,
+  onWidthChange,
+  isNL,
 }: {
   shape: RuleShape;
   currentLength: number;
   currentWidth: number;
-  onSelect: (l: number, w: number) => void;
+  onLengthChange: (v: number) => void;
+  onWidthChange: (v: number) => void;
+  isNL: boolean;
 }) {
-  const presets = DIM_PRESETS[shape] || [];
+  const ranges = DIM_RANGES[shape] || DIM_RANGES._default;
+  const isRound = shape === 'round';
 
   return (
-    <div className="grid grid-cols-2 gap-2">
-      {presets.map(p => {
-        const selected = p.lengthMm === currentLength && p.widthMm === currentWidth;
-        return (
-          <button
-            key={p.id}
-            onClick={() => onSelect(p.lengthMm, p.widthMm)}
-            className={cn(
-              "relative flex items-center justify-center py-3 px-4 rounded-sm border transition-all duration-200 text-center",
-              selected ? "border-foreground bg-foreground/5" : "border-border hover:border-foreground/50"
-            )}
-          >
-            <span className="text-sm font-medium tabular-nums">{p.label}mm</span>
-            {selected && (
-              <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-foreground rounded-full flex items-center justify-center">
-                <Check className="w-2.5 h-2.5 text-background" />
-              </div>
-            )}
-          </button>
-        );
-      })}
+    <div className="space-y-5">
+      {isRound ? (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs uppercase tracking-wider text-muted-foreground">
+              {isNL ? 'Diameter' : 'Diameter'}
+            </label>
+            <span className="text-sm font-medium tabular-nums">{currentLength}mm</span>
+          </div>
+          <Slider
+            value={[currentLength]}
+            min={ranges.lengthMin}
+            max={ranges.lengthMax}
+            step={10}
+            onValueChange={([v]) => { onLengthChange(v); onWidthChange(v); }}
+            className="w-full"
+          />
+          <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
+            <span>{ranges.lengthMin}mm</span>
+            <span>{ranges.lengthMax}mm</span>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                {isNL ? 'Lengte' : 'Length'}
+              </label>
+              <span className="text-sm font-medium tabular-nums">{currentLength}mm</span>
+            </div>
+            <Slider
+              value={[currentLength]}
+              min={ranges.lengthMin}
+              max={ranges.lengthMax}
+              step={10}
+              onValueChange={([v]) => onLengthChange(v)}
+              className="w-full"
+            />
+            <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
+              <span>{ranges.lengthMin}mm</span>
+              <span>{ranges.lengthMax}mm</span>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                {isNL ? 'Breedte' : 'Width'}
+              </label>
+              <span className="text-sm font-medium tabular-nums">{currentWidth}mm</span>
+            </div>
+            <Slider
+              value={[currentWidth]}
+              min={ranges.widthMin}
+              max={ranges.widthMax}
+              step={10}
+              onValueChange={([v]) => onWidthChange(v)}
+              className="w-full"
+            />
+            <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
+              <span>{ranges.widthMin}mm</span>
+              <span>{ranges.widthMax}mm</span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -354,12 +373,17 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
 
   const handleShapeChange = useCallback((newShape: RuleShape) => {
     setShape(newShape);
-    const presets = DIM_PRESETS[newShape];
-    if (presets?.[0]) {
-      setLengthMm(presets[0].lengthMm);
-      setWidthMm(presets[0].widthMm);
+    // Set sensible defaults for the new shape
+    if (newShape === 'round') {
+      setLengthMm(1200);
+      setWidthMm(1200);
+    } else {
+      // Keep current dims but clamp to valid ranges
+      const ranges = DIM_RANGES[newShape] || DIM_RANGES._default;
+      setLengthMm(prev => Math.max(ranges.lengthMin, Math.min(ranges.lengthMax, prev)));
+      setWidthMm(prev => Math.max(ranges.widthMin, Math.min(ranges.widthMax, prev)));
     }
-    const validLegs = getValidLegStyles(newShape, presets?.[0]?.lengthMm ?? lengthMm);
+    const validLegs = getValidLegStyles(newShape, lengthMm);
     if (!validLegs.find(l => l.id === legStyle)) {
       const shapeDef = SHAPE_DEFINITIONS.find(s => s.id === newShape);
       setLegStyle(shapeDef?.defaultLegStyle ?? validLegs[0]?.id ?? 'cylindrical');
@@ -475,15 +499,14 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Afmeting' : 'Size'} step={2}>
-            <DimensionPresetsV3
+            <DimensionSlidersV3
               shape={shape}
               currentLength={lengthMm}
               currentWidth={widthMm}
-              onSelect={handleDimensionSelect}
+              onLengthChange={(v) => { setLengthMm(v); if (shape === 'round') setWidthMm(v); }}
+              onWidthChange={setWidthMm}
+              isNL={isNL}
             />
-            <p className="text-[10px] text-muted-foreground mt-2">
-              {isNL ? 'Alle maten in millimeters' : 'All dimensions in millimeters'}
-            </p>
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Bladdikte' : 'Thickness'} step={3}>
