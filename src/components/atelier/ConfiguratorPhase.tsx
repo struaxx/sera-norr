@@ -75,8 +75,8 @@ function ShapeSelectorV3({
   };
 
   return (
-    <div className="grid grid-cols-5 gap-2">
-      {SHAPE_DEFINITIONS.map(s => (
+    <div className="grid grid-cols-4 gap-2">
+      {SHAPE_DEFINITIONS.filter(s => s.isActive !== false).map(s => (
         <button
           key={s.id}
           onClick={() => onChange(s.id)}

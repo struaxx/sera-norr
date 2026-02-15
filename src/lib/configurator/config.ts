@@ -216,7 +216,7 @@ export const PRODUCT_TYPES: ProductTypeConfig[] = [
 ];
 
 // Shape Configuration - 5 new shapes (no more organic)
-export const SHAPES: { id: TableShape; name: { nl: string; en: string }; icon: string; description?: { nl: string; en: string } }[] = [
+export const SHAPES: { id: TableShape; name: { nl: string; en: string }; icon: string; description?: { nl: string; en: string }; isActive?: boolean }[] = [
   { 
     id: 'ellips', 
     name: { nl: 'Ellips', en: 'Ellipse' }, 
@@ -245,7 +245,8 @@ export const SHAPES: { id: TableShape; name: { nl: string; en: string }; icon: s
     id: 'cut-corner', 
     name: { nl: 'Cut Corner', en: 'Cut Corner' }, 
     icon: '⬡',
-    description: { nl: 'Rechthoek met afgeschuinde hoeken', en: 'Rectangle with chamfered corners' }
+    description: { nl: 'Rechthoek met afgeschuinde hoeken', en: 'Rectangle with chamfered corners' },
+    isActive: false,
   },
 ];
 
