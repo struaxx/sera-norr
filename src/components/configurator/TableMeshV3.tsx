@@ -329,60 +329,49 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: cylindrical plinth (70%) + orb collar (30%), single LatheGeometry profile ---
-// NO hourglass/waist/concavity. Radius never < 90% of column radius.
+// --- Hourglass: plinth (70%) + orb collar bulge (30%), single LatheGeometry ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
     const R = radiusM;
     const H = heightM;
 
-    // Fixed profile points (y fraction, r fraction of R)
-    // Straight cylinder + spherical bulge on top, smooth transitions
+    // Normalized profile: (yFraction, rFraction)
+    // Straight plinth 0–70%, orb collar bulge 70–100%
     const profile: [number, number][] = [
-      [0.00, 0.98],  // bottom fillet start
-      [0.05, 1.00],  // bottom fillet end → cylinder starts
-      [0.70, 1.00],  // cylinder ends
-      [0.78, 1.06],  // orb bulge rising
-      [0.85, 1.10],  // orb max diameter
-      [0.92, 1.06],  // orb tapering
-      [1.00, 0.96],  // top — meets tabletop
+      [0.00, 0.96],
+      [0.05, 1.00],
+      [0.70, 1.00],
+      [0.78, 1.06],
+      [0.85, 1.12],  // visible bulge peak
+      [0.92, 1.06],
+      [1.00, 1.00],
     ];
 
-    // Interpolate smoothly between profile points using Catmull-Rom-like subdivision
+    // Build smooth curve by subdividing between profile points
     const points: THREE.Vector2[] = [];
-    const subdivisions = 80;
+    const totalPts = 80;
 
-    for (let i = 0; i <= subdivisions; i++) {
-      const t = i / subdivisions; // 0..1 along height
-      const y = t * H;
+    for (let i = 0; i <= totalPts; i++) {
+      const t = i / totalPts;
 
-      // Find surrounding profile points
-      let r: number;
-      if (t <= profile[0][0]) {
-        r = profile[0][1] * R;
-      } else if (t >= profile[profile.length - 1][0]) {
-        r = profile[profile.length - 1][1] * R;
-      } else {
-        // Find segment
-        let seg = 0;
-        for (let s = 0; s < profile.length - 1; s++) {
-          if (t >= profile[s][0] && t <= profile[s + 1][0]) {
-            seg = s;
-            break;
-          }
-        }
-        const [y0, r0] = profile[seg];
-        const [y1, r1] = profile[seg + 1];
-        const localT = (t - y0) / (y1 - y0);
-        // Smoothstep interpolation for organic curves
-        const smooth = localT * localT * (3 - 2 * localT);
-        r = (r0 + (r1 - r0) * smooth) * R;
+      // Find segment
+      let seg = profile.length - 2;
+      for (let s = 0; s < profile.length - 1; s++) {
+        if (t <= profile[s + 1][0]) { seg = s; break; }
       }
 
-      points.push(new THREE.Vector2(r, y));
+      const [y0, r0] = profile[seg];
+      const [y1, r1] = profile[seg + 1];
+      const localT = y1 === y0 ? 0 : (t - y0) / (y1 - y0);
+      const smooth = localT * localT * (3 - 2 * localT);
+      const r = (r0 + (r1 - r0) * smooth) * R;
+
+      points.push(new THREE.Vector2(r, t * H));
     }
 
-    return new THREE.LatheGeometry(points, 48);
+    const g = new THREE.LatheGeometry(points, 32);
+    g.computeVertexNormals();
+    return g;
   }, [radiusM, heightM]);
 
   return (
