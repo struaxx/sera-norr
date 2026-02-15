@@ -329,57 +329,56 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: full table GLB rendered as single unit ---
+// --- Hourglass: single leg from GLB, flipped upside down ---
 const HOURGLASS_GLB = '/models/hourglass-leg-single.glb';
 
-// Renders entire GLB as one unit with stone texture
-function HourglassWithTexture({ heightM, stoneId }: { heightM: number; stoneId?: string }) {
+function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const { scene } = useGLTF(HOURGLASS_GLB);
-  const texturePath = stoneId ? get3DTexture(stoneId) : null;
-  const texture = useTexture(texturePath || get3DTexture('bianco-carrara'));
 
-  const cloned = useMemo(() => {
-    const clone = scene.clone(true);
-    const box = new THREE.Box3().setFromObject(clone);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-
-    const s = heightM / size.y;
-    clone.scale.set(s, s, s);
-
-    const scaledBox = new THREE.Box3().setFromObject(clone);
-    const scaledCenter = new THREE.Vector3();
-    scaledBox.getCenter(scaledCenter);
-    clone.position.set(-scaledCenter.x, -scaledBox.min.y, -scaledCenter.z);
-
-    return clone;
-  }, [scene, heightM]);
-
-  useEffect(() => {
-    const tex = texture.clone();
-    tex.wrapS = THREE.RepeatWrapping;
-    tex.wrapT = THREE.RepeatWrapping;
-    tex.repeat.set(2, 2);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.needsUpdate = true;
-
-    const mat = new THREE.MeshStandardMaterial({
-      map: tex,
-      roughness: 0.35,
-      metalness: 0.05,
-      envMapIntensity: 1.2,
-    });
-
-    cloned.traverse((child) => {
+  const geo = useMemo(() => {
+    // Collect all meshes from the GLB
+    const geometries: THREE.BufferGeometry[] = [];
+    scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        (child as THREE.Mesh).material = mat;
-        (child as THREE.Mesh).castShadow = true;
-        (child as THREE.Mesh).receiveShadow = true;
+        const m = child as THREE.Mesh;
+        const g = m.geometry.clone();
+        g.applyMatrix4(m.matrixWorld);
+        geometries.push(g);
       }
     });
-  }, [cloned, texture]);
+    if (geometries.length === 0) return null;
 
-  return <primitive object={cloned} />;
+    // Use first geometry (single leg mesh)
+    const merged = geometries[0];
+
+    // Normalize: center XZ, bottom at Y=0
+    const box = new THREE.Box3().setFromBufferAttribute(
+      merged.attributes.position as THREE.BufferAttribute
+    );
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    merged.translate(-center.x, -box.min.y, -center.z);
+
+    // Flip upside down: mirror on Y, then shift back up
+    merged.scale(1, -1, 1);
+    merged.translate(0, size.y, 0);
+
+    // Uniform scale to match target height
+    const s = heightM / size.y;
+    merged.scale(s, s, s);
+    merged.computeVertexNormals();
+    return merged;
+  }, [scene, heightM]);
+
+  if (!geo) return null;
+
+  return (
+    <mesh geometry={geo} castShadow receiveShadow>
+      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
+    </mesh>
+  );
 }
 
 useGLTF.preload(HOURGLASS_GLB);
@@ -565,7 +564,9 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
             {style === 'conical' && (
               <ConicalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {/* hourglass handled at top level */}
+            {style === 'hourglass' && (
+              <HourglassLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            )}
             {style === 'quartet_legs' && (
               <QuartetLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
@@ -620,8 +621,6 @@ export function TableMeshV3(props: TableMeshV3Props) {
     [shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle]
   );
 
-  const isHourglass = resolved.legStyle === 'hourglass';
-  const heightM = mmToM(heightMm);
   const lengthM = mmToM(lengthMm);
   const widthM = mmToM(widthMm);
   const thicknessM = mmToM(thicknessMm);
@@ -632,20 +631,11 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const topRepeatY = Math.max(1, widthM / textureScale);
 
   const topGeometry = useMemo(
-    () => isHourglass ? null : createTabletopGeometry(shape, lengthM, widthM, thicknessM),
-    [shape, lengthM, widthM, thicknessM, isHourglass]
+    () => createTabletopGeometry(shape, lengthM, widthM, thicknessM),
+    [shape, lengthM, widthM, thicknessM]
   );
 
   const topTransform = getTabletopTransform(shape, legHeightM, thicknessM);
-
-  if (isHourglass) {
-    return (
-      <group>
-        <GroundPlane />
-        <HourglassWithTexture heightM={heightM} stoneId={stoneId} />
-      </group>
-    );
-  }
 
   return (
     <group>
