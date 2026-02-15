@@ -332,14 +332,14 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
 // --- Hourglass: loaded from GLB model ---
 const HOURGLASS_GLB_PATH = '/models/hourglass-leg.glb';
 
-function HourglassFullTable({ 
-  lengthM, widthM, heightM, stoneId 
+function HourglassLegsOnly({ 
+  lengthM, widthM, legHeightM, stoneId 
 }: { 
-  lengthM: number; widthM: number; heightM: number; stoneId?: string 
+  lengthM: number; widthM: number; legHeightM: number; stoneId?: string 
 }) {
   const { scene } = useGLTF(HOURGLASS_GLB_PATH);
 
-  const scaledScene = useMemo(() => {
+  const legsScene = useMemo(() => {
     const clone = scene.clone(true);
 
     // Compute bounding box of the GLB model
@@ -347,23 +347,36 @@ function HourglassFullTable({
     const size = new THREE.Vector3(); box.getSize(size);
     const center = new THREE.Vector3(); box.getCenter(center);
 
-    // Scale to match configured table dimensions
-    // GLB has its own proportions — scale X to match length, Z to match width, Y to match height
-    const scaleX = lengthM / size.x;
-    const scaleY = heightM / size.y;
-    const scaleZ = widthM / size.z;
+    // Uniform scale based on height to preserve round proportions
+    const uniformScale = legHeightM / size.y;
+    clone.scale.set(uniformScale, uniformScale, uniformScale);
 
-    clone.scale.set(scaleX, scaleY, scaleZ);
-
-    // Position: bottom at y=0, centered on x/z
+    // Re-center: bottom at y=0, centered on x/z
     clone.position.set(
-      -center.x * scaleX,
-      -box.min.y * scaleY,
-      -center.z * scaleZ
+      -center.x * uniformScale,
+      -box.min.y * uniformScale,
+      -center.z * uniformScale
+    );
+
+    // Now scale X and Z non-uniformly to match table dimensions
+    // but only for the GROUP position, not the geometry itself
+    // Actually we need to stretch x/z to fit the table length/width
+    const scaledSizeX = size.x * uniformScale;
+    const scaledSizeZ = size.z * uniformScale;
+    const stretchX = lengthM / scaledSizeX;
+    const stretchZ = widthM / scaledSizeZ;
+
+    // Apply stretch only to position, not to individual mesh geometry
+    // This keeps legs round but positions them correctly
+    clone.scale.set(uniformScale * stretchX, uniformScale, uniformScale * stretchZ);
+    clone.position.set(
+      -center.x * uniformScale * stretchX,
+      -box.min.y * uniformScale,
+      -center.z * uniformScale * stretchZ
     );
 
     return clone;
-  }, [scene, lengthM, widthM, heightM]);
+  }, [scene, lengthM, widthM, legHeightM]);
 
   // Apply stone texture to all meshes
   const texturePath = get3DTexture(stoneId ?? 'calacatta-viola');
@@ -375,7 +388,7 @@ function HourglassFullTable({
     texture.repeat.set(2, 2);
     texture.colorSpace = THREE.SRGBColorSpace;
 
-    scaledScene.traverse((child) => {
+    legsScene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         mesh.castShadow = true;
@@ -388,9 +401,9 @@ function HourglassFullTable({
         });
       }
     });
-  }, [scaledScene, texture, stoneId]);
+  }, [legsScene, texture, stoneId]);
 
-  return <primitive object={scaledScene} />;
+  return <primitive object={legsScene} />;
 }
 
 // Preload GLB
@@ -651,17 +664,26 @@ export function TableMeshV3(props: TableMeshV3Props) {
 
   const topTransform = getTabletopTransform(shape, legHeightM, thicknessM);
 
-  // Hourglass: render full GLB model (includes tabletop + legs)
+  // Hourglass: render GLB legs + procedural tabletop for correct proportions
   if (isHourglass) {
     return (
       <group>
         <GroundPlane />
-        <HourglassFullTable
+        <HourglassLegsOnly
           lengthM={lengthM}
           widthM={widthM}
-          heightM={totalHeightM}
+          legHeightM={legHeightM}
           stoneId={stoneId}
         />
+        <mesh
+          position={topTransform.position}
+          rotation={topTransform.rotation}
+          geometry={topGeometry}
+          castShadow
+          receiveShadow
+        >
+          <MonolithMaterial stoneId={stoneId} repeatX={topRepeatX} repeatY={topRepeatY} />
+        </mesh>
       </group>
     );
   }
