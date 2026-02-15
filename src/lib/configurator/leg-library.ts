@@ -137,19 +137,6 @@ export const LEG_LIBRARY: LegStyle[] = [
     isActiveInConfigurator: true,
     sortOrder: 8,
   },
-  {
-    id: 'curved_legs',
-    name: 'Curved',
-    category: 'fixed',
-    descriptionShort: {
-      nl: 'Gebogen poten — organische dynamiek',
-      en: 'Curved legs — organic dynamism',
-    },
-    priceUplift: 300,
-    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
-    isActiveInConfigurator: true,
-    sortOrder: 9,
-  },
 ];
 
 // ============================================

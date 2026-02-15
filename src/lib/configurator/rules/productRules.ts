@@ -22,8 +22,7 @@ export type RuleLegStyle =
   | 'quartet_legs'
   | 'v_legs'
   | 'd_legs'
-  | 'rounded_legs'
-  | 'curved_legs';
+  | 'rounded_legs';
 
 // ============================================
 // Leg Category
@@ -176,20 +175,6 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
     minLengthMm: 0,
     priceUplift: 0,
   },
-  {
-    id: 'curved_legs',
-    label: 'Curved',
-    labelNL: 'Gebogen',
-    category: 'pedestal',
-    sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 120, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
-    ],
-    compatibleShapes: ['round', 'ellips', 'ovale'],
-    minLengthMm: 0,
-    priceUplift: 300,
-  },
 ];
 
 // ============================================
@@ -215,7 +200,7 @@ export const SHAPE_DEFINITIONS: ShapeDefinition[] = [
 // PEDESTAL STYLE CHECK
 // ============================================
 
-const PEDESTAL_STYLES: RuleLegStyle[] = ['cylindrical', 'cylindrical_fluted', 'conical', 'hourglass', 'curved_legs'];
+const PEDESTAL_STYLES: RuleLegStyle[] = ['cylindrical', 'cylindrical_fluted', 'conical', 'hourglass'];
 
 export function isPedestalStyle(style: RuleLegStyle): boolean {
   return PEDESTAL_STYLES.includes(style);

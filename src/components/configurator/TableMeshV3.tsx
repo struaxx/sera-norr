@@ -524,42 +524,6 @@ function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Curved Legs: trumpet pedestal via LatheGeometry (matches travertine reference) ---
-function CurvedLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const geo = useMemo(() => {
-    const segments = 64;
-    const points: THREE.Vector2[] = [];
-    // Profile: conical base → concave inward → narrow waist at ~70% → flare to top
-    const baseRadius = radiusM * 1.2;
-    const waistRadius = radiusM * 0.4;
-    const topRadius = radiusM * 0.9;
-    const waistPos = 0.70; // waist at 70% height (higher up)
-
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments; // 0 = bottom, 1 = top
-      let r: number;
-      if (t <= waistPos) {
-        // Base to waist: concave inward curve
-        const u = t / waistPos;
-        const curve = Math.pow(u, 0.7);
-        r = baseRadius + (waistRadius - baseRadius) * curve;
-      } else {
-        // Waist to top: flare outward
-        const u = (t - waistPos) / (1 - waistPos);
-        const curve = Math.pow(u, 0.4);
-        r = waistRadius + (topRadius - waistRadius) * curve;
-      }
-      points.push(new THREE.Vector2(Math.max(r, radiusM * 0.15), t * heightM));
-    }
-    return new THREE.LatheGeometry(points, 48);
-  }, [radiusM, heightM]);
-
-  return (
-    <mesh geometry={geo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
-    </mesh>
-  );
-}
 
 // ============================================
 // LEG RENDERER (rule-driven placement)
@@ -599,9 +563,6 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
             )}
             {style === 'rounded_legs' && (
               <RoundedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
-            )}
-            {style === 'curved_legs' && (
-              <CurvedLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
           </group>
         );
