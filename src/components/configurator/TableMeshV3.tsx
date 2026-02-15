@@ -336,15 +336,18 @@ function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
     const H = heightM;
 
     // Normalized profile: (yFraction, rFraction)
-    // Straight plinth 0–70%, orb collar bulge 70–100%
+    // Straight plinth ~60%, subtle neck, large orb wider than column
     const profile: [number, number][] = [
-      [0.00, 0.96],
-      [0.05, 1.00],
-      [0.70, 1.00],
-      [0.78, 1.06],
-      [0.85, 1.12],  // visible bulge peak
-      [0.92, 1.06],
-      [1.00, 1.00],
+      [0.00, 0.94],   // bottom fillet
+      [0.04, 1.00],   // column starts
+      [0.58, 1.00],   // column ends
+      [0.63, 0.92],   // subtle concave neck
+      [0.68, 0.96],   // neck rising into orb
+      [0.76, 1.15],   // orb swelling
+      [0.83, 1.22],   // orb peak — clearly wider than column
+      [0.90, 1.15],   // orb tapering
+      [0.96, 0.95],   // orb closing toward tabletop
+      [1.00, 0.70],   // narrow cap meeting tabletop
     ];
 
     // Build smooth curve by subdividing between profile points
