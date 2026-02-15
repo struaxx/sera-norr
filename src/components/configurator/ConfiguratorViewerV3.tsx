@@ -262,7 +262,7 @@ export function ConfiguratorViewerV3({
           minDistance={1.0}
           maxDistance={6}
           minPolarAngle={Math.PI / 8}
-          maxPolarAngle={Math.PI / 2.1}
+          maxPolarAngle={Math.PI / 2.5}
           autoRotate={autoRotate}
           autoRotateSpeed={0.3}
           enableDamping
