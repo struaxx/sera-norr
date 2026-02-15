@@ -335,16 +335,20 @@ function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
     const R = radiusM;
     const H = heightM;
 
-    // Normalized profile: (yFraction, rFraction)
-    // True hourglass silhouette: fuller base/top with a pronounced waist.
+    // Reference: jar/bowl silhouette
+    // Straight column with rounded bottom, subtle neck, wide bowl/dish on top
     const profile: [number, number][] = [
-      [0.00, 1.04],  // slightly proud foot
-      [0.10, 1.10],  // lower bulge
-      [0.26, 0.92],  // taper down
-      [0.50, 0.62],  // narrow waist
-      [0.74, 0.90],  // recover from waist
-      [0.90, 1.08],  // upper bulge
-      [1.00, 1.00],  // clean tabletop interface
+      [0.00, 0.90],  // bottom center — rounded fillet
+      [0.03, 0.96],  // fillet rising
+      [0.06, 1.00],  // reach full column radius
+      [0.70, 1.00],  // straight column end
+      [0.76, 0.94],  // neck starts — subtle inward curve
+      [0.80, 0.88],  // neck deepest point
+      [0.84, 0.92],  // neck recovering
+      [0.88, 1.05],  // bowl flare begins
+      [0.92, 1.22],  // bowl expanding
+      [0.96, 1.36],  // bowl nearly full width
+      [1.00, 1.42],  // bowl rim — wide dish to meet tabletop
     ];
 
     // Build smooth curve by subdividing between profile points
