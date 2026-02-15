@@ -166,9 +166,9 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
     labelNL: 'Afgerond',
     category: 'pedestal',
     sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 80, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 100, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 120, heightMm: 730 },
+      { id: 'S', label: 'S', radiusMm: 110, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 140, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 170, heightMm: 730 },
     ],
     compatibleShapes: ['round', 'ellips', 'ovale', 'corner', 'cut-corner'],
     minLengthMm: 0,
