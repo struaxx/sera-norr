@@ -647,7 +647,13 @@ export function TableMeshV3(props: TableMeshV3Props) {
     <group>
       <GroundPlane />
       {isHourglass ? (
-        <HourglassLegsUnit heightM={legHeightM} stoneId={stoneId} />
+        <>
+          {resolved.legPlacements.map((p, i) => (
+            <group key={i} position={[mmToM(p.x), 0, mmToM(p.z)]}>
+              <HourglassLegsUnit heightM={legHeightM} stoneId={stoneId} />
+            </group>
+          ))}
+        </>
       ) : (
         <LegsGroup resolved={resolved} stoneId={stoneId} />
       )}
