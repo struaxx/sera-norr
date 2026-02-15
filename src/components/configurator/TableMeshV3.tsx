@@ -329,47 +329,59 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: organic baluster shape (wide-narrow-bulb-narrow-wide) ---
+// --- Hourglass: wide cylinder base + sphere bulge + taper to top (reference photo) ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
-    // Lathe profile: series of bulbous curves like reference photo
     const points: THREE.Vector2[] = [];
-    const segments = 48;
+    const segments = 64;
     const R = radiusM;
     
-    // Profile from bottom (y=0) to top (y=heightM):
-    // Wide base -> narrow waist -> wide bulb -> narrow neck -> wide top
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments; // 0..1 bottom to top
-      const y = t * heightM;
-      
-      // Organic profile using sin waves
-      // Base bulge (0-0.2), waist (0.2-0.35), belly bulge (0.35-0.65), neck (0.65-0.8), top bulge (0.8-1.0)
-      let r: number;
-      if (t < 0.15) {
-        // Base: wide, slight taper up
-        r = R * (0.95 + 0.05 * Math.cos(t / 0.15 * Math.PI));
-      } else if (t < 0.3) {
-        // Narrow waist
-        const wt = (t - 0.15) / 0.15;
-        r = R * (0.55 + 0.4 * Math.cos(wt * Math.PI));
-      } else if (t < 0.7) {
-        // Central bulb (belly)
-        const bt = (t - 0.3) / 0.4;
-        r = R * (0.55 + 0.5 * Math.sin(bt * Math.PI));
-      } else if (t < 0.85) {
-        // Narrow neck
-        const nt = (t - 0.7) / 0.15;
-        r = R * (0.55 + 0.4 * Math.cos((1 - nt) * Math.PI));
-      } else {
-        // Top: widens to meet tabletop
-        const tt = (t - 0.85) / 0.15;
-        r = R * (0.55 + 0.35 * Math.sin(tt * Math.PI * 0.5));
-      }
-      
-      points.push(new THREE.Vector2(Math.max(r, R * 0.15), y));
-    }
+    // Proportions inspired by the reference photo:
+    // Bottom 40%: wide cylinder base, slightly tapered inward at top
+    // 40%-70%: spherical bulge (wider than base)
+    // 70%-100%: tapers to ~60% R to meet tabletop
     
+    const baseEnd = 0.38;      // where the base cylinder ends
+    const bulgeCenter = 0.55;  // center of the sphere bulge
+    const bulgeHalf = 0.17;    // half-height of the bulge zone
+    const neckStart = 0.72;    // where the neck/taper begins
+    
+    const baseR = R * 0.92;         // base cylinder radius
+    const bulgeR = R * 1.12;        // sphere bulge peak radius
+    const neckR = R * 0.45;         // narrowest point (waist between base and bulge)
+    const topR = R * 0.58;          // top where it meets table
+
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments;
+      const y = t * heightM;
+      let r: number;
+
+      if (t <= baseEnd) {
+        // Wide base cylinder, very slight taper toward the waist
+        const bt = t / baseEnd;
+        // Smoothly taper from baseR to neckR at the end
+        const taper = bt * bt * bt; // cubic ease — stays wide most of the way
+        r = baseR + (neckR - baseR) * taper;
+      } else if (t <= neckStart) {
+        // Sphere / bulge zone
+        const bt = (t - baseEnd) / (neckStart - baseEnd); // 0..1
+        // Sine bulge: 0→neckR, 0.5→bulgeR, 1→neckR-ish
+        const sinVal = Math.sin(bt * Math.PI);
+        r = neckR + (bulgeR - neckR) * sinVal;
+      } else {
+        // Top taper: from bulge exit to topR
+        const tt = (t - neckStart) / (1 - neckStart);
+        // Current radius at neckStart exit
+        const exitR = neckR + (bulgeR - neckR) * Math.sin(1.0 * Math.PI); // ≈ neckR
+        const startR = neckR * 1.1;
+        // Smooth ease to topR
+        const ease = tt * tt * (3 - 2 * tt); // smoothstep
+        r = startR + (topR - startR) * ease;
+      }
+
+      points.push(new THREE.Vector2(Math.max(r, R * 0.12), y));
+    }
+
     return new THREE.LatheGeometry(points, 48);
   }, [radiusM, heightM]);
 
