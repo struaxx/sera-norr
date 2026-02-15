@@ -329,73 +329,57 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: straight column (70%) + orb collar on top (30%), no waist/concavity ---
+// --- Hourglass: cylindrical plinth (70%) + orb collar (30%), single LatheGeometry profile ---
+// NO hourglass/waist/concavity. Radius never < 90% of column radius.
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
-    const points: THREE.Vector2[] = [];
-    const segments = 100;
     const R = radiusM;
+    const H = heightM;
 
-    // Orb-plinth pedestal: NO concave/hourglass pinch anywhere.
-    // Column = bottom 70%, Orb = top 30%
-    // Radius never drops below 85% of column radius.
+    // Fixed profile points (y fraction, r fraction of R)
+    // Straight cylinder + spherical bulge on top, smooth transitions
+    const profile: [number, number][] = [
+      [0.00, 0.98],  // bottom fillet start
+      [0.05, 1.00],  // bottom fillet end → cylinder starts
+      [0.70, 1.00],  // cylinder ends
+      [0.78, 1.06],  // orb bulge rising
+      [0.85, 1.10],  // orb max diameter
+      [0.92, 1.06],  // orb tapering
+      [1.00, 0.96],  // top — meets tabletop
+    ];
 
-    const colR = R;              // column radius = full radius
-    const orbR = R * 0.95;       // orb radius ≈ column radius
-    const filletR = R * 0.12;    // fillet roundover at edges
-    const colEnd = 0.70;         // column occupies 70% of height
+    // Interpolate smoothly between profile points using Catmull-Rom-like subdivision
+    const points: THREE.Vector2[] = [];
+    const subdivisions = 80;
 
-    // Orb geometry: sphere center and radius
-    const orbHeight = heightM * (1 - colEnd); // 30% of total
-    const orbCenterY = heightM * colEnd + orbHeight * 0.45; // sphere center
-    const orbSphereR = orbHeight * 0.52; // sphere radius for the orb shape
+    for (let i = 0; i <= subdivisions; i++) {
+      const t = i / subdivisions; // 0..1 along height
+      const y = t * H;
 
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments;
-      const y = t * heightM;
+      // Find surrounding profile points
       let r: number;
-
-      if (t <= 0.04) {
-        // Bottom fillet: rounded base edge
-        const ft = t / 0.04;
-        const angle = (1 - ft) * (Math.PI / 2); // PI/2 → 0
-        r = colR - filletR + Math.cos(angle) * filletR;
-      } else if (t <= colEnd - 0.04) {
-        // Straight column body — perfectly vertical
-        r = colR;
-      } else if (t <= colEnd) {
-        // Top-of-column fillet into orb transition
-        const ft = (t - (colEnd - 0.04)) / 0.04; // 0..1
-        // Smooth blend from colR toward the orb connection point
-        // The orb starts at roughly orbR, so we blend gently
-        const orbStartR = Math.sqrt(Math.max(0, orbSphereR * orbSphereR - Math.pow(orbCenterY - y, 2)));
-        const targetR = Math.max(orbStartR, colR * 0.88);
-        const smooth = ft * ft * (3 - 2 * ft);
-        r = colR + (targetR - colR) * smooth;
-      } else if (t <= 0.96) {
-        // Orb / sphere section
-        const dy = y - orbCenterY;
-        const rSq = orbSphereR * orbSphereR - dy * dy;
-        if (rSq > 0) {
-          r = Math.sqrt(rSq);
-        } else {
-          r = colR * 0.4; // fallback for top/bottom of sphere
-        }
-        // Clamp: never thinner than 85% of column
-        r = Math.max(r, colR * 0.85);
+      if (t <= profile[0][0]) {
+        r = profile[0][1] * R;
+      } else if (t >= profile[profile.length - 1][0]) {
+        r = profile[profile.length - 1][1] * R;
       } else {
-        // Top cap: where orb meets tabletop — gentle taper
-        const ct = (t - 0.96) / 0.04;
-        const smooth = ct * ct * (3 - 2 * ct);
-        const capStartR = Math.max(
-          Math.sqrt(Math.max(0, orbSphereR * orbSphereR - Math.pow(heightM * 0.96 - orbCenterY, 2))),
-          colR * 0.85
-        );
-        const topR = colR * 0.45; // narrow where it meets tabletop
-        r = capStartR + (topR - capStartR) * smooth;
+        // Find segment
+        let seg = 0;
+        for (let s = 0; s < profile.length - 1; s++) {
+          if (t >= profile[s][0] && t <= profile[s + 1][0]) {
+            seg = s;
+            break;
+          }
+        }
+        const [y0, r0] = profile[seg];
+        const [y1, r1] = profile[seg + 1];
+        const localT = (t - y0) / (y1 - y0);
+        // Smoothstep interpolation for organic curves
+        const smooth = localT * localT * (3 - 2 * localT);
+        r = (r0 + (r1 - r0) * smooth) * R;
       }
 
-      points.push(new THREE.Vector2(Math.max(r, R * 0.15), y));
+      points.push(new THREE.Vector2(r, y));
     }
 
     return new THREE.LatheGeometry(points, 48);
