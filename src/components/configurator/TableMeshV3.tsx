@@ -229,11 +229,11 @@ function CylindricalLeg({ radiusM, heightM, stoneId }: LegProps) {
 
 // --- Cylindrical Fluted: single scalloped column with continuous texture ---
 function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const fluteCount = 16;
-  const fluteDepth = radiusM * 0.12;
+  const fluteCount = 20;
+  const fluteDepth = radiusM * 0.15;
 
   const geo = useMemo(() => {
-    const angularSegments = fluteCount * 8;
+    const angularSegments = fluteCount * 12;
     const heightSegments = 2;
     
     const positions: number[] = [];
@@ -249,9 +249,14 @@ function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
         const u = ix / angularSegments;
         const angle = u * Math.PI * 2;
         
-        // Scalloped radius: sinusoidal indentations
-        const flutePhase = angle * fluteCount;
-        const r = radiusM - fluteDepth * (0.5 + 0.5 * Math.cos(flutePhase));
+        // Sharp flute profile: flat faces with narrow V-grooves
+        const phase = (angle * fluteCount) % (Math.PI * 2);
+        const normalized = phase / (Math.PI * 2); // 0..1 per flute
+        // Create a sharp dip at the edges of each flute
+        const dist = Math.abs(normalized - 0.5) * 2; // 0 at center, 1 at edges
+        const sharpness = 8;
+        const profile = 1 - Math.pow(1 - dist, sharpness);
+        const r = radiusM - fluteDepth * profile;
         
         positions.push(Math.cos(angle) * r, y, Math.sin(angle) * r);
         
