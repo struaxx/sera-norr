@@ -581,8 +581,8 @@ function CurvedLegMaterialApplier({ group, stoneId }: { group: THREE.Object3D; s
     tex.needsUpdate = true;
 
     const mat = stoneId
-      ? new THREE.MeshStandardMaterial({ map: tex, roughness: 0.35, metalness: 0.05, envMapIntensity: 1.2 })
-      : new THREE.MeshStandardMaterial({ color: '#C8BEB4', roughness: 0.85, metalness: 0 });
+      ? new THREE.MeshStandardMaterial({ map: tex, roughness: 0.35, metalness: 0.05, envMapIntensity: 1.2, side: THREE.DoubleSide })
+      : new THREE.MeshStandardMaterial({ color: '#C8BEB4', roughness: 0.85, metalness: 0, side: THREE.DoubleSide });
 
     group.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
