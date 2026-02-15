@@ -249,14 +249,13 @@ function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
         const u = ix / angularSegments;
         const angle = u * Math.PI * 2;
         
-        // Sharp flute profile: flat faces with narrow V-grooves
+        // Convex flute profile: rounded bulges with sharp narrow grooves
         const phase = (angle * fluteCount) % (Math.PI * 2);
         const normalized = phase / (Math.PI * 2); // 0..1 per flute
-        // Create a sharp dip at the edges of each flute
-        const dist = Math.abs(normalized - 0.5) * 2; // 0 at center, 1 at edges
-        const sharpness = 8;
-        const profile = 1 - Math.pow(1 - dist, sharpness);
-        const r = radiusM - fluteDepth * profile;
+        // Cosine gives convex bulge; pow sharpens the groove at edges
+        const bulge = Math.cos((normalized - 0.5) * Math.PI); // 1 at center, 0 at edge
+        const sharpBulge = Math.pow(Math.max(bulge, 0), 0.6); // flatten top, keep sharp dip
+        const r = (radiusM - fluteDepth) + fluteDepth * sharpBulge;
         
         positions.push(Math.cos(angle) * r, y, Math.sin(angle) * r);
         
