@@ -164,14 +164,13 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
     id: 'rounded_legs',
     label: 'Rounded',
     labelNL: 'Afgerond',
-    category: 'fixed',
-    fixedLegCount: 4,
+    category: 'pedestal',
     sizeVariants: [
-      { id: 'S', label: 'S', radiusMm: 40, heightMm: 730 },
-      { id: 'M', label: 'M', radiusMm: 50, heightMm: 730 },
-      { id: 'L', label: 'L', radiusMm: 60, heightMm: 730 },
+      { id: 'S', label: 'S', radiusMm: 150, heightMm: 730 },
+      { id: 'M', label: 'M', radiusMm: 200, heightMm: 730 },
+      { id: 'L', label: 'L', radiusMm: 250, heightMm: 730 },
     ],
-    compatibleShapes: ['ellips', 'ovale', 'corner', 'cut-corner'],
+    compatibleShapes: ['round', 'ellips', 'ovale', 'corner', 'cut-corner'],
     minLengthMm: 0,
     priceUplift: 0,
   },
@@ -200,7 +199,7 @@ export const SHAPE_DEFINITIONS: ShapeDefinition[] = [
 // PEDESTAL STYLE CHECK
 // ============================================
 
-const PEDESTAL_STYLES: RuleLegStyle[] = ['cylindrical', 'cylindrical_fluted', 'conical', 'hourglass'];
+const PEDESTAL_STYLES: RuleLegStyle[] = ['cylindrical', 'cylindrical_fluted', 'conical', 'hourglass', 'rounded_legs'];
 
 export function isPedestalStyle(style: RuleLegStyle): boolean {
   return PEDESTAL_STYLES.includes(style);

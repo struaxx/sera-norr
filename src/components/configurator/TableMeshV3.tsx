@@ -507,20 +507,40 @@ function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
   );
 }
 
-// --- Rounded Legs: cylinder with sphere on bottom ---
+// --- Rounded Legs: thick drum pedestal with subtle rounded top edge (like reference) ---
 function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const cylHeight = heightM - radiusM;
+  const geo = useMemo(() => {
+    // Thick drum with rounded top edge via LatheGeometry
+    const r = radiusM;
+    const filletR = r * 0.15; // subtle rounded top edge
+    const straightH = heightM - filletR;
+    const segments = 12;
+
+    const points: THREE.Vector2[] = [];
+    // Bottom center
+    points.push(new THREE.Vector2(0, 0));
+    // Bottom edge
+    points.push(new THREE.Vector2(r, 0));
+    // Straight side up
+    points.push(new THREE.Vector2(r, straightH));
+    // Rounded top edge (fillet)
+    for (let i = 1; i <= segments; i++) {
+      const angle = (Math.PI / 2) * (i / segments);
+      points.push(new THREE.Vector2(
+        r - filletR + filletR * Math.cos(angle),
+        straightH + filletR * Math.sin(angle)
+      ));
+    }
+    // Top center
+    points.push(new THREE.Vector2(0, heightM));
+
+    return new THREE.LatheGeometry(points, 48);
+  }, [radiusM, heightM]);
+
   return (
-    <group>
-      <mesh position={[0, radiusM + cylHeight / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[radiusM, radiusM, cylHeight, 16]} />
-        <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={1.5} />
-      </mesh>
-      <mesh position={[0, radiusM, 0]} castShadow receiveShadow>
-        <sphereGeometry args={[radiusM, 16, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
-        <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={0.5} />
-      </mesh>
-    </group>
+    <mesh geometry={geo} castShadow receiveShadow>
+      <MonolithMaterial stoneId={stoneId} repeatX={2} repeatY={2} />
+    </mesh>
   );
 }
 
