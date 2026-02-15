@@ -534,10 +534,11 @@ function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
     return new THREE.LatheGeometry(points, 48);
   }, [domeR, cylinderH]);
 
-  // Scale texture proportionally: ~1 repeat around circumference, height-proportional vertically
-  const circumference = 2 * Math.PI * radiusM;
-  const texRepeatX = Math.max(1, circumference / 0.4);
-  const texRepeatY = Math.max(1, heightM / 0.4);
+  // LatheGeometry UV: U wraps around circumference (0-1), V goes bottom-to-top (0-1)
+  // Use proportional repeat so marble grain isn't stretched vertically
+  const aspectRatio = heightM / (2 * Math.PI * radiusM);
+  const texRepeatX = 2;
+  const texRepeatY = 2 * aspectRatio;
 
   return (
     <mesh geometry={geo} castShadow receiveShadow>
