@@ -107,96 +107,101 @@ function ShapeSelectorV3({
 // DIMENSION SLIDERS (continuous, mm-based)
 // ============================================
 
+// Ranges in mm, but step is 100mm (= 10cm) for clean round cm values
 const DIM_RANGES: Record<string, { lengthMin: number; lengthMax: number; widthMin: number; widthMax: number }> = {
   round: { lengthMin: 800, lengthMax: 1800, widthMin: 800, widthMax: 1800 },
   _default: { lengthMin: 1200, lengthMax: 3000, widthMin: 600, widthMax: 1400 },
 };
 
+const HEIGHT_RANGE = { min: 720, max: 780, step: 10 }; // 72–78cm in 1cm steps
+
+/** mm → display cm */
+const toCm = (mm: number) => Math.round(mm / 10);
+
 function DimensionSlidersV3({
   shape,
   currentLength,
   currentWidth,
+  currentHeight,
   onLengthChange,
   onWidthChange,
+  onHeightChange,
   isNL,
 }: {
   shape: RuleShape;
   currentLength: number;
   currentWidth: number;
+  currentHeight: number;
   onLengthChange: (v: number) => void;
   onWidthChange: (v: number) => void;
+  onHeightChange: (v: number) => void;
   isNL: boolean;
 }) {
   const ranges = DIM_RANGES[shape] || DIM_RANGES._default;
   const isRound = shape === 'round';
 
+  const SliderRow = ({ label, value, min, max, step, onChange }: {
+    label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void;
+  }) => (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</label>
+        <span className="text-sm font-medium tabular-nums">{toCm(value)} cm</span>
+      </div>
+      <Slider
+        value={[value]}
+        min={min}
+        max={max}
+        step={step}
+        onValueChange={([v]) => onChange(v)}
+        className="w-full"
+      />
+      <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
+        <span>{toCm(min)} cm</span>
+        <span>{toCm(max)} cm</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-5">
       {isRound ? (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-xs uppercase tracking-wider text-muted-foreground">
-              {isNL ? 'Diameter' : 'Diameter'}
-            </label>
-            <span className="text-sm font-medium tabular-nums">{currentLength}mm</span>
-          </div>
-          <Slider
-            value={[currentLength]}
-            min={ranges.lengthMin}
-            max={ranges.lengthMax}
-            step={10}
-            onValueChange={([v]) => { onLengthChange(v); onWidthChange(v); }}
-            className="w-full"
-          />
-          <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
-            <span>{ranges.lengthMin}mm</span>
-            <span>{ranges.lengthMax}mm</span>
-          </div>
-        </div>
+        <SliderRow
+          label={isNL ? 'Diameter' : 'Diameter'}
+          value={currentLength}
+          min={ranges.lengthMin}
+          max={ranges.lengthMax}
+          step={100}
+          onChange={(v) => { onLengthChange(v); onWidthChange(v); }}
+        />
       ) : (
         <>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">
-                {isNL ? 'Lengte' : 'Length'}
-              </label>
-              <span className="text-sm font-medium tabular-nums">{currentLength}mm</span>
-            </div>
-            <Slider
-              value={[currentLength]}
-              min={ranges.lengthMin}
-              max={ranges.lengthMax}
-              step={10}
-              onValueChange={([v]) => onLengthChange(v)}
-              className="w-full"
-            />
-            <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
-              <span>{ranges.lengthMin}mm</span>
-              <span>{ranges.lengthMax}mm</span>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">
-                {isNL ? 'Breedte' : 'Width'}
-              </label>
-              <span className="text-sm font-medium tabular-nums">{currentWidth}mm</span>
-            </div>
-            <Slider
-              value={[currentWidth]}
-              min={ranges.widthMin}
-              max={ranges.widthMax}
-              step={10}
-              onValueChange={([v]) => onWidthChange(v)}
-              className="w-full"
-            />
-            <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
-              <span>{ranges.widthMin}mm</span>
-              <span>{ranges.widthMax}mm</span>
-            </div>
-          </div>
+          <SliderRow
+            label={isNL ? 'Lengte' : 'Length'}
+            value={currentLength}
+            min={ranges.lengthMin}
+            max={ranges.lengthMax}
+            step={100}
+            onChange={onLengthChange}
+          />
+          <SliderRow
+            label={isNL ? 'Breedte' : 'Width'}
+            value={currentWidth}
+            min={ranges.widthMin}
+            max={ranges.widthMax}
+            step={100}
+            onChange={onWidthChange}
+          />
         </>
       )}
+      <SliderRow
+        label={isNL ? 'Hoogte' : 'Height'}
+        value={currentHeight}
+        min={HEIGHT_RANGE.min}
+        max={HEIGHT_RANGE.max}
+        step={HEIGHT_RANGE.step}
+        onChange={onHeightChange}
+      />
     </div>
   );
 }
@@ -503,8 +508,10 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               shape={shape}
               currentLength={lengthMm}
               currentWidth={widthMm}
+              currentHeight={heightMm}
               onLengthChange={(v) => { setLengthMm(v); if (shape === 'round') setWidthMm(v); }}
               onWidthChange={setWidthMm}
+              onHeightChange={setHeightMm}
               isNL={isNL}
             />
           </ConfigPanel>
@@ -537,14 +544,14 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">{isNL ? 'Uw selectie' : 'Your selection'}</p>
                   <h4 className="text-sm font-medium">
-                    {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {lengthMm}×{widthMm}mm
+                    {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {toCm(lengthMm)}×{toCm(widthMm)} cm
                   </h4>
                 </div>
               </div>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 <span>{resolved?.legDefinition?.[isNL ? 'labelNL' : 'label'] ?? legStyle}</span>
                 <span>•</span>
-                <span>{thicknessMm}mm blad</span>
+                <span>{thicknessMm}mm blad • {toCm(heightMm)} cm hoog</span>
                 <span>•</span>
                 <span>{resolved?.legCount ?? '?'} {isNL ? (resolved?.legCount === 1 ? 'poot' : 'poten') : 'legs'}</span>
               </div>
