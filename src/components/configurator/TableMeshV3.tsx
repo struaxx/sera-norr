@@ -329,69 +329,73 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: barrel base + sphere ball touching tabletop (reference photo) ---
+// --- Hourglass: straight column (70%) + orb collar on top (30%), no waist/concavity ---
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
   const geo = useMemo(() => {
     const points: THREE.Vector2[] = [];
-    const segments = 80;
+    const segments = 100;
     const R = radiusM;
 
-    // Reference photo analysis:
-    // - Bottom ~40%: barrel/cylinder shape, very slightly convex (not a cone)
-    // - 40%-50%: smooth waist/neck transition
-    // - 50%-95%: large sphere/ball, nearly as wide as the base
-    // - 95%-100%: ball meets tabletop directly (no visible stem)
+    // Orb-plinth pedestal: NO concave/hourglass pinch anywhere.
+    // Column = bottom 70%, Orb = top 30%
+    // Radius never drops below 85% of column radius.
 
-    const baseR = R * 0.88;    // barrel base radius
-    const barrelBulge = R * 0.03; // subtle barrel convexity
-    const waistR = R * 0.42;   // narrowest pinch between base and ball
-    const ballR = R * 0.82;    // ball radius — nearly as wide as base
-    const topR = R * 0.35;     // where ball meets tabletop
+    const colR = R;              // column radius = full radius
+    const orbR = R * 0.95;       // orb radius ≈ column radius
+    const filletR = R * 0.12;    // fillet roundover at edges
+    const colEnd = 0.70;         // column occupies 70% of height
 
-    // Zone boundaries
-    const zBaseEnd = 0.38;     // barrel base ends
-    const zWaist = 0.47;       // narrowest point
-    const zBallStart = 0.47;   // ball starts right at waist
-    const zBallEnd = 0.96;     // ball ends very close to top
-    
-    // Ball center for circle calculation
-    const ballCenterT = (zBallStart + zBallEnd) / 2; // ~0.715
-    const ballHalfSpan = (zBallEnd - zBallStart) / 2;
+    // Orb geometry: sphere center and radius
+    const orbHeight = heightM * (1 - colEnd); // 30% of total
+    const orbCenterY = heightM * colEnd + orbHeight * 0.45; // sphere center
+    const orbSphereR = orbHeight * 0.52; // sphere radius for the orb shape
 
     for (let i = 0; i <= segments; i++) {
       const t = i / segments;
       const y = t * heightM;
       let r: number;
 
-      if (t <= zBaseEnd) {
-        // Barrel base: nearly vertical with subtle convex belly
-        const bt = t / zBaseEnd; // 0..1
-        // Barrel convexity peaks at center
-        const belly = Math.sin(bt * Math.PI) * barrelBulge;
-        // Very slight taper toward the waist at the very end
-        const taper = Math.pow(bt, 4); // stays wide, tapers only at end
-        r = baseR + belly - (baseR - waistR) * taper * 0.3;
-      } else if (t <= zWaist) {
-        // Smooth transition from base to waist
-        const wt = (t - zBaseEnd) / (zWaist - zBaseEnd);
-        const smooth = wt * wt * (3 - 2 * wt); // smoothstep
-        // Start radius is where the base ended
-        const baseEndR = baseR - (baseR - waistR) * 0.3;
-        r = baseEndR + (waistR - baseEndR) * smooth;
-      } else if (t <= zBallEnd) {
-        // Spherical ball — use circular cross-section
-        const bt = (t - zBallStart) / (zBallEnd - zBallStart); // 0..1
-        // Sine for smooth sphere profile
-        const sinVal = Math.sin(bt * Math.PI);
-        r = waistR + (ballR - waistR) * sinVal;
+      if (t <= 0.04) {
+        // Bottom fillet: rounded base edge
+        const ft = t / 0.04;
+        const angle = (1 - ft) * (Math.PI / 2); // PI/2 → 0
+        r = colR - filletR + Math.cos(angle) * filletR;
+      } else if (t <= colEnd - 0.04) {
+        // Straight column body — perfectly vertical
+        r = colR;
+      } else if (t <= colEnd) {
+        // Top-of-column fillet into orb transition
+        const ft = (t - (colEnd - 0.04)) / 0.04; // 0..1
+        // Smooth blend from colR toward the orb connection point
+        // The orb starts at roughly orbR, so we blend gently
+        const orbStartR = Math.sqrt(Math.max(0, orbSphereR * orbSphereR - Math.pow(orbCenterY - y, 2)));
+        const targetR = Math.max(orbStartR, colR * 0.88);
+        const smooth = ft * ft * (3 - 2 * ft);
+        r = colR + (targetR - colR) * smooth;
+      } else if (t <= 0.96) {
+        // Orb / sphere section
+        const dy = y - orbCenterY;
+        const rSq = orbSphereR * orbSphereR - dy * dy;
+        if (rSq > 0) {
+          r = Math.sqrt(rSq);
+        } else {
+          r = colR * 0.4; // fallback for top/bottom of sphere
+        }
+        // Clamp: never thinner than 85% of column
+        r = Math.max(r, colR * 0.85);
       } else {
-        // Tiny cap: ball meets tabletop
-        const ct = (t - zBallEnd) / (1 - zBallEnd);
+        // Top cap: where orb meets tabletop — gentle taper
+        const ct = (t - 0.96) / 0.04;
         const smooth = ct * ct * (3 - 2 * ct);
-        r = topR + (1 - smooth) * (topR * 0.2);
+        const capStartR = Math.max(
+          Math.sqrt(Math.max(0, orbSphereR * orbSphereR - Math.pow(heightM * 0.96 - orbCenterY, 2))),
+          colR * 0.85
+        );
+        const topR = colR * 0.45; // narrow where it meets tabletop
+        r = capStartR + (topR - capStartR) * smooth;
       }
 
-      points.push(new THREE.Vector2(Math.max(r, R * 0.08), y));
+      points.push(new THREE.Vector2(Math.max(r, R * 0.15), y));
     }
 
     return new THREE.LatheGeometry(points, 48);
