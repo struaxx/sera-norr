@@ -6,7 +6,7 @@
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
-import { useTexture } from '@react-three/drei';
+import { useTexture, useGLTF } from '@react-three/drei';
 import { mmToM } from '@/lib/configurator/units';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
 import { get3DTexture, getTextureScale } from '@/lib/configurator/texture-resolver';
@@ -329,64 +329,66 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: sculpted waist profile, single LatheGeometry ---
+// --- Hourglass: loaded from GLB model ---
+const HOURGLASS_GLB_PATH = '/models/hourglass-leg.glb';
+
 function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const geo = useMemo(() => {
-    const R = radiusM;
-    const H = heightM;
+  const { scene } = useGLTF(HOURGLASS_GLB_PATH);
 
-    // Reference: plinth + sphere silhouette
-    // Straight cylinder bottom (~60%) with rounded base corners,
-    // then a large sphere/orb sitting on top, wider than the column.
-    const profile: [number, number][] = [
-      [0.00, 0.85],  // bottom — rounded fillet
-      [0.03, 0.94],  // fillet
-      [0.06, 1.00],  // full column radius
-      [0.55, 1.00],  // straight plinth end
-      [0.58, 1.02],  // transition zone
-      [0.62, 1.08],  // orb begins
-      [0.68, 1.20],  // orb expanding
-      [0.75, 1.32],  // orb widening
-      [0.82, 1.38],  // near max width
-      [0.88, 1.40],  // orb peak — widest point
-      [0.93, 1.35],  // orb curving back
-      [0.97, 1.22],  // orb narrowing toward top
-      [1.00, 1.10],  // top — meets tabletop (not too narrow)
-    ];
+  const clonedScene = useMemo(() => {
+    const clone = scene.clone(true);
 
-    // Build smooth curve by subdividing between profile points
-    const points: THREE.Vector2[] = [];
-    const totalPts = 80;
+    // Compute bounding box of the loaded model to normalize its size
+    const box = new THREE.Box3().setFromObject(clone);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
 
-    for (let i = 0; i <= totalPts; i++) {
-      const t = i / totalPts;
+    // Scale model to match our target height, maintain aspect ratio
+    const scaleFactor = heightM / size.y;
+    clone.scale.setScalar(scaleFactor);
 
-      // Find segment
-      let seg = profile.length - 2;
-      for (let s = 0; s < profile.length - 1; s++) {
-        if (t <= profile[s + 1][0]) { seg = s; break; }
+    // Re-center after scaling: put bottom at y=0, center on x/z
+    clone.position.set(
+      -center.x * scaleFactor,
+      -box.min.y * scaleFactor,
+      -center.z * scaleFactor
+    );
+
+    return clone;
+  }, [scene, radiusM, heightM]);
+
+  // Apply stone texture to all meshes in the model
+  const texturePath = get3DTexture(stoneId ?? 'calacatta-viola');
+  const texture = useTexture(texturePath);
+
+  useMemo(() => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(2, 2);
+    texture.colorSpace = THREE.SRGBColorSpace;
+
+    clonedScene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.material = new THREE.MeshStandardMaterial({
+          map: texture,
+          roughness: 0.3,
+          metalness: 0.05,
+          envMapIntensity: 0.6,
+        });
       }
+    });
+  }, [clonedScene, texture, stoneId]);
 
-      const [y0, r0] = profile[seg];
-      const [y1, r1] = profile[seg + 1];
-      const localT = y1 === y0 ? 0 : (t - y0) / (y1 - y0);
-      const smooth = localT * localT * (3 - 2 * localT);
-      const r = (r0 + (r1 - r0) * smooth) * R;
-
-      points.push(new THREE.Vector2(r, t * H));
-    }
-
-    const g = new THREE.LatheGeometry(points, 32);
-    g.computeVertexNormals();
-    return g;
-  }, [radiusM, heightM]);
-
-  return (
-    <mesh geometry={geo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
-    </mesh>
-  );
+  return <primitive object={clonedScene} />;
 }
+
+// Preload GLB
+useGLTF.preload(HOURGLASS_GLB_PATH);
 
 // --- Quartet: single central drum base (round tables only) ---
 function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
