@@ -500,6 +500,9 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             />
           </ConfigPanel>
 
+          {/* Spacer to prevent sticky summary from covering leg buttons */}
+          <div className="h-32" />
+
           {/* Summary */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
