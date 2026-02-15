@@ -95,7 +95,7 @@ export const LEG_LIBRARY: LegStyle[] = [
     },
     priceUplift: 350,
     compatibleShapes: ['round'],
-    isActiveInConfigurator: true,
+    isActiveInConfigurator: false,
     sortOrder: 5,
   },
   {
