@@ -227,33 +227,90 @@ function CylindricalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Cylindrical Fluted: bundled vertical reeds/ridges like classical fluting ---
+// --- Cylindrical Fluted: single scalloped column with continuous texture ---
 function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const fluteCount = 20;
-  const fluteRadius = radiusM * 0.18;
-  const angleStep = (Math.PI * 2) / fluteCount;
+  const fluteCount = 16;
+  const fluteDepth = radiusM * 0.12;
 
-  const coreRadius = radiusM - fluteRadius * 0.6;
+  const geo = useMemo(() => {
+    const angularSegments = fluteCount * 8;
+    const heightSegments = 2;
+    
+    const positions: number[] = [];
+    const normals: number[] = [];
+    const uvs: number[] = [];
+    const indices: number[] = [];
+
+    for (let iy = 0; iy <= heightSegments; iy++) {
+      const v = iy / heightSegments;
+      const y = v * heightM;
+
+      for (let ix = 0; ix <= angularSegments; ix++) {
+        const u = ix / angularSegments;
+        const angle = u * Math.PI * 2;
+        
+        // Scalloped radius: sinusoidal indentations
+        const flutePhase = angle * fluteCount;
+        const r = radiusM - fluteDepth * (0.5 + 0.5 * Math.cos(flutePhase));
+        
+        positions.push(Math.cos(angle) * r, y, Math.sin(angle) * r);
+        
+        // Approximate outward normal
+        const nx = Math.cos(angle);
+        const nz = Math.sin(angle);
+        normals.push(nx, 0, nz);
+        
+        uvs.push(u, v);
+      }
+    }
+
+    // Top cap center
+    const topCenterIdx = positions.length / 3;
+    positions.push(0, heightM, 0);
+    normals.push(0, 1, 0);
+    uvs.push(0.5, 0.5);
+
+    // Bottom cap center
+    const bottomCenterIdx = positions.length / 3;
+    positions.push(0, 0, 0);
+    normals.push(0, -1, 0);
+    uvs.push(0.5, 0.5);
+
+    // Side faces
+    for (let iy = 0; iy < heightSegments; iy++) {
+      for (let ix = 0; ix < angularSegments; ix++) {
+        const a = iy * (angularSegments + 1) + ix;
+        const b = a + 1;
+        const c = a + (angularSegments + 1);
+        const d = c + 1;
+        indices.push(a, c, b, b, c, d);
+      }
+    }
+
+    // Top cap
+    const topRow = heightSegments * (angularSegments + 1);
+    for (let ix = 0; ix < angularSegments; ix++) {
+      indices.push(topCenterIdx, topRow + ix, topRow + ix + 1);
+    }
+
+    // Bottom cap
+    for (let ix = 0; ix < angularSegments; ix++) {
+      indices.push(bottomCenterIdx, ix + 1, ix);
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    geometry.setIndex(indices);
+
+    return geometry;
+  }, [radiusM, heightM, fluteCount, fluteDepth]);
 
   return (
-    <group>
-      {/* Solid inner core to eliminate gaps */}
-      <mesh position={[0, heightM / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[coreRadius, coreRadius, heightM, 32]} />
-        <MonolithMaterial stoneId={stoneId} repeatX={1.5} repeatY={2} />
-      </mesh>
-      {Array.from({ length: fluteCount }).map((_, i) => {
-        const angle = i * angleStep;
-        const x = Math.cos(angle) * (radiusM - fluteRadius * 0.3);
-        const z = Math.sin(angle) * (radiusM - fluteRadius * 0.3);
-        return (
-          <mesh key={i} position={[x, heightM / 2, z]} castShadow receiveShadow>
-            <cylinderGeometry args={[fluteRadius, fluteRadius, heightM, 8]} />
-            <MonolithMaterial stoneId={stoneId} repeatX={0.5} repeatY={2} />
-          </mesh>
-        );
-      })}
-    </group>
+    <mesh geometry={geo} castShadow receiveShadow>
+      <MonolithMaterial stoneId={stoneId} repeatX={2} repeatY={2} />
+    </mesh>
   );
 }
 
