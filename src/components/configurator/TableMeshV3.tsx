@@ -444,20 +444,48 @@ function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
   );
 }
 
-// --- D-Legs: half-cylinder (D-profile), flat side facing center ---
+// --- D-Legs: D-profile from top view — mostly cylindrical with one flat chord ---
 function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
   const geo = useMemo(() => {
-    const g = new THREE.CylinderGeometry(radiusM * 1.5, radiusM * 1.5, heightM, 24, 1, false, 0, Math.PI);
+    const r = radiusM * 1.5;
+    // D-shape: arc spanning ~240° with a flat chord on one side
+    const shape2d = new THREE.Shape();
+    const arcStart = -Math.PI * 0.67; // ~120° from center
+    const arcEnd = Math.PI * 0.67;    // ~120° from center
+    const segments = 32;
+
+    // Start at flat chord top
+    const startX = r * Math.cos(arcStart);
+    const startZ = r * Math.sin(arcStart);
+    shape2d.moveTo(startX, startZ);
+
+    // Arc (the curved side)
+    for (let i = 1; i <= segments; i++) {
+      const angle = arcStart + (arcEnd - arcStart) * (i / segments);
+      shape2d.lineTo(r * Math.cos(angle), r * Math.sin(angle));
+    }
+
+    // Close with flat chord
+    shape2d.closePath();
+
+    const g = new THREE.ExtrudeGeometry(shape2d, {
+      depth: heightM,
+      bevelEnabled: false,
+    });
+
     return g;
   }, [radiusM, heightM]);
 
-  // Rotate flat side toward center
-  const rotY = cornerIndex === 0 ? Math.PI / 2 : -Math.PI / 2;
+  // Rotate so flat side faces center, extrude goes upward
+  // ExtrudeGeometry extrudes along Z, we need Y-up
+  const rotY = cornerIndex === 0 ? 0 : Math.PI;
 
   return (
-    <mesh position={[0, heightM / 2, 0]} rotation={[0, rotY, 0]} geometry={geo} castShadow receiveShadow>
-      <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={1.5} />
-    </mesh>
+    <group rotation={[-Math.PI / 2, 0, rotY]}>
+      <mesh geometry={geo} castShadow receiveShadow>
+        <MonolithMaterial stoneId={stoneId} repeatX={1} repeatY={1.5} />
+      </mesh>
+    </group>
   );
 }
 
