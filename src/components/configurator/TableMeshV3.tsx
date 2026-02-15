@@ -507,35 +507,32 @@ function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
   );
 }
 
-// --- Rounded Legs: thick drum pedestal with subtle rounded top edge (like reference) ---
+// --- Rounded Legs: cylinder body + hemisphere dome on top (like bottom 70% of hourglass) ---
 function RoundedLeg({ radiusM, heightM, stoneId }: LegProps) {
-  const geo = useMemo(() => {
-    // Thick drum with rounded top edge via LatheGeometry
-    const r = radiusM;
-    const filletR = r * 0.15; // subtle rounded top edge
-    const straightH = heightM - filletR;
-    const segments = 12;
+  const domeR = radiusM;
+  const cylinderH = heightM - domeR; // straight cylinder portion
 
+  const geo = useMemo(() => {
+    const segments = 24;
     const points: THREE.Vector2[] = [];
+
     // Bottom center
     points.push(new THREE.Vector2(0, 0));
     // Bottom edge
-    points.push(new THREE.Vector2(r, 0));
-    // Straight side up
-    points.push(new THREE.Vector2(r, straightH));
-    // Rounded top edge (fillet)
+    points.push(new THREE.Vector2(domeR, 0));
+    // Straight cylinder up to where dome starts
+    points.push(new THREE.Vector2(domeR, Math.max(0, cylinderH)));
+    // Hemisphere dome
     for (let i = 1; i <= segments; i++) {
       const angle = (Math.PI / 2) * (i / segments);
       points.push(new THREE.Vector2(
-        r - filletR + filletR * Math.cos(angle),
-        straightH + filletR * Math.sin(angle)
+        domeR * Math.cos(angle),
+        Math.max(0, cylinderH) + domeR * Math.sin(angle)
       ));
     }
-    // Top center
-    points.push(new THREE.Vector2(0, heightM));
 
     return new THREE.LatheGeometry(points, 48);
-  }, [radiusM, heightM]);
+  }, [domeR, cylinderH]);
 
   return (
     <mesh geometry={geo} castShadow receiveShadow>
