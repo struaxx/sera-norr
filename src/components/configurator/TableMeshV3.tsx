@@ -335,20 +335,23 @@ function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
     const R = radiusM;
     const H = heightM;
 
-    // Reference: jar/bowl silhouette
-    // Straight column with rounded bottom, subtle neck, wide bowl/dish on top
+    // Reference: plinth + sphere silhouette
+    // Straight cylinder bottom (~60%) with rounded base corners,
+    // then a large sphere/orb sitting on top, wider than the column.
     const profile: [number, number][] = [
-      [0.00, 0.90],  // bottom center — rounded fillet
-      [0.03, 0.96],  // fillet rising
-      [0.06, 1.00],  // reach full column radius
-      [0.70, 1.00],  // straight column end
-      [0.76, 0.94],  // neck starts — subtle inward curve
-      [0.80, 0.88],  // neck deepest point
-      [0.84, 0.92],  // neck recovering
-      [0.88, 1.05],  // bowl flare begins
-      [0.92, 1.22],  // bowl expanding
-      [0.96, 1.36],  // bowl nearly full width
-      [1.00, 1.42],  // bowl rim — wide dish to meet tabletop
+      [0.00, 0.85],  // bottom — rounded fillet
+      [0.03, 0.94],  // fillet
+      [0.06, 1.00],  // full column radius
+      [0.55, 1.00],  // straight plinth end
+      [0.58, 1.02],  // transition zone
+      [0.62, 1.08],  // orb begins
+      [0.68, 1.20],  // orb expanding
+      [0.75, 1.32],  // orb widening
+      [0.82, 1.38],  // near max width
+      [0.88, 1.40],  // orb peak — widest point
+      [0.93, 1.35],  // orb curving back
+      [0.97, 1.22],  // orb narrowing toward top
+      [1.00, 1.10],  // top — meets tabletop (not too narrow)
     ];
 
     // Build smooth curve by subdividing between profile points
