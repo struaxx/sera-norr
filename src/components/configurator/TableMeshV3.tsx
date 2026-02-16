@@ -338,37 +338,52 @@ function HourglassLegsUnit({ heightM, stoneId }: { heightM: number; stoneId?: st
   const group = useMemo(() => {
     const clone = scene.clone(true);
 
-    // The GLB contains a paired hourglass model. We need to isolate a single leg.
-    // Strategy: find all meshes, compute their individual centers on X,
-    // then keep only the meshes on one side (negative or positive X).
-    const allMeshes: THREE.Mesh[] = [];
+    // The GLB may be a single mesh with both legs baked in.
+    // Split strategy: clip geometry to keep only X <= centerX (one leg).
+    const wrapper = new THREE.Group();
+
     clone.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        allMeshes.push(child as THREE.Mesh);
+      if (!(child as THREE.Mesh).isMesh) return;
+      const mesh = child as THREE.Mesh;
+      mesh.updateWorldMatrix(true, false);
+      const geo = mesh.geometry.clone();
+      geo.applyMatrix4(mesh.matrixWorld);
+
+      // Find geometry center on X
+      geo.computeBoundingBox();
+      const centerX = (geo.boundingBox!.min.x + geo.boundingBox!.max.x) / 2;
+
+      const pos = geo.attributes.position;
+      const idx = geo.index;
+
+      if (idx) {
+        // Indexed geometry: keep only triangles whose centroid.x <= centerX
+        const newIndices: number[] = [];
+        for (let i = 0; i < idx.count; i += 3) {
+          const a = idx.getX(i), b = idx.getX(i + 1), c = idx.getX(i + 2);
+          const cx = (pos.getX(a) + pos.getX(b) + pos.getX(c)) / 3;
+          if (cx <= centerX) {
+            newIndices.push(a, b, c);
+          }
+        }
+        geo.setIndex(newIndices);
+      } else {
+        // Non-indexed: filter triangle triples
+        const posArr = geo.attributes.position.array as Float32Array;
+        const kept: number[] = [];
+        for (let i = 0; i < posArr.length; i += 9) {
+          const cx = (posArr[i] + posArr[i + 3] + posArr[i + 6]) / 3;
+          if (cx <= centerX) {
+            for (let j = 0; j < 9; j++) kept.push(posArr[i + j]);
+          }
+        }
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(kept, 3));
       }
+
+      const m = new THREE.Mesh(geo);
+      wrapper.add(m);
     });
 
-    // Compute overall bounding box center to determine split axis
-    const fullBox = new THREE.Box3().setFromObject(clone);
-    const fullCenter = new THREE.Vector3();
-    fullBox.getCenter(fullCenter);
-
-    // Keep only meshes whose center is on the left side (x <= center.x)
-    const wrapper = new THREE.Group();
-    for (const mesh of allMeshes) {
-      const meshBox = new THREE.Box3().setFromObject(mesh);
-      const meshCenter = new THREE.Vector3();
-      meshBox.getCenter(meshCenter);
-      if (meshCenter.x <= fullCenter.x) {
-        const m = mesh.clone(true);
-        // Preserve world transform
-        mesh.updateWorldMatrix(true, false);
-        m.applyMatrix4(mesh.matrixWorld);
-        wrapper.add(m);
-      }
-    }
-
-    // If nothing was added (single mesh model), just use the clone
     if (wrapper.children.length === 0) {
       wrapper.add(clone);
     }
@@ -382,15 +397,15 @@ function HourglassLegsUnit({ heightM, stoneId }: { heightM: number; stoneId?: st
     const s = heightM / size.y;
     wrapper.scale.set(s, s, s);
 
-    // Flip upside down via rotation (preserves face winding / normals)
+    // Flip upside down
     wrapper.rotation.set(Math.PI, 0, 0);
 
-    // After rotation + scale, recompute bounds and position so bottom sits at y=0, centered on XZ
+    // Reposition so bottom sits at y=0, centered on XZ
     wrapper.updateMatrixWorld(true);
     const finalBox = new THREE.Box3().setFromObject(wrapper);
-    const finalCenter2 = new THREE.Vector3();
-    finalBox.getCenter(finalCenter2);
-    wrapper.position.set(-finalCenter2.x, -finalBox.min.y, -finalCenter2.z);
+    const finalCenter = new THREE.Vector3();
+    finalBox.getCenter(finalCenter);
+    wrapper.position.set(-finalCenter.x, -finalBox.min.y, -finalCenter.z);
 
     return wrapper;
   }, [scene, heightM]);
