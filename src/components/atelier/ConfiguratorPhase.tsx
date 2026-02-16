@@ -171,7 +171,7 @@ function DimensionSlidersV3({
           value={currentLength}
           min={ranges.lengthMin}
           max={ranges.lengthMax}
-          step={100}
+          step={50}
           onChange={(v) => { onLengthChange(v); onWidthChange(v); }}
         />
       ) : (
@@ -181,7 +181,7 @@ function DimensionSlidersV3({
             value={currentLength}
             min={ranges.lengthMin}
             max={ranges.lengthMax}
-            step={100}
+            step={50}
             onChange={onLengthChange}
           />
           <SliderRow
@@ -189,7 +189,7 @@ function DimensionSlidersV3({
             value={currentWidth}
             min={ranges.widthMin}
             max={ranges.widthMax}
-            step={100}
+            step={50}
             onChange={onWidthChange}
           />
         </>
