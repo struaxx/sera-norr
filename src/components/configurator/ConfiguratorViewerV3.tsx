@@ -346,21 +346,6 @@ export function ConfiguratorViewerV3({
         </div>
       </div>
 
-      {/* Test Presets Bar */}
-      {onPresetLoad && (
-        <div className="absolute top-3 right-3 flex flex-wrap gap-1 z-10 pointer-events-auto max-w-[300px]">
-          {TEST_PRESETS.map(preset => (
-            <button
-              key={preset.id}
-              onClick={() => onPresetLoad(preset)}
-              className="px-2 py-1 bg-background/90 backdrop-blur-sm border border-border text-[9px] font-mono rounded-sm hover:bg-secondary transition-colors"
-              title={preset.note}
-            >
-              {preset.label}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
