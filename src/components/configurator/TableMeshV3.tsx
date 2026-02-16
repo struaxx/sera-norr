@@ -337,67 +337,17 @@ function HourglassLegsUnit({ heightM, stoneId }: { heightM: number; stoneId?: st
 
   const group = useMemo(() => {
     const clone = scene.clone(true);
-
-    // The GLB may be a single mesh with both legs baked in.
-    // Split strategy: clip geometry to keep only X <= centerX (one leg).
     const wrapper = new THREE.Group();
+    wrapper.add(clone);
 
-    clone.traverse((child) => {
-      if (!(child as THREE.Mesh).isMesh) return;
-      const mesh = child as THREE.Mesh;
-      mesh.updateWorldMatrix(true, false);
-      const geo = mesh.geometry.clone();
-      geo.applyMatrix4(mesh.matrixWorld);
-
-      // Find geometry center on X
-      geo.computeBoundingBox();
-      const centerX = (geo.boundingBox!.min.x + geo.boundingBox!.max.x) / 2;
-
-      const pos = geo.attributes.position;
-      const idx = geo.index;
-
-      if (idx) {
-        // Indexed geometry: keep only triangles whose centroid.x <= centerX
-        const newIndices: number[] = [];
-        for (let i = 0; i < idx.count; i += 3) {
-          const a = idx.getX(i), b = idx.getX(i + 1), c = idx.getX(i + 2);
-          const cx = (pos.getX(a) + pos.getX(b) + pos.getX(c)) / 3;
-          if (cx <= centerX) {
-            newIndices.push(a, b, c);
-          }
-        }
-        geo.setIndex(newIndices);
-      } else {
-        // Non-indexed: filter triangle triples
-        const posArr = geo.attributes.position.array as Float32Array;
-        const kept: number[] = [];
-        for (let i = 0; i < posArr.length; i += 9) {
-          const cx = (posArr[i] + posArr[i + 3] + posArr[i + 6]) / 3;
-          if (cx <= centerX) {
-            for (let j = 0; j < 9; j++) kept.push(posArr[i + j]);
-          }
-        }
-        geo.setAttribute('position', new THREE.Float32BufferAttribute(kept, 3));
-      }
-
-      const m = new THREE.Mesh(geo);
-      wrapper.add(m);
-    });
-
-    if (wrapper.children.length === 0) {
-      wrapper.add(clone);
-    }
-
-    // Measure bounding box
+    // Measure and scale to match leg height
     const box = new THREE.Box3().setFromObject(wrapper);
     const size = new THREE.Vector3();
     box.getSize(size);
-
-    // Uniform scale to match leg height
     const s = heightM / size.y;
     wrapper.scale.set(s, s, s);
 
-    // Flip upside down
+    // Flip upside down (bulb on top)
     wrapper.rotation.set(Math.PI, 0, 0);
 
     // Reposition so bottom sits at y=0, centered on XZ
