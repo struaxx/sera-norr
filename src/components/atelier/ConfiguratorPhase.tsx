@@ -110,7 +110,7 @@ function ShapeSelectorV3({
 // Ranges in mm, but step is 100mm (= 10cm) for clean round cm values
 const DIM_RANGES: Record<string, { lengthMin: number; lengthMax: number; widthMin: number; widthMax: number }> = {
   round: { lengthMin: 800, lengthMax: 1800, widthMin: 800, widthMax: 1800 },
-  _default: { lengthMin: 1200, lengthMax: 3000, widthMin: 600, widthMax: 1400 },
+  _default: { lengthMin: 2000, lengthMax: 2600, widthMin: 600, widthMax: 1400 },
 };
 
 const HEIGHT_RANGE = { min: 720, max: 780, step: 10 }; // 72–78cm in 1cm steps
