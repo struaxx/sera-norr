@@ -140,20 +140,23 @@ function DimensionSlidersV3({
   const ranges = DIM_RANGES[shape] || DIM_RANGES._default;
   const isRound = shape === 'round';
 
+  const snap = (v: number, step: number) => Math.round(v / step) * step;
+
   const SliderRow = ({ label, value, min, max, step, onChange }: {
     label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void;
   }) => (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</label>
-        <span className="text-sm font-medium tabular-nums">{toCm(value)} cm</span>
+        <span className="text-sm font-medium tabular-nums">{toCm(snap(value, step))} cm</span>
       </div>
       <Slider
         value={[value]}
         min={min}
         max={max}
-        step={step}
+        step={1}
         onValueChange={([v]) => onChange(v)}
+        onValueCommit={([v]) => onChange(snap(v, step))}
         className="w-full"
       />
       <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
