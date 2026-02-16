@@ -118,6 +118,34 @@ const HEIGHT_RANGE = { min: 720, max: 780, step: 10 }; // 72–78cm in 1cm steps
 /** mm → display cm */
 const toCm = (mm: number) => Math.round(mm / 10);
 
+const snapValue = (v: number, step: number) => Math.round(v / step) * step;
+
+function SliderRow({ label, value, min, max, snapStep, onChange }: {
+  label: string; value: number; min: number; max: number; snapStep: number; onChange: (v: number) => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</label>
+        <span className="text-sm font-medium tabular-nums">{toCm(snapValue(value, snapStep))} cm</span>
+      </div>
+      <Slider
+        value={[value]}
+        min={min}
+        max={max}
+        step={1}
+        onValueChange={([v]) => onChange(v)}
+        onValueCommit={([v]) => onChange(snapValue(v, snapStep))}
+        className="w-full"
+      />
+      <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
+        <span>{toCm(min)} cm</span>
+        <span>{toCm(max)} cm</span>
+      </div>
+    </div>
+  );
+}
+
 function DimensionSlidersV3({
   shape,
   currentLength,
@@ -140,32 +168,6 @@ function DimensionSlidersV3({
   const ranges = DIM_RANGES[shape] || DIM_RANGES._default;
   const isRound = shape === 'round';
 
-  const snap = (v: number, step: number) => Math.round(v / step) * step;
-
-  const SliderRow = ({ label, value, min, max, step, onChange }: {
-    label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void;
-  }) => (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</label>
-        <span className="text-sm font-medium tabular-nums">{toCm(snap(value, step))} cm</span>
-      </div>
-      <Slider
-        value={[value]}
-        min={min}
-        max={max}
-        step={1}
-        onValueChange={([v]) => onChange(v)}
-        onValueCommit={([v]) => onChange(snap(v, step))}
-        className="w-full"
-      />
-      <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
-        <span>{toCm(min)} cm</span>
-        <span>{toCm(max)} cm</span>
-      </div>
-    </div>
-  );
-
   return (
     <div className="space-y-5">
       {isRound ? (
@@ -174,7 +176,7 @@ function DimensionSlidersV3({
           value={currentLength}
           min={ranges.lengthMin}
           max={ranges.lengthMax}
-          step={50}
+          snapStep={50}
           onChange={(v) => { onLengthChange(v); onWidthChange(v); }}
         />
       ) : (
@@ -184,7 +186,7 @@ function DimensionSlidersV3({
             value={currentLength}
             min={ranges.lengthMin}
             max={ranges.lengthMax}
-            step={50}
+            snapStep={50}
             onChange={onLengthChange}
           />
           <SliderRow
@@ -192,7 +194,7 @@ function DimensionSlidersV3({
             value={currentWidth}
             min={ranges.widthMin}
             max={ranges.widthMax}
-            step={50}
+            snapStep={50}
             onChange={onWidthChange}
           />
         </>
@@ -202,7 +204,7 @@ function DimensionSlidersV3({
         value={currentHeight}
         min={HEIGHT_RANGE.min}
         max={HEIGHT_RANGE.max}
-        step={HEIGHT_RANGE.step}
+        snapStep={HEIGHT_RANGE.step}
         onChange={onHeightChange}
       />
     </div>
