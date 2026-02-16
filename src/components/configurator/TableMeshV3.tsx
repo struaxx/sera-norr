@@ -338,26 +338,38 @@ function HourglassLegsUnit({ heightM, stoneId }: { heightM: number; stoneId?: st
   const group = useMemo(() => {
     const clone = scene.clone(true);
 
+    // The GLB may contain multiple legs as children — keep only the first mesh subtree
+    // to get a single hourglass leg
+    const wrapper = new THREE.Group();
+    const firstChild = clone.children[0];
+    if (firstChild) {
+      const singleLeg = firstChild.clone(true);
+      wrapper.add(singleLeg);
+    } else {
+      // Fallback: use entire scene if structure is flat
+      wrapper.add(clone);
+    }
+
     // Measure original bounding box
-    const box = new THREE.Box3().setFromObject(clone);
+    const box = new THREE.Box3().setFromObject(wrapper);
     const size = new THREE.Vector3();
     box.getSize(size);
 
     // Uniform scale to match leg height
     const s = heightM / size.y;
-    clone.scale.set(s, s, s);
+    wrapper.scale.set(s, s, s);
 
     // Flip upside down via rotation (preserves face winding / normals)
-    clone.rotation.set(Math.PI, 0, 0);
+    wrapper.rotation.set(Math.PI, 0, 0);
 
     // After rotation + scale, recompute bounds and position so bottom sits at y=0, centered on XZ
-    clone.updateMatrixWorld(true);
-    const finalBox = new THREE.Box3().setFromObject(clone);
+    wrapper.updateMatrixWorld(true);
+    const finalBox = new THREE.Box3().setFromObject(wrapper);
     const finalCenter = new THREE.Vector3();
     finalBox.getCenter(finalCenter);
-    clone.position.set(-finalCenter.x, -finalBox.min.y, -finalCenter.z);
+    wrapper.position.set(-finalCenter.x, -finalBox.min.y, -finalCenter.z);
 
-    return clone;
+    return wrapper;
   }, [scene, heightM]);
 
   // Apply material
