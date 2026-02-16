@@ -338,19 +338,42 @@ function HourglassLegsUnit({ heightM, stoneId }: { heightM: number; stoneId?: st
   const group = useMemo(() => {
     const clone = scene.clone(true);
 
-    // The GLB may contain multiple legs as children — keep only the first mesh subtree
-    // to get a single hourglass leg
+    // The GLB contains a paired hourglass model. We need to isolate a single leg.
+    // Strategy: find all meshes, compute their individual centers on X,
+    // then keep only the meshes on one side (negative or positive X).
+    const allMeshes: THREE.Mesh[] = [];
+    clone.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        allMeshes.push(child as THREE.Mesh);
+      }
+    });
+
+    // Compute overall bounding box center to determine split axis
+    const fullBox = new THREE.Box3().setFromObject(clone);
+    const fullCenter = new THREE.Vector3();
+    fullBox.getCenter(fullCenter);
+
+    // Keep only meshes whose center is on the left side (x <= center.x)
     const wrapper = new THREE.Group();
-    const firstChild = clone.children[0];
-    if (firstChild) {
-      const singleLeg = firstChild.clone(true);
-      wrapper.add(singleLeg);
-    } else {
-      // Fallback: use entire scene if structure is flat
+    for (const mesh of allMeshes) {
+      const meshBox = new THREE.Box3().setFromObject(mesh);
+      const meshCenter = new THREE.Vector3();
+      meshBox.getCenter(meshCenter);
+      if (meshCenter.x <= fullCenter.x) {
+        const m = mesh.clone(true);
+        // Preserve world transform
+        mesh.updateWorldMatrix(true, false);
+        m.applyMatrix4(mesh.matrixWorld);
+        wrapper.add(m);
+      }
+    }
+
+    // If nothing was added (single mesh model), just use the clone
+    if (wrapper.children.length === 0) {
       wrapper.add(clone);
     }
 
-    // Measure original bounding box
+    // Measure bounding box
     const box = new THREE.Box3().setFromObject(wrapper);
     const size = new THREE.Vector3();
     box.getSize(size);
@@ -365,9 +388,9 @@ function HourglassLegsUnit({ heightM, stoneId }: { heightM: number; stoneId?: st
     // After rotation + scale, recompute bounds and position so bottom sits at y=0, centered on XZ
     wrapper.updateMatrixWorld(true);
     const finalBox = new THREE.Box3().setFromObject(wrapper);
-    const finalCenter = new THREE.Vector3();
-    finalBox.getCenter(finalCenter);
-    wrapper.position.set(-finalCenter.x, -finalBox.min.y, -finalCenter.z);
+    const finalCenter2 = new THREE.Vector3();
+    finalBox.getCenter(finalCenter2);
+    wrapper.position.set(-finalCenter2.x, -finalBox.min.y, -finalCenter2.z);
 
     return wrapper;
   }, [scene, heightM]);
