@@ -558,7 +558,10 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
                 <span>•</span>
                 <span>{thicknessMm}mm blad • {toCm(heightMm)} cm hoog</span>
                 <span>•</span>
-                <span>{resolved?.legCount ?? '?'} {isNL ? (resolved?.legCount === 1 ? 'poot' : 'poten') : 'legs'}</span>
+                <span>{(() => {
+                  const displayCount = resolved?.legStyle === 'hourglass' ? 2 : (resolved?.legCount ?? 0);
+                  return `${displayCount || '?'} ${isNL ? (displayCount === 1 ? 'poot' : 'poten') : 'legs'}`;
+                })()}</span>
               </div>
             </div>
 
