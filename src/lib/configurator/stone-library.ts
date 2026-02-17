@@ -1217,40 +1217,50 @@ export const STONE_LIBRARY: StoneLibraryEntry[] = [
 ];
 
 // ============================================
+// CONFIGURATOR-ACTIVE STONES (curated selection)
+// ============================================
+const CONFIGURATOR_ACTIVE_IDS = new Set([
+  'calacatta-viola',     // Hero / statement marble
+  'classic-light',       // Most accessible travertine
+  'tiramisu',            // Warm, cosy, trend-proof travertine
+  'brown-silver',        // Cool/tough contrast, modern travertine
+]);
+
+// ============================================
 // HELPER FUNCTIONS
 // ============================================
 
 export function getStonesByFamily(family: StoneFamily): StoneLibraryEntry[] {
   return STONE_LIBRARY
-    .filter(s => s.family === family && s.isActiveInConfigurator)
+    .filter(s => s.family === family && CONFIGURATOR_ACTIVE_IDS.has(s.id))
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 export function getStonesByCollection(collection: StoneCollection): StoneLibraryEntry[] {
   return STONE_LIBRARY
-    .filter(s => s.collection === collection && s.isActiveInConfigurator)
+    .filter(s => s.collection === collection && CONFIGURATOR_ACTIVE_IDS.has(s.id))
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 export function getStonesByTier(tier: StoneTier): StoneLibraryEntry[] {
   return STONE_LIBRARY
-    .filter(s => s.tier === tier && s.isActiveInConfigurator)
+    .filter(s => s.tier === tier && CONFIGURATOR_ACTIVE_IDS.has(s.id))
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 export function getStonesByTags(tags: CharacterTag[]): StoneLibraryEntry[] {
   return STONE_LIBRARY
-    .filter(s => s.isActiveInConfigurator && tags.every(tag => s.characterTags.includes(tag)))
+    .filter(s => CONFIGURATOR_ACTIVE_IDS.has(s.id) && tags.every(tag => s.characterTags.includes(tag)))
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 export function searchStones(query: string): StoneLibraryEntry[] {
   const normalizedQuery = query.toLowerCase().trim();
-  if (!normalizedQuery) return STONE_LIBRARY.filter(s => s.isActiveInConfigurator);
+  if (!normalizedQuery) return STONE_LIBRARY.filter(s => CONFIGURATOR_ACTIVE_IDS.has(s.id));
   
   return STONE_LIBRARY
     .filter(s => 
-      s.isActiveInConfigurator && (
+      CONFIGURATOR_ACTIVE_IDS.has(s.id) && (
         s.name.toLowerCase().includes(normalizedQuery) ||
         s.shortDescription.toLowerCase().includes(normalizedQuery) ||
         s.characterTags.some(tag => tag.includes(normalizedQuery))
