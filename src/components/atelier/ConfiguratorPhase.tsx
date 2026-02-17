@@ -274,8 +274,10 @@ function LegSelectorV3({
 }) {
   const validStyles = useMemo(() => getValidLegStyles(shape, lengthMm), [shape, lengthMm]);
 
-  const pedestalStyles = LEG_DEFINITIONS.filter(l => l.category === 'pedestal');
-  const fixedStyles = LEG_DEFINITIONS.filter(l => l.category === 'fixed');
+  // Filter out deactivated leg styles (quartet, rounded, etc.)
+  const HIDDEN_LEGS: RuleLegStyle[] = ['quartet_legs', 'rounded_legs'];
+  const pedestalStyles = LEG_DEFINITIONS.filter(l => l.category === 'pedestal' && !HIDDEN_LEGS.includes(l.id));
+  const fixedStyles = LEG_DEFINITIONS.filter(l => l.category === 'fixed' && !HIDDEN_LEGS.includes(l.id));
 
   const hasPedestalOptions = pedestalStyles.some(l => validStyles.some(v => v.id === l.id));
   const hasFixedOptions = fixedStyles.some(l => validStyles.some(v => v.id === l.id));
