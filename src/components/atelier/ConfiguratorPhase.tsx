@@ -3,6 +3,8 @@
 // ============================================
 
 import { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { getStonesByFamily, type StoneLibraryEntry } from '@/lib/configurator/stone-library';
+import { getSwatchTexture, hasTexture } from '@/lib/configurator/texture-resolver';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, RotateCcw, Check } from 'lucide-react';
@@ -368,6 +370,79 @@ function ConfigPanel({
 }
 
 // ============================================
+// MATERIAL SELECTOR V3
+// ============================================
+
+function MaterialSelectorV3({
+  value,
+  onChange,
+  isNL,
+}: {
+  value: string;
+  onChange: (id: string) => void;
+  isNL: boolean;
+}) {
+  const allStones = useMemo(() => {
+    return [...getStonesByFamily('travertine'), ...getStonesByFamily('marble')];
+  }, []);
+
+  return (
+    <div className="space-y-3">
+      <p className="text-[11px] text-muted-foreground italic border-l-2 border-border pl-3">
+        {isNL
+          ? 'Elke steen is uniek. Definitieve selectie gebeurt op slab-niveau.'
+          : 'Every stone is unique. Final selection happens at slab level.'}
+      </p>
+      <div className="grid grid-cols-2 gap-3">
+        {allStones.map((stone) => {
+          const textureUrl = getSwatchTexture(stone.id);
+          const showTexture = hasTexture(stone.id);
+          const isSelected = value === stone.id;
+
+          return (
+            <button
+              key={stone.id}
+              onClick={() => onChange(stone.id)}
+              className={cn(
+                "relative rounded-sm border transition-all duration-200 text-left group overflow-hidden",
+                isSelected
+                  ? "border-foreground ring-1 ring-foreground"
+                  : "border-border hover:border-foreground/50"
+              )}
+            >
+              {isSelected && (
+                <div className="absolute top-2 right-2 z-10 w-6 h-6 bg-foreground rounded-full flex items-center justify-center shadow-md">
+                  <Check className="w-3.5 h-3.5 text-background" />
+                </div>
+              )}
+              <div
+                className="aspect-square w-full"
+                style={{ backgroundColor: stone.swatchColor }}
+              >
+                {showTexture && (
+                  <img
+                    src={textureUrl}
+                    alt={stone.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                )}
+              </div>
+              <div className="p-3">
+                <h4 className="text-sm font-medium line-clamp-1">{stone.name}</h4>
+                <p className="text-[9px] uppercase tracking-wider text-muted-foreground">
+                  {stone.family === 'travertine' ? (isNL ? 'Travertijn' : 'Travertine') : (isNL ? 'Marmer' : 'Marble')}
+                </p>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================
 // MAIN CONFIGURATOR PHASE
 // ============================================
 
@@ -535,6 +610,10 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               onChange={setLegStyle}
               isNL={isNL}
             />
+          </ConfigPanel>
+
+          <ConfigPanel title={isNL ? 'Materiaal' : 'Material'} step={5}>
+            <MaterialSelectorV3 value={stoneId} onChange={setStoneId} isNL={isNL} />
           </ConfigPanel>
 
           {/* Spacer to prevent sticky summary from covering leg buttons */}
