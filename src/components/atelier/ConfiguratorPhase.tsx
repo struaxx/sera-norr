@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, RotateCcw, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { EDGE_PROFILES } from '@/lib/configurator/config';
 import { useConfiguratorStore } from '@/stores/configurator-store';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
 import {
@@ -443,6 +444,46 @@ function MaterialSelectorV3({
 }
 
 // ============================================
+// EDGE PROFILE SELECTOR V3
+// ============================================
+
+function EdgeSelectorV3({
+  value,
+  onChange,
+  isNL,
+}: {
+  value: string;
+  onChange: (id: string) => void;
+  isNL: boolean;
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      {EDGE_PROFILES.map((edge) => {
+        const isSelected = value === edge.id;
+        return (
+          <button
+            key={edge.id}
+            onClick={() => onChange(edge.id)}
+            className={cn(
+              "flex items-center gap-3 p-3 rounded-sm border transition-all duration-200 text-left",
+              isSelected
+                ? "border-foreground bg-foreground/5"
+                : "border-border hover:border-foreground/50"
+            )}
+          >
+            <span className="text-lg leading-none">{edge.icon}</span>
+            <span className="text-sm font-medium">{isNL ? edge.name.nl : edge.name.en}</span>
+            {isSelected && (
+              <Check className="w-3.5 h-3.5 ml-auto text-foreground" />
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================
 // MAIN CONFIGURATOR PHASE
 // ============================================
 
@@ -456,6 +497,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [thicknessMm, setThicknessMm] = useState(20);
   const [legStyle, setLegStyle] = useState<RuleLegStyle>('cylindrical');
   const [stoneId, setStoneId] = useState('calacatta-viola');
+  const [edgeProfile, setEdgeProfile] = useState('straight');
   const [resolved, setResolved] = useState<ResolvedConfiguration | null>(null);
 
   const handleShapeChange = useCallback((newShape: RuleShape) => {
@@ -614,6 +656,10 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
 
           <ConfigPanel title={isNL ? 'Materiaal' : 'Material'} step={5}>
             <MaterialSelectorV3 value={stoneId} onChange={setStoneId} isNL={isNL} />
+          </ConfigPanel>
+
+          <ConfigPanel title={isNL ? 'Randafwerking' : 'Edge profile'} step={6}>
+            <EdgeSelectorV3 value={edgeProfile} onChange={setEdgeProfile} isNL={isNL} />
           </ConfigPanel>
 
           {/* Spacer to prevent sticky summary from covering leg buttons */}
