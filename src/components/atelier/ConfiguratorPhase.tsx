@@ -605,6 +605,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
                 thicknessMm={thicknessMm}
                 legStyle={legStyle}
                 stoneId={stoneId}
+                edgeProfile={edgeProfile}
                 onConfigResolved={handleConfigResolved}
                 onPresetLoad={handlePresetLoad}
                 isNL={isNL}

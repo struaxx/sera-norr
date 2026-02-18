@@ -37,6 +37,7 @@ export interface ConfiguratorViewerV3Props {
   thicknessMm: number;
   legStyle?: RuleLegStyle;
   stoneId?: string;
+  edgeProfile?: string;
   onConfigResolved?: (resolved: ResolvedConfiguration) => void;
   onPresetLoad?: (preset: TestPreset) => void;
   className?: string;
@@ -164,6 +165,7 @@ export function ConfiguratorViewerV3({
   thicknessMm,
   legStyle,
   stoneId,
+  edgeProfile,
   onConfigResolved,
   onPresetLoad,
   className,
@@ -245,6 +247,7 @@ export function ConfiguratorViewerV3({
             thicknessMm={thicknessMm}
             legStyle={resolved.legStyle}
             stoneId={stoneId}
+            edgeProfile={edgeProfile as any}
           />
           {showDimensions && <DimensionLabels resolved={resolved} />}
           <ContactShadows
