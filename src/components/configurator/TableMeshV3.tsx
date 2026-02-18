@@ -16,6 +16,8 @@ import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRu
 // PROPS
 // ============================================
 
+export type EdgeProfileType = 'straight' | 'beveled' | 'rounded' | 'bullnose';
+
 export interface TableMeshV3Props {
   shape: RuleShape;
   lengthMm: number;
@@ -24,6 +26,7 @@ export interface TableMeshV3Props {
   thicknessMm: number;
   legStyle?: RuleLegStyle;
   stoneId?: string;
+  edgeProfile?: EdgeProfileType;
 }
 
 // ============================================
@@ -95,28 +98,86 @@ function applyPlanarUV(geometry: THREE.BufferGeometry, lengthM: number, widthM: 
 // TABLETOP GEOMETRY
 // ============================================
 
+// Edge profile → bevel config mapping
+function getBevelConfig(edgeProfile: EdgeProfileType, thicknessM: number) {
+  const t = thicknessM;
+  switch (edgeProfile) {
+    case 'beveled':
+      return { bevelEnabled: true, bevelSize: t * 0.25, bevelThickness: t * 0.25, bevelSegments: 1 };
+    case 'rounded':
+      return { bevelEnabled: true, bevelSize: t * 0.2, bevelThickness: t * 0.2, bevelSegments: 6 };
+    case 'bullnose':
+      return { bevelEnabled: true, bevelSize: t * 0.45, bevelThickness: t * 0.45, bevelSegments: 12 };
+    case 'straight':
+    default:
+      return { bevelEnabled: false, bevelSize: 0, bevelThickness: 0, bevelSegments: 0 };
+  }
+}
+
 function createTabletopGeometry(
   shape: RuleShape,
   lengthM: number,
   widthM: number,
   thicknessM: number,
+  edgeProfile: EdgeProfileType = 'straight',
 ): THREE.BufferGeometry {
+  const bevel = getBevelConfig(edgeProfile, thicknessM);
+
   switch (shape) {
     case 'round': {
       const r = lengthM / 2;
-      return new THREE.CylinderGeometry(r, r, thicknessM, 64);
+      if (edgeProfile === 'straight') {
+        return new THREE.CylinderGeometry(r, r, thicknessM, 64);
+      }
+      // Use lathe for beveled round tops
+      const segments = 48;
+      const points: THREE.Vector2[] = [];
+      const bs = bevel.bevelSize;
+      const bt = bevel.bevelThickness;
+      const bSeg = bevel.bevelSegments;
+      const straightH = Math.max(0, thicknessM - bt * 2);
+
+      // Bottom center
+      points.push(new THREE.Vector2(0, 0));
+      // Bottom edge with bevel
+      if (bSeg > 0) {
+        for (let i = 0; i <= bSeg; i++) {
+          const angle = Math.PI / 2 * (1 - i / bSeg);
+          points.push(new THREE.Vector2(r - bs + bs * Math.cos(angle), bt - bt * Math.sin(angle)));
+        }
+      } else {
+        points.push(new THREE.Vector2(r, 0));
+      }
+      // Straight sides
+      if (straightH > 0) {
+        points.push(new THREE.Vector2(r, bt));
+        points.push(new THREE.Vector2(r, bt + straightH));
+      }
+      // Top edge with bevel
+      if (bSeg > 0) {
+        for (let i = 0; i <= bSeg; i++) {
+          const angle = Math.PI / 2 * (i / bSeg);
+          points.push(new THREE.Vector2(r - bs + bs * Math.cos(angle), thicknessM - bt + bt * Math.sin(angle)));
+        }
+      } else {
+        points.push(new THREE.Vector2(r, thicknessM));
+      }
+      // Top center
+      points.push(new THREE.Vector2(0, thicknessM));
+
+      return new THREE.LatheGeometry(points, 64);
     }
     case 'ellips': {
       const ellipse = new THREE.Shape();
-      ellipse.absellipse(0, 0, lengthM / 2, widthM / 2, 0, Math.PI * 2, false, 0);
-      const geo = new THREE.ExtrudeGeometry(ellipse, { depth: thicknessM, bevelEnabled: false });
+      ellipse.absellipse(0, 0, lengthM / 2 - bevel.bevelSize, widthM / 2 - bevel.bevelSize, 0, Math.PI * 2, false, 0);
+      const geo = new THREE.ExtrudeGeometry(ellipse, { depth: thicknessM - bevel.bevelThickness * 2, ...bevel });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
     case 'ovale': {
       const shape2d = new THREE.Shape();
-      const hw = lengthM / 2;
-      const hd = widthM / 2;
+      const hw = lengthM / 2 - bevel.bevelSize;
+      const hd = widthM / 2 - bevel.bevelSize;
       const capR = Math.min(hd, hw);
       const straight = hw - capR;
       const arcSegments = 32;
@@ -134,15 +195,15 @@ function createTabletopGeometry(
       }
       shape2d.closePath();
 
-      const geo = new THREE.ExtrudeGeometry(shape2d, { depth: thicknessM, bevelEnabled: false });
+      const geo = new THREE.ExtrudeGeometry(shape2d, { depth: thicknessM - bevel.bevelThickness * 2, ...bevel });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
     case 'corner': {
       const cornerRadius = Math.min(lengthM, widthM) * 0.05;
       const rr = new THREE.Shape();
-      const hw = lengthM / 2;
-      const hd = widthM / 2;
+      const hw = lengthM / 2 - bevel.bevelSize;
+      const hd = widthM / 2 - bevel.bevelSize;
       const cr = cornerRadius;
 
       rr.moveTo(-hw + cr, -hd);
@@ -156,15 +217,15 @@ function createTabletopGeometry(
       rr.absarc(-hw + cr, -hd + cr, cr, Math.PI, Math.PI * 1.5, false);
       rr.closePath();
 
-      const geo = new THREE.ExtrudeGeometry(rr, { depth: thicknessM, bevelEnabled: false });
+      const geo = new THREE.ExtrudeGeometry(rr, { depth: thicknessM - bevel.bevelThickness * 2, ...bevel });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
     case 'cut-corner': {
       const chamfer = Math.min(lengthM, widthM) * 0.1;
       const cc = new THREE.Shape();
-      const hw = lengthM / 2;
-      const hd = widthM / 2;
+      const hw = lengthM / 2 - bevel.bevelSize;
+      const hd = widthM / 2 - bevel.bevelSize;
 
       cc.moveTo(-hw + chamfer, -hd);
       cc.lineTo(hw - chamfer, -hd);
@@ -176,7 +237,7 @@ function createTabletopGeometry(
       cc.lineTo(-hw, -hd + chamfer);
       cc.closePath();
 
-      const geo = new THREE.ExtrudeGeometry(cc, { depth: thicknessM, bevelEnabled: false });
+      const geo = new THREE.ExtrudeGeometry(cc, { depth: thicknessM - bevel.bevelThickness * 2, ...bevel });
       applyPlanarUV(geo, lengthM, widthM);
       return geo;
     }
@@ -612,7 +673,7 @@ function GroundPlane() {
 // ============================================
 
 export function TableMeshV3(props: TableMeshV3Props) {
-  const { shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle, stoneId } = props;
+  const { shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle, stoneId, edgeProfile = 'straight' } = props;
 
   const resolved = useMemo(() =>
     resolveConfiguration({
@@ -637,8 +698,8 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const topRepeatY = Math.max(1, widthM / textureScale);
 
   const topGeometry = useMemo(
-    () => createTabletopGeometry(shape, lengthM, widthM, thicknessM),
-    [shape, lengthM, widthM, thicknessM]
+    () => createTabletopGeometry(shape, lengthM, widthM, thicknessM, edgeProfile),
+    [shape, lengthM, widthM, thicknessM, edgeProfile]
   );
 
   const topTransform = getTabletopTransform(shape, legHeightM, thicknessM);
