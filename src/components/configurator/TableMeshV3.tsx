@@ -702,9 +702,9 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const thicknessM = mmToM(thicknessMm);
   const legHeightM = mmToM(resolved.legHeightMm);
 
-  const textureScale = stoneId ? getTextureScale(stoneId) : 0.6;
-  const topRepeatX = Math.max(1, lengthM / textureScale);
-  const topRepeatY = Math.max(1, widthM / textureScale);
+  const textureScale = stoneId ? getTextureScale(stoneId) : 2.0;
+  const topRepeatX = Math.max(1, Math.min(2, lengthM / textureScale));
+  const topRepeatY = Math.max(1, Math.min(2, widthM / textureScale));
 
   const topGeometry = useMemo(
     () => createTabletopGeometry(shape, lengthM, widthM, thicknessM, edgeProfile),
