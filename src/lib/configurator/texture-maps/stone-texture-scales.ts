@@ -2,49 +2,50 @@
 // Stone Texture Scales
 // ============================================
 // Per-stone UV scale tuning (repeat is calculated in TableMesh)
+// Higher value = texture covers MORE area = fewer repeats = fewer seams
 
-export const DEFAULT_TEXTURE_SCALE = 0.6;
+export const DEFAULT_TEXTURE_SCALE = 2.0;
 
 export const STONE_TEXTURE_SCALES: Record<string, number> = {
-  // Bold veining - larger scale
-  'calacatta-viola': 0.8,
-  'calacatta-vagli': 0.8,
-  'arabescato-corchia': 0.8,
-  'panda-white': 0.8,
-  'grand-antique': 0.8,
-  'calacatta-rosa': 0.8,
-  'london-smoke': 0.9,
-  'nero-marquina': 0.9,
-  'verde-alpi': 0.9,
+  // Bold veining - larger scale to show full vein pattern
+  'calacatta-viola': 2.5,
+  'calacatta-vagli': 2.5,
+  'arabescato-corchia': 2.5,
+  'panda-white': 2.5,
+  'grand-antique': 2.5,
+  'calacatta-rosa': 2.5,
+  'london-smoke': 2.2,
+  'nero-marquina': 2.2,
+  'verde-alpi': 2.2,
 
-  // Travertines - moderate scale for pores
-  'ivory': 0.6,
-  'cream-travertine': 0.6,
-  'light-cream-travertine': 0.6,
-  'tiramisu': 0.7,
-  'gore-gray': 0.6,
-  'super-white-travertine': 0.6,
-  'river-silver': 0.6,
-  'silver-grey-travertine': 0.6,
-  'brown-silver': 0.6,
-  'titanium-silver': 0.7,
-  'sbyss-black': 0.7,
-  'golden-coast': 0.6,
-  'classic-cloudy': 0.6,
-  'classic-light': 0.6,
-  'soft-rome': 0.6,
-  'sivas-yellow': 0.6,
-  'swamp-brown': 0.6,
-  'antique-red': 0.7,
-  'leonardo-travertine': 0.6,
+  // Travertines - large scale to minimize visible seams
+  'ivory': 2.0,
+  'cream-travertine': 2.0,
+  'light-cream-travertine': 2.0,
+  'tiramisu': 2.0,
+  'gore-gray': 2.0,
+  'super-white-travertine': 2.0,
+  'river-silver': 2.0,
+  'silver-grey-travertine': 2.0,
+  'brown-silver': 2.0,
+  'titanium-silver': 2.0,
+  'sbyss-black': 2.0,
+  'golden-coast': 2.0,
+  'classic-cloudy': 2.0,
+  'classic-light': 2.0,
+  'soft-rome': 2.0,
+  'sivas-yellow': 2.0,
+  'swamp-brown': 2.0,
+  'antique-red': 2.0,
+  'leonardo-travertine': 2.0,
 
-  // Other marbles - moderate
-  'volakas-white': 0.7,
-  'light-emperador': 0.7,
-  'dark-emperador': 0.7,
-  'daino-reale': 0.7,
-  'moca-cream-limestone': 0.6,
-  'taj-mahal': 0.7,
-  'elegant-grey': 0.7,
-  'bianco-carrara': 0.7,
+  // Other marbles
+  'volakas-white': 2.2,
+  'light-emperador': 2.0,
+  'dark-emperador': 2.0,
+  'daino-reale': 2.0,
+  'moca-cream-limestone': 2.0,
+  'taj-mahal': 2.2,
+  'elegant-grey': 2.0,
+  'bianco-carrara': 2.2,
 };
