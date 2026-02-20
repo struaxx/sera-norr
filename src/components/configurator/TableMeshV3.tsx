@@ -48,6 +48,11 @@ function StoneMaterial({ stoneId, repeatX = 2, repeatY = 2 }: { stoneId: string;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(repeatX, repeatY);
     texture.colorSpace = THREE.SRGBColorSpace;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.anisotropy = 16;
+    texture.generateMipmaps = true;
+    texture.needsUpdate = true;
   }, [texture, repeatX, repeatY]);
 
   return (
@@ -450,6 +455,10 @@ function HourglassMaterialApplier({ group, stoneId }: { group: THREE.Object3D; s
     tex.wrapT = THREE.RepeatWrapping;
     tex.repeat.set(2, 2);
     tex.colorSpace = THREE.SRGBColorSpace;
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.anisotropy = 16;
+    tex.generateMipmaps = true;
     tex.needsUpdate = true;
 
     const mat = stoneId
