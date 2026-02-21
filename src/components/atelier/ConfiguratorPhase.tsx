@@ -612,7 +612,38 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               />
             </Suspense>
 
-            <div className="mt-4 flex items-center justify-center gap-6 text-xs text-muted-foreground">
+            {/* Selection summary - under 3D viewer */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-4 bg-background border border-foreground/20 rounded-sm p-4"
+            >
+              <div className="space-y-2 mb-3">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{isNL ? 'Uw selectie' : 'Your selection'}</p>
+                  <h4 className="text-sm font-medium">
+                    {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {toCm(lengthMm)}×{toCm(widthMm)} cm
+                  </h4>
+                </div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                  <span>{resolved?.legDefinition?.[isNL ? 'labelNL' : 'label'] ?? legStyle}</span>
+                  <span>•</span>
+                  <span>{thicknessMm}mm blad • {toCm(heightMm)} cm hoog</span>
+                  <span>•</span>
+                  <span>{(() => {
+                    const displayCount = resolved?.legStyle === 'hourglass' ? 2 : (resolved?.legCount ?? 0);
+                    return `${displayCount || '?'} ${isNL ? (displayCount === 1 ? 'poot' : 'poten') : 'legs'}`;
+                  })()}</span>
+                </div>
+              </div>
+
+              <Button variant="atelier" className="w-full" onClick={onContinue}>
+                {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </motion.div>
+
+            <div className="mt-3 flex items-center justify-center gap-6 text-xs text-muted-foreground">
               <span>{isNL ? 'Handgemaakt op bestelling' : 'Handmade to order'}</span>
               <span>•</span>
               <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
@@ -663,41 +694,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
             <EdgeSelectorV3 value={edgeProfile} onChange={setEdgeProfile} isNL={isNL} />
           </ConfigPanel>
 
-          {/* Spacer to prevent sticky summary from covering leg buttons */}
-          <div className="h-32" />
-
-          {/* Summary */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="sticky bottom-4 bg-background border border-foreground/20 rounded-sm p-5 shadow-lg"
-          >
-            <div className="space-y-3 mb-4">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">{isNL ? 'Uw selectie' : 'Your selection'}</p>
-                  <h4 className="text-sm font-medium">
-                    {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {toCm(lengthMm)}×{toCm(widthMm)} cm
-                  </h4>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                <span>{resolved?.legDefinition?.[isNL ? 'labelNL' : 'label'] ?? legStyle}</span>
-                <span>•</span>
-                <span>{thicknessMm}mm blad • {toCm(heightMm)} cm hoog</span>
-                <span>•</span>
-                <span>{(() => {
-                  const displayCount = resolved?.legStyle === 'hourglass' ? 2 : (resolved?.legCount ?? 0);
-                  return `${displayCount || '?'} ${isNL ? (displayCount === 1 ? 'poot' : 'poten') : 'legs'}`;
-                })()}</span>
-              </div>
-            </div>
-
-            <Button variant="atelier" className="w-full" onClick={onContinue}>
-              {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </motion.div>
         </div>
       </div>
 
