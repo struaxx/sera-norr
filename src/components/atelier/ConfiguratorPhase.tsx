@@ -7,7 +7,7 @@ import { getStonesByFamily, type StoneLibraryEntry } from '@/lib/configurator/st
 import { getSwatchTexture, hasTexture } from '@/lib/configurator/texture-resolver';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, ArrowRight, RotateCcw, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, RotateCcw, Check, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { EDGE_PROFILES } from '@/lib/configurator/config';
@@ -484,6 +484,56 @@ function EdgeSelectorV3({
 }
 
 // ============================================
+// "ANDERS" (OTHER) OPTION COMPONENT
+// ============================================
+
+function CustomRequestToggle({
+  label,
+  value,
+  onChange,
+  isNL,
+}: {
+  label?: string;
+  value: string;
+  onChange: (v: string) => void;
+  isNL: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const isActive = isOpen || value.length > 0;
+
+  return (
+    <div className="mt-3 pt-3 border-t border-border">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "flex items-center gap-2 text-xs transition-colors",
+          isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        <MessageSquare className="w-3.5 h-3.5" />
+        <span>{label || (isNL ? 'Anders / op aanvraag' : 'Other / on request')}</span>
+        {value && <Check className="w-3 h-3 text-foreground" />}
+      </button>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="mt-2"
+        >
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={isNL ? 'Beschrijf uw wens...' : 'Describe your preference...'}
+            className="w-full text-sm bg-secondary/50 border border-border rounded-sm p-3 resize-none focus:outline-none focus:ring-1 focus:ring-foreground/30 placeholder:text-muted-foreground/60"
+            rows={2}
+          />
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+// ============================================
 // MAIN CONFIGURATOR PHASE
 // ============================================
 
@@ -499,6 +549,13 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [stoneId, setStoneId] = useState('calacatta-viola');
   const [edgeProfile, setEdgeProfile] = useState('straight');
   const [resolved, setResolved] = useState<ResolvedConfiguration | null>(null);
+
+  // Custom request fields per step
+  const [customShape, setCustomShape] = useState('');
+  const [customDimension, setCustomDimension] = useState('');
+  const [customThickness, setCustomThickness] = useState('');
+  const [customLeg, setCustomLeg] = useState('');
+  const [customEdge, setCustomEdge] = useState('');
 
   const handleShapeChange = useCallback((newShape: RuleShape) => {
     setShape(newShape);
@@ -657,6 +714,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
         <div className="lg:col-span-5 space-y-5">
           <ConfigPanel title={isNL ? 'Vorm' : 'Shape'} step={1}>
             <ShapeSelectorV3 value={shape} onChange={handleShapeChange} isNL={isNL} />
+            <CustomRequestToggle value={customShape} onChange={setCustomShape} isNL={isNL} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Afmeting' : 'Size'} step={2}>
@@ -670,10 +728,12 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               onHeightChange={setHeightMm}
               isNL={isNL}
             />
+            <CustomRequestToggle value={customDimension} onChange={setCustomDimension} isNL={isNL} label={isNL ? 'Andere afmeting gewenst' : 'Different size needed'} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Bladdikte' : 'Thickness'} step={3}>
             <ThicknessSelectorV3 value={thicknessMm} onChange={setThicknessMm} isNL={isNL} />
+            <CustomRequestToggle value={customThickness} onChange={setCustomThickness} isNL={isNL} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Onderstel' : 'Base'} step={4}>
@@ -684,6 +744,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               onChange={setLegStyle}
               isNL={isNL}
             />
+            <CustomRequestToggle value={customLeg} onChange={setCustomLeg} isNL={isNL} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Materiaal' : 'Material'} step={5}>
@@ -692,6 +753,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
 
           <ConfigPanel title={isNL ? 'Randafwerking' : 'Edge profile'} step={6}>
             <EdgeSelectorV3 value={edgeProfile} onChange={setEdgeProfile} isNL={isNL} />
+            <CustomRequestToggle value={customEdge} onChange={setCustomEdge} isNL={isNL} />
           </ConfigPanel>
 
         </div>
