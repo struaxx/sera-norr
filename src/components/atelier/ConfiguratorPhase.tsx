@@ -491,13 +491,11 @@ function CustomRequestToggle({
   label,
   value,
   onChange,
-  onActivate,
   isNL,
 }: {
   label?: string;
   value: string;
   onChange: (v: string) => void;
-  onActivate?: () => void;
   isNL: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(value.length > 0);
@@ -509,7 +507,6 @@ function CustomRequestToggle({
         onClick={() => {
           const next = !isOpen;
           setIsOpen(next);
-          if (next && onActivate) onActivate();
           if (!next) onChange('');
         }}
         className={cn(
@@ -722,7 +719,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
         <div className="lg:col-span-5 space-y-5">
           <ConfigPanel title={isNL ? 'Vorm' : 'Shape'} step={1}>
             <ShapeSelectorV3 value={shape} onChange={handleShapeChange} isNL={isNL} />
-            <CustomRequestToggle value={customShape} onChange={setCustomShape} isNL={isNL} onActivate={() => setShape('' as RuleShape)} />
+            <CustomRequestToggle value={customShape} onChange={setCustomShape} isNL={isNL} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Afmeting' : 'Size'} step={2}>
@@ -736,12 +733,12 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               onHeightChange={(v) => { setHeightMm(v); setCustomDimension(''); }}
               isNL={isNL}
             />
-            <CustomRequestToggle value={customDimension} onChange={setCustomDimension} isNL={isNL} label={isNL ? 'Andere afmeting gewenst' : 'Different size needed'} onActivate={() => {}} />
+            <CustomRequestToggle value={customDimension} onChange={setCustomDimension} isNL={isNL} label={isNL ? 'Andere afmeting gewenst' : 'Different size needed'} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Bladdikte' : 'Thickness'} step={3}>
             <ThicknessSelectorV3 value={thicknessMm} onChange={(v) => { setThicknessMm(v); setCustomThickness(''); }} isNL={isNL} />
-            <CustomRequestToggle value={customThickness} onChange={setCustomThickness} isNL={isNL} onActivate={() => setThicknessMm(0)} />
+            <CustomRequestToggle value={customThickness} onChange={setCustomThickness} isNL={isNL} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Onderstel' : 'Base'} step={4}>
@@ -752,7 +749,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
               onChange={(v) => { setLegStyle(v); setCustomLeg(''); }}
               isNL={isNL}
             />
-            <CustomRequestToggle value={customLeg} onChange={setCustomLeg} isNL={isNL} onActivate={() => setLegStyle('' as RuleLegStyle)} />
+            <CustomRequestToggle value={customLeg} onChange={setCustomLeg} isNL={isNL} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Materiaal' : 'Material'} step={5}>
@@ -761,7 +758,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
 
           <ConfigPanel title={isNL ? 'Randafwerking' : 'Edge profile'} step={6}>
             <EdgeSelectorV3 value={edgeProfile} onChange={(v) => { setEdgeProfile(v); setCustomEdge(''); }} isNL={isNL} />
-            <CustomRequestToggle value={customEdge} onChange={setCustomEdge} isNL={isNL} onActivate={() => setEdgeProfile('')} />
+            <CustomRequestToggle value={customEdge} onChange={setCustomEdge} isNL={isNL} />
           </ConfigPanel>
 
         </div>
