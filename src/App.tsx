@@ -20,6 +20,7 @@ import Voorstel from "./pages/Voorstel";
 import Lookbook from "./pages/Lookbook";
 import Care from "./pages/Care";
 import Insights from "./pages/Insights";
+import Shipping from "./pages/Shipping";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/lookbook" element={<Lookbook />} />
           <Route path="/care" element={<Care />} />
           <Route path="/insights" element={<Insights />} />
+          <Route path="/verzending-levering" element={<Shipping />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieBanner />

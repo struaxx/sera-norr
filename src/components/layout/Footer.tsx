@@ -81,7 +81,7 @@ export function Footer() {
               <li><Link to="/voorstel" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Voorstel aanvragen' : 'Request proposal'}</Link></li>
               <li><Link to="/lookbook" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Online voorbeelden' : 'Online examples'}</Link></li>
               <li><Link to="/care" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Onderhoud & bescherming' : 'Care & protection'}</Link></li>
-              <li><Link to="/shipping" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.shipping')}</Link></li>
+              <li><Link to="/verzending-levering" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Verzending & levering' : 'Shipping & delivery'}</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.privacy')}</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.terms')}</Link></li>
               <li><CookiePreferencesButton /></li>
