@@ -13,6 +13,7 @@ import { CollectionCard } from "@/components/ui/collection-card";
 import { ValuePillars, AtelierSteps } from "@/components/homepage";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useIsMobile } from "@/hooks/use-mobile";
 import heroImage from "@/assets/hero-homepage.png";
 
 const Index = () => {
@@ -146,6 +147,9 @@ const Index = () => {
           INTRO - Short, scannable
           ============================================ */}
       <IntroSection isNL={isNL} />
+      
+      {/* Sticky mobile CTA */}
+      <StickyMobileCTA isNL={isNL} />
 
       {/* ============================================
           COLLECTIES - With single "Ontdek collecties" CTA
@@ -187,7 +191,7 @@ function IntroSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
   return (
-    <section className="py-20 lg:py-28" ref={ref}>
+    <section id="intro" className="py-20 lg:py-28" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         <motion.div 
           className="max-w-2xl mx-auto text-center"
@@ -325,7 +329,7 @@ function CareSection({ isNL }: { isNL: boolean }) {
   ];
 
   return (
-    <section className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
+    <section id="onderhoud" className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         <motion.div 
           className="flex items-center gap-6 mb-12 lg:mb-16"
@@ -407,7 +411,7 @@ function FinalCTASection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
   return (
-    <section className="py-20 lg:py-28 bg-foreground text-background" ref={ref}>
+    <section id="contact" className="py-20 lg:py-28 bg-foreground text-background" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         <motion.div 
           className="max-w-xl mx-auto text-center"
@@ -424,14 +428,54 @@ function FinalCTASection({ isNL }: { isNL: boolean }) {
               : "Schedule a no-obligation conversation. We respond quickly."}
           </p>
           <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
-            <Link to="/contact">
-              {isNL ? "Neem contact op" : "Get in touch"}
+            <Link to="/atelier">
+              {isNL ? "Ontwerp uw tafel" : "Design your table"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
+          <p className="mt-4">
+            <Link to="/contact" className="text-background/60 hover:text-background text-sm underline underline-offset-4 transition-colors">
+              {isNL ? "Of neem contact op" : "Or get in touch"}
+            </Link>
+          </p>
         </motion.div>
       </div>
     </section>
+  );
+}
+
+// ============================================
+// STICKY MOBILE CTA
+// ============================================
+function StickyMobileCTA({ isNL }: { isNL: boolean }) {
+  const isMobile = useIsMobile();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show after scrolling past the hero
+      setIsVisible(window.scrollY > window.innerHeight * 0.8);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (!isMobile) return null;
+
+  return (
+    <motion.div
+      className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border px-4 py-3 lg:hidden"
+      initial={{ y: 100 }}
+      animate={{ y: isVisible ? 0 : 100 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+    >
+      <Button asChild variant="sera-primary" size="lg" className="w-full">
+        <Link to="/atelier">
+          {isNL ? 'Ontwerp uw tafel' : 'Design your table'}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Link>
+      </Button>
+    </motion.div>
   );
 }
 
