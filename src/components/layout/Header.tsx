@@ -110,7 +110,7 @@ export function Header() {
               )}
             >
               <Link to="/atelier">
-                Ontwerp nu
+                {t('nav.designCta', 'Ontwerp uw tafel')}
                 <ArrowRight className="ml-1.5 h-3 w-3" />
               </Link>
             </Button>
