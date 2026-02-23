@@ -96,9 +96,7 @@ export function Footer() {
             </p>
             <span className="hidden md:inline text-muted-foreground/40">|</span>
             <p className="text-muted-foreground/70 text-xs">
-              {i18n.language === 'nl' 
-                ? 'SERA NORR is een designatelier voor maatwerk natuursteenmeubels.'
-                : 'SERA NORR is a design atelier for bespoke natural stone furniture.'}
+              KvK 89004213
             </p>
           </div>
           <p className="text-muted-foreground text-sm">{t('footer.crafted')}</p>
