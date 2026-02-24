@@ -37,7 +37,7 @@ const Shipping = () => {
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: isNL ? 'Verzending & Levering' : 'Shipping & Delivery', url: '/verzending-levering' },
+    { name: isNL ? 'Verzending & Levering' : 'Shipping & Delivery', url: '/shipping' },
   ]);
 
   const faqSchema = generateFAQSchema(faqItems);
@@ -65,7 +65,7 @@ const Shipping = () => {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: isNL ? 'Verzending & Levering' : 'Shipping & Delivery', href: '/verzending-levering' },
+          { label: isNL ? 'Verzending & Levering' : 'Shipping & Delivery', href: '/shipping' },
         ]}
       />
 

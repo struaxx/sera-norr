@@ -151,7 +151,7 @@ const Voorstel = () => {
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: isNL ? 'Voorstel' : 'Proposal', url: '/voorstel' },
+    { name: isNL ? 'Voorstel' : 'Proposal', url: '/proposal' },
   ]);
 
   const showVormField = ['eettafel', 'salontafel'].includes(formData.type);

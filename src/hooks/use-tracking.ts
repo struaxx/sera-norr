@@ -27,7 +27,7 @@ const getPageType = (pathname: string): string => {
   if (pathname === '/contact') return 'contact';
   if (pathname === '/materials') return 'materials';
   if (pathname.startsWith('/materials/')) return 'material_detail';
-  if (pathname === '/voorstel') return 'proposal';
+  if (pathname === '/proposal') return 'proposal';
   if (pathname === '/lookbook') return 'lookbook';
   if (pathname === '/care') return 'care';
   if (pathname === '/journal') return 'journal';
