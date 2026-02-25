@@ -221,7 +221,7 @@ export function ConfiguratorViewerV3({
       </AnimatePresence>
 
       {/* 3D Canvas */}
-      <Canvas shadows dpr={[1.5, 2.5]} gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }} className="touch-none">
+      <Canvas shadows dpr={[1, 2]} className="touch-none">
         <PerspectiveCamera
           makeDefault
           position={currentCamera.position}
@@ -234,8 +234,7 @@ export function ConfiguratorViewerV3({
           position={[5, 10, 5]}
           intensity={1.2}
           castShadow
-          shadow-mapSize={[2048, 2048]}
-          shadow-bias={-0.0001}
+          shadow-mapSize={[1024, 1024]}
         />
         <directionalLight position={[-3, 5, -3]} intensity={0.4} />
 
