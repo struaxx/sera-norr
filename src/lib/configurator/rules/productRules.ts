@@ -215,9 +215,6 @@ export function determineLegCount(
   shape: RuleShape,
   lengthMm: number,
 ): number {
-  // Hourglass: GLB contains the full pair — always 1 placement (centered)
-  if (legStyle === 'hourglass') return 1;
-
   // Fixed-count styles
   const def = LEG_DEFINITIONS.find(l => l.id === legStyle);
   if (def?.category === 'fixed' && def.fixedLegCount != null) {

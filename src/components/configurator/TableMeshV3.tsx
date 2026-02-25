@@ -4,9 +4,9 @@
 // 9 leg styles, rule-driven placement, monolith textures
 // AXIS: X = length, Z = width, Y = height (up)
 
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import * as THREE from 'three';
-import { useTexture, useGLTF } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import { mmToM } from '@/lib/configurator/units';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
 import { get3DTexture, getTextureScale } from '@/lib/configurator/texture-resolver';
@@ -34,6 +34,7 @@ export interface TableMeshV3Props {
 // ============================================
 const CONE_TAPER_RATIO = 0.65;
 const HOURGLASS_WAIST_RATIO = 0.4;
+const CORNER_RADIUS_RATIO = 0.12; // 12% of smallest dimension for visibly rounded corners
 
 // ============================================
 // STONE MATERIAL
@@ -205,7 +206,7 @@ function createTabletopGeometry(
       return geo;
     }
     case 'corner': {
-      const cornerRadius = Math.min(lengthM, widthM) * 0.05;
+      const cornerRadius = Math.min(lengthM, widthM) * CORNER_RADIUS_RATIO;
       const rr = new THREE.Shape();
       const hw = lengthM / 2 - bevel.bevelSize;
       const hd = widthM / 2 - bevel.bevelSize;
@@ -299,13 +300,22 @@ function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
   const fluteDepth = radiusM * 0.15;
 
   const geo = useMemo(() => {
-    const angularSegments = fluteCount * 12;
-    const heightSegments = 2;
-    
+    const angularSegments = fluteCount * 16; // higher resolution per flute
+    const heightSegments = 12; // smooth vertical shading
+
     const positions: number[] = [];
     const normals: number[] = [];
     const uvs: number[] = [];
     const indices: number[] = [];
+
+    // Helper: compute fluted radius at a given angle
+    function flutedRadius(angle: number): number {
+      const phase = (angle * fluteCount) % (Math.PI * 2);
+      const normalized = phase / (Math.PI * 2);
+      const bulge = Math.cos((normalized - 0.5) * Math.PI);
+      const sharpBulge = Math.pow(Math.max(bulge, 0), 0.6);
+      return (radiusM - fluteDepth) + fluteDepth * sharpBulge;
+    }
 
     for (let iy = 0; iy <= heightSegments; iy++) {
       const v = iy / heightSegments;
@@ -314,22 +324,34 @@ function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
       for (let ix = 0; ix <= angularSegments; ix++) {
         const u = ix / angularSegments;
         const angle = u * Math.PI * 2;
-        
-        // Convex flute profile: rounded bulges with sharp narrow grooves
-        const phase = (angle * fluteCount) % (Math.PI * 2);
-        const normalized = phase / (Math.PI * 2); // 0..1 per flute
-        // Cosine gives convex bulge; pow sharpens the groove at edges
-        const bulge = Math.cos((normalized - 0.5) * Math.PI); // 1 at center, 0 at edge
-        const sharpBulge = Math.pow(Math.max(bulge, 0), 0.6); // flatten top, keep sharp dip
-        const r = (radiusM - fluteDepth) + fluteDepth * sharpBulge;
-        
-        positions.push(Math.cos(angle) * r, y, Math.sin(angle) * r);
-        
-        // Approximate outward normal
-        const nx = Math.cos(angle);
-        const nz = Math.sin(angle);
-        normals.push(nx, 0, nz);
-        
+
+        const r = flutedRadius(angle);
+        const x = Math.cos(angle) * r;
+        const z = Math.sin(angle) * r;
+        positions.push(x, y, z);
+
+        // Compute accurate normal using finite differences on the surface
+        const da = 0.001; // small angular delta
+        const rPrev = flutedRadius(angle - da);
+        const rNext = flutedRadius(angle + da);
+
+        // Tangent along the angular direction (in XZ plane)
+        const txPrev = Math.cos(angle - da) * rPrev;
+        const tzPrev = Math.sin(angle - da) * rPrev;
+        const txNext = Math.cos(angle + da) * rNext;
+        const tzNext = Math.sin(angle + da) * rNext;
+
+        // Angular tangent
+        const atx = txNext - txPrev;
+        const atz = tzNext - tzPrev;
+        // Height tangent is always (0, 1, 0)
+        // Normal = cross(heightTangent, angularTangent)
+        const nx = -atz; // simplified cross product Y-component = 0
+        const ny = 0;
+        const nz = atx;
+        const nLen = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+        normals.push(nx / nLen, ny / nLen, nz / nLen);
+
         uvs.push(u, v);
       }
     }
@@ -395,87 +417,88 @@ function ConicalLeg({ radiusM, heightM, stoneId }: LegProps) {
   );
 }
 
-// --- Hourglass: full GLB rendered once, flipped (rotation not scale to preserve normals) ---
-const HOURGLASS_GLB = '/models/hourglass-leg-single.glb';
+// --- Hourglass: procedural LatheGeometry for perfect quality ---
+// Profile: wide base → narrow waist at ~40% height → wide bulb on top
+function HourglassLeg({ radiusM, heightM, stoneId }: LegProps) {
+  const geo = useMemo(() => {
+    const segments = 64; // high angular resolution
+    const profilePoints = 48; // smooth profile curve
+    const waistPos = HOURGLASS_WAIST_RATIO; // waist at 40% height
+    const waistRadius = radiusM * 0.45; // waist is 45% of full radius
+    const topRadius = radiusM * 0.95; // top slightly narrower than base
 
-function HourglassLegsUnit({ heightM, stoneId }: { heightM: number; stoneId?: string }) {
-  const { scene } = useGLTF(HOURGLASS_GLB);
+    const points: THREE.Vector2[] = [];
 
-  const group = useMemo(() => {
-    const clone = scene.clone(true);
-    const wrapper = new THREE.Group();
-    wrapper.add(clone);
+    // Build hourglass profile from bottom (y=0) to top (y=heightM)
+    // Bottom center
+    points.push(new THREE.Vector2(0, 0));
+    // Bottom face edge (small bevel for realism)
+    const bevelR = radiusM * 0.03;
+    const bevelSegs = 4;
+    for (let i = 0; i <= bevelSegs; i++) {
+      const angle = Math.PI / 2 * (1 - i / bevelSegs);
+      points.push(new THREE.Vector2(
+        radiusM - bevelR + bevelR * Math.cos(angle),
+        bevelR - bevelR * Math.sin(angle),
+      ));
+    }
 
-    // Measure and scale to match leg height
-    const box = new THREE.Box3().setFromObject(wrapper);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const s = heightM / size.y;
-    wrapper.scale.set(s, s, s);
+    // Profile: base → waist → top using smooth cubic bezier-like interpolation
+    const waistY = heightM * waistPos;
+    const topY = heightM;
+    const halfProfile = Math.floor(profilePoints / 2);
 
-    // Flip upside down (bulb on top)
-    wrapper.rotation.set(Math.PI, 0, 0);
+    // Bottom half: from base radius down to waist
+    for (let i = 1; i <= halfProfile; i++) {
+      const t = i / halfProfile; // 0→1
+      // Smooth easing (ease-in-out) for organic curve
+      const ease = t * t * (3 - 2 * t); // smoothstep
+      const y = bevelR + (waistY - bevelR) * ease;
+      // Radius: cosine interpolation for smooth concave curve
+      const rFactor = 0.5 * (1 + Math.cos(Math.PI * ease));
+      const r = waistRadius + (radiusM - waistRadius) * rFactor;
+      points.push(new THREE.Vector2(r, y));
+    }
 
-    // Reposition so bottom sits at y=0, centered on XZ
-    wrapper.updateMatrixWorld(true);
-    const finalBox = new THREE.Box3().setFromObject(wrapper);
-    const finalCenter = new THREE.Vector3();
-    finalBox.getCenter(finalCenter);
-    wrapper.position.set(-finalCenter.x, -finalBox.min.y, -finalCenter.z);
+    // Top half: from waist back up to top radius
+    for (let i = 1; i <= halfProfile; i++) {
+      const t = i / halfProfile; // 0→1
+      const ease = t * t * (3 - 2 * t); // smoothstep
+      const y = waistY + (topY - waistY) * ease;
+      // Radius: cosine interpolation for smooth convex curve
+      const rFactor = 0.5 * (1 + Math.cos(Math.PI * (1 - ease)));
+      const r = waistRadius + (topRadius - waistRadius) * rFactor;
+      points.push(new THREE.Vector2(r, y));
+    }
 
-    return wrapper;
-  }, [scene, heightM]);
+    // Top bevel
+    for (let i = 0; i <= bevelSegs; i++) {
+      const angle = Math.PI / 2 * (i / bevelSegs);
+      points.push(new THREE.Vector2(
+        topRadius - bevelR + bevelR * Math.cos(angle),
+        topY - bevelR + bevelR * Math.sin(angle),
+      ));
+    }
 
-  // Apply material
-  useEffect(() => {
-    group.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        (child as THREE.Mesh).castShadow = true;
-        (child as THREE.Mesh).receiveShadow = true;
-      }
-    });
-  }, [group]);
+    // Top center
+    points.push(new THREE.Vector2(0, topY));
+
+    const lathe = new THREE.LatheGeometry(points, segments);
+    lathe.computeVertexNormals();
+    return lathe;
+  }, [radiusM, heightM]);
+
+  // UV proportional repeat for natural stone texture
+  const aspectRatio = heightM / (2 * Math.PI * radiusM);
+  const texRepeatX = 2;
+  const texRepeatY = 2 * aspectRatio;
 
   return (
-    <group>
-      <primitive object={group} />
-      {/* Apply stone or clay material imperatively */}
-      <HourglassMaterialApplier group={group} stoneId={stoneId} />
-    </group>
+    <mesh geometry={geo} castShadow receiveShadow>
+      <MonolithMaterial stoneId={stoneId} repeatX={texRepeatX} repeatY={texRepeatY} />
+    </mesh>
   );
 }
-
-function HourglassMaterialApplier({ group, stoneId }: { group: THREE.Object3D; stoneId?: string }) {
-  const texturePath = stoneId ? get3DTexture(stoneId) : null;
-  const texture = useTexture(texturePath || get3DTexture('bianco-carrara'));
-
-  useEffect(() => {
-    const tex = texture.clone();
-    tex.wrapS = THREE.ClampToEdgeWrapping;
-    tex.wrapT = THREE.ClampToEdgeWrapping;
-    tex.repeat.set(1, 1);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.minFilter = THREE.LinearMipmapLinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-    tex.anisotropy = 16;
-    tex.generateMipmaps = true;
-    tex.needsUpdate = true;
-
-    const mat = stoneId
-      ? new THREE.MeshStandardMaterial({ map: tex, roughness: 0.35, metalness: 0.05, envMapIntensity: 1.2 })
-      : new THREE.MeshStandardMaterial({ color: '#C8BEB4', roughness: 0.85, metalness: 0 });
-
-    group.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        (child as THREE.Mesh).material = mat;
-      }
-    });
-  }, [group, texture, stoneId]);
-
-  return null;
-}
-
-useGLTF.preload(HOURGLASS_GLB);
 
 // --- Quartet: single central drum base (round tables only) ---
 function QuartetLeg({ radiusM, heightM, stoneId }: LegProps) {
@@ -644,7 +667,9 @@ function LegsGroup({ resolved, stoneId }: { resolved: ResolvedConfiguration; sto
             {style === 'conical' && (
               <ConicalLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
-            {/* hourglass handled at top level as single unit */}
+            {style === 'hourglass' && (
+              <HourglassLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
+            )}
             {style === 'quartet_legs' && (
               <QuartetLeg radiusM={legRadiusM} heightM={legHeightM} stoneId={stoneId} />
             )}
@@ -696,7 +721,6 @@ export function TableMeshV3(props: TableMeshV3Props) {
     [shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle]
   );
 
-  const isHourglass = resolved.legStyle === 'hourglass';
   const lengthM = mmToM(lengthMm);
   const widthM = mmToM(widthMm);
   const thicknessM = mmToM(thicknessMm);
@@ -716,17 +740,7 @@ export function TableMeshV3(props: TableMeshV3Props) {
   return (
     <group>
       <GroundPlane />
-      {isHourglass ? (
-        <>
-          {resolved.legPlacements.map((p, i) => (
-            <group key={i} position={[mmToM(p.x), 0, mmToM(p.z)]}>
-              <HourglassLegsUnit heightM={legHeightM} stoneId={stoneId} />
-            </group>
-          ))}
-        </>
-      ) : (
-        <LegsGroup resolved={resolved} stoneId={stoneId} />
-      )}
+      <LegsGroup resolved={resolved} stoneId={stoneId} />
       <mesh
         position={topTransform.position}
         rotation={topTransform.rotation}
