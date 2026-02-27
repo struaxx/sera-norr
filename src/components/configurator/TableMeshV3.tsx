@@ -205,7 +205,7 @@ function createTabletopGeometry(
       return geo;
     }
     case 'corner': {
-      const cornerRadius = Math.min(lengthM, widthM) * 0.05;
+      const cornerRadius = Math.min(lengthM, widthM) * 0.12;
       const rr = new THREE.Shape();
       const hw = lengthM / 2 - bevel.bevelSize;
       const hd = widthM / 2 - bevel.bevelSize;
@@ -299,8 +299,8 @@ function CylindricalFlutedLeg({ radiusM, heightM, stoneId }: LegProps) {
   const fluteDepth = radiusM * 0.15;
 
   const geo = useMemo(() => {
-    const angularSegments = fluteCount * 12;
-    const heightSegments = 2;
+    const angularSegments = fluteCount * 16;
+    const heightSegments = 8;
     
     const positions: number[] = [];
     const normals: number[] = [];
@@ -451,9 +451,9 @@ function HourglassMaterialApplier({ group, stoneId }: { group: THREE.Object3D; s
 
   useEffect(() => {
     const tex = texture.clone();
-    tex.wrapS = THREE.ClampToEdgeWrapping;
-    tex.wrapT = THREE.ClampToEdgeWrapping;
-    tex.repeat.set(1, 1);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(2, 2);
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.minFilter = THREE.LinearMipmapLinearFilter;
     tex.magFilter = THREE.LinearFilter;
