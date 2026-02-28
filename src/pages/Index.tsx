@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Hairline } from "@/components/ui/hairline";
 import { CollectionCard } from "@/components/ui/collection-card";
 import { ValuePillars, AtelierSteps } from "@/components/homepage";
+import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -255,6 +256,16 @@ function CollectiesSection({
               ? "Twee signatuurcollecties, elk met eigen karakter."
               : "Two signature collections, each with its own character."}
           </p>
+        </motion.div>
+
+        {/* Room Fit Reveal — hover to see a table appear in the room */}
+        <motion.div
+          className="mb-16"
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <RoomReveal isNL={isNL} />
         </motion.div>
 
         {loading ? (
