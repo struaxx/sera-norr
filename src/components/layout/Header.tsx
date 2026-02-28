@@ -49,7 +49,7 @@ export function Header() {
       >
         <nav className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
           {/* Left Navigation */}
-          <div className="hidden lg:flex items-center gap-10">
+          <div className="hidden lg:flex lg:flex-1 items-center gap-10">
             {navLinks.slice(0, 2).map((link) => (
               <Link
                 key={link.path}
@@ -68,6 +68,9 @@ export function Header() {
             ))}
           </div>
 
+          {/* Left spacer for mobile centering */}
+          <div className="flex-1 lg:hidden" />
+
           {/* Logo */}
           <Link
             to="/"
@@ -80,7 +83,7 @@ export function Header() {
           </Link>
 
           {/* Right Navigation with sticky CTA */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex lg:flex-1 items-center justify-end gap-8">
             {navLinks.slice(2).map((link) => (
               <Link
                 key={link.path}
@@ -116,7 +119,7 @@ export function Header() {
             </Button>
           </div>
 
-          <div className="lg:hidden flex items-center gap-3">
+          <div className="lg:hidden flex flex-1 items-center justify-end gap-3">
             <LanguageSwitcher isLight={isLightText} />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
