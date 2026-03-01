@@ -2,7 +2,8 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import terraPlaceholder from "@/assets/terra-collection.jpg";
+import roomEmpty from "@/assets/room-empty.jpg";
+import roomFurnished from "@/assets/room-furnished.jpg";
 
 interface RoomRevealProps {
   beforeImage?: string;
@@ -29,11 +30,8 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
   const hintRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
 
-  const beforeBg = beforeImage
-    ? `url(${beforeImage})`
-    : "linear-gradient(165deg, hsl(38 18% 92%) 0%, hsl(38 15% 88%) 45%, hsl(30 12% 78%) 100%)";
-
-  const afterSrc = afterImage || terraPlaceholder;
+  const beforeSrc = beforeImage || roomEmpty;
+  const afterSrc = afterImage || roomFurnished;
 
   // Lerp helper
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -188,18 +186,12 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       onTouchEnd={() => setIsHovering(false)}
     >
       {/* 1. Before layer — empty room */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: beforeBg }}
+      <img
+        src={beforeSrc}
+        alt={isNL ? "Lege kamer" : "Empty room"}
+        className="absolute inset-0 w-full h-full object-cover"
+        draggable={false}
       />
-
-      {/* Room detail gradients for placeholder */}
-      {!beforeImage && (
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-[hsl(30_10%_72%)] to-transparent opacity-40" />
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[hsl(25_8%_65%/0.15)]" />
-        </div>
-      )}
 
       {/* 2. After layer — circular clip-path reveal (always visible, auto-animating) */}
       <div
