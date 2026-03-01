@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -17,7 +17,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
   const isMobile = useIsMobile();
 
   // Positions
-  const [isHovering, setIsHovering] = useState(false);
+  const isHoveringRef = useRef(false);
   const mousePosRef = useRef({ x: 0, y: 0 });
   const autoPosRef = useRef({ x: 0, y: 0 });
   const displayPosRef = useRef({ x: 0, y: 0 });
@@ -62,7 +62,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       };
 
       // Blend factor: smoothly transition between auto and mouse
-      const targetBlend = isHovering ? 1 : 0;
+      const targetBlend = isHoveringRef.current ? 1 : 0;
       hoverBlendRef.current = lerp(hoverBlendRef.current, targetBlend, 0.06);
 
       // Display position: blend between auto and mouse
@@ -74,7 +74,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
 
       // Radius: breathe slightly in idle, grow on hover
       const breathe = 1 + 0.06 * Math.sin(t * 0.8);
-      const targetRadius = isHovering ? hoverRadius : idleRadius * breathe;
+      const targetRadius = isHoveringRef.current ? hoverRadius : idleRadius * breathe;
       currentRadiusRef.current = lerp(currentRadiusRef.current, targetRadius, 0.05);
 
       // Apply clip-path directly to DOM (no React re-render)
@@ -91,18 +91,18 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         cursorRingRef.current.style.top = `${y}px`;
         cursorRingRef.current.style.width = `${r * 2}px`;
         cursorRingRef.current.style.height = `${r * 2}px`;
-        cursorRingRef.current.style.opacity = isHovering ? "1" : "0";
+        cursorRingRef.current.style.opacity = isHoveringRef.current ? "1" : "0";
       }
 
       // Hint label
       if (hintRef.current) {
-        hintRef.current.style.opacity = isHovering ? "0" : "1";
+        hintRef.current.style.opacity = isHoveringRef.current ? "0" : "1";
       }
 
       // Size label
       if (labelRef.current) {
-        labelRef.current.style.opacity = isHovering ? "1" : "0";
-        labelRef.current.style.transform = isHovering
+        labelRef.current.style.opacity = isHoveringRef.current ? "1" : "0";
+        labelRef.current.style.transform = isHoveringRef.current
           ? "translateY(0)"
           : "translateY(12px)";
       }
@@ -110,11 +110,13 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       animFrameRef.current = requestAnimationFrame(animate);
     };
 
-    // Initialize radius
-    currentRadiusRef.current = isMobile ? 80 : 120;
+    // Initialize radius only on mount
+    if (currentRadiusRef.current === 0) {
+      currentRadiusRef.current = isMobile ? 80 : 120;
+    }
     animFrameRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [prefersReducedMotion, isHovering, isMobile, getDimensions]);
+  }, [prefersReducedMotion, isMobile, getDimensions]);
 
   // Mouse handlers
   const handleMouseMove = useCallback(
@@ -139,7 +141,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         x: touch.clientX - rect.left,
         y: touch.clientY - rect.top,
       };
-      setIsHovering(true);
+      isHoveringRef.current = true;
     },
     []
   );
@@ -179,11 +181,11 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         !isMobile && "cursor-none"
       )}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseEnter={() => { isHoveringRef.current = true; }}
+      onMouseLeave={() => { isHoveringRef.current = false; }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      onTouchEnd={() => setIsHovering(false)}
+      onTouchEnd={() => { isHoveringRef.current = false; }}
     >
       {/* 1. Before layer — empty room */}
       <img
