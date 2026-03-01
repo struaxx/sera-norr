@@ -16,7 +16,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
 
-  // Positions — all refs to avoid re-renders / effect restarts
+  // Positions
   const isHoveringRef = useRef(false);
   const mousePosRef = useRef({ x: 0, y: 0 });
   const autoPosRef = useRef({ x: 0, y: 0 });
@@ -62,11 +62,9 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         y: cy + h * 0.25 * Math.cos(t * 0.23),
       };
 
-      // Blend factor: asymmetric — fast to engage, gentle to release
-      const hovering = isHoveringRef.current;
-      const targetBlend = hovering ? 1 : 0;
-      const blendSpeed = hovering ? 0.18 : 0.08;
-      hoverBlendRef.current = lerp(hoverBlendRef.current, targetBlend, blendSpeed);
+      // Blend factor: smoothly transition between auto and mouse
+      const targetBlend = isHoveringRef.current ? 1 : 0;
+      hoverBlendRef.current = lerp(hoverBlendRef.current, targetBlend, 0.06);
 
       // Display position: blend between auto and mouse
       const blend = hoverBlendRef.current;
@@ -77,9 +75,8 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
 
       // Radius: breathe slightly in idle, grow on hover
       const breathe = 1 + 0.06 * Math.sin(t * 0.8);
-      const targetRadius = hovering ? hoverRadius : idleRadius * breathe;
-      const radiusSpeed = hovering ? 0.12 : 0.06;
-      currentRadiusRef.current = lerp(currentRadiusRef.current, targetRadius, radiusSpeed);
+      const targetRadius = isHoveringRef.current ? hoverRadius : idleRadius * breathe;
+      currentRadiusRef.current = lerp(currentRadiusRef.current, targetRadius, 0.05);
 
       // Apply clip-path directly to DOM (no React re-render)
       const { x, y } = displayPosRef.current;
@@ -97,23 +94,18 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         cursorRingRef.current.style.top = `${y}px`;
         cursorRingRef.current.style.width = `${r * 2}px`;
         cursorRingRef.current.style.height = `${r * 2}px`;
-        cursorRingRef.current.style.opacity = String(cursorOpacityRef.current);
+        cursorRingRef.current.style.opacity = isHoveringRef.current ? "1" : "0";
       }
 
       // Hint label — gentle pulse when idle, fade out on hover
       if (hintRef.current) {
-        if (hovering) {
-          hintRef.current.style.opacity = "0";
-        } else {
-          const pulse = 0.7 + 0.3 * Math.sin(t * 1.5);
-          hintRef.current.style.opacity = String(pulse);
-        }
+        hintRef.current.style.opacity = isHoveringRef.current ? "0" : "1";
       }
 
       // Size label
       if (labelRef.current) {
-        labelRef.current.style.opacity = hovering ? "1" : "0";
-        labelRef.current.style.transform = hovering
+        labelRef.current.style.opacity = isHoveringRef.current ? "1" : "0";
+        labelRef.current.style.transform = isHoveringRef.current
           ? "translateY(0)"
           : "translateY(12px)";
       }
@@ -121,17 +113,10 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       animFrameRef.current = requestAnimationFrame(animate);
     };
 
-    // Initialize radius only on first mount
+    // Initialize radius only on mount
     if (currentRadiusRef.current === 0) {
-      currentRadiusRef.current = idleRadius;
+      currentRadiusRef.current = isMobile ? 80 : 120;
     }
-
-    // Seed mouse position to center so first hover doesn't jump to (0,0)
-    const { cx, cy } = getDimensions();
-    if (mousePosRef.current.x === 0 && mousePosRef.current.y === 0) {
-      mousePosRef.current = { x: cx, y: cy };
-    }
-
     animFrameRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animFrameRef.current);
   }, [prefersReducedMotion, isMobile, getDimensions]);
@@ -213,7 +198,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         !isMobile && "cursor-none"
       )}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
+      onMouseEnter={() => { isHoveringRef.current = true; }}
       onMouseLeave={() => { isHoveringRef.current = false; }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
