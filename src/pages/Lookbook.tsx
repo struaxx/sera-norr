@@ -22,15 +22,15 @@ import {
 
 // Curated lookbook items
 const lookbookItems = [
-  { id: 1, title: 'Eettafel Travertin', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '240×100 cm' },
-  { id: 2, title: 'Salontafel Rond', stone: 'Travertin', useCase: 'Woonkamer', dimensions: 'Ø120 cm' },
-  { id: 3, title: 'Console Marmer', stone: 'Calacatta Viola', useCase: 'Hal', dimensions: '160×40 cm' },
-  { id: 4, title: 'Bijzettafel', stone: 'Travertin', useCase: 'Zithoek', dimensions: 'Ø45 cm' },
-  { id: 5, title: 'Eettafel Ovaal', stone: 'Marmer licht', useCase: 'Eetkamer', dimensions: '220×110 cm' },
-  { id: 6, title: 'Statement Console', stone: 'Calacatta Viola', useCase: 'Entree', dimensions: '180×45 cm' },
-  { id: 7, title: 'Salon Set', stone: 'Travertin', useCase: 'Woonkamer', dimensions: '140×80 cm' },
-  { id: 8, title: 'Ronde Eettafel', stone: 'Marmer donker', useCase: 'Eetkamer', dimensions: 'Ø150 cm' },
-  { id: 9, title: 'Minimalist Console', stone: 'Travertin', useCase: 'Gang', dimensions: '140×35 cm' },
+  { id: 1, title: 'Eettafel Ovaal', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: '240×100 cm', image: '/lookbook/marble-oval-dining.png' },
+  { id: 2, title: 'Ronde Eettafel', stone: 'Travertin', useCase: 'Eetkamer', dimensions: 'Ø130 cm', image: '/lookbook/travertine-round-fluted.png' },
+  { id: 3, title: 'Ronde Eettafel', stone: 'Travertin', useCase: 'Eetkamer', dimensions: 'Ø140 cm', image: '/lookbook/travertine-round-cone.png' },
+  { id: 4, title: 'Salon Set', stone: 'Calacatta Viola & Travertin', useCase: 'Woonkamer', dimensions: 'Ø120 + Ø80 cm', image: '/lookbook/marble-round-livingroom.png' },
+  { id: 5, title: 'Ronde Eettafel', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: 'Ø150 cm', image: '/lookbook/calacatta-viola-round.png' },
+  { id: 6, title: 'Eettafel Ovaal', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '220×110 cm', image: '/lookbook/travertine-oval-slab.png' },
+  { id: 7, title: 'Console Marmer', stone: 'Calacatta Viola', useCase: 'Hal', dimensions: '160×40 cm' },
+  { id: 8, title: 'Bijzettafel', stone: 'Travertin', useCase: 'Zithoek', dimensions: 'Ø45 cm' },
+  { id: 9, title: 'Statement Console', stone: 'Calacatta Viola', useCase: 'Entree', dimensions: '180×45 cm' },
   { id: 10, title: 'Sculptural Side', stone: 'Calacatta', useCase: 'Slaapkamer', dimensions: 'Ø50 cm' },
   { id: 11, title: 'Grand Dining', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '280×110 cm' },
   { id: 12, title: 'Petit Console', stone: 'Marmer licht', useCase: 'Hal', dimensions: '120×35 cm' },
@@ -310,15 +310,23 @@ const Lookbook = () => {
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div className="aspect-[4/5] bg-background overflow-hidden relative">
-                    {/* Placeholder gradient simulating stone texture */}
-                    <div 
-                      className={`absolute inset-0 bg-gradient-to-br ${
-                        index % 4 === 0 ? 'from-stone-200 to-stone-300' :
-                        index % 4 === 1 ? 'from-stone-100 to-stone-200' :
-                        index % 4 === 2 ? 'from-purple-50 to-stone-200' :
-                        'from-stone-300 to-stone-400'
-                      }`}
-                    />
+                    {item.image ? (
+                      <img 
+                        src={item.image} 
+                        alt={`${item.title} — ${item.stone} ${item.dimensions}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div 
+                        className={`absolute inset-0 bg-gradient-to-br ${
+                          index % 4 === 0 ? 'from-stone-200 to-stone-300' :
+                          index % 4 === 1 ? 'from-stone-100 to-stone-200' :
+                          index % 4 === 2 ? 'from-purple-50 to-stone-200' :
+                          'from-stone-300 to-stone-400'
+                        }`}
+                      />
+                    )}
                     
                     {/* Locked overlay */}
                     {!isUnlocked && (
