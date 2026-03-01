@@ -21,6 +21,7 @@ interface LookbookItem {
   description: string;
   aspectRatio: "portrait" | "landscape" | "square";
   size: "normal" | "large" | "tall";
+  image?: string;
 }
 
 const Collections = () => {
@@ -44,31 +45,31 @@ const Collections = () => {
 
   // Lookbook items with varied sizes for Pinterest masonry effect
   const items: LookbookItem[] = isNL ? [
-    { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Ovaal", feel: "Sculpturaal", description: "Monumentale eettafel met krachtige, ronde basis en ellipsvormig blad.", aspectRatio: "portrait", size: "large" },
-    { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rechthoek", feel: "Statement", description: "Console met massieve blokbasis, gedefinieerd door paarse adering.", aspectRatio: "landscape", size: "normal" },
-    { id: "3", name: "Rondo Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Rond", feel: "Rustig", description: "Gestapelde ringen vormen een organische salontafel in warm travertin.", aspectRatio: "square", size: "normal" },
-    { id: "4", name: "Linea Dining", collection: "TERRA", stone: "Travertin", type: "Eettafel", shape: "Rechthoek", feel: "Rustig", description: "Langwerpige eettafel met strakke lijnen en natuurlijke textuur.", aspectRatio: "landscape", size: "large" },
-    { id: "5", name: "Onda Side", collection: "VANTA", stone: "Calacatta Viola", type: "Overig", shape: "Organisch", feel: "Sculpturaal", description: "Golvende bijzettafel geïnspireerd op natuurlijke erosie.", aspectRatio: "portrait", size: "tall" },
-    { id: "6", name: "Terra Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Minimale console met zwevend blad op massieve steunpunten.", aspectRatio: "landscape", size: "normal" },
-    { id: "7", name: "Viola Oval", collection: "VANTA", stone: "Calacatta Viola", type: "Salontafel", shape: "Ovaal", feel: "Statement", description: "Lage salontafel met dramatische viola-marmer adering.", aspectRatio: "square", size: "large" },
-    { id: "8", name: "Cube Media", collection: "TERRA", stone: "Travertin", type: "TV-meubel", shape: "Rechthoek", feel: "Rustig", description: "Media console met gestapelde volumes en open niches.", aspectRatio: "landscape", size: "normal" },
-    { id: "9", name: "Monolith Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Rechthoek", feel: "Statement", description: "Massieve rechthoekige tafel met sculpturale aanwezigheid.", aspectRatio: "portrait", size: "normal" },
-    { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Organisch", feel: "Rustig", description: "Asymmetrische salontafel geïnspireerd door rivierkeien.", aspectRatio: "square", size: "normal" },
-    { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Console met boogvormige uitsparing en klassieke proporties.", aspectRatio: "landscape", size: "normal" },
-    { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Overig", shape: "Rechthoek", feel: "Sculpturaal", description: "Multifunctioneel blokobject voor zitplaats of sculptuur.", aspectRatio: "portrait", size: "tall" },
+    { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Ovaal", feel: "Sculpturaal", description: "Monumentale eettafel met krachtige, ronde basis en ellipsvormig blad.", aspectRatio: "portrait", size: "large", image: "/lookbook/marble-oval-dining.png" },
+    { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rechthoek", feel: "Statement", description: "Console met massieve blokbasis, gedefinieerd door paarse adering.", aspectRatio: "landscape", size: "normal", image: "/lookbook/marble-oval-fluted.png" },
+    { id: "3", name: "Rondo Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Rond", feel: "Rustig", description: "Gestapelde ringen vormen een organische salontafel in warm travertin.", aspectRatio: "square", size: "normal", image: "/lookbook/travertine-round-fluted.png" },
+    { id: "4", name: "Linea Dining", collection: "TERRA", stone: "Travertin", type: "Eettafel", shape: "Rechthoek", feel: "Rustig", description: "Langwerpige eettafel met strakke lijnen en natuurlijke textuur.", aspectRatio: "landscape", size: "large", image: "/lookbook/travertine-oval-fluted.png" },
+    { id: "5", name: "Onda Side", collection: "VANTA", stone: "Calacatta Viola", type: "Overig", shape: "Organisch", feel: "Sculpturaal", description: "Golvende bijzettafel geïnspireerd op natuurlijke erosie.", aspectRatio: "portrait", size: "tall", image: "/lookbook/calacatta-viola-round.png" },
+    { id: "6", name: "Terra Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Minimale console met zwevend blad op massieve steunpunten.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-coffee-set.png" },
+    { id: "7", name: "Viola Oval", collection: "VANTA", stone: "Calacatta Viola", type: "Salontafel", shape: "Ovaal", feel: "Statement", description: "Lage salontafel met dramatische viola-marmer adering.", aspectRatio: "square", size: "large", image: "/lookbook/marble-round-fluted.png" },
+    { id: "8", name: "Cube Media", collection: "TERRA", stone: "Travertin", type: "TV-meubel", shape: "Rechthoek", feel: "Rustig", description: "Media console met gestapelde volumes en open niches.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-coffee-fluted.png" },
+    { id: "9", name: "Monolith Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Rechthoek", feel: "Statement", description: "Massieve rechthoekige tafel met sculpturale aanwezigheid.", aspectRatio: "portrait", size: "normal", image: "/lookbook/marble-coffee-fluted.png" },
+    { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Organisch", feel: "Rustig", description: "Asymmetrische salontafel geïnspireerd door rivierkeien.", aspectRatio: "square", size: "normal", image: "/lookbook/travertine-round-cone.png" },
+    { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Console met boogvormige uitsparing en klassieke proporties.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-oval-slab.png" },
+    { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Overig", shape: "Rechthoek", feel: "Sculpturaal", description: "Multifunctioneel blokobject voor zitplaats of sculptuur.", aspectRatio: "portrait", size: "tall", image: "/lookbook/marble-round-livingroom.png" },
   ] : [
-    { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Oval", feel: "Sculptural", description: "Monumental dining table with powerful round base and elliptical top.", aspectRatio: "portrait", size: "large" },
-    { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rectangle", feel: "Statement", description: "Console with massive block base, defined by purple veining.", aspectRatio: "landscape", size: "normal" },
-    { id: "3", name: "Rondo Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Round", feel: "Calm", description: "Stacked rings form an organic coffee table in warm travertine.", aspectRatio: "square", size: "normal" },
-    { id: "4", name: "Linea Dining", collection: "TERRA", stone: "Travertine", type: "Dining table", shape: "Rectangle", feel: "Calm", description: "Elongated dining table with clean lines and natural texture.", aspectRatio: "landscape", size: "large" },
-    { id: "5", name: "Onda Side", collection: "VANTA", stone: "Calacatta Viola", type: "Other", shape: "Organic", feel: "Sculptural", description: "Undulating side table inspired by natural erosion.", aspectRatio: "portrait", size: "tall" },
-    { id: "6", name: "Terra Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Minimal console with floating top on massive supports.", aspectRatio: "landscape", size: "normal" },
-    { id: "7", name: "Viola Oval", collection: "VANTA", stone: "Calacatta Viola", type: "Coffee table", shape: "Oval", feel: "Statement", description: "Low coffee table with dramatic viola marble veining.", aspectRatio: "square", size: "large" },
-    { id: "8", name: "Cube Media", collection: "TERRA", stone: "Travertine", type: "TV unit", shape: "Rectangle", feel: "Calm", description: "Media console with stacked volumes and open niches.", aspectRatio: "landscape", size: "normal" },
-    { id: "9", name: "Monolith Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Rectangle", feel: "Statement", description: "Massive rectangular table with sculptural presence.", aspectRatio: "portrait", size: "normal" },
-    { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Organic", feel: "Calm", description: "Asymmetric coffee table inspired by river pebbles.", aspectRatio: "square", size: "normal" },
-    { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Console with arched cutout and classical proportions.", aspectRatio: "landscape", size: "normal" },
-    { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Other", shape: "Rectangle", feel: "Sculptural", description: "Multifunctional block object for seating or sculpture.", aspectRatio: "portrait", size: "tall" },
+    { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Oval", feel: "Sculptural", description: "Monumental dining table with powerful round base and elliptical top.", aspectRatio: "portrait", size: "large", image: "/lookbook/marble-oval-dining.png" },
+    { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rectangle", feel: "Statement", description: "Console with massive block base, defined by purple veining.", aspectRatio: "landscape", size: "normal", image: "/lookbook/marble-oval-fluted.png" },
+    { id: "3", name: "Rondo Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Round", feel: "Calm", description: "Stacked rings form an organic coffee table in warm travertine.", aspectRatio: "square", size: "normal", image: "/lookbook/travertine-round-fluted.png" },
+    { id: "4", name: "Linea Dining", collection: "TERRA", stone: "Travertine", type: "Dining table", shape: "Rectangle", feel: "Calm", description: "Elongated dining table with clean lines and natural texture.", aspectRatio: "landscape", size: "large", image: "/lookbook/travertine-oval-fluted.png" },
+    { id: "5", name: "Onda Side", collection: "VANTA", stone: "Calacatta Viola", type: "Other", shape: "Organic", feel: "Sculptural", description: "Undulating side table inspired by natural erosion.", aspectRatio: "portrait", size: "tall", image: "/lookbook/calacatta-viola-round.png" },
+    { id: "6", name: "Terra Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Minimal console with floating top on massive supports.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-coffee-set.png" },
+    { id: "7", name: "Viola Oval", collection: "VANTA", stone: "Calacatta Viola", type: "Coffee table", shape: "Oval", feel: "Statement", description: "Low coffee table with dramatic viola marble veining.", aspectRatio: "square", size: "large", image: "/lookbook/marble-round-fluted.png" },
+    { id: "8", name: "Cube Media", collection: "TERRA", stone: "Travertine", type: "TV unit", shape: "Rectangle", feel: "Calm", description: "Media console with stacked volumes and open niches.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-coffee-fluted.png" },
+    { id: "9", name: "Monolith Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Rectangle", feel: "Statement", description: "Massive rectangular table with sculptural presence.", aspectRatio: "portrait", size: "normal", image: "/lookbook/marble-coffee-fluted.png" },
+    { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Organic", feel: "Calm", description: "Asymmetric coffee table inspired by river pebbles.", aspectRatio: "square", size: "normal", image: "/lookbook/travertine-round-cone.png" },
+    { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Console with arched cutout and classical proportions.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-oval-slab.png" },
+    { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Other", shape: "Rectangle", feel: "Sculptural", description: "Multifunctional block object for seating or sculpture.", aspectRatio: "portrait", size: "tall", image: "/lookbook/marble-round-livingroom.png" },
   ];
 
   // Filter options
@@ -229,16 +230,19 @@ const Collections = () => {
                   <div className={cn(
                     "w-full h-full min-h-[240px] overflow-hidden relative",
                     getHeightClass(item),
-                    item.collection === "VANTA" 
+                    !item.image && (item.collection === "VANTA" 
                       ? "bg-gradient-to-br from-secondary/60 via-secondary/40 to-secondary/20" 
-                      : "bg-gradient-to-br from-[#E8DFD0]/60 via-[#E8DFD0]/40 to-[#E8DFD0]/20"
+                      : "bg-gradient-to-br from-[#E8DFD0]/60 via-[#E8DFD0]/40 to-[#E8DFD0]/20")
                   )}>
-                    {/* Collection watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-[10px] lg:text-xs uppercase tracking-[0.25em] text-foreground/10 font-medium">
-                        {item.collection}
-                      </span>
-                    </div>
+                    {/* Product image */}
+                    {item.image && (
+                      <img 
+                        src={item.image} 
+                        alt={item.name} 
+                        className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    )}
                     
                     {/* Hover overlay with info */}
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/80 transition-all duration-500 flex flex-col justify-end p-4 lg:p-5">
