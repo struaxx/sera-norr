@@ -88,7 +88,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
 
       // Cursor ring (desktop) — smooth lerped opacity
       if (cursorRingRef.current) {
-        const targetCursorOpacity = hovering ? 1 : 0;
+        const targetCursorOpacity = isHoveringRef.current ? 1 : 0;
         cursorOpacityRef.current = lerp(cursorOpacityRef.current, targetCursorOpacity, 0.15);
         cursorRingRef.current.style.left = `${x}px`;
         cursorRingRef.current.style.top = `${y}px`;
