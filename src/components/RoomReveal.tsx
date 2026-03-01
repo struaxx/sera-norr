@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -16,13 +16,14 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
 
-  // Positions
-  const [isHovering, setIsHovering] = useState(false);
+  // Positions — all refs to avoid re-renders / effect restarts
+  const isHoveringRef = useRef(false);
   const mousePosRef = useRef({ x: 0, y: 0 });
   const autoPosRef = useRef({ x: 0, y: 0 });
   const displayPosRef = useRef({ x: 0, y: 0 });
   const currentRadiusRef = useRef(0);
   const hoverBlendRef = useRef(0); // 0 = full auto, 1 = full mouse
+  const cursorOpacityRef = useRef(0);
   const animFrameRef = useRef<number>(0);
   const timeRef = useRef(0);
   const clipLayerRef = useRef<HTMLDivElement>(null);
@@ -61,9 +62,11 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         y: cy + h * 0.25 * Math.cos(t * 0.23),
       };
 
-      // Blend factor: smoothly transition between auto and mouse
-      const targetBlend = isHovering ? 1 : 0;
-      hoverBlendRef.current = lerp(hoverBlendRef.current, targetBlend, 0.06);
+      // Blend factor: asymmetric — fast to engage, gentle to release
+      const hovering = isHoveringRef.current;
+      const targetBlend = hovering ? 1 : 0;
+      const blendSpeed = hovering ? 0.18 : 0.08;
+      hoverBlendRef.current = lerp(hoverBlendRef.current, targetBlend, blendSpeed);
 
       // Display position: blend between auto and mouse
       const blend = hoverBlendRef.current;
@@ -74,8 +77,9 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
 
       // Radius: breathe slightly in idle, grow on hover
       const breathe = 1 + 0.06 * Math.sin(t * 0.8);
-      const targetRadius = isHovering ? hoverRadius : idleRadius * breathe;
-      currentRadiusRef.current = lerp(currentRadiusRef.current, targetRadius, 0.05);
+      const targetRadius = hovering ? hoverRadius : idleRadius * breathe;
+      const radiusSpeed = hovering ? 0.12 : 0.06;
+      currentRadiusRef.current = lerp(currentRadiusRef.current, targetRadius, radiusSpeed);
 
       // Apply clip-path directly to DOM (no React re-render)
       const { x, y } = displayPosRef.current;
@@ -85,24 +89,31 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         clipLayerRef.current.style.clipPath = `circle(${r}px at ${x}px ${y}px)`;
       }
 
-      // Cursor ring (desktop)
+      // Cursor ring (desktop) — smooth lerped opacity
       if (cursorRingRef.current) {
+        const targetCursorOpacity = hovering ? 1 : 0;
+        cursorOpacityRef.current = lerp(cursorOpacityRef.current, targetCursorOpacity, 0.15);
         cursorRingRef.current.style.left = `${x}px`;
         cursorRingRef.current.style.top = `${y}px`;
         cursorRingRef.current.style.width = `${r * 2}px`;
         cursorRingRef.current.style.height = `${r * 2}px`;
-        cursorRingRef.current.style.opacity = isHovering ? "1" : "0";
+        cursorRingRef.current.style.opacity = String(cursorOpacityRef.current);
       }
 
-      // Hint label
+      // Hint label — gentle pulse when idle, fade out on hover
       if (hintRef.current) {
-        hintRef.current.style.opacity = isHovering ? "0" : "1";
+        if (hovering) {
+          hintRef.current.style.opacity = "0";
+        } else {
+          const pulse = 0.7 + 0.3 * Math.sin(t * 1.5);
+          hintRef.current.style.opacity = String(pulse);
+        }
       }
 
       // Size label
       if (labelRef.current) {
-        labelRef.current.style.opacity = isHovering ? "1" : "0";
-        labelRef.current.style.transform = isHovering
+        labelRef.current.style.opacity = hovering ? "1" : "0";
+        labelRef.current.style.transform = hovering
           ? "translateY(0)"
           : "translateY(12px)";
       }
@@ -110,11 +121,20 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       animFrameRef.current = requestAnimationFrame(animate);
     };
 
-    // Initialize radius
-    currentRadiusRef.current = isMobile ? 80 : 120;
+    // Initialize radius only on first mount
+    if (currentRadiusRef.current === 0) {
+      currentRadiusRef.current = idleRadius;
+    }
+
+    // Seed mouse position to center so first hover doesn't jump to (0,0)
+    const { cx, cy } = getDimensions();
+    if (mousePosRef.current.x === 0 && mousePosRef.current.y === 0) {
+      mousePosRef.current = { x: cx, y: cy };
+    }
+
     animFrameRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [prefersReducedMotion, isHovering, isMobile, getDimensions]);
+  }, [prefersReducedMotion, isMobile, getDimensions]);
 
   // Mouse handlers
   const handleMouseMove = useCallback(
@@ -129,6 +149,20 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
     []
   );
 
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        mousePosRef.current = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        };
+      }
+      isHoveringRef.current = true;
+    },
+    []
+  );
+
   // Touch handlers
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
@@ -139,7 +173,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         x: touch.clientX - rect.left,
         y: touch.clientY - rect.top,
       };
-      setIsHovering(true);
+      isHoveringRef.current = true;
     },
     []
   );
@@ -179,11 +213,11 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         !isMobile && "cursor-none"
       )}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={() => { isHoveringRef.current = false; }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      onTouchEnd={() => setIsHovering(false)}
+      onTouchEnd={() => { isHoveringRef.current = false; }}
     >
       {/* 1. Before layer — empty room */}
       <img
@@ -207,12 +241,12 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         />
       </div>
 
-      {/* 3. "Ontdek" hint — fades out on hover */}
+      {/* 3. "Ontdek" hint — pulses gently when idle, fades on hover */}
       <div
         ref={hintRef}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-500"
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
       >
-        <span className="micro-label text-foreground/30">
+        <span className="micro-label text-foreground/60">
           {isNL ? "Ontdek" : "Discover"}
         </span>
       </div>
@@ -221,11 +255,10 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       {!isMobile && (
         <div
           ref={cursorRingRef}
-          className="pointer-events-none absolute rounded-full border border-foreground/15"
+          className="pointer-events-none absolute rounded-full border-2 border-foreground/30"
           style={{
             opacity: 0,
             transform: "translate(-50%, -50%)",
-            transition: "opacity 0.3s ease",
           }}
         />
       )}
