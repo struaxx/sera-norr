@@ -28,12 +28,12 @@ const lookbookItems = [
   { id: 4, title: 'Salon Set', stone: 'Calacatta Viola & Travertin', useCase: 'Woonkamer', dimensions: 'Ø120 + Ø80 cm', image: '/lookbook/marble-round-livingroom.png' },
   { id: 5, title: 'Ronde Eettafel', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: 'Ø150 cm', image: '/lookbook/calacatta-viola-round.png' },
   { id: 6, title: 'Eettafel Ovaal', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '220×110 cm', image: '/lookbook/travertine-oval-slab.png' },
-  { id: 7, title: 'Console Marmer', stone: 'Calacatta Viola', useCase: 'Hal', dimensions: '160×40 cm' },
-  { id: 8, title: 'Bijzettafel', stone: 'Travertin', useCase: 'Zithoek', dimensions: 'Ø45 cm' },
-  { id: 9, title: 'Statement Console', stone: 'Calacatta Viola', useCase: 'Entree', dimensions: '180×45 cm' },
-  { id: 10, title: 'Sculptural Side', stone: 'Calacatta', useCase: 'Slaapkamer', dimensions: 'Ø50 cm' },
-  { id: 11, title: 'Grand Dining', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '280×110 cm' },
-  { id: 12, title: 'Petit Console', stone: 'Marmer licht', useCase: 'Hal', dimensions: '120×35 cm' },
+  { id: 7, title: 'Console Marmer', stone: 'Calacatta Viola', useCase: 'Hal', dimensions: '160×40 cm', image: '/lookbook/marble-oval-fluted.png' },
+  { id: 8, title: 'Bijzettafel', stone: 'Travertin', useCase: 'Zithoek', dimensions: 'Ø45 cm', image: '/lookbook/travertine-coffee-fluted.png' },
+  { id: 9, title: 'Statement Console', stone: 'Calacatta Viola', useCase: 'Entree', dimensions: '180×45 cm', image: '/lookbook/marble-coffee-fluted.png' },
+  { id: 10, title: 'Sculptural Side', stone: 'Calacatta', useCase: 'Slaapkamer', dimensions: 'Ø50 cm', image: '/lookbook/marble-round-fluted.png' },
+  { id: 11, title: 'Grand Dining', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '280×110 cm', image: '/lookbook/travertine-oval-fluted.png' },
+  { id: 12, title: 'Petit Console', stone: 'Travertin', useCase: 'Hal', dimensions: '120×35 cm', image: '/lookbook/travertine-coffee-set.png' },
 ];
 
 const Lookbook = () => {
