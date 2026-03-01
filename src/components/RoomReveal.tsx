@@ -23,6 +23,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
   const displayPosRef = useRef({ x: 0, y: 0 });
   const currentRadiusRef = useRef(0);
   const hoverBlendRef = useRef(0); // 0 = full auto, 1 = full mouse
+  const cursorOpacityRef = useRef(0);
   const animFrameRef = useRef<number>(0);
   const timeRef = useRef(0);
   const clipLayerRef = useRef<HTMLDivElement>(null);
@@ -85,8 +86,10 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         clipLayerRef.current.style.clipPath = `circle(${r}px at ${x}px ${y}px)`;
       }
 
-      // Cursor ring (desktop)
+      // Cursor ring (desktop) — smooth lerped opacity
       if (cursorRingRef.current) {
+        const targetCursorOpacity = hovering ? 1 : 0;
+        cursorOpacityRef.current = lerp(cursorOpacityRef.current, targetCursorOpacity, 0.15);
         cursorRingRef.current.style.left = `${x}px`;
         cursorRingRef.current.style.top = `${y}px`;
         cursorRingRef.current.style.width = `${r * 2}px`;
@@ -94,7 +97,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         cursorRingRef.current.style.opacity = isHoveringRef.current ? "1" : "0";
       }
 
-      // Hint label
+      // Hint label — gentle pulse when idle, fade out on hover
       if (hintRef.current) {
         hintRef.current.style.opacity = isHoveringRef.current ? "0" : "1";
       }
@@ -127,6 +130,20 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       };
+    },
+    []
+  );
+
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        mousePosRef.current = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        };
+      }
+      isHoveringRef.current = true;
     },
     []
   );
@@ -209,12 +226,12 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         />
       </div>
 
-      {/* 3. "Ontdek" hint — fades out on hover */}
+      {/* 3. "Ontdek" hint — pulses gently when idle, fades on hover */}
       <div
         ref={hintRef}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-500"
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
       >
-        <span className="micro-label text-foreground/30">
+        <span className="micro-label text-foreground/60">
           {isNL ? "Ontdek" : "Discover"}
         </span>
       </div>
@@ -223,11 +240,10 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       {!isMobile && (
         <div
           ref={cursorRingRef}
-          className="pointer-events-none absolute rounded-full border border-foreground/15"
+          className="pointer-events-none absolute rounded-full border-2 border-foreground/30"
           style={{
             opacity: 0,
             transform: "translate(-50%, -50%)",
-            transition: "opacity 0.3s ease",
           }}
         />
       )}
