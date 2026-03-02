@@ -1,32 +1,23 @@
 
 
-# Fix Hourglass: Render GLB as Single Centered Unit
+## Plan: Nieuwe foto's toevoegen + layout-aanpassingen Collections & Lookbook
 
-## Problem
-The uploaded GLB (`hourglass-leg-single.glb`) contains the **complete table** (3 legs + top as one model). The current code tries to extract one mesh and place it at each leg position from the rules engine, resulting in duplicated legs (2 placements x 2 visible legs in the mesh = 4 legs).
+### Wat er verandert
 
-## Solution
-Render the entire GLB scene **once**, centered at the origin, scaled to match the configured table dimensions. When hourglass is selected, skip the standard leg placement system and procedural tabletop entirely.
+**1. Nieuwe foto's toevoegen aan beide pagina's**
+Er zijn 18 nieuwe `hf_*` foto's in `public/lookbook/`. Deze worden toegevoegd als extra items aan zowel:
+- `src/pages/Collections.tsx` — het masonry grid (nu 12 items, wordt ~30)
+- `src/pages/Lookbook.tsx` — de lookbook galerij (nu 12 items, wordt ~30)
 
-## Technical Details
+Elke nieuwe foto krijgt een passende naam, collectie (VANTA/TERRA), steensoort, en type op basis van de bestandsnamen.
 
-### File: `src/components/configurator/TableMeshV3.tsx`
+**2. Sticky filter bar verwijderen (Collections)**
+De hele `<section>` met de sticky filter bar (ALLES / VANTA / TERRA / EETTAFELS / etc.) wordt verwijderd uit `Collections.tsx`. De bijbehorende filter state (`activeFilter`, `filterOptions`, filter logic) wordt ook opgeruimd. Alle items worden altijd getoond.
 
-1. **Replace `HourglassLeg` with `HourglassFullTable`**
-   - Load the GLB with `useGLTF`
-   - Clone the entire scene
-   - Compute bounding box of the full model
-   - Scale uniformly based on height (`heightM / modelHeight`) to keep proportions round
-   - Position at origin (0, 0, 0) so it sits on the ground plane
-   - Apply `MonolithMaterial` to all meshes via `traverse`
+**3. Duidelijke grens tussen header en foto's (Collections)**
+In plaats van de zwevende overgang wordt er een zichtbare `border-b border-foreground/10` of een `<Hairline>` component toegevoegd onderaan de header section, zodat er een duidelijke visuele scheiding is voor het fotogrid begint.
 
-2. **Update `TableMeshV3` main component**
-   - Detect `isHourglass = resolved.legStyle === 'hourglass'`
-   - When hourglass: render only `<GroundPlane />` + `<HourglassFullTable />` (no `LegsGroup`, no procedural tabletop)
-   - When not hourglass: render standard legs + tabletop as before
-
-3. **Key difference from previous attempt**
-   - Use **uniform scaling** only (no stretch on X/Z) to prevent oval distortion
-   - The GLB already has the correct proportions; just scale it to the right height
-   - No separate tabletop needed since the GLB includes it
+### Bestanden die worden aangepast
+- `src/pages/Collections.tsx` — nieuwe items, filter verwijderen, separator toevoegen
+- `src/pages/Lookbook.tsx` — nieuwe items toevoegen
 
