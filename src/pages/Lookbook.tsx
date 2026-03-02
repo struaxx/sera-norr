@@ -34,6 +34,25 @@ const lookbookItems = [
   { id: 10, title: 'Sculptural Side', stone: 'Calacatta', useCase: 'Slaapkamer', dimensions: 'Ø50 cm', image: '/lookbook/marble-round-fluted.png' },
   { id: 11, title: 'Grand Dining', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '280×110 cm', image: '/lookbook/travertine-oval-fluted.png' },
   { id: 12, title: 'Petit Console', stone: 'Travertin', useCase: 'Hal', dimensions: '120×35 cm', image: '/lookbook/travertine-coffee-set.png' },
+  // New photos
+  { id: 13, title: 'Fluted Round', stone: 'Travertin', useCase: 'Eetkamer', dimensions: 'Ø120 cm', image: '/lookbook/hf_20260302_192947_bf2d5c2a-accf-4eab-91f9-6c9e232a8ca9.png' },
+  { id: 14, title: 'Viola Dining', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: '260×110 cm', image: '/lookbook/hf_20260302_193457_5241fec0-6f29-443e-8611-215c123acaf1.png' },
+  { id: 15, title: 'Sculptural Base', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: 'Ø140 cm', image: '/lookbook/hf_20260302_193517_2927dca0-dc35-42d3-8ebc-96aa8765aa6c.png' },
+  { id: 16, title: 'Terra Cylinder', stone: 'Travertin', useCase: 'Zithoek', dimensions: 'Ø40 cm', image: '/lookbook/hf_20260302_193525_76bc9c3a-11ea-468b-b16c-eeec413641ca.png' },
+  { id: 17, title: 'Grand Oval', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '240×120 cm', image: '/lookbook/hf_20260302_193532_4c68463b-e3dd-49e2-941a-e0c0f60f4afb.png' },
+  { id: 18, title: 'Viola Salon', stone: 'Calacatta Viola', useCase: 'Woonkamer', dimensions: 'Ø90 cm', image: '/lookbook/hf_20260302_193814_33d614cc-9ed5-4e85-81cb-0a3d33634771.png' },
+  { id: 19, title: 'Fluted Console', stone: 'Travertin', useCase: 'Hal', dimensions: '150×40 cm', image: '/lookbook/hf_20260302_193827_5a71d56c-3f4a-48ac-9040-fd839818e611.png' },
+  { id: 20, title: 'Duo Set', stone: 'Calacatta Viola', useCase: 'Woonkamer', dimensions: 'Ø100 + Ø60 cm', image: '/lookbook/hf_20260302_193938_bc08d013-b022-4ec3-96ab-5006204810c6.png' },
+  { id: 21, title: 'Terra Pedestal', stone: 'Travertin', useCase: 'Entree', dimensions: 'Ø35 cm', image: '/lookbook/hf_20260302_193948_92c5aa02-a535-40c6-b836-5a8d17caefed.png' },
+  { id: 22, title: 'Ribbed Dining', stone: 'Travertin', useCase: 'Eetkamer', dimensions: 'Ø150 cm', image: '/lookbook/hf_20260302_194905_1f39a000-891d-4b16-aef9-02f8443a887b.png' },
+  { id: 23, title: 'Viola Statement', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: '220×100 cm', image: '/lookbook/hf_20260302_194910_7db0cac4-07f6-46aa-ae79-7b4c3078d449.png' },
+  { id: 24, title: 'Terra Slab Side', stone: 'Travertin', useCase: 'Zithoek', dimensions: '50×40 cm', image: '/lookbook/hf_20260302_194922_d503480e-9df6-4cde-a61b-cb9d6f776e3c.png' },
+  { id: 25, title: 'Arch Dining', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: '240×110 cm', image: '/lookbook/hf_20260302_194927_0ddf7cfd-6888-4e9c-b499-7cdca489110e.png' },
+  { id: 26, title: 'Cone Coffee', stone: 'Travertin', useCase: 'Woonkamer', dimensions: 'Ø80 cm', image: '/lookbook/hf_20260302_195406_c9467450-e5a7-40e7-a4e6-b3053747232b.png' },
+  { id: 27, title: 'Viola Round XL', stone: 'Calacatta Viola', useCase: 'Eetkamer', dimensions: 'Ø180 cm', image: '/lookbook/hf_20260302_195410_0a0fa54f-3736-407b-8463-9eab503b8efb.png' },
+  { id: 28, title: 'Stacked Console', stone: 'Travertin', useCase: 'Hal', dimensions: '140×35 cm', image: '/lookbook/hf_20260302_195415_9bfd5a3b-8d26-426f-8a03-dd5e617e4d83.png' },
+  { id: 29, title: 'Viola Nest', stone: 'Calacatta Viola', useCase: 'Slaapkamer', dimensions: 'Ø45 + Ø35 cm', image: '/lookbook/hf_20260302_195421_fc214e7f-6dcd-46f8-9843-775188d1e8df.png' },
+  { id: 30, title: 'Terra Grand', stone: 'Travertin', useCase: 'Eetkamer', dimensions: '280×120 cm', image: '/lookbook/hf_20260302_195442_6ac8dcca-0aac-451d-981e-bd80eeccce5b.png' },
 ];
 
 const Lookbook = () => {

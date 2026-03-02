@@ -8,6 +8,7 @@ import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Hairline } from "@/components/ui/hairline";
 
 // Lookbook item type
 interface LookbookItem {
@@ -28,7 +29,6 @@ const Collections = () => {
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
   const [selectedItem, setSelectedItem] = useState<LookbookItem | null>(null);
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   const seoTitle = isNL 
     ? "Collecties | SERA NORR — Lookbook & Inspiratie"
@@ -57,6 +57,25 @@ const Collections = () => {
     { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Organisch", feel: "Rustig", description: "Asymmetrische salontafel geïnspireerd door rivierkeien.", aspectRatio: "square", size: "normal", image: "/lookbook/travertine-round-cone.png" },
     { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Console met boogvormige uitsparing en klassieke proporties.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-oval-slab.png" },
     { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Overig", shape: "Rechthoek", feel: "Sculpturaal", description: "Multifunctioneel blokobject voor zitplaats of sculptuur.", aspectRatio: "portrait", size: "tall", image: "/lookbook/marble-round-livingroom.png" },
+    // New photos
+    { id: "13", name: "Fluted Round", collection: "TERRA", stone: "Travertin", type: "Eettafel", shape: "Rond", feel: "Rustig", description: "Ronde eettafel met geribbelde basis in warm travertin.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_192947_bf2d5c2a-accf-4eab-91f9-6c9e232a8ca9.png" },
+    { id: "14", name: "Viola Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Ovaal", feel: "Statement", description: "Ovale eettafel met kenmerkende paarse adering.", aspectRatio: "landscape", size: "large", image: "/lookbook/hf_20260302_193457_5241fec0-6f29-443e-8611-215c123acaf1.png" },
+    { id: "15", name: "Sculptural Base", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Rond", feel: "Sculpturaal", description: "Ronde tafel met sculpturale kolomvoet.", aspectRatio: "portrait", size: "normal", image: "/lookbook/hf_20260302_193517_2927dca0-dc35-42d3-8ebc-96aa8765aa6c.png" },
+    { id: "16", name: "Terra Cylinder", collection: "TERRA", stone: "Travertin", type: "Bijzettafel", shape: "Rond", feel: "Rustig", description: "Cilindrische bijzettafel in natuurlijk travertin.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_193525_76bc9c3a-11ea-468b-b16c-eeec413641ca.png" },
+    { id: "17", name: "Grand Oval", collection: "TERRA", stone: "Travertin", type: "Eettafel", shape: "Ovaal", feel: "Rustig", description: "Grote ovale eettafel met massieve slab-basis.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_193532_4c68463b-e3dd-49e2-941a-e0c0f60f4afb.png" },
+    { id: "18", name: "Viola Salon", collection: "VANTA", stone: "Calacatta Viola", type: "Salontafel", shape: "Rond", feel: "Statement", description: "Lage ronde salontafel met dramatische marmertekening.", aspectRatio: "portrait", size: "tall", image: "/lookbook/hf_20260302_193814_33d614cc-9ed5-4e85-81cb-0a3d33634771.png" },
+    { id: "19", name: "Fluted Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Geribbelde console met warm, aards karakter.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_193827_5a71d56c-3f4a-48ac-9040-fd839818e611.png" },
+    { id: "20", name: "Duo Set", collection: "VANTA", stone: "Calacatta Viola", type: "Salontafel", shape: "Rond", feel: "Sculpturaal", description: "Set van twee ronde tafels met complementaire hoogtes.", aspectRatio: "square", size: "large", image: "/lookbook/hf_20260302_193938_bc08d013-b022-4ec3-96ab-5006204810c6.png" },
+    { id: "21", name: "Terra Pedestal", collection: "TERRA", stone: "Travertin", type: "Overig", shape: "Rond", feel: "Rustig", description: "Voetstuk in travertin als sokkel of displayelement.", aspectRatio: "portrait", size: "normal", image: "/lookbook/hf_20260302_193948_92c5aa02-a535-40c6-b836-5a8d17caefed.png" },
+    { id: "22", name: "Ribbed Dining", collection: "TERRA", stone: "Travertin", type: "Eettafel", shape: "Rond", feel: "Rustig", description: "Ronde eettafel met geribbeld detail op de basis.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_194905_1f39a000-891d-4b16-aef9-02f8443a887b.png" },
+    { id: "23", name: "Viola Statement", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Rechthoek", feel: "Statement", description: "Rechthoekige eettafel als middelpunt van de ruimte.", aspectRatio: "portrait", size: "large", image: "/lookbook/hf_20260302_194910_7db0cac4-07f6-46aa-ae79-7b4c3078d449.png" },
+    { id: "24", name: "Terra Slab Side", collection: "TERRA", stone: "Travertin", type: "Bijzettafel", shape: "Rechthoek", feel: "Rustig", description: "Bijzettafel uit een massief blok travertin.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_194922_d503480e-9df6-4cde-a61b-cb9d6f776e3c.png" },
+    { id: "25", name: "Arch Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Ovaal", feel: "Sculpturaal", description: "Ovale eettafel met boogvormige poten.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_194927_0ddf7cfd-6888-4e9c-b499-7cdca489110e.png" },
+    { id: "26", name: "Cone Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Rond", feel: "Rustig", description: "Salontafel met conische basis in licht travertin.", aspectRatio: "portrait", size: "normal", image: "/lookbook/hf_20260302_195406_c9467450-e5a7-40e7-a4e6-b3053747232b.png" },
+    { id: "27", name: "Viola Round XL", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Rond", feel: "Statement", description: "Extra grote ronde eettafel in Calacatta Viola.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_195410_0a0fa54f-3736-407b-8463-9eab503b8efb.png" },
+    { id: "28", name: "Stacked Console", collection: "TERRA", stone: "Travertin", type: "Console", shape: "Rechthoek", feel: "Rustig", description: "Gestapelde lagen vormen een unieke console.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_195415_9bfd5a3b-8d26-426f-8a03-dd5e617e4d83.png" },
+    { id: "29", name: "Viola Nest", collection: "VANTA", stone: "Calacatta Viola", type: "Bijzettafel", shape: "Rond", feel: "Sculpturaal", description: "Nestbare bijzettafels in viola marmer.", aspectRatio: "portrait", size: "tall", image: "/lookbook/hf_20260302_195421_fc214e7f-6dcd-46f8-9843-775188d1e8df.png" },
+    { id: "30", name: "Terra Grand", collection: "TERRA", stone: "Travertin", type: "Eettafel", shape: "Ovaal", feel: "Rustig", description: "Grote ovale eettafel voor formeel dineren.", aspectRatio: "landscape", size: "large", image: "/lookbook/hf_20260302_195442_6ac8dcca-0aac-451d-981e-bd80eeccce5b.png" },
   ] : [
     { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Oval", feel: "Sculptural", description: "Monumental dining table with powerful round base and elliptical top.", aspectRatio: "portrait", size: "large", image: "/lookbook/marble-oval-dining.png" },
     { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rectangle", feel: "Statement", description: "Console with massive block base, defined by purple veining.", aspectRatio: "landscape", size: "normal", image: "/lookbook/marble-oval-fluted.png" },
@@ -70,35 +89,26 @@ const Collections = () => {
     { id: "10", name: "Pebble Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Organic", feel: "Calm", description: "Asymmetric coffee table inspired by river pebbles.", aspectRatio: "square", size: "normal", image: "/lookbook/travertine-round-cone.png" },
     { id: "11", name: "Arch Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Console with arched cutout and classical proportions.", aspectRatio: "landscape", size: "normal", image: "/lookbook/travertine-oval-slab.png" },
     { id: "12", name: "Viola Block", collection: "VANTA", stone: "Calacatta Viola", type: "Other", shape: "Rectangle", feel: "Sculptural", description: "Multifunctional block object for seating or sculpture.", aspectRatio: "portrait", size: "tall", image: "/lookbook/marble-round-livingroom.png" },
+    // New photos
+    { id: "13", name: "Fluted Round", collection: "TERRA", stone: "Travertine", type: "Dining table", shape: "Round", feel: "Calm", description: "Round dining table with fluted base in warm travertine.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_192947_bf2d5c2a-accf-4eab-91f9-6c9e232a8ca9.png" },
+    { id: "14", name: "Viola Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Oval", feel: "Statement", description: "Oval dining table with signature purple veining.", aspectRatio: "landscape", size: "large", image: "/lookbook/hf_20260302_193457_5241fec0-6f29-443e-8611-215c123acaf1.png" },
+    { id: "15", name: "Sculptural Base", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Round", feel: "Sculptural", description: "Round table with sculptural column base.", aspectRatio: "portrait", size: "normal", image: "/lookbook/hf_20260302_193517_2927dca0-dc35-42d3-8ebc-96aa8765aa6c.png" },
+    { id: "16", name: "Terra Cylinder", collection: "TERRA", stone: "Travertine", type: "Side table", shape: "Round", feel: "Calm", description: "Cylindrical side table in natural travertine.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_193525_76bc9c3a-11ea-468b-b16c-eeec413641ca.png" },
+    { id: "17", name: "Grand Oval", collection: "TERRA", stone: "Travertine", type: "Dining table", shape: "Oval", feel: "Calm", description: "Large oval dining table with massive slab base.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_193532_4c68463b-e3dd-49e2-941a-e0c0f60f4afb.png" },
+    { id: "18", name: "Viola Salon", collection: "VANTA", stone: "Calacatta Viola", type: "Coffee table", shape: "Round", feel: "Statement", description: "Low round coffee table with dramatic marble drawing.", aspectRatio: "portrait", size: "tall", image: "/lookbook/hf_20260302_193814_33d614cc-9ed5-4e85-81cb-0a3d33634771.png" },
+    { id: "19", name: "Fluted Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Fluted console with warm, earthy character.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_193827_5a71d56c-3f4a-48ac-9040-fd839818e611.png" },
+    { id: "20", name: "Duo Set", collection: "VANTA", stone: "Calacatta Viola", type: "Coffee table", shape: "Round", feel: "Sculptural", description: "Set of two round tables with complementary heights.", aspectRatio: "square", size: "large", image: "/lookbook/hf_20260302_193938_bc08d013-b022-4ec3-96ab-5006204810c6.png" },
+    { id: "21", name: "Terra Pedestal", collection: "TERRA", stone: "Travertine", type: "Other", shape: "Round", feel: "Calm", description: "Travertine pedestal as plinth or display element.", aspectRatio: "portrait", size: "normal", image: "/lookbook/hf_20260302_193948_92c5aa02-a535-40c6-b836-5a8d17caefed.png" },
+    { id: "22", name: "Ribbed Dining", collection: "TERRA", stone: "Travertine", type: "Dining table", shape: "Round", feel: "Calm", description: "Round dining table with ribbed detail on the base.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_194905_1f39a000-891d-4b16-aef9-02f8443a887b.png" },
+    { id: "23", name: "Viola Statement", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Rectangle", feel: "Statement", description: "Rectangular dining table as room centrepiece.", aspectRatio: "portrait", size: "large", image: "/lookbook/hf_20260302_194910_7db0cac4-07f6-46aa-ae79-7b4c3078d449.png" },
+    { id: "24", name: "Terra Slab Side", collection: "TERRA", stone: "Travertine", type: "Side table", shape: "Rectangle", feel: "Calm", description: "Side table carved from a solid travertine block.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_194922_d503480e-9df6-4cde-a61b-cb9d6f776e3c.png" },
+    { id: "25", name: "Arch Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Oval", feel: "Sculptural", description: "Oval dining table with arched legs.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_194927_0ddf7cfd-6888-4e9c-b499-7cdca489110e.png" },
+    { id: "26", name: "Cone Coffee", collection: "TERRA", stone: "Travertine", type: "Coffee table", shape: "Round", feel: "Calm", description: "Coffee table with conical base in light travertine.", aspectRatio: "portrait", size: "normal", image: "/lookbook/hf_20260302_195406_c9467450-e5a7-40e7-a4e6-b3053747232b.png" },
+    { id: "27", name: "Viola Round XL", collection: "VANTA", stone: "Calacatta Viola", type: "Dining table", shape: "Round", feel: "Statement", description: "Extra large round dining table in Calacatta Viola.", aspectRatio: "square", size: "normal", image: "/lookbook/hf_20260302_195410_0a0fa54f-3736-407b-8463-9eab503b8efb.png" },
+    { id: "28", name: "Stacked Console", collection: "TERRA", stone: "Travertine", type: "Console", shape: "Rectangle", feel: "Calm", description: "Stacked layers form a unique console.", aspectRatio: "landscape", size: "normal", image: "/lookbook/hf_20260302_195415_9bfd5a3b-8d26-426f-8a03-dd5e617e4d83.png" },
+    { id: "29", name: "Viola Nest", collection: "VANTA", stone: "Calacatta Viola", type: "Side table", shape: "Round", feel: "Sculptural", description: "Nesting side tables in viola marble.", aspectRatio: "portrait", size: "tall", image: "/lookbook/hf_20260302_195421_fc214e7f-6dcd-46f8-9843-775188d1e8df.png" },
+    { id: "30", name: "Terra Grand", collection: "TERRA", stone: "Travertine", type: "Dining table", shape: "Oval", feel: "Calm", description: "Large oval dining table for formal dining.", aspectRatio: "landscape", size: "large", image: "/lookbook/hf_20260302_195442_6ac8dcca-0aac-451d-981e-bd80eeccce5b.png" },
   ];
-
-  // Filter options
-  const filterOptions = [
-    { id: "all", label: isNL ? "Alles" : "All" },
-    { id: "VANTA", label: "VANTA" },
-    { id: "TERRA", label: "TERRA" },
-    { id: "dining", label: isNL ? "Eettafels" : "Dining" },
-    { id: "coffee", label: isNL ? "Salontafels" : "Coffee" },
-    { id: "console", label: isNL ? "Consoles" : "Consoles" },
-  ];
-
-  // Filter items
-  const filteredItems = items.filter((item) => {
-    if (!activeFilter || activeFilter === "all") return true;
-    if (activeFilter === "VANTA" || activeFilter === "TERRA") {
-      return item.collection === activeFilter;
-    }
-    if (activeFilter === "dining") {
-      return item.type.toLowerCase().includes("dining") || item.type.toLowerCase().includes("eettafel");
-    }
-    if (activeFilter === "coffee") {
-      return item.type.toLowerCase().includes("coffee") || item.type.toLowerCase().includes("salontafel");
-    }
-    if (activeFilter === "console") {
-      return item.type.toLowerCase().includes("console");
-    }
-    return true;
-  });
 
   // Get aspect ratio class
   const getAspectClass = (item: LookbookItem) => {
@@ -177,29 +187,8 @@ const Collections = () => {
         </div>
       </section>
 
-      {/* ========================================
-          FILTER BAR (sticky)
-          ======================================== */}
-      <section className="sticky top-16 lg:top-20 z-30 bg-background/95 backdrop-blur-sm border-y border-foreground/5">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex items-center gap-3 py-4 overflow-x-auto scrollbar-hide">
-            {filterOptions.map((filter) => (
-              <button
-                key={filter.id}
-                onClick={() => setActiveFilter(filter.id === "all" ? null : filter.id)}
-                className={cn(
-                  "px-4 py-2 text-[11px] uppercase tracking-[0.12em] whitespace-nowrap transition-all duration-300 border",
-                  (activeFilter === filter.id || (filter.id === "all" && !activeFilter))
-                    ? "bg-foreground text-background border-foreground"
-                    : "bg-transparent text-foreground/60 border-foreground/10 hover:border-foreground/25 hover:text-foreground"
-                )}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Separator */}
+      <Hairline variant="dark" />
 
       {/* ========================================
           PINTEREST MASONRY GRID
@@ -208,7 +197,7 @@ const Collections = () => {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 auto-rows-[minmax(200px,auto)]">
             <AnimatePresence mode="popLayout">
-              {filteredItems.map((item, index) => (
+              {items.map((item, index) => (
                 <motion.button
                   key={item.id}
                   layout
@@ -226,7 +215,7 @@ const Collections = () => {
                     getAspectClass(item)
                   )}
                 >
-                  {/* Image placeholder with collection-based color */}
+                  {/* Image */}
                   <div className={cn(
                     "w-full h-full min-h-[240px] overflow-hidden relative",
                     getHeightClass(item),
@@ -234,7 +223,6 @@ const Collections = () => {
                       ? "bg-gradient-to-br from-secondary/60 via-secondary/40 to-secondary/20" 
                       : "bg-gradient-to-br from-[#E8DFD0]/60 via-[#E8DFD0]/40 to-[#E8DFD0]/20")
                   )}>
-                    {/* Product image */}
                     {item.image && (
                       <img 
                         src={item.image} 
@@ -244,7 +232,7 @@ const Collections = () => {
                       />
                     )}
                     
-                    {/* Hover overlay with info */}
+                    {/* Hover overlay */}
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/80 transition-all duration-500 flex flex-col justify-end p-4 lg:p-5">
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-4 group-hover:translate-y-0">
                         <p className="text-[9px] uppercase tracking-[0.2em] text-background/60 mb-1.5">
@@ -268,21 +256,6 @@ const Collections = () => {
               ))}
             </AnimatePresence>
           </div>
-
-          {/* Empty state */}
-          {filteredItems.length === 0 && (
-            <div className="text-center py-20">
-              <p className="text-muted-foreground text-sm">
-                {isNL ? "Geen ontwerpen gevonden." : "No designs found."}
-              </p>
-              <button
-                onClick={() => setActiveFilter(null)}
-                className="mt-4 text-xs uppercase tracking-[0.1em] text-foreground underline underline-offset-4"
-              >
-                {isNL ? "Bekijk alles" : "View all"}
-              </button>
-            </div>
-          )}
         </div>
       </section>
 
@@ -332,10 +305,8 @@ const Collections = () => {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:p-8"
             onClick={() => setSelectedItem(null)}
           >
-            {/* Backdrop */}
             <div className="absolute inset-0 bg-background/98 backdrop-blur-sm" />
             
-            {/* Content */}
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -344,7 +315,6 @@ const Collections = () => {
               onClick={(e) => e.stopPropagation()}
               className="relative max-w-lg w-full bg-background border border-foreground/10 p-8 lg:p-10"
             >
-              {/* Close button */}
               <button
                 onClick={() => setSelectedItem(null)}
                 className="absolute top-5 right-5 p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -352,17 +322,14 @@ const Collections = () => {
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Collection label */}
               <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 block">
                 {selectedItem.collection} {isNL ? "Collectie" : "Collection"}
               </span>
 
-              {/* Title */}
               <h2 className="font-serif text-display-xs lg:text-display-sm text-foreground mb-4">
                 {selectedItem.name}
               </h2>
 
-              {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-6">
                 <Tag label={selectedItem.stone} />
                 <Tag label={selectedItem.type} />
@@ -370,12 +337,10 @@ const Collections = () => {
                 <Tag label={selectedItem.feel} />
               </div>
 
-              {/* Description */}
               <p className="text-body-md text-muted-foreground leading-relaxed mb-8">
                 {selectedItem.description}
               </p>
 
-              {/* Actions */}
               <div className="flex flex-wrap gap-4">
                 <Button asChild variant="sera-primary" size="lg">
                   <Link to={`/atelier?style=${selectedItem.collection.toLowerCase()}`}>
