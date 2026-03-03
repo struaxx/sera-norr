@@ -17,7 +17,6 @@ const Bespoke = lazy(() => import("./pages/Bespoke"));
 const Atelier = lazy(() => import("./pages/Atelier"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
-const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Journal = lazy(() => import("./pages/Journal"));
 const Materials = lazy(() => import("./pages/Materials"));
 const MaterialDetail = lazy(() => import("./pages/MaterialDetail"));
@@ -44,7 +43,6 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/collections" element={<Collections />} />
             <Route path="/collections/:collectionId" element={<CollectionDetail />} />
-            <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="/bespoke" element={<Bespoke />} />
             <Route path="/atelier" element={<Atelier />} />
             <Route path="/about" element={<About />} />

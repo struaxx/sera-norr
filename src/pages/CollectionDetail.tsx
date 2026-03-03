@@ -1,19 +1,18 @@
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SEOHead, Breadcrumbs, FAQSection, generateCollectionSchema, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo";
-import { fetchCollectionByHandle, fetchCollections, fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import vantaFallback from "@/assets/vanta-collection.jpg";
 import terraFallback from "@/assets/terra-collection.jpg";
 
-// Static collection metadata (FAQs, long descriptions, etc.)
+// Static collection metadata
 const collectionsMetadata: Record<string, {
+  title: string;
   subtitle: string;
   subtitleEn: string;
+  image: string;
   metaTitle: string;
   metaTitleEn: string;
   metaDescription: string;
@@ -27,8 +26,10 @@ const collectionsMetadata: Record<string, {
   faqsEn: Array<{ question: string; answer: string }>;
 }> = {
   terra: {
+    title: "TERRA",
     subtitle: "Travertin",
     subtitleEn: "Travertine",
+    image: terraFallback,
     metaTitle: "TERRA Collectie — Travertin Eettafels & Salontafels",
     metaTitleEn: "TERRA Collection — Travertine Dining & Coffee Tables",
     metaDescription: "Ontdek de TERRA collectie: sculpturale meubels in Italiaans travertin. Eettafels, salontafels en consoles met natuurlijke warmte en tijdloze elegantie.",
@@ -60,8 +61,10 @@ Travertine is ideal for furniture that needs to radiate warmth and calm. The por
     ],
   },
   vanta: {
+    title: "VANTA",
     subtitle: "Calacatta Viola",
     subtitleEn: "Calacatta Viola",
+    image: vantaFallback,
     metaTitle: "VANTA Collectie — Calacatta Viola Marmeren Tafels",
     metaTitleEn: "VANTA Collection — Calacatta Viola Marble Tables",
     metaDescription: "Ontdek de VANTA collectie: exclusieve meubels in Calacatta Viola marmer. Zeldzame violette aders, strakke vormen. Eettafels en salontafels op maat.",
@@ -94,135 +97,14 @@ All VANTA furniture is crafted with the highest precision. The material demands 
   },
 };
 
-interface CollectionData {
-  id: string;
-  title: string;
-  handle: string;
-  description: string;
-  image: {
-    url: string;
-    altText: string | null;
-  } | null;
-  products: {
-    edges: ShopifyProduct[];
-  };
-}
-
-// Map URL slugs to Shopify collection handles - try multiple options
-const urlToShopifyHandles: Record<string, string[]> = {
-  'vanta': ['vanta', 'frontpage', 'vanta-collection'],
-  'terra': ['terra', 'terra-collection'],
-};
-
 const CollectionDetail = () => {
   const { collectionId } = useParams();
   const { t, i18n } = useTranslation();
   const isEnglish = i18n.language === 'en';
-  
-  const [collection, setCollection] = useState<CollectionData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const metadata = collectionsMetadata[collectionId?.toLowerCase() || ''];
 
-  useEffect(() => {
-    const loadCollection = async () => {
-      if (!collectionId) return;
-      setLoading(true);
-
-      const normalizedId = collectionId.toLowerCase();
-      const handlesToTry = urlToShopifyHandles[normalizedId] || [normalizedId];
-
-      const tryHandle = async (handle: string) => {
-        const data = await fetchCollectionByHandle(handle, 20);
-        if (data) {
-          setCollection(data);
-          return true;
-        }
-        return false;
-      };
-
-      // 1) Try known handles
-      for (const handle of handlesToTry) {
-        try {
-          if (await tryHandle(handle)) {
-            setLoading(false);
-            return;
-          }
-        } catch {
-          // continue
-        }
-      }
-
-      // 2) Try to discover collection by listing and matching title
-      try {
-        const all = await fetchCollections(50);
-        const match = all.find((c) => c.node.title.toLowerCase().includes(normalizedId));
-        if (match) {
-          try {
-            if (await tryHandle(match.node.handle)) {
-              setLoading(false);
-              return;
-            }
-          } catch {
-            // ignore
-          }
-        }
-      } catch {
-        // ignore
-      }
-
-      // 3) Fallback for VANTA: show real products even if collection doesn't exist in Shopify
-      if (normalizedId === "vanta") {
-        try {
-          const vantaProducts = await fetchProducts(20, "title:VANTA");
-          if (vantaProducts.length > 0) {
-            setCollection({
-              id: "fallback-vanta",
-              title: "VANTA",
-              handle: "vanta",
-              description: "",
-              image: {
-                url: vantaFallback,
-                altText: "VANTA collectie",
-              },
-              products: { edges: vantaProducts },
-            });
-            setLoading(false);
-            return;
-          }
-        } catch {
-          // ignore
-        }
-      }
-
-      // No collection found
-      setCollection(null);
-      setLoading(false);
-    };
-
-    loadCollection();
-  }, [collectionId]);
-
-  if (loading) {
-    return (
-      <Layout>
-        <section className="pt-40 pb-24">
-          <div className="container mx-auto px-6 lg:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="space-y-4">
-                <Skeleton className="h-8 w-32" />
-                <Skeleton className="h-16 w-64" />
-                <Skeleton className="h-32 w-full" />
-              </div>
-              <Skeleton className="aspect-[4/5] w-full" />
-            </div>
-          </div>
-        </section>
-      </Layout>
-    );
-  }
-
-  if (!collection) {
+  if (!metadata) {
     return (
       <Layout>
         <section className="pt-40 pb-24">
@@ -237,53 +119,42 @@ const CollectionDetail = () => {
     );
   }
 
-  const title = metadata ? (isEnglish ? metadata.metaTitleEn : metadata.metaTitle) : collection.title;
-  const metaDescription = metadata ? (isEnglish ? metadata.metaDescriptionEn : metadata.metaDescription) : collection.description;
-  const longDesc = metadata ? (isEnglish ? metadata.longDescriptionEn : metadata.longDescription) : collection.description;
-  const materials = metadata ? (isEnglish ? metadata.materialsEn : metadata.materials) : [];
-  const subtitle = metadata ? (isEnglish ? metadata.subtitleEn : metadata.subtitle) : '';
-  const faqs = metadata ? (isEnglish ? metadata.faqsEn : metadata.faqs) : [];
-
-  const products = collection.products?.edges || [];
+  const title = isEnglish ? metadata.metaTitleEn : metadata.metaTitle;
+  const metaDescription = isEnglish ? metadata.metaDescriptionEn : metadata.metaDescription;
+  const longDesc = isEnglish ? metadata.longDescriptionEn : metadata.longDescription;
+  const materials = isEnglish ? metadata.materialsEn : metadata.materials;
+  const subtitle = isEnglish ? metadata.subtitleEn : metadata.subtitle;
+  const faqs = isEnglish ? metadata.faqsEn : metadata.faqs;
 
   const breadcrumbItems = [
     { label: isEnglish ? 'Collections' : 'Collecties', href: '/collections' },
-    { label: collection.title, href: `/collections/${collectionId}` },
+    { label: metadata.title, href: `/collections/${collectionId}` },
   ];
 
   const breadcrumbSchemaItems = [
     { name: isEnglish ? 'Home' : 'Home', url: '/' },
     { name: isEnglish ? 'Collections' : 'Collecties', url: '/collections' },
-    { name: collection.title, url: `/collections/${collectionId}` },
+    { name: metadata.title, url: `/collections/${collectionId}` },
   ];
 
   const collectionSchema = generateCollectionSchema({
-    name: `${collection.title} - SERA NORR`,
+    name: `${metadata.title} - SERA NORR`,
     description: metaDescription,
-    image: collection.image?.url || '',
+    image: metadata.image,
     url: `https://sera-norr.com/collections/${collectionId}`,
-    products: products.map((p) => ({
-      name: p.node.title,
-      url: `https://sera-norr.com/product/${p.node.handle}`,
-    })),
+    products: [],
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbSchemaItems);
   const faqSchema = faqs.length > 0 ? generateFAQSchema(faqs) : null;
-
   const combinedSchema = faqSchema ? [collectionSchema, breadcrumbSchema, faqSchema] : [collectionSchema, breadcrumbSchema];
-
-  // Format price as "Price on request" for bespoke items
-  const formatPriceOnRequest = () => {
-    return isEnglish ? 'Price on request' : 'Prijs op aanvraag';
-  };
 
   return (
     <Layout>
       <SEOHead
         title={title}
         description={metaDescription}
-        keywords={metadata?.keywords || ''}
+        keywords={metadata.keywords}
         structuredData={combinedSchema}
         type="website"
       />
@@ -312,7 +183,7 @@ const CollectionDetail = () => {
                 </p>
               )}
               <h1 className="font-serif text-display-lg text-foreground mb-6">
-                {collection.title}
+                {metadata.title}
               </h1>
               <div className="text-muted-foreground text-body-lg leading-relaxed mb-8 space-y-4">
                 {longDesc.split('\n\n').map((paragraph, idx) => (
@@ -341,7 +212,7 @@ const CollectionDetail = () => {
                 </p>
                 <Button asChild variant="sera-primary" size="lg">
                   <Link to={`/atelier?style=${collectionId?.toLowerCase()}`}>
-                    {isEnglish ? `Design in ${collection.title} style` : `Ontwerp in ${collection.title} stijl`}
+                    {isEnglish ? `Design in ${metadata.title} style` : `Ontwerp in ${metadata.title} stijl`}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -352,91 +223,15 @@ const CollectionDetail = () => {
             </div>
             <div className="order-1 lg:order-2 image-reveal">
               <div className="aspect-[4/5] bg-muted">
-                {collection.image?.url ? (
-                  <img
-                    src={collection.image.url}
-                    alt={collection.image.altText || `${collection.title} ${isEnglish ? 'Collection' : 'Collectie'} - SERA NORR`}
-                    className="w-full h-full object-cover"
-                    loading="eager"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-secondary flex items-center justify-center">
-                    <span className="text-muted-foreground">{collection.title}</span>
-                  </div>
-                )}
+                <img
+                  src={metadata.image}
+                  alt={`${metadata.title} ${isEnglish ? 'Collection' : 'Collectie'} - SERA NORR`}
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                />
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Products from Shopify */}
-      <section className="section-padding bg-secondary/30">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="mb-12">
-            <h2 className="font-serif text-display-sm text-foreground">
-              {t('collections.pieces')}
-            </h2>
-          </div>
-          
-          {products.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground text-body-md">
-                {isEnglish ? 'No products found in this collection yet.' : 'Nog geen producten gevonden in deze collectie.'}
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-              {products.map((product) => {
-                const productImage = product.node.images?.edges?.[0]?.node;
-                const price = product.node.priceRange?.minVariantPrice;
-                
-                return (
-                  <article key={product.node.id} className="group">
-                    <Link to={`/product/${product.node.handle}`} className="block">
-                      <div className="aspect-[4/3] bg-muted mb-6 overflow-hidden image-reveal">
-                        {productImage?.url ? (
-                          <img
-                            src={productImage.url}
-                            alt={productImage.altText || product.node.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-secondary flex items-center justify-center">
-                            <span className="text-muted-foreground text-sm">{product.node.title}</span>
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-                    <div className="flex justify-between items-start gap-4">
-                      <div>
-                        <h3 className="font-serif text-xl text-foreground mb-2">
-                          <Link to={`/product/${product.node.handle}`} className="hover:text-muted-foreground transition-colors">
-                            {product.node.title}
-                          </Link>
-                        </h3>
-                        {/* Shopify descriptions hidden - not available in NL */}
-                      </div>
-                      {price && (
-                        <p className="font-sans text-sm text-muted-foreground whitespace-nowrap">
-                          {formatPriceOnRequest()}
-                        </p>
-                      )}
-                    </div>
-                    <div className="mt-4">
-                      <Button asChild variant="atelier-subtle" size="sm">
-                        <Link to="/contact">
-                          {t('collections.requestQuote')}
-                          <ArrowRight className="ml-2 h-3 w-3" />
-                        </Link>
-                      </Button>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          )}
         </div>
       </section>
 
@@ -455,11 +250,11 @@ const CollectionDetail = () => {
             {t('collections.customTitle')}
           </h2>
           <p className="text-background/80 text-body-md max-w-xl mx-auto mb-8">
-            {t('collections.customDescription').replace('{collection.name}', collection.title)}
+            {t('collections.customDescription').replace('{collection.name}', metadata.title)}
           </p>
           <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
             <Link to={`/atelier?style=${collectionId?.toLowerCase()}`}>
-              {isEnglish ? `Design in ${collection.title} style` : `Ontwerp in ${collection.title} stijl`}
+              {isEnglish ? `Design in ${metadata.title} style` : `Ontwerp in ${metadata.title} stijl`}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

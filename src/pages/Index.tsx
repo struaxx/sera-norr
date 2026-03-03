@@ -6,8 +6,6 @@ import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { SEOHead, baseSchema } from "@/components/seo";
-import { fetchCollections, ShopifyCollection } from "@/lib/shopify";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Hairline } from "@/components/ui/hairline";
 import { CollectionCard } from "@/components/ui/collection-card";
 import { ValuePillars, AtelierSteps } from "@/components/homepage";
@@ -16,28 +14,32 @@ import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
 import heroImage from "@/assets/hero-homepage.png";
+import vantaImage from "@/assets/vanta-collection.jpg";
+import terraImage from "@/assets/terra-collection.jpg";
 
 const Index = () => {
   const { t, i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
-  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
-  const [loading, setLoading] = useState(true);
   
   usePageTracking();
 
-  useEffect(() => {
-    const loadCollections = async () => {
-      try {
-        const data = await fetchCollections(10);
-        setCollections(data);
-      } catch (error) {
-        console.error("Failed to fetch collections:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadCollections();
-  }, []);
+  // Static collections data (no longer fetched from Shopify)
+  const collections = [
+    {
+      id: 'vanta',
+      handle: 'vanta',
+      title: 'VANTA',
+      imageUrl: vantaImage,
+      description: isNL ? 'Calacatta Viola marmer — rijke paarse adering.' : 'Calacatta Viola marble — rich purple veining.',
+    },
+    {
+      id: 'terra',
+      handle: 'terra',
+      title: 'TERRA',
+      imageUrl: terraImage,
+      description: isNL ? 'Natuurlijk travertin — warme beigetinten.' : 'Natural travertine — warm beige tones.',
+    },
+  ];
 
   const seoTitle = isNL 
     ? "SERA NORR — Luxe natuursteen meubels op maat | Online atelier" 
@@ -50,20 +52,6 @@ const Index = () => {
   const seoKeywords = isNL
     ? "SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel"
     : "SERA NORR, online atelier, bespoke natural stone furniture, travertine table, custom marble table, Calacatta Viola, stone dining table";
-
-  // Get Dutch description for collections
-  const getCollectionDescription = (handle: string) => {
-    const handleLower = handle.toLowerCase();
-    
-    if (handleLower.includes('vanta')) {
-      return isNL ? 'Calacatta Viola marmer — rijke paarse adering.' : 'Calacatta Viola marble — rich purple veining.';
-    }
-    if (handleLower.includes('terra')) {
-      return isNL ? 'Natuurlijk travertin — warme beigetinten.' : 'Natural travertine — warm beige tones.';
-    }
-    
-    return '';
-  };
 
   return (
     <Layout>
@@ -153,13 +141,11 @@ const Index = () => {
       <StickyMobileCTA isNL={isNL} />
 
       {/* ============================================
-          COLLECTIES - With single "Ontdek collecties" CTA
+          COLLECTIES - Static VANTA & TERRA
           ============================================ */}
       <CollectiesSection 
         collections={collections}
-        loading={loading}
         isNL={isNL}
-        getCollectionDescription={getCollectionDescription}
       />
 
       {/* ============================================
@@ -212,18 +198,14 @@ function IntroSection({ isNL }: { isNL: boolean }) {
 }
 
 // ============================================
-// COLLECTIES SECTION
+// COLLECTIES SECTION (static data)
 // ============================================
 function CollectiesSection({ 
   collections, 
-  loading, 
-  isNL, 
-  getCollectionDescription 
+  isNL,
 }: { 
-  collections: ShopifyCollection[]; 
-  loading: boolean; 
+  collections: Array<{ id: string; handle: string; title: string; imageUrl: string; description: string }>;
   isNL: boolean; 
-  getCollectionDescription: (handle: string) => string;
 }) {
   const { ref, isInView, variants } = useScrollReveal();
 
@@ -268,40 +250,23 @@ function CollectiesSection({
           <RoomReveal isNL={isNL} />
         </motion.div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            {[1, 2].map((i) => (
-              <div key={i}>
-                <Skeleton className="aspect-[3/4] w-full mb-5" />
-                <Skeleton className="h-3 w-20 mb-3" />
-                <Skeleton className="h-6 w-32 mb-2" />
-                <Skeleton className="h-4 w-48" />
-              </div>
-            ))}
-          </div>
-        ) : collections.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-            {collections.slice(0, 2).map((collection, index) => (
-              <CollectionCard
-                key={collection.node.id}
-                id={collection.node.id}
-                handle={collection.node.handle}
-                title={collection.node.title}
-                imageUrl={collection.node.image?.url}
-                imageAlt={collection.node.image?.altText || collection.node.title}
-                description={getCollectionDescription(collection.node.handle)}
-                collectionLabel={isNL ? 'Collectie' : 'Collection'}
-                priceLabel={isNL ? 'Prijs op aanvraag' : 'Price on request'}
-                ctaLabel={isNL ? 'Ontdek' : 'Discover'}
-                index={index}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className="text-muted-foreground text-center py-12">
-            {isNL ? 'Geen collecties gevonden.' : 'No collections found.'}
-          </p>
-        )}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+          {collections.map((collection, index) => (
+            <CollectionCard
+              key={collection.id}
+              id={collection.id}
+              handle={collection.handle}
+              title={collection.title}
+              imageUrl={collection.imageUrl}
+              imageAlt={collection.title}
+              description={collection.description}
+              collectionLabel={isNL ? 'Collectie' : 'Collection'}
+              priceLabel={isNL ? 'Prijs op aanvraag' : 'Price on request'}
+              ctaLabel={isNL ? 'Ontdek' : 'Discover'}
+              index={index}
+            />
+          ))}
+        </div>
 
         {/* Single secondary CTA */}
         <motion.div 
