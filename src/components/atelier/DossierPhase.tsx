@@ -173,36 +173,10 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
       if (result.success) {
         // Send confirmation emails via edge function
         try {
-          // Customer confirmation
+          // Send both customer confirmation + admin notification
           await supabase.functions.invoke('send-confirmation-email', {
             body: {
-              type: 'customer_confirmation',
-              buildCode: currentBuildCode,
-              shareUrl,
-              customerEmail: contact.email,
-              customerName: contact.name,
-              customerPhone: contact.phone,
-              customerPostcode: contact.location,
-              configuration: config,
-              priceEstimate: { vanafPrice: priceEstimate.vanafPrice },
-              stoneName,
-              shapeName,
-              dimensionString,
-              thicknessString,
-              finishName,
-              edgeName,
-              baseName,
-              customStoneRequest: customStoneName,
-              notes: contact.notes,
-              wantsCall,
-              leadTime,
-            },
-          });
-
-          // Admin notification
-          await supabase.functions.invoke('send-confirmation-email', {
-            body: {
-              type: 'admin_notification',
+              type: 'both',
               buildCode: currentBuildCode,
               shareUrl,
               customerEmail: contact.email,
