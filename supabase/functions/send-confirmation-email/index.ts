@@ -30,7 +30,7 @@ interface EmailRequest {
 }
 
 const ADMIN_EMAIL = "info@sera-norr.com";
-const FROM_EMAIL = "SERA NORR <info@sera-norr.com>";
+const FROM_EMAIL = "SERA NORR <onboarding@resend.dev>";
 
 const formatPrice = (price: number) =>
   new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price);
