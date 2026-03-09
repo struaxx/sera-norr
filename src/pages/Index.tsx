@@ -187,10 +187,8 @@ function IntroSection({ isNL }: { isNL: boolean }) {
 // COLLECTIES SECTION (static data)
 // ============================================
 function CollectiesSection({ 
-  collections, 
   isNL,
 }: { 
-  collections: Array<{ id: string; handle: string; title: string; imageUrl: string; description: string }>;
   isNL: boolean; 
 }) {
   const { ref, isInView, variants } = useScrollReveal();
