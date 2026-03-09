@@ -132,10 +132,7 @@ const Index = () => {
       {/* ============================================
           COLLECTIES - Static VANTA & TERRA
           ============================================ */}
-      <CollectiesSection 
-        collections={collections}
-        isNL={isNL}
-      />
+      <CollectiesSection isNL={isNL} />
 
       {/* ============================================
           3-STEP ATELIER INTRO (Primary funnel entry)
