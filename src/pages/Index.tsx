@@ -22,23 +22,13 @@ const Index = () => {
   
   usePageTracking();
 
-  // Static collections data (no longer fetched from Shopify)
-  const collections = [
-    {
-      id: 'vanta',
-      handle: 'vanta',
-      title: 'VANTA',
-      imageUrl: vantaImage,
-      description: isNL ? 'Calacatta Viola marmer — rijke paarse adering.' : 'Calacatta Viola marble — rich purple veining.',
-    },
-    {
-      id: 'terra',
-      handle: 'terra',
-      title: 'TERRA',
-      imageUrl: terraImage,
-      description: isNL ? 'Natuurlijk travertin — warme beigetinten.' : 'Natural travertine — warm beige tones.',
-    },
-  ];
+  // Collection descriptions for the section
+  const collectionsIntro = {
+    title: isNL ? "Travertin & marmer" : "Travertine & marble",
+    subtitle: isNL 
+      ? "Twee signatuurcollecties, elk met eigen karakter."
+      : "Two signature collections, each with its own character.",
+  };
 
   const seoTitle = isNL 
     ? "SERA NORR — Luxe natuursteen meubels op maat | Online atelier" 
