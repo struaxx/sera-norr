@@ -221,7 +221,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         <img
           src={afterSrc}
           alt={isNL ? "Kamer met tafel" : "Room with table"}
-          className="absolute inset-0 w-full h-full object-cover object-top"
+          className="absolute inset-0 w-full h-full object-cover object-bottom"
           draggable={false}
         />
       </div>
