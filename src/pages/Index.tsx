@@ -250,34 +250,43 @@ function CollectiesSection({
           <RoomReveal isNL={isNL} />
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-          {collections.map((collection, index) => (
-            <CollectionCard
-              key={collection.id}
-              id={collection.id}
-              handle={collection.handle}
-              title={collection.title}
-              imageUrl={collection.imageUrl}
-              imageAlt={collection.title}
-              description={collection.description}
-              collectionLabel={isNL ? 'Collectie' : 'Collection'}
-              priceLabel={isNL ? 'Prijs op aanvraag' : 'Price on request'}
-              ctaLabel={isNL ? 'Ontdek' : 'Discover'}
-              index={index}
-            />
-          ))}
-        </div>
+        {/* Lookbook preview link */}
+        <motion.div
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <Link to="/lookbook" className="group block">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8">
+              {[
+                '/lookbook/marble-round-fluted.png',
+                '/lookbook/travertine-round-fluted.png',
+                '/lookbook/marble-oval-fluted.png',
+                '/lookbook/travertine-coffee-fluted.png',
+              ].map((src, i) => (
+                <div key={i} className="aspect-[4/5] overflow-hidden bg-secondary/50">
+                  <img 
+                    src={src} 
+                    alt="" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </Link>
+        </motion.div>
 
-        {/* Single secondary CTA */}
+        {/* Single CTA to lookbook */}
         <motion.div 
-          className="mt-16 lg:mt-20 text-center"
+          className="mt-8 lg:mt-12 text-center"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
           <Button asChild variant="sera-secondary" size="lg">
-            <Link to="/collections">
-              {isNL ? "Ontdek collecties" : "Discover collections"}
+            <Link to="/lookbook">
+              {isNL ? "Bekijk lookbook" : "View lookbook"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
