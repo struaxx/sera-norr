@@ -248,25 +248,6 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         />
       )}
 
-      {/* 5. Label with sizing options — fades in on hover */}
-      <div
-        ref={labelRef}
-        className="absolute bottom-5 left-5 lg:bottom-8 lg:left-8"
-        style={{
-          opacity: 0,
-          transform: "translateY(12px)",
-          transition: "opacity 0.5s cubic-bezier(0.25,0.1,0.25,1), transform 0.5s cubic-bezier(0.25,0.1,0.25,1)",
-        }}
-      >
-        <div className="bg-background/90 backdrop-blur-sm px-5 py-3 rounded-sm shadow-sm">
-          <p className="micro-label mb-1">
-            {isNL ? "Op maat gemaakt" : "Made to fit"}
-          </p>
-          <p className="font-serif text-sm lg:text-base text-foreground tracking-wide">
-            180×90 &nbsp;/&nbsp; 200×100 &nbsp;/&nbsp; custom
-          </p>
-        </div>
-      </div>
     </div>
   );
 }
