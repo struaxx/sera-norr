@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { SEOHead, baseSchema } from "@/components/seo";
 import { Hairline } from "@/components/ui/hairline";
-import { CollectionCard } from "@/components/ui/collection-card";
+
 import { ValuePillars, AtelierSteps } from "@/components/homepage";
 import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
