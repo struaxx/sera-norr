@@ -7,15 +7,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { SEOHead, baseSchema } from "@/components/seo";
 import { Hairline } from "@/components/ui/hairline";
-import { CollectionCard } from "@/components/ui/collection-card";
+
 import { ValuePillars, AtelierSteps } from "@/components/homepage";
 import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
 import heroImage from "@/assets/hero-homepage.png";
-import vantaImage from "@/assets/vanta-collection.jpg";
-import terraImage from "@/assets/terra-collection.jpg";
+
 
 const Index = () => {
   const { t, i18n } = useTranslation();
@@ -23,23 +22,13 @@ const Index = () => {
   
   usePageTracking();
 
-  // Static collections data (no longer fetched from Shopify)
-  const collections = [
-    {
-      id: 'vanta',
-      handle: 'vanta',
-      title: 'VANTA',
-      imageUrl: vantaImage,
-      description: isNL ? 'Calacatta Viola marmer — rijke paarse adering.' : 'Calacatta Viola marble — rich purple veining.',
-    },
-    {
-      id: 'terra',
-      handle: 'terra',
-      title: 'TERRA',
-      imageUrl: terraImage,
-      description: isNL ? 'Natuurlijk travertin — warme beigetinten.' : 'Natural travertine — warm beige tones.',
-    },
-  ];
+  // Collection descriptions for the section
+  const collectionsIntro = {
+    title: isNL ? "Travertin & marmer" : "Travertine & marble",
+    subtitle: isNL 
+      ? "Twee signatuurcollecties, elk met eigen karakter."
+      : "Two signature collections, each with its own character.",
+  };
 
   const seoTitle = isNL 
     ? "SERA NORR — Luxe natuursteen meubels op maat | Online atelier" 
@@ -143,10 +132,7 @@ const Index = () => {
       {/* ============================================
           COLLECTIES - Static VANTA & TERRA
           ============================================ */}
-      <CollectiesSection 
-        collections={collections}
-        isNL={isNL}
-      />
+      <CollectiesSection isNL={isNL} />
 
       {/* ============================================
           3-STEP ATELIER INTRO (Primary funnel entry)
@@ -201,10 +187,8 @@ function IntroSection({ isNL }: { isNL: boolean }) {
 // COLLECTIES SECTION (static data)
 // ============================================
 function CollectiesSection({ 
-  collections, 
   isNL,
 }: { 
-  collections: Array<{ id: string; handle: string; title: string; imageUrl: string; description: string }>;
   isNL: boolean; 
 }) {
   const { ref, isInView, variants } = useScrollReveal();
@@ -250,34 +234,43 @@ function CollectiesSection({
           <RoomReveal isNL={isNL} />
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-          {collections.map((collection, index) => (
-            <CollectionCard
-              key={collection.id}
-              id={collection.id}
-              handle={collection.handle}
-              title={collection.title}
-              imageUrl={collection.imageUrl}
-              imageAlt={collection.title}
-              description={collection.description}
-              collectionLabel={isNL ? 'Collectie' : 'Collection'}
-              priceLabel={isNL ? 'Prijs op aanvraag' : 'Price on request'}
-              ctaLabel={isNL ? 'Ontdek' : 'Discover'}
-              index={index}
-            />
-          ))}
-        </div>
+        {/* Lookbook preview link */}
+        <motion.div
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <Link to="/lookbook" className="group block">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8">
+              {[
+                '/lookbook/marble-round-fluted.png',
+                '/lookbook/travertine-round-fluted.png',
+                '/lookbook/marble-oval-fluted.png',
+                '/lookbook/travertine-coffee-fluted.png',
+              ].map((src, i) => (
+                <div key={i} className="aspect-[4/5] overflow-hidden bg-secondary/50">
+                  <img 
+                    src={src} 
+                    alt="" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </Link>
+        </motion.div>
 
-        {/* Single secondary CTA */}
+        {/* Single CTA to lookbook */}
         <motion.div 
-          className="mt-16 lg:mt-20 text-center"
+          className="mt-8 lg:mt-12 text-center"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
           <Button asChild variant="sera-secondary" size="lg">
-            <Link to="/collections">
-              {isNL ? "Ontdek collecties" : "Discover collections"}
+            <Link to="/lookbook">
+              {isNL ? "Bekijk lookbook" : "View lookbook"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
