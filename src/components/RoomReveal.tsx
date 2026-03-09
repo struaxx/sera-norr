@@ -208,7 +208,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       <img
         src={beforeSrc}
         alt={isNL ? "Lege kamer" : "Empty room"}
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover object-top"
         draggable={false}
       />
 
