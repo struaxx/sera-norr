@@ -14,7 +14,7 @@ import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
 import heroImage from "@/assets/hero-homepage.png";
-import vantaImage from "@/assets/vanta-collection.jpg";
+
 
 const Index = () => {
   const { t, i18n } = useTranslation();
