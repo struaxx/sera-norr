@@ -243,10 +243,10 @@ function CollectiesSection({
           <Link to="/lookbook" className="group block">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8">
               {[
-                '/lookbook/marble-round-fluted.png',
-                '/lookbook/travertine-round-fluted.png',
-                '/lookbook/marble-oval-fluted.png',
-                '/lookbook/travertine-coffee-fluted.png',
+                '/lookbook/marble-round-livingroom.png',
+                '/lookbook/travertine-oval-slab.png',
+                '/lookbook/calacatta-viola-round.png',
+                '/lookbook/travertine-round-cone.png',
               ].map((src, i) => (
                 <div key={i} className="aspect-[4/5] overflow-hidden bg-secondary/50">
                   <img 
