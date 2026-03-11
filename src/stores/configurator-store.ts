@@ -76,6 +76,10 @@ interface ConfiguratorStore {
   customStoneRequest: CustomStoneRequest | null;
   setCustomStoneRequest: (request: CustomStoneRequest | null) => void;
   
+  // Custom per-step requests
+  customRequests: CustomRequests;
+  setCustomRequests: (requests: CustomRequests) => void;
+  
   // Configurator state
   config: ConfiguratorState;
   viewer: ViewerState;
