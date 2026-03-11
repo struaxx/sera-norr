@@ -17,7 +17,7 @@ const Atelier = lazy(() => import("./pages/Atelier"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Journal = lazy(() => import("./pages/Journal"));
-const Voorstel = lazy(() => import("./pages/Voorstel"));
+
 
 const Care = lazy(() => import("./pages/Care"));
 const Insights = lazy(() => import("./pages/Insights"));
