@@ -45,18 +45,8 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               <li>
-                <Link to="/lookbook" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">
+                <Link to="/collections" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">
                   Lookbook
-                </Link>
-              </li>
-              <li>
-                <Link to="/collections/terra" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">
-                  TERRA
-                </Link>
-              </li>
-              <li>
-                <Link to="/collections/vanta" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">
-                  VANTA
                 </Link>
               </li>
             </ul>
