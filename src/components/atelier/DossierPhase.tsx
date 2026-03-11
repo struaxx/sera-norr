@@ -64,7 +64,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
     notes: '',
   });
 
-  const priceEstimate = calculateModularPrice(config);
+  const leadTime = getModularLeadTime(config);
   const leadTime = getModularLeadTime(config);
   const currentBuildCode = buildCode || generateBuildCode();
 
