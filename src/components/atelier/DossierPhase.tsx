@@ -35,7 +35,7 @@ import {
 } from '@/lib/configurator';
 import { getStoneById } from '@/lib/configurator/stone-library';
 import { getLegById } from '@/lib/configurator/leg-library';
-import { calculateModularPrice, formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
+import { getModularLeadTime } from '@/lib/configurator/pricing-v2';
 import { requestQuote } from '@/lib/configurator/api';
 import { downloadDossierPDF } from '@/lib/configurator/pdf-generator';
 import { supabase } from '@/integrations/supabase/client';
@@ -64,7 +64,6 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
     notes: '',
   });
 
-  const priceEstimate = calculateModularPrice(config);
   const leadTime = getModularLeadTime(config);
   const currentBuildCode = buildCode || generateBuildCode();
 
@@ -160,9 +159,9 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         buildCode: currentBuildCode,
         configuration: config,
         priceEstimate: {
-          min: priceEstimate.vanafPrice,
-          max: priceEstimate.vanafPrice,
-          total: priceEstimate.vanafPrice,
+          min: 0,
+          max: 0,
+          total: 0,
         },
         contact: {
           ...contact,
@@ -185,7 +184,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               customerPhone: contact.phone,
               customerPostcode: contact.location,
               configuration: config,
-              priceEstimate: { vanafPrice: priceEstimate.vanafPrice },
+              priceEstimate: { vanafPrice: 0 },
               stoneName,
               shapeName,
               dimensionString,
@@ -363,18 +362,15 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               </p>
             </div>
 
-            {/* Price Summary - Vanaf Price */}
+            {/* Pricing Note */}
             <div className="bg-foreground/5 p-6 border-t border-border">
-              <div className="flex justify-between items-baseline mb-2">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  {isNL ? 'Vanaf' : 'From'}
-                </span>
-                <span className="text-2xl font-serif">
-                  {formatVanafPrice(priceEstimate.vanafPrice)}
-                </span>
-              </div>
-              <p className="text-[10px] text-muted-foreground">
-                {priceEstimate.disclaimer}
+              <p className="text-sm text-foreground font-serif mb-1">
+                {isNL ? 'Prijs op maat' : 'Tailored pricing'}
+              </p>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                {isNL 
+                  ? 'Elke tafel is uniek — de definitieve prijs ontvangt u in uw persoonlijk voorstel, afgestemd op slab-keuze, afwerking en levering.'
+                  : 'Every table is unique — you will receive the final price in your personal proposal, tailored to slab selection, finish and delivery.'}
               </p>
             </div>
           </div>
