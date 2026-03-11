@@ -323,6 +323,37 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 label={isNL ? 'Onderstel' : 'Base'} 
                 value={baseName || ''} 
               />
+
+              {/* Custom requests */}
+              {customRequests && Object.keys(customRequests).length > 0 && (
+                <>
+                  <div className="border-t border-border pt-4 mt-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {isNL ? 'Aanvullende wensen' : 'Additional requests'}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {customRequests.shape && (
+                        <DossierRow label={isNL ? 'Vorm' : 'Shape'} value={customRequests.shape} isCustom />
+                      )}
+                      {customRequests.dimension && (
+                        <DossierRow label={isNL ? 'Afmeting' : 'Size'} value={customRequests.dimension} isCustom />
+                      )}
+                      {customRequests.thickness && (
+                        <DossierRow label={isNL ? 'Bladdikte' : 'Thickness'} value={customRequests.thickness} isCustom />
+                      )}
+                      {customRequests.leg && (
+                        <DossierRow label={isNL ? 'Onderstel' : 'Base'} value={customRequests.leg} isCustom />
+                      )}
+                      {customRequests.edge && (
+                        <DossierRow label={isNL ? 'Randprofiel' : 'Edge'} value={customRequests.edge} isCustom />
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Service & Delivery - Info Only (Included) */}
