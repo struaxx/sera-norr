@@ -12,7 +12,6 @@ import Index from "./pages/Index";
 
 // Lazy load all other pages for better performance
 const Collections = lazy(() => import("./pages/Collections"));
-const CollectionDetail = lazy(() => import("./pages/CollectionDetail"));
 const Bespoke = lazy(() => import("./pages/Bespoke"));
 const Atelier = lazy(() => import("./pages/Atelier"));
 const About = lazy(() => import("./pages/About"));
