@@ -112,7 +112,7 @@ export const LEG_DEFINITIONS: LegDefinition[] = [
       { id: 'M', label: 'M', radiusMm: 150, heightMm: 730 },
       { id: 'L', label: 'L', radiusMm: 200, heightMm: 730 },
     ],
-    compatibleShapes: ['round', 'ellips', 'ovale', 'corner'],
+    compatibleShapes: ['ellips', 'ovale', 'corner'],
     minLengthMm: 0,
     priceUplift: 400,
   },
