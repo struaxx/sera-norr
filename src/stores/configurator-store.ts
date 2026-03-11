@@ -304,6 +304,8 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       
       generateBuildCode: () => {
         const { config } = get();
+        const timestamp = Date.now().toString(36).slice(-4).toUpperCase();
+        const random = Math.random().toString(36).substring(2, 4).toUpperCase();
         const parts = [
           'SN',
           config.productType.substring(0, 2).toUpperCase(),
@@ -311,7 +313,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
           config.stone.substring(0, 3).toUpperCase(),
           config.dimensions.length,
           config.dimensions.width,
-          Date.now().toString(36).substring(-4).toUpperCase(),
+          `${timestamp}${random}`,
         ];
         const code = parts.join('-');
         set({ buildCode: code });
