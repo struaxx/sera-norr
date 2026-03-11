@@ -591,11 +591,11 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
 }
 
 // Helper Components
-function DossierRow({ label, value }: { label: string; value: string }) {
+function DossierRow({ label, value, isCustom }: { label: string; value: string; isCustom?: boolean }) {
   return (
     <div className="flex justify-between items-center py-2 border-b border-border/50 last:border-0">
       <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium">{value}</span>
+      <span className={cn("text-sm font-medium max-w-[60%] text-right", isCustom && "italic text-muted-foreground")}>{isCustom ? `"${value}"` : value}</span>
     </div>
   );
 }
