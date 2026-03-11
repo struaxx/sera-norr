@@ -635,8 +635,9 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
     if (customThickness) requests.thickness = customThickness;
     if (customLeg) requests.leg = customLeg;
     if (customEdge) requests.edge = customEdge;
+    if (customStone) requests.stone = customStone;
     setCustomRequests(requests);
-  }, [shape, lengthMm, widthMm, heightMm, thicknessMm, stoneId, edgeProfile, legStyle, customShape, customDimension, customThickness, customLeg, customEdge, setStoreShape, setDimension, setStone, setStoreEdge, setStoreLegStyle, setCustomRequests]);
+  }, [shape, lengthMm, widthMm, heightMm, thicknessMm, stoneId, edgeProfile, legStyle, customShape, customDimension, customThickness, customLeg, customEdge, customStone, setStoreShape, setDimension, setStone, setStoreEdge, setStoreLegStyle, setCustomRequests]);
 
   const handleShapeChange = useCallback((newShape: RuleShape) => {
     setShape(newShape);
