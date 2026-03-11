@@ -774,7 +774,10 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
           <ArrowLeft className="w-4 h-4 mr-2" />
           {isNL ? 'Reset ontwerp' : 'Reset design'}
         </Button>
-        <Button variant="atelier" onClick={onContinue}>
+        <Button variant="atelier" onClick={() => {
+          syncToStore();
+          onContinue();
+        }}>
           {isNL ? 'Bekijk dossier' : 'View dossier'}
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
