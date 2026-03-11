@@ -35,7 +35,7 @@ import {
 } from '@/lib/configurator';
 import { getStoneById } from '@/lib/configurator/stone-library';
 import { getLegById } from '@/lib/configurator/leg-library';
-import { calculateModularPrice, formatVanafPrice, getModularLeadTime } from '@/lib/configurator/pricing-v2';
+import { getModularLeadTime } from '@/lib/configurator/pricing-v2';
 import { requestQuote } from '@/lib/configurator/api';
 import { downloadDossierPDF } from '@/lib/configurator/pdf-generator';
 import { supabase } from '@/integrations/supabase/client';
