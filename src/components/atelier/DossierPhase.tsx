@@ -166,7 +166,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         },
         contact: {
           ...contact,
-          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}${customStoneName ? `\n\n[Custom steen aanvraag: ${customStoneName}]` : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
+          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}${customStoneName ? `\n\n[Custom steen aanvraag: ${customStoneName}]` : ''}${customRequests && Object.keys(customRequests).length > 0 ? `\n\n[Aanvullende wensen: ${Object.entries(customRequests).map(([k, v]) => `${k}: ${v}`).join(', ')}]` : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
         },
         inspirationItems: inspirationItems.map(i => i.id),
       });
