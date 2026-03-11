@@ -30,7 +30,7 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
     },
     {
       icon: Clock,
-      title: "8–12 weken levertijd",
+      title: "12–16 weken levertijd",
       description: "Bij uitloop informeren wij u tijdig.",
     },
     {
