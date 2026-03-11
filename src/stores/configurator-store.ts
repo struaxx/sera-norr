@@ -387,6 +387,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
         selectedCollection: state.selectedCollection,
         inspirationItems: state.inspirationItems,
         customStoneRequest: state.customStoneRequest,
+        customRequests: state.customRequests,
         config: state.config,
         buildCode: state.buildCode,
       }),
