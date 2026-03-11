@@ -307,7 +307,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               />
               <DossierRow 
                 label={isNL ? 'Bladdikte' : 'Thickness'} 
-                value={customRequests?.thickness ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.thickness}` : thicknessString} 
+                value={customRequests?.thickness ? `Op aanvraag (${customRequests.thickness})` : thicknessString} 
                 isCustom={!!customRequests?.thickness}
               />
               <DossierRow 
