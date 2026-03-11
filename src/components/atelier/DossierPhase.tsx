@@ -325,7 +325,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               />
               <DossierRow 
                 label={isNL ? 'Onderstel' : 'Base'} 
-                value={customRequests?.leg ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.leg}` : (baseName || '')} 
+                value={customRequests?.leg ? `Op aanvraag (${customRequests.leg})` : (baseName || '')} 
                 isCustom={!!customRequests?.leg}
               />
             </div>
