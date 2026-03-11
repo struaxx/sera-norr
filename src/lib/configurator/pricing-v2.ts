@@ -190,18 +190,5 @@ export function formatVanafPrice(price: number, locale: string = 'nl-NL'): strin
  * Get lead time estimate based on configuration
  */
 export function getModularLeadTime(config: ConfiguratorState): { min: number; max: number } {
-  const stone = getStoneById(config.stone);
-  const isIcon = stone?.tier === 'icon';
-  const isCutCorner = config.shape === 'cut-corner';
-  const isCustom = config.stone === 'custom';
-  
-  if (isCustom) {
-    return { min: 16, max: 24 };
-  }
-  
-  if (isIcon || isCutCorner) {
-    return { min: 14, max: 18 };
-  }
-  
-  return { min: 10, max: 14 };
+  return { min: 12, max: 16 };
 }

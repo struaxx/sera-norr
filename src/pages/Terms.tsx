@@ -127,8 +127,8 @@ export default function Terms() {
               </h2>
               <p>
                 {isNL
-                  ? 'Leveringstermijnen zijn indicatief en afhankelijk van het type steen en de complexiteit van het ontwerp. Gangbare levertijden zijn 8–14 weken. SERA NORR is niet aansprakelijk voor vertragingen door overmacht. Levering geschiedt met white-glove bezorgservice, inclusief plaatsing in de gewenste ruimte. Zie onze pagina Verzending & Levering voor meer details.'
-                  : 'Delivery times are indicative and depend on the type of stone and complexity of the design. Typical lead times are 8–14 weeks. SERA NORR is not liable for delays due to force majeure. Delivery includes white-glove service with placement in the desired room. See our Shipping & Delivery page for more details.'}
+                  ? 'Leveringstermijnen zijn indicatief en afhankelijk van het type steen en de complexiteit van het ontwerp. Gangbare levertijden zijn 12–16 weken. SERA NORR is niet aansprakelijk voor vertragingen door overmacht. Levering geschiedt met white-glove bezorgservice, inclusief plaatsing in de gewenste ruimte. Zie onze pagina Verzending & Levering voor meer details.'
+                  : 'Delivery times are indicative and depend on the type of stone and complexity of the design. Typical lead times are 12–16 weeks. SERA NORR is not liable for delays due to force majeure. Delivery includes white-glove service with placement in the desired room. See our Shipping & Delivery page for more details.'}
               </p>
             </section>
 

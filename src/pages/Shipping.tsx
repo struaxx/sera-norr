@@ -49,7 +49,7 @@ const Shipping = () => {
     { icon: Truck, title: 'White-glove levering', description: 'Ons team levert tot in uw ruimte, plaatst het meubel en neemt alle verpakking mee.' },
   ] : [
     { icon: ShieldCheck, title: 'Design approval', description: 'After your final approval of the design and materials, we begin production.' },
-    { icon: Clock, title: 'Production: 6–10 weeks', description: 'Your piece is crafted to order in our atelier. You receive progress updates along the way.' },
+    { icon: Clock, title: 'Production: 12–16 weeks', description: 'Your piece is crafted to order in our atelier. You receive progress updates along the way.' },
     { icon: Package, title: 'Careful packaging', description: 'Each piece is individually protected with custom-made protective materials for safe transport.' },
     { icon: Truck, title: 'White-glove delivery', description: 'Our team delivers to your room, positions the piece and removes all packaging.' },
   ];
