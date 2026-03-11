@@ -44,7 +44,7 @@ const Shipping = () => {
 
   const steps = isNL ? [
     { icon: ShieldCheck, title: 'Goedkeuring ontwerp', description: 'Na uw definitieve akkoord op het ontwerp en de materialen starten wij de productie.' },
-    { icon: Clock, title: 'Productie: 6–10 weken', description: 'Uw meubel wordt op maat vervaardigd in ons atelier. U ontvangt updates over de voortgang.' },
+    { icon: Clock, title: 'Productie: 12–16 weken', description: 'Uw meubel wordt op maat vervaardigd in ons atelier. U ontvangt updates over de voortgang.' },
     { icon: Package, title: 'Zorgvuldige verpakking', description: 'Elk stuk wordt individueel beschermd met op maat gemaakte beschermingsmaterialen voor veilig transport.' },
     { icon: Truck, title: 'White-glove levering', description: 'Ons team levert tot in uw ruimte, plaatst het meubel en neemt alle verpakking mee.' },
   ] : [
