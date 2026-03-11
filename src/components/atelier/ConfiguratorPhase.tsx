@@ -554,6 +554,13 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [edgeProfile, setEdgeProfile] = useState('straight');
   const [resolved, setResolved] = useState<ResolvedConfiguration | null>(null);
 
+  // Custom request fields per step
+  const [customShape, setCustomShape] = useState('');
+  const [customDimension, setCustomDimension] = useState('');
+  const [customThickness, setCustomThickness] = useState('');
+  const [customLeg, setCustomLeg] = useState('');
+  const [customEdge, setCustomEdge] = useState('');
+
   // Sync all local state to Zustand store before transitioning to dossier
   const syncToStore = useCallback(() => {
     setStoreShape(shape as any);
@@ -573,12 +580,6 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
     if (customEdge) requests.edge = customEdge;
     setCustomRequests(requests);
   }, [shape, lengthMm, widthMm, heightMm, thicknessMm, stoneId, edgeProfile, legStyle, customShape, customDimension, customThickness, customLeg, customEdge, setStoreShape, setDimension, setStone, setStoreEdge, setStoreLegStyle, setCustomRequests]);
-
-  const [customShape, setCustomShape] = useState('');
-  const [customDimension, setCustomDimension] = useState('');
-  const [customThickness, setCustomThickness] = useState('');
-  const [customLeg, setCustomLeg] = useState('');
-  const [customEdge, setCustomEdge] = useState('');
 
   const handleShapeChange = useCallback((newShape: RuleShape) => {
     setShape(newShape);
