@@ -170,7 +170,10 @@ function createTabletopGeometry(
       // Top center
       points.push(new THREE.Vector2(0, thicknessM));
 
-      return new THREE.LatheGeometry(points, 64);
+      const lathe = new THREE.LatheGeometry(points, 64);
+      // Fix UVs: apply planar projection for top/bottom faces to avoid radial distortion
+      applyPlanarUVForLathe(lathe, r);
+      return lathe;
     }
     case 'ellips': {
       const ellipse = new THREE.Shape();
