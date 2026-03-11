@@ -377,15 +377,21 @@ function ConfigPanel({
 function MaterialSelectorV3({
   value,
   onChange,
+  customValue,
+  onCustomChange,
   isNL,
 }: {
   value: string;
   onChange: (id: string) => void;
+  customValue: string;
+  onCustomChange: (v: string) => void;
   isNL: boolean;
 }) {
   const allStones = useMemo(() => {
     return [...getStonesByFamily('travertine'), ...getStonesByFamily('marble')];
   }, []);
+
+  const isCustomSelected = value === 'custom';
 
   return (
     <div className="space-y-3">
@@ -403,7 +409,7 @@ function MaterialSelectorV3({
           return (
             <button
               key={stone.id}
-              onClick={() => onChange(stone.id)}
+              onClick={() => { onChange(stone.id); onCustomChange(''); }}
               className={cn(
                 "relative rounded-sm border transition-all duration-200 text-left group overflow-hidden",
                 isSelected
@@ -438,7 +444,57 @@ function MaterialSelectorV3({
             </button>
           );
         })}
+
+        {/* Anders / op aanvraag card */}
+        <button
+          onClick={() => onChange('custom')}
+          className={cn(
+            "relative rounded-sm border transition-all duration-200 text-left group overflow-hidden",
+            isCustomSelected
+              ? "border-foreground ring-1 ring-foreground"
+              : "border-border hover:border-foreground/50"
+          )}
+        >
+          {isCustomSelected && (
+            <div className="absolute top-2 right-2 z-10 w-6 h-6 bg-foreground rounded-full flex items-center justify-center shadow-md">
+              <Check className="w-3.5 h-3.5 text-background" />
+            </div>
+          )}
+          <div className="aspect-square w-full bg-secondary/50 flex items-center justify-center">
+            <div className="text-center px-4">
+              <MessageSquare className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">
+                {isNL ? 'Beschrijf uw wens' : 'Describe your preference'}
+              </p>
+            </div>
+          </div>
+          <div className="p-3">
+            <h4 className="text-sm font-medium line-clamp-1">
+              {isNL ? 'Anders' : 'Other'}
+            </h4>
+            <p className="text-[9px] uppercase tracking-wider text-muted-foreground">
+              {isNL ? 'Op aanvraag' : 'On request'}
+            </p>
+          </div>
+        </button>
       </div>
+
+      {/* Custom text input when selected */}
+      {isCustomSelected && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+        >
+          <textarea
+            value={customValue}
+            onChange={(e) => onCustomChange(e.target.value)}
+            placeholder={isNL ? 'Bijv. Statuario Extra, Azul Bahia, of beschrijf uw gewenste steen...' : 'E.g. Statuario Extra, Azul Bahia, or describe your desired stone...'}
+            className="w-full text-sm bg-secondary/50 border border-border rounded-sm p-3 resize-none focus:outline-none focus:ring-1 focus:ring-foreground/30 placeholder:text-muted-foreground/60"
+            rows={2}
+            autoFocus
+          />
+        </motion.div>
+      )}
     </div>
   );
 }
