@@ -47,6 +47,15 @@ export interface CustomStoneRequest {
   imageFile?: File;
 }
 
+// Per-step custom request notes from the configurator
+export interface CustomRequests {
+  shape?: string;
+  dimension?: string;
+  thickness?: string;
+  leg?: string;
+  edge?: string;
+}
+
 // ============================================
 // Store Interface
 // ============================================
