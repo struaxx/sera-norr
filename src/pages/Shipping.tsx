@@ -13,14 +13,14 @@ const Shipping = () => {
 
   const faqItems = isNL ? [
     { question: 'Wat kost de levering?', answer: 'Levering, plaatsing en verpakkingsafvoer zijn inbegrepen in de prijs van elk meubel. Er zijn geen verborgen kosten.' },
-    { question: 'Hoe lang duurt de levertijd?', answer: 'De productietijd bedraagt gemiddeld 6–10 weken na definitieve goedkeuring van uw ontwerp. U ontvangt een persoonlijke planning zodra uw bestelling is bevestigd.' },
+    { question: 'Hoe lang duurt de levertijd?', answer: 'De productietijd bedraagt gemiddeld 12–16 weken na definitieve goedkeuring van uw ontwerp. U ontvangt een persoonlijke planning zodra uw bestelling is bevestigd.' },
     { question: 'Leveren jullie in heel Nederland en België?', answer: 'Ja, wij leveren door heel Nederland en België. Levering in andere Europese landen is op aanvraag mogelijk.' },
     { question: 'Wat houdt white-glove levering in?', answer: 'Ons team levert uw meubel tot in de gewenste ruimte, plaatst het op de juiste positie en neemt alle verpakkingsmaterialen mee. U hoeft niets zelf te doen.' },
     { question: 'Kan ik een specifieke leverdag kiezen?', answer: 'Ja, wij plannen de levering in overleg op een dag en tijdstip dat u schikt. U wordt vooraf gecontacteerd om een afspraak te maken.' },
     { question: 'Wat als mijn meubel beschadigd aankomt?', answer: 'Alle meubels zijn volledig verzekerd tijdens transport. In het onwaarschijnlijke geval van schade lossen wij dit kosteloos op — reparatie of volledige vervanging.' },
   ] : [
     { question: 'What does delivery cost?', answer: 'Delivery, placement and packaging removal are included in the price of every piece. There are no hidden costs.' },
-    { question: 'How long is the lead time?', answer: 'Production time averages 6–10 weeks after final approval of your design. You receive a personal timeline once your order is confirmed.' },
+    { question: 'How long is the lead time?', answer: 'Production time averages 12–16 weeks after final approval of your design. You receive a personal timeline once your order is confirmed.' },
     { question: 'Do you deliver throughout the Netherlands and Belgium?', answer: 'Yes, we deliver throughout the Netherlands and Belgium. Delivery to other European countries is available on request.' },
     { question: 'What does white-glove delivery include?', answer: 'Our team delivers your piece to the desired room, positions it exactly where you want it, and removes all packaging materials. You don\'t need to do a thing.' },
     { question: 'Can I choose a specific delivery day?', answer: 'Yes, we schedule delivery in consultation on a day and time that suits you. You will be contacted in advance to arrange an appointment.' },
@@ -44,12 +44,12 @@ const Shipping = () => {
 
   const steps = isNL ? [
     { icon: ShieldCheck, title: 'Goedkeuring ontwerp', description: 'Na uw definitieve akkoord op het ontwerp en de materialen starten wij de productie.' },
-    { icon: Clock, title: 'Productie: 6–10 weken', description: 'Uw meubel wordt op maat vervaardigd in ons atelier. U ontvangt updates over de voortgang.' },
+    { icon: Clock, title: 'Productie: 12–16 weken', description: 'Uw meubel wordt op maat vervaardigd in ons atelier. U ontvangt updates over de voortgang.' },
     { icon: Package, title: 'Zorgvuldige verpakking', description: 'Elk stuk wordt individueel beschermd met op maat gemaakte beschermingsmaterialen voor veilig transport.' },
     { icon: Truck, title: 'White-glove levering', description: 'Ons team levert tot in uw ruimte, plaatst het meubel en neemt alle verpakking mee.' },
   ] : [
     { icon: ShieldCheck, title: 'Design approval', description: 'After your final approval of the design and materials, we begin production.' },
-    { icon: Clock, title: 'Production: 6–10 weeks', description: 'Your piece is crafted to order in our atelier. You receive progress updates along the way.' },
+    { icon: Clock, title: 'Production: 12–16 weeks', description: 'Your piece is crafted to order in our atelier. You receive progress updates along the way.' },
     { icon: Package, title: 'Careful packaging', description: 'Each piece is individually protected with custom-made protective materials for safe transport.' },
     { icon: Truck, title: 'White-glove delivery', description: 'Our team delivers to your room, positions the piece and removes all packaging.' },
   ];

@@ -217,7 +217,7 @@ const CollectionDetail = () => {
                   </Link>
                 </Button>
                 <p className="text-[11px] text-muted-foreground/50">
-                  {isEnglish ? "Price indication • 8-12 weeks • Bespoke guidance" : "Prijsindicatie • 8-12 weken • Maatwerk begeleiding"}
+                  {isEnglish ? "Price indication • 12-16 weeks • Bespoke guidance" : "Prijsindicatie • 12-16 weken • Maatwerk begeleiding"}
                 </p>
               </div>
             </div>

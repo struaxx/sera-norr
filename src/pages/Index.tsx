@@ -108,7 +108,7 @@ const Index = () => {
                 <span className="hidden sm:inline text-background/30">·</span>
                 <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
                 <span className="hidden sm:inline text-background/30">·</span>
-                <span>{isNL ? '8–12 weken' : '8–12 weeks'}</span>
+                <span>{isNL ? '12–16 weken' : '12–16 weeks'}</span>
               </div>
             </div>
           </div>

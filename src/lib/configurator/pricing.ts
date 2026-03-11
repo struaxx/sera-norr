@@ -113,18 +113,5 @@ export function formatPriceRange(min: number, max: number, locale: string = 'nl-
  * Get lead time estimate based on configuration complexity
  */
 export function getLeadTimeEstimate(config: ConfiguratorState): { min: number; max: number } {
-  const { stone, shape, baseType } = config;
-  
-  // Custom stone = longer lead time
-  if (stone === 'custom') {
-    return { min: 16, max: 24 };
-  }
-  
-  // Cut-corner or monolith base = medium complexity
-  if (baseType === 'monolith' || shape === 'cut-corner') {
-    return { min: 14, max: 18 };
-  }
-  
-  // Standard configuration
-  return { min: 10, max: 14 };
+  return { min: 12, max: 16 };
 }
