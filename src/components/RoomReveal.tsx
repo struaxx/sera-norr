@@ -208,7 +208,8 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       <img
         src={beforeSrc}
         alt={isNL ? "Lege kamer" : "Empty room"}
-        className="absolute inset-0 w-full h-full object-cover object-bottom"
+className="absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: 'center 65%' }}
         draggable={false}
       />
 
@@ -221,7 +222,8 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         <img
           src={afterSrc}
           alt={isNL ? "Kamer met tafel" : "Room with table"}
-          className="absolute inset-0 w-full h-full object-cover object-bottom"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: 'center 65%' }}
           draggable={false}
         />
       </div>
