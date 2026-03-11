@@ -20,7 +20,7 @@ const Shipping = () => {
     { question: 'Wat als mijn meubel beschadigd aankomt?', answer: 'Alle meubels zijn volledig verzekerd tijdens transport. In het onwaarschijnlijke geval van schade lossen wij dit kosteloos op — reparatie of volledige vervanging.' },
   ] : [
     { question: 'What does delivery cost?', answer: 'Delivery, placement and packaging removal are included in the price of every piece. There are no hidden costs.' },
-    { question: 'How long is the lead time?', answer: 'Production time averages 6–10 weeks after final approval of your design. You receive a personal timeline once your order is confirmed.' },
+    { question: 'How long is the lead time?', answer: 'Production time averages 12–16 weeks after final approval of your design. You receive a personal timeline once your order is confirmed.' },
     { question: 'Do you deliver throughout the Netherlands and Belgium?', answer: 'Yes, we deliver throughout the Netherlands and Belgium. Delivery to other European countries is available on request.' },
     { question: 'What does white-glove delivery include?', answer: 'Our team delivers your piece to the desired room, positions it exactly where you want it, and removes all packaging materials. You don\'t need to do a thing.' },
     { question: 'Can I choose a specific delivery day?', answer: 'Yes, we schedule delivery in consultation on a day and time that suits you. You will be contacted in advance to arrange an appointment.' },
