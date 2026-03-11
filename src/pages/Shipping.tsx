@@ -13,7 +13,7 @@ const Shipping = () => {
 
   const faqItems = isNL ? [
     { question: 'Wat kost de levering?', answer: 'Levering, plaatsing en verpakkingsafvoer zijn inbegrepen in de prijs van elk meubel. Er zijn geen verborgen kosten.' },
-    { question: 'Hoe lang duurt de levertijd?', answer: 'De productietijd bedraagt gemiddeld 6–10 weken na definitieve goedkeuring van uw ontwerp. U ontvangt een persoonlijke planning zodra uw bestelling is bevestigd.' },
+    { question: 'Hoe lang duurt de levertijd?', answer: 'De productietijd bedraagt gemiddeld 12–16 weken na definitieve goedkeuring van uw ontwerp. U ontvangt een persoonlijke planning zodra uw bestelling is bevestigd.' },
     { question: 'Leveren jullie in heel Nederland en België?', answer: 'Ja, wij leveren door heel Nederland en België. Levering in andere Europese landen is op aanvraag mogelijk.' },
     { question: 'Wat houdt white-glove levering in?', answer: 'Ons team levert uw meubel tot in de gewenste ruimte, plaatst het op de juiste positie en neemt alle verpakkingsmaterialen mee. U hoeft niets zelf te doen.' },
     { question: 'Kan ik een specifieke leverdag kiezen?', answer: 'Ja, wij plannen de levering in overleg op een dag en tijdstip dat u schikt. U wordt vooraf gecontacteerd om een afspraak te maken.' },
