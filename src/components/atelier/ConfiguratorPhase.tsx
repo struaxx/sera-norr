@@ -834,7 +834,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Materiaal' : 'Material'} step={5}>
-            <MaterialSelectorV3 value={stoneId} onChange={setStoneId} isNL={isNL} />
+            <MaterialSelectorV3 value={stoneId} onChange={setStoneId} customValue={customStone} onCustomChange={setCustomStone} isNL={isNL} />
           </ConfigPanel>
 
           <ConfigPanel title={isNL ? 'Randafwerking' : 'Edge profile'} step={6}>
