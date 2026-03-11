@@ -99,6 +99,27 @@ function applyPlanarUV(geometry: THREE.BufferGeometry, lengthM: number, widthM: 
   uv.needsUpdate = true;
 }
 
+// Fix LatheGeometry UVs: planar projection on top/bottom faces, cylindrical on sides
+function applyPlanarUVForLathe(geometry: THREE.BufferGeometry, radiusM: number) {
+  const pos = geometry.attributes.position;
+  const uv = geometry.attributes.uv;
+  const normal = geometry.attributes.normal;
+  if (!pos || !uv || !normal) return;
+
+  const diameter = radiusM * 2;
+
+  for (let i = 0; i < pos.count; i++) {
+    const ny = Math.abs(normal.getY(i));
+    // Top/bottom faces have normals pointing mostly up/down
+    if (ny > 0.5) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      uv.setXY(i, x / diameter + 0.5, z / diameter + 0.5);
+    }
+  }
+  uv.needsUpdate = true;
+}
+
 // ============================================
 // TABLETOP GEOMETRY
 // ============================================
