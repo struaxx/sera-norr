@@ -20,7 +20,7 @@ const Journal = lazy(() => import("./pages/Journal"));
 const Materials = lazy(() => import("./pages/Materials"));
 const MaterialDetail = lazy(() => import("./pages/MaterialDetail"));
 const Voorstel = lazy(() => import("./pages/Voorstel"));
-const Lookbook = lazy(() => import("./pages/Lookbook"));
+
 const Care = lazy(() => import("./pages/Care"));
 const Insights = lazy(() => import("./pages/Insights"));
 const Shipping = lazy(() => import("./pages/Shipping"));
