@@ -40,8 +40,7 @@ const App = () => (
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/collections" element={<Lookbook />} />
-            <Route path="/collections/:collectionId" element={<CollectionDetail />} />
+            <Route path="/collections" element={<Collections />} />
             <Route path="/bespoke" element={<Bespoke />} />
             <Route path="/atelier" element={<Atelier />} />
             <Route path="/about" element={<About />} />
