@@ -65,7 +65,6 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   });
 
   const leadTime = getModularLeadTime(config);
-  const leadTime = getModularLeadTime(config);
   const currentBuildCode = buildCode || generateBuildCode();
 
   // Get display names from stone library
