@@ -647,7 +647,7 @@ function SuccessScreen({ buildCode, shareUrl, isNL }: { buildCode: string; share
           </a>
         </Button>
         <Button variant="ghost" className="w-full" asChild>
-          <a href="/collecties">
+          <a href="/collections">
             {isNL ? 'Bekijk collecties' : 'View collections'}
           </a>
         </Button>
