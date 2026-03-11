@@ -165,8 +165,12 @@ export async function requestQuote(request: {
       return { success: false, error: 'Aanvraag kon niet worden verzonden' };
     }
 
-    // Generate dossier reference
-    const dossierRef = `DOS-${request.buildCode}-${Date.now().toString(36).toUpperCase()}`;
+    // Generate unique dossier reference from DB id
+    const dbId = (data as any)?.id || '';
+    const now = new Date();
+    const yymm = `${String(now.getFullYear()).slice(-2)}${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const shortId = dbId.replace(/-/g, '').slice(-6).toUpperCase();
+    const dossierRef = `DOS-${yymm}-${shortId}`;
 
     return {
       success: true,
