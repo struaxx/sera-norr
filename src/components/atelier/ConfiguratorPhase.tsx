@@ -542,7 +542,7 @@ function CustomRequestToggle({
 // ============================================
 
 export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: ConfiguratorPhaseProps) {
-  const { config, resetConfig } = useConfiguratorStore();
+  const { config, resetConfig, setShape: setStoreShape, setDimension, setStone, setEdgeProfile: setStoreEdge, setLegStyle: setStoreLegStyle, setCustomRequests } = useConfiguratorStore();
 
   const [shape, setShape] = useState<RuleShape>('ellips');
   const [lengthMm, setLengthMm] = useState(2000);
@@ -560,6 +560,26 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [customThickness, setCustomThickness] = useState('');
   const [customLeg, setCustomLeg] = useState('');
   const [customEdge, setCustomEdge] = useState('');
+
+  // Sync all local state to Zustand store before transitioning to dossier
+  const syncToStore = useCallback(() => {
+    setStoreShape(shape as any);
+    setDimension('length', toCm(lengthMm));
+    setDimension('width', toCm(widthMm));
+    setDimension('height', toCm(heightMm));
+    setDimension('thickness', thicknessMm / 10);
+    setStone(stoneId as any);
+    setStoreEdge(edgeProfile as any);
+    setStoreLegStyle(legStyle);
+    // Store custom requests
+    const requests: Record<string, string> = {};
+    if (customShape) requests.shape = customShape;
+    if (customDimension) requests.dimension = customDimension;
+    if (customThickness) requests.thickness = customThickness;
+    if (customLeg) requests.leg = customLeg;
+    if (customEdge) requests.edge = customEdge;
+    setCustomRequests(requests);
+  }, [shape, lengthMm, widthMm, heightMm, thicknessMm, stoneId, edgeProfile, legStyle, customShape, customDimension, customThickness, customLeg, customEdge, setStoreShape, setDimension, setStone, setStoreEdge, setStoreLegStyle, setCustomRequests]);
 
   const handleShapeChange = useCallback((newShape: RuleShape) => {
     setShape(newShape);
@@ -699,7 +719,11 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
                 </div>
               </div>
 
-              <Button variant="atelier" className="w-full" onClick={onContinue}>
+              <Button variant="atelier" className="w-full" onClick={() => {
+                // Sync local state to Zustand store before transitioning
+                syncToStore();
+                onContinue();
+              }}>
                 {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -770,7 +794,10 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
           <ArrowLeft className="w-4 h-4 mr-2" />
           {isNL ? 'Reset ontwerp' : 'Reset design'}
         </Button>
-        <Button variant="atelier" onClick={onContinue}>
+        <Button variant="atelier" onClick={() => {
+          syncToStore();
+          onContinue();
+        }}>
           {isNL ? 'Bekijk dossier' : 'View dossier'}
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>

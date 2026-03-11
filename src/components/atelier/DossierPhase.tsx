@@ -4,6 +4,7 @@
 
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { 
   ArrowLeft, 
   Download, 
@@ -46,7 +47,7 @@ interface DossierPhaseProps {
 
 export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const { toast } = useToast();
-  const { config, inspirationItems, generateBuildCode, buildCode, customStoneRequest, getShareUrl } = useConfiguratorStore();
+  const { config, inspirationItems, generateBuildCode, buildCode, customStoneRequest, customRequests, getShareUrl } = useConfiguratorStore();
   
   const viewerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -165,7 +166,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         },
         contact: {
           ...contact,
-          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}${customStoneName ? `\n\n[Custom steen aanvraag: ${customStoneName}]` : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
+          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}${customStoneName ? `\n\n[Custom steen aanvraag: ${customStoneName}]` : ''}${customRequests && Object.keys(customRequests).length > 0 ? `\n\n[Aanvullende wensen: ${Object.entries(customRequests).map(([k, v]) => `${k}: ${v}`).join(', ')}]` : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
         },
         inspirationItems: inspirationItems.map(i => i.id),
       });
@@ -323,6 +324,37 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 label={isNL ? 'Onderstel' : 'Base'} 
                 value={baseName || ''} 
               />
+
+              {/* Custom requests */}
+              {customRequests && Object.keys(customRequests).length > 0 && (
+                <>
+                  <div className="border-t border-border pt-4 mt-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {isNL ? 'Aanvullende wensen' : 'Additional requests'}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {customRequests.shape && (
+                        <DossierRow label={isNL ? 'Vorm' : 'Shape'} value={customRequests.shape} isCustom />
+                      )}
+                      {customRequests.dimension && (
+                        <DossierRow label={isNL ? 'Afmeting' : 'Size'} value={customRequests.dimension} isCustom />
+                      )}
+                      {customRequests.thickness && (
+                        <DossierRow label={isNL ? 'Bladdikte' : 'Thickness'} value={customRequests.thickness} isCustom />
+                      )}
+                      {customRequests.leg && (
+                        <DossierRow label={isNL ? 'Onderstel' : 'Base'} value={customRequests.leg} isCustom />
+                      )}
+                      {customRequests.edge && (
+                        <DossierRow label={isNL ? 'Randprofiel' : 'Edge'} value={customRequests.edge} isCustom />
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Service & Delivery - Info Only (Included) */}
@@ -560,11 +592,11 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
 }
 
 // Helper Components
-function DossierRow({ label, value }: { label: string; value: string }) {
+function DossierRow({ label, value, isCustom }: { label: string; value: string; isCustom?: boolean }) {
   return (
     <div className="flex justify-between items-center py-2 border-b border-border/50 last:border-0">
       <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium">{value}</span>
+      <span className={cn("text-sm font-medium max-w-[60%] text-right", isCustom && "italic text-muted-foreground")}>{isCustom ? `"${value}"` : value}</span>
     </div>
   );
 }

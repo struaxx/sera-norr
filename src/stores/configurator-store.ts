@@ -47,6 +47,15 @@ export interface CustomStoneRequest {
   imageFile?: File;
 }
 
+// Per-step custom request notes from the configurator
+export interface CustomRequests {
+  shape?: string;
+  dimension?: string;
+  thickness?: string;
+  leg?: string;
+  edge?: string;
+}
+
 // ============================================
 // Store Interface
 // ============================================
@@ -66,6 +75,10 @@ interface ConfiguratorStore {
   // Custom stone request
   customStoneRequest: CustomStoneRequest | null;
   setCustomStoneRequest: (request: CustomStoneRequest | null) => void;
+  
+  // Custom per-step requests
+  customRequests: CustomRequests;
+  setCustomRequests: (requests: CustomRequests) => void;
   
   // Configurator state
   config: ConfiguratorState;
@@ -174,6 +187,10 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       // Custom stone request
       customStoneRequest: null,
       setCustomStoneRequest: (request) => set({ customStoneRequest: request }),
+      
+      // Custom per-step requests
+      customRequests: {},
+      setCustomRequests: (requests) => set({ customRequests: requests }),
       
       // Config
       config: defaultConfig,
@@ -349,6 +366,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
         selectedCollection: null,
         inspirationItems: [],
         customStoneRequest: null,
+        customRequests: {},
         config: defaultConfig,
         viewer: defaultViewer,
         buildCode: null,
@@ -357,6 +375,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       resetConfig: () => set((state) => {
         state.config = defaultConfig;
         state.customStoneRequest = null;
+        state.customRequests = {};
         state.buildCode = null;
       }),
     })),
@@ -368,6 +387,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
         selectedCollection: state.selectedCollection,
         inspirationItems: state.inspirationItems,
         customStoneRequest: state.customStoneRequest,
+        customRequests: state.customRequests,
         config: state.config,
         buildCode: state.buildCode,
       }),
