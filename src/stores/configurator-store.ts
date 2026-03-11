@@ -366,6 +366,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
         selectedCollection: null,
         inspirationItems: [],
         customStoneRequest: null,
+        customRequests: {},
         config: defaultConfig,
         viewer: defaultViewer,
         buildCode: null,
@@ -374,6 +375,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       resetConfig: () => set((state) => {
         state.config = defaultConfig;
         state.customStoneRequest = null;
+        state.customRequests = {};
         state.buildCode = null;
       }),
     })),
