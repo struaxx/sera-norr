@@ -542,7 +542,7 @@ function CustomRequestToggle({
 // ============================================
 
 export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: ConfiguratorPhaseProps) {
-  const { config, resetConfig, setShape: setStoreShape, setDimension, setStone, setEdgeProfile, setLegStyle: setStoreLegStyle, setCustomRequests } = useConfiguratorStore();
+  const { config, resetConfig, setShape: setStoreShape, setDimension, setStone, setEdgeProfile: setStoreEdge, setLegStyle: setStoreLegStyle, setCustomRequests } = useConfiguratorStore();
 
   const [shape, setShape] = useState<RuleShape>('ellips');
   const [lengthMm, setLengthMm] = useState(2000);
