@@ -297,7 +297,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
             <div className="p-6 space-y-4">
               <DossierRow 
                 label={isNL ? 'Vorm' : 'Shape'} 
-                value={customRequests?.shape ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.shape}` : (shapeName || '')} 
+                value={customRequests?.shape ? `Op aanvraag (${customRequests.shape})` : (shapeName || '')} 
                 isCustom={!!customRequests?.shape}
               />
               <DossierRow 
