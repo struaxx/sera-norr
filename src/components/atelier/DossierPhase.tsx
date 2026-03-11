@@ -159,9 +159,9 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         buildCode: currentBuildCode,
         configuration: config,
         priceEstimate: {
-          min: priceEstimate.vanafPrice,
-          max: priceEstimate.vanafPrice,
-          total: priceEstimate.vanafPrice,
+          min: 0,
+          max: 0,
+          total: 0,
         },
         contact: {
           ...contact,
