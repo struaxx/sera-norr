@@ -616,6 +616,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   const [customThickness, setCustomThickness] = useState('');
   const [customLeg, setCustomLeg] = useState('');
   const [customEdge, setCustomEdge] = useState('');
+  const [customStone, setCustomStone] = useState('');
 
   // Sync all local state to Zustand store before transitioning to dossier
   const syncToStore = useCallback(() => {
