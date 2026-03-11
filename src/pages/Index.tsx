@@ -269,7 +269,7 @@ function CollectiesSection({
           animate={isInView ? "visible" : "hidden"}
         >
           <Button asChild variant="sera-secondary" size="lg">
-            <Link to="/lookbook">
+            <Link to="/collections">
               {isNL ? "Bekijk lookbook" : "View lookbook"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
