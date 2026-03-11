@@ -1,23 +1,30 @@
 
 
-## Plan: Nieuwe foto's toevoegen + layout-aanpassingen Collections & Lookbook
+## Probleem
 
-### Wat er verandert
+Het buildCode wordt voor elke aanvraag identiek gegenereerd als de configuratie hetzelfde is. Twee oorzaken:
 
-**1. Nieuwe foto's toevoegen aan beide pagina's**
-Er zijn 18 nieuwe `hf_*` foto's in `public/lookbook/`. Deze worden toegevoegd als extra items aan zowel:
-- `src/pages/Collections.tsx` — het masonry grid (nu 12 items, wordt ~30)
-- `src/pages/Lookbook.tsx` — de lookbook galerij (nu 12 items, wordt ~30)
+1. **Bug in `generateBuildCode`**: `Date.now().toString(36).substring(-4)` — `substring()` behandelt negatieve waarden als 0, dus het geeft de volledige string terug in plaats van de laatste 4 tekens. Moet `slice(-4)` zijn.
+2. **Geen regeneratie bij submit**: Het buildCode wordt eenmalig gegenereerd en in localStorage bewaard. Bij een tweede aanvraag wordt hetzelfde code hergebruikt.
+3. **Dossier referentie niet gekoppeld aan database**: De `dossierRef` wordt client-side aangemaakt maar niet opgeslagen of meegestuurd in de e-mail.
 
-Elke nieuwe foto krijgt een passende naam, collectie (VANTA/TERRA), steensoort, en type op basis van de bestandsnamen.
+## Oplossing
 
-**2. Sticky filter bar verwijderen (Collections)**
-De hele `<section>` met de sticky filter bar (ALLES / VANTA / TERRA / EETTAFELS / etc.) wordt verwijderd uit `Collections.tsx`. De bijbehorende filter state (`activeFilter`, `filterOptions`, filter logic) wordt ook opgeruimd. Alle items worden altijd getoond.
+### 1. Fix `generateBuildCode` in `configurator-store.ts`
+- `substring(-4)` → `slice(-4)` zodat de timestamp-suffix daadwerkelijk uniek is.
 
-**3. Duidelijke grens tussen header en foto's (Collections)**
-In plaats van de zwevende overgang wordt er een zichtbare `border-b border-foreground/10` of een `<Hairline>` component toegevoegd onderaan de header section, zodat er een duidelijke visuele scheiding is voor het fotogrid begint.
+### 2. Unieke dossier referentie per aanvraag
+- Bij elke submit in `requestQuote` (api.ts): gebruik het database-gegenereerde `id` (UUID) uit het `form_submissions` antwoord om een unieke dossierref te maken, bijv. `DOS-2503-XXXX` (jaar+maand + laatste 4 chars van DB id).
+- Stuur deze dossierRef mee in de e-mail subject line in plaats van alleen het buildCode.
+
+### 3. Dossier ref in e-mail
+- Update `submit-form` edge function: return het submission `id` (dit doet het al via `data.id`).
+- Update `send-confirmation-email` aanroep (als apart) of de email subject in `requestQuote` om de unieke dossierRef te gebruiken.
+
+### 4. Forceer nieuw buildCode bij elke submit
+- In de dossier-fase, regenereer het buildCode vlak voor verzending zodat het altijd een vers timestamp bevat.
 
 ### Bestanden die worden aangepast
-- `src/pages/Collections.tsx` — nieuwe items, filter verwijderen, separator toevoegen
-- `src/pages/Lookbook.tsx` — nieuwe items toevoegen
+- `src/stores/configurator-store.ts` — fix `slice(-4)`, add random suffix
+- `src/lib/configurator/api.ts` — genereer unieke dossierRef op basis van DB id, gebruik in email subject
 
