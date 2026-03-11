@@ -184,7 +184,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               customerPhone: contact.phone,
               customerPostcode: contact.location,
               configuration: config,
-              priceEstimate: { vanafPrice: priceEstimate.vanafPrice },
+              priceEstimate: { vanafPrice: 0 },
               stoneName,
               shapeName,
               dimensionString,
