@@ -240,7 +240,7 @@ function CollectiesSection({
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <Link to="/lookbook" className="group block">
+          <Link to="/collections" className="group block">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8">
               {[
                 '/lookbook/marble-round-livingroom.png',
