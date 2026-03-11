@@ -297,17 +297,17 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
             <div className="p-6 space-y-4">
               <DossierRow 
                 label={isNL ? 'Vorm' : 'Shape'} 
-                value={customRequests?.shape ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.shape}` : (shapeName || '')} 
+                value={customRequests?.shape ? `Op aanvraag (${customRequests.shape})` : (shapeName || '')} 
                 isCustom={!!customRequests?.shape}
               />
               <DossierRow 
                 label={isNL ? 'Afmetingen' : 'Dimensions'} 
-                value={customRequests?.dimension ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.dimension}` : dimensionString} 
+                value={customRequests?.dimension ? `Op aanvraag (${customRequests.dimension})` : dimensionString} 
                 isCustom={!!customRequests?.dimension}
               />
               <DossierRow 
                 label={isNL ? 'Bladdikte' : 'Thickness'} 
-                value={customRequests?.thickness ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.thickness}` : thicknessString} 
+                value={customRequests?.thickness ? `Op aanvraag (${customRequests.thickness})` : thicknessString} 
                 isCustom={!!customRequests?.thickness}
               />
               <DossierRow 
@@ -320,12 +320,12 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               />
               <DossierRow 
                 label={isNL ? 'Randprofiel' : 'Edge'} 
-                value={customRequests?.edge ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.edge}` : (edgeName || '')} 
+                value={customRequests?.edge ? `Op aanvraag (${customRequests.edge})` : (edgeName || '')} 
                 isCustom={!!customRequests?.edge}
               />
               <DossierRow 
                 label={isNL ? 'Onderstel' : 'Base'} 
-                value={customRequests?.leg ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.leg}` : (baseName || '')} 
+                value={customRequests?.leg ? `Op aanvraag (${customRequests.leg})` : (baseName || '')} 
                 isCustom={!!customRequests?.leg}
               />
             </div>
