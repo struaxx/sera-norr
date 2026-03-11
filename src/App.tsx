@@ -17,8 +17,6 @@ const Atelier = lazy(() => import("./pages/Atelier"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Journal = lazy(() => import("./pages/Journal"));
-const Materials = lazy(() => import("./pages/Materials"));
-const MaterialDetail = lazy(() => import("./pages/MaterialDetail"));
 const Voorstel = lazy(() => import("./pages/Voorstel"));
 
 const Care = lazy(() => import("./pages/Care"));
@@ -46,8 +44,6 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/journal" element={<Journal />} />
-            <Route path="/materials" element={<Materials />} />
-            <Route path="/materials/:materialId" element={<MaterialDetail />} />
             <Route path="/proposal" element={<Voorstel />} />
             <Route path="/lookbook" element={<Collections />} />
             <Route path="/care" element={<Care />} />

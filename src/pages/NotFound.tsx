@@ -50,10 +50,10 @@ const NotFound = () => {
                 {isNL ? "Atelier" : "Atelier"}
               </Link>
               <Link 
-                to="/materials" 
+                to="/collections" 
                 className="text-foreground/70 hover:text-foreground transition-colors underline underline-offset-4"
               >
-                {isNL ? "Materialen" : "Materials"}
+                {isNL ? "Collecties" : "Collections"}
               </Link>
               <Link 
                 to="/about" 
