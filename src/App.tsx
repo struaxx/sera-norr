@@ -12,7 +12,6 @@ import Index from "./pages/Index";
 
 // Lazy load all other pages for better performance
 const Collections = lazy(() => import("./pages/Collections"));
-const CollectionDetail = lazy(() => import("./pages/CollectionDetail"));
 const Bespoke = lazy(() => import("./pages/Bespoke"));
 const Atelier = lazy(() => import("./pages/Atelier"));
 const About = lazy(() => import("./pages/About"));
@@ -21,7 +20,7 @@ const Journal = lazy(() => import("./pages/Journal"));
 const Materials = lazy(() => import("./pages/Materials"));
 const MaterialDetail = lazy(() => import("./pages/MaterialDetail"));
 const Voorstel = lazy(() => import("./pages/Voorstel"));
-const Lookbook = lazy(() => import("./pages/Lookbook"));
+
 const Care = lazy(() => import("./pages/Care"));
 const Insights = lazy(() => import("./pages/Insights"));
 const Shipping = lazy(() => import("./pages/Shipping"));
@@ -41,8 +40,7 @@ const App = () => (
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/collections" element={<Lookbook />} />
-            <Route path="/collections/:collectionId" element={<CollectionDetail />} />
+            <Route path="/collections" element={<Collections />} />
             <Route path="/bespoke" element={<Bespoke />} />
             <Route path="/atelier" element={<Atelier />} />
             <Route path="/about" element={<About />} />
@@ -51,7 +49,7 @@ const App = () => (
             <Route path="/materials" element={<Materials />} />
             <Route path="/materials/:materialId" element={<MaterialDetail />} />
             <Route path="/proposal" element={<Voorstel />} />
-            <Route path="/lookbook" element={<Lookbook />} />
+            <Route path="/lookbook" element={<Collections />} />
             <Route path="/care" element={<Care />} />
             <Route path="/insights" element={<Insights />} />
             <Route path="/shipping" element={<Shipping />} />

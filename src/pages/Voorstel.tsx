@@ -241,7 +241,7 @@ const Voorstel = () => {
                 </Link>
               </Button>
               <Button asChild variant="atelier" size="lg">
-                <Link to="/lookbook">
+                <Link to="/collections">
                   {isNL ? "Bekijk online voorbeelden" : "View online examples"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

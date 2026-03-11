@@ -17,7 +17,7 @@ export function Header() {
 
   // Updated navigation: Collecties, Atelier (replaces Bespoke), Contact
   const navLinks = [
-    { name: t('nav.collections'), path: "/lookbook" },
+    { name: t('nav.collections'), path: "/collections" },
     { name: "Atelier", path: "/atelier" },
     { name: t('nav.contact'), path: "/contact" },
   ];
