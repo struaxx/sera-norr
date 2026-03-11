@@ -699,7 +699,11 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
                 </div>
               </div>
 
-              <Button variant="atelier" className="w-full" onClick={onContinue}>
+              <Button variant="atelier" className="w-full" onClick={() => {
+                // Sync local state to Zustand store before transitioning
+                syncToStore();
+                onContinue();
+              }}>
                 {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
