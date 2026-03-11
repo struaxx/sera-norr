@@ -363,18 +363,15 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               </p>
             </div>
 
-            {/* Price Summary - Vanaf Price */}
+            {/* Pricing Note */}
             <div className="bg-foreground/5 p-6 border-t border-border">
-              <div className="flex justify-between items-baseline mb-2">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  {isNL ? 'Vanaf' : 'From'}
-                </span>
-                <span className="text-2xl font-serif">
-                  {formatVanafPrice(priceEstimate.vanafPrice)}
-                </span>
-              </div>
-              <p className="text-[10px] text-muted-foreground">
-                {priceEstimate.disclaimer}
+              <p className="text-sm text-foreground font-serif mb-1">
+                {isNL ? 'Prijs op maat' : 'Tailored pricing'}
+              </p>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                {isNL 
+                  ? 'Elke tafel is uniek — de definitieve prijs ontvangt u in uw persoonlijk voorstel, afgestemd op slab-keuze, afwerking en levering.'
+                  : 'Every table is unique — you will receive the final price in your personal proposal, tailored to slab selection, finish and delivery.'}
               </p>
             </div>
           </div>
