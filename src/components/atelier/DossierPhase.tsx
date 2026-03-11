@@ -320,7 +320,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               />
               <DossierRow 
                 label={isNL ? 'Randprofiel' : 'Edge'} 
-                value={customRequests?.edge ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.edge}` : (edgeName || '')} 
+                value={customRequests?.edge ? `Op aanvraag (${customRequests.edge})` : (edgeName || '')} 
                 isCustom={!!customRequests?.edge}
               />
               <DossierRow 
