@@ -188,6 +188,10 @@ export const useConfiguratorStore = create<ConfiguratorStore>()(
       customStoneRequest: null,
       setCustomStoneRequest: (request) => set({ customStoneRequest: request }),
       
+      // Custom per-step requests
+      customRequests: {},
+      setCustomRequests: (requests) => set({ customRequests: requests }),
+      
       // Config
       config: defaultConfig,
       viewer: defaultViewer,
