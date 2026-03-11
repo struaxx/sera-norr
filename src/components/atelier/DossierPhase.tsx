@@ -46,7 +46,7 @@ interface DossierPhaseProps {
 
 export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const { toast } = useToast();
-  const { config, inspirationItems, generateBuildCode, buildCode, customStoneRequest, getShareUrl } = useConfiguratorStore();
+  const { config, inspirationItems, generateBuildCode, buildCode, customStoneRequest, customRequests, getShareUrl } = useConfiguratorStore();
   
   const viewerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
