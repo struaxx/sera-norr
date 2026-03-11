@@ -302,7 +302,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               />
               <DossierRow 
                 label={isNL ? 'Afmetingen' : 'Dimensions'} 
-                value={customRequests?.dimension ? `${isNL ? 'Anders, nl.' : 'Custom:'} ${customRequests.dimension}` : dimensionString} 
+                value={customRequests?.dimension ? `Op aanvraag (${customRequests.dimension})` : dimensionString} 
                 isCustom={!!customRequests?.dimension}
               />
               <DossierRow 
