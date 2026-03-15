@@ -224,11 +224,23 @@ const Collections = () => {
                       : "bg-gradient-to-br from-[#E8DFD0]/60 via-[#E8DFD0]/40 to-[#E8DFD0]/20")
                   )}>
                     {item.image && (
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
+                      <img
+                        src={item.image}
+                        alt={item.name}
                         className="absolute inset-0 w-full h-full object-cover"
-                        loading="lazy"
+                        loading={index < 8 ? "eager" : "lazy"}
+                        decoding={index < 8 ? "sync" : "async"}
+                        fetchPriority={index < 4 ? "high" : "auto"}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.dataset.retried) {
+                            target.dataset.retried = 'true';
+                            target.src = `${item.image}?retry=${Date.now()}`;
+                          } else {
+                            target.style.display = 'none';
+                            target.parentElement?.classList.add('bg-secondary/40');
+                          }
+                        }}
                       />
                     )}
                     
