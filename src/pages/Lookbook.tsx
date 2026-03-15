@@ -334,7 +334,18 @@ const Lookbook = () => {
                         src={item.image} 
                         alt={`${item.title} — ${item.stone} ${item.dimensions}`}
                         className="w-full h-full object-cover"
-                        loading="lazy"
+                        loading={index < 8 ? "eager" : "lazy"}
+                        decoding={index < 8 ? "sync" : "async"}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.dataset.retried) {
+                            target.dataset.retried = 'true';
+                            target.src = `${item.image}?retry=${Date.now()}`;
+                          } else {
+                            target.style.display = 'none';
+                            target.parentElement?.classList.add('bg-secondary/40');
+                          }
+                        }}
                       />
                     ) : (
                       <div 
