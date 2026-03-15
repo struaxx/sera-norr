@@ -27,7 +27,7 @@ interface LookbookItem {
 
 const Collections = () => {
   const { i18n } = useTranslation();
-  const isNL = i18n.language === 'nl';
+  const isNL = (i18n.resolvedLanguage ?? i18n.language ?? 'nl').toLowerCase().startsWith('nl');
   const [selectedItem, setSelectedItem] = useState<LookbookItem | null>(null);
 
   const seoTitle = isNL 
