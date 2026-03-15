@@ -14,9 +14,16 @@ i18n
     },
     lng: savedLanguage,
     fallbackLng: 'nl',
+    supportedLngs: ['nl', 'en'],
     interpolation: {
       escapeValue: false,
     },
   });
+
+// Re-apply saved language on each page load to prevent drift
+const stored = localStorage.getItem('language');
+if (stored && (stored === 'nl' || stored === 'en') && i18n.language !== stored) {
+  i18n.changeLanguage(stored);
+}
 
 export default i18n;
