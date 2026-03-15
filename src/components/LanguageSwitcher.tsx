@@ -7,10 +7,11 @@ interface LanguageSwitcherProps {
 
 export function LanguageSwitcher({ isLight = false }: LanguageSwitcherProps) {
   const { i18n } = useTranslation();
-  
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
+  const activeLanguage = (i18n.resolvedLanguage ?? i18n.language ?? 'nl').toLowerCase().startsWith('en') ? 'en' : 'nl';
+
+  const changeLanguage = (lng: 'nl' | 'en') => {
     localStorage.setItem('language', lng);
+    void i18n.changeLanguage(lng);
   };
 
   return (
@@ -20,10 +21,10 @@ export function LanguageSwitcher({ isLight = false }: LanguageSwitcherProps) {
         className={cn(
           "font-sans text-[10px] uppercase tracking-[0.15em] transition-colors duration-300",
           isLight
-            ? i18n.language === 'nl'
+            ? activeLanguage === 'nl'
               ? "text-white"
               : "text-white/60 hover:text-white"
-            : i18n.language === 'nl'
+            : activeLanguage === 'nl'
               ? "text-foreground"
               : "text-muted-foreground hover:text-foreground"
         )}
@@ -39,10 +40,10 @@ export function LanguageSwitcher({ isLight = false }: LanguageSwitcherProps) {
         className={cn(
           "font-sans text-[10px] uppercase tracking-[0.15em] transition-colors duration-300",
           isLight
-            ? i18n.language === 'en'
+            ? activeLanguage === 'en'
               ? "text-white"
               : "text-white/60 hover:text-white"
-            : i18n.language === 'en'
+            : activeLanguage === 'en'
               ? "text-foreground"
               : "text-muted-foreground hover:text-foreground"
         )}
