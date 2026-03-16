@@ -32,7 +32,6 @@ const Care = () => {
     { question: 'How often should I seal the stone?', answer: 'For heavily used surfaces (dining tables) we recommend annual sealing. Consoles and side tables can be treated every 2-3 years.' },
     { question: 'Does travertine change color?', answer: 'Travertine may develop a slight patina through use, which deepens its character. This is a natural process that contributes to the unique beauty of the material.' },
     { question: 'Is marble prone to scratches?', answer: 'Marble is softer than granite and may develop light use marks with intensive use. This is normal and contributes to the lived-in character.' },
-    { question: 'Does SERA NORR supply care products?', answer: 'Upon delivery you receive a care kit with suitable products and instructions. Additional products are available on request.' },
   ];
 
   const seoTitle = isNL 
