@@ -129,7 +129,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
     }
     animFrameRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [prefersReducedMotion, isMobile, getDimensions]);
+  }, [prefersReducedMotion, isMobile]);
 
   // Mouse handlers
   const handleMouseMove = useCallback(
