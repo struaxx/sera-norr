@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Instagram, Linkedin, Mail } from "lucide-react";
+import { Instagram, Mail } from "lucide-react";
 import { CookiePreferencesButton } from "@/components/CookieBanner";
 
 export function Footer() {
