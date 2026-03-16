@@ -243,15 +243,15 @@ function CollectiesSection({
           <Link to="/collections" className="group block">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8">
               {[
-                '/lookbook/marble-round-livingroom.png',
-                '/lookbook/travertine-oval-slab.png',
-                '/lookbook/calacatta-viola-round.png',
-                '/lookbook/travertine-round-cone.png',
-              ].map((src, i) => (
+                { src: '/lookbook/marble-round-livingroom.png', alt: isNL ? 'Ronde marmeren tafel in woonkamer setting' : 'Round marble table in living room setting' },
+                { src: '/lookbook/travertine-oval-slab.png', alt: isNL ? 'Ovale travertin eettafel met massieve slab basis' : 'Oval travertine dining table with massive slab base' },
+                { src: '/lookbook/calacatta-viola-round.png', alt: isNL ? 'Ronde Calacatta Viola marmeren tafel' : 'Round Calacatta Viola marble table' },
+                { src: '/lookbook/travertine-round-cone.png', alt: isNL ? 'Ronde travertin salontafel met conische basis' : 'Round travertine coffee table with conical base' },
+              ].map((img, i) => (
                 <div key={i} className="aspect-[4/5] overflow-hidden bg-secondary/50">
                   <img 
-                    src={src} 
-                    alt="" 
+                    src={img.src} 
+                    alt={img.alt} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
