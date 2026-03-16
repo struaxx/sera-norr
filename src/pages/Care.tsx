@@ -26,14 +26,12 @@ const Care = () => {
     { question: 'Hoe vaak moet ik impregneren?', answer: 'Voor intensief gebruikte oppervlakken (eettafels) adviseren wij jaarlijks impregneren. Consoles en bijzettafels kunnen om de 2-3 jaar worden behandeld.' },
     { question: 'Verandert travertin van kleur?', answer: 'Travertin kan licht patineren door gebruik, wat het karakter verdiept. Dit is een natuurlijk proces dat bijdraagt aan de unieke schoonheid van het materiaal.' },
     { question: 'Is marmer gevoelig voor krassen?', answer: 'Marmer is zachter dan graniet en kan bij intensief gebruik lichte gebruikssporen krijgen. Dit is normaal en draagt bij aan het geleefde karakter.' },
-    { question: 'Levert SERA NORR onderhoudsmiddelen?', answer: 'Bij levering ontvangt u een verzorgingsset met geschikte producten en instructies. Aanvullende producten zijn op aanvraag verkrijgbaar.' },
   ] : [
     { question: 'Can I place hot pans on natural stone?', answer: 'Natural stone is heat resistant, but we always recommend a trivet to prevent thermal shock and protect the finish.' },
     { question: 'How do I remove stains?', answer: 'Most stains can be removed with a damp cloth. For stubborn stains, we recommend a pH-neutral stone cleaner. Avoid acidic or abrasive products.' },
     { question: 'How often should I seal the stone?', answer: 'For heavily used surfaces (dining tables) we recommend annual sealing. Consoles and side tables can be treated every 2-3 years.' },
     { question: 'Does travertine change color?', answer: 'Travertine may develop a slight patina through use, which deepens its character. This is a natural process that contributes to the unique beauty of the material.' },
     { question: 'Is marble prone to scratches?', answer: 'Marble is softer than granite and may develop light use marks with intensive use. This is normal and contributes to the lived-in character.' },
-    { question: 'Does SERA NORR supply care products?', answer: 'Upon delivery you receive a care kit with suitable products and instructions. Additional products are available on request.' },
   ];
 
   const seoTitle = isNL 
