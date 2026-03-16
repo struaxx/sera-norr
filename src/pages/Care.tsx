@@ -26,7 +26,6 @@ const Care = () => {
     { question: 'Hoe vaak moet ik impregneren?', answer: 'Voor intensief gebruikte oppervlakken (eettafels) adviseren wij jaarlijks impregneren. Consoles en bijzettafels kunnen om de 2-3 jaar worden behandeld.' },
     { question: 'Verandert travertin van kleur?', answer: 'Travertin kan licht patineren door gebruik, wat het karakter verdiept. Dit is een natuurlijk proces dat bijdraagt aan de unieke schoonheid van het materiaal.' },
     { question: 'Is marmer gevoelig voor krassen?', answer: 'Marmer is zachter dan graniet en kan bij intensief gebruik lichte gebruikssporen krijgen. Dit is normaal en draagt bij aan het geleefde karakter.' },
-    { question: 'Levert SERA NORR onderhoudsmiddelen?', answer: 'Bij levering ontvangt u een verzorgingsset met geschikte producten en instructies. Aanvullende producten zijn op aanvraag verkrijgbaar.' },
   ] : [
     { question: 'Can I place hot pans on natural stone?', answer: 'Natural stone is heat resistant, but we always recommend a trivet to prevent thermal shock and protect the finish.' },
     { question: 'How do I remove stains?', answer: 'Most stains can be removed with a damp cloth. For stubborn stains, we recommend a pH-neutral stone cleaner. Avoid acidic or abrasive products.' },
