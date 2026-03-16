@@ -36,8 +36,8 @@ export default function Privacy() {
               </p>
               <p>
                 {isNL
-                  ? 'Voor vragen over dit privacybeleid kunt u contact opnemen via info@seranorr.com.'
-                  : 'For questions about this privacy policy, please contact us at info@seranorr.com.'}
+                   ? 'Voor vragen over dit privacybeleid kunt u contact opnemen via info@sera-norr.com.'
+                   : 'For questions about this privacy policy, please contact us at info@sera-norr.com.'}
               </p>
             </section>
 
