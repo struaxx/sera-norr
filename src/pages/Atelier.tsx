@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Phone } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@/components/layout';
 import { SEOHead } from '@/components/seo';
 import { Button } from '@/components/ui/button';
@@ -15,9 +16,9 @@ import { loadConfiguration } from '@/lib/configurator/api';
 import { PRESETS } from '@/lib/configurator/presets';
 
 // Phase indicator component with reset - NOW 2 STEPS ONLY
-function PhaseIndicator({ currentPhase, onReset }: { currentPhase: AtelierPhase; onReset: () => void }) {
+function PhaseIndicator({ currentPhase, onReset, isNL }: { currentPhase: AtelierPhase; onReset: () => void; isNL: boolean }) {
   const phases: { id: AtelierPhase; label: string; step: number }[] = [
-    { id: 'configurator', label: 'Ontwerp', step: 1 },
+    { id: 'configurator', label: isNL ? 'Ontwerp' : 'Design', step: 1 },
     { id: 'dossier', label: 'Dossier', step: 2 },
   ];
 
@@ -205,19 +206,20 @@ export default function Atelier() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const isNL = true;
+  const { i18n } = useTranslation();
+  const isNL = i18n.language === 'nl';
 
   return (
     <Layout>
       <SEOHead 
-        title="Atelier | Ontwerp uw maatwerk stuk | SERA NORR"
-        description="Stel uw unieke natuurstenen meubel samen in ons digitale atelier. Kies materiaal, afmetingen en afwerking voor een persoonlijk voorstel."
+        title={isNL ? "Atelier | Ontwerp uw maatwerk stuk | SERA NORR" : "Atelier | Design your bespoke piece | SERA NORR"}
+        description={isNL ? "Stel uw unieke natuurstenen meubel samen in ons digitale atelier. Kies materiaal, afmetingen en afwerking voor een persoonlijk voorstel." : "Create your unique natural stone furniture in our digital atelier. Choose material, dimensions and finish for a personal proposal."}
       />
 
       <main className="min-h-screen py-16 md:py-24">
         <div className="container max-w-7xl mx-auto px-4">
           {/* Phase Indicator with Reset */}
-          <PhaseIndicator currentPhase={phase} onReset={handleReset} />
+          <PhaseIndicator currentPhase={phase} onReset={handleReset} isNL={isNL} />
 
           {/* Help sidebar */}
           <HelpSidebar isNL={isNL} />
@@ -235,14 +237,14 @@ export default function Atelier() {
                 <ConfiguratorPhase 
                   onBack={handleReset}
                   onContinue={() => handlePhaseTransition('dossier')}
-                  isNL={true}
+                  isNL={isNL}
                 />
               )}
 
               {phase === 'dossier' && (
                 <DossierPhase 
                   onBack={() => handlePhaseTransition('configurator')}
-                  isNL={true}
+                  isNL={isNL}
                 />
               )}
             </motion.div>
