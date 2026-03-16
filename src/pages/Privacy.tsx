@@ -104,8 +104,8 @@ export default function Privacy() {
               </h2>
               <p>
                 {isNL
-                  ? 'Op grond van de AVG (GDPR) heeft u recht op inzage, rectificatie, verwijdering, beperking en overdraagbaarheid van uw gegevens, alsmede het recht om bezwaar te maken. U kunt deze rechten uitoefenen door contact op te nemen via info@seranorr.com. U heeft tevens het recht een klacht in te dienen bij de Autoriteit Persoonsgegevens.'
-                  : 'Under the GDPR, you have the right to access, rectification, erasure, restriction, and portability of your data, as well as the right to object. You can exercise these rights by contacting info@seranorr.com. You also have the right to file a complaint with the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).'}
+                   ? 'Op grond van de AVG (GDPR) heeft u recht op inzage, rectificatie, verwijdering, beperking en overdraagbaarheid van uw gegevens, alsmede het recht om bezwaar te maken. U kunt deze rechten uitoefenen door contact op te nemen via info@sera-norr.com. U heeft tevens het recht een klacht in te dienen bij de Autoriteit Persoonsgegevens.'
+                   : 'Under the GDPR, you have the right to access, rectification, erasure, restriction, and portability of your data, as well as the right to object. You can exercise these rights by contacting info@sera-norr.com. You also have the right to file a complaint with the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).'}
               </p>
             </section>
 

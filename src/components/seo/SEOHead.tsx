@@ -247,7 +247,7 @@ export const localBusinessSchema = {
   name: 'SERA NORR Online Atelier',
   image: 'https://sera-norr.com/og-image.jpg',
   url: 'https://sera-norr.com',
-  email: 'atelier@seranorr.com',
+  email: 'info@sera-norr.com',
   description: 'Online atelier voor maatwerk meubels in natuursteen. Travertin, marmer en geselecteerde steensoorten. Ontworpen in Nederland.',
   areaServed: {
     '@type': 'Country',

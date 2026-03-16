@@ -249,7 +249,7 @@ export async function generateDossierPDF({
   pdf.setTextColor(brandMuted);
   pdf.setFontSize(9);
   pdf.setFont('helvetica', 'normal');
-  pdf.text('info@seranorr.com', margin, yPos);
+  pdf.text('info@sera-norr.com', margin, yPos);
   pdf.text('sera-norr.com', margin + 50, yPos);
 
   // ============================================
