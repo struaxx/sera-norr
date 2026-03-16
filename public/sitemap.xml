@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://sera-norr.com/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/?lang=en" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/collections</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/collections" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/collections?lang=en" />
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/atelier</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/atelier" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/atelier?lang=en" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/about</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/about" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/about?lang=en" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/contact</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/contact?lang=en" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/journal</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/journal" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/journal?lang=en" />
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/care</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/care" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/care?lang=en" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/shipping</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/shipping" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/shipping?lang=en" />
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/privacy?lang=en" />
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://sera-norr.com/terms</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sera-norr.com/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sera-norr.com/terms?lang=en" />
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+</urlset>
