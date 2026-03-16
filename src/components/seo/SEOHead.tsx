@@ -146,7 +146,7 @@ export const organizationSchema = {
   },
   contactPoint: {
     '@type': 'ContactPoint',
-    email: 'atelier@seranorr.com',
+     email: 'info@sera-norr.com',
     contactType: 'customer service',
     availableLanguage: ['Dutch', 'English'],
   },
