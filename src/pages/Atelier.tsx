@@ -219,7 +219,7 @@ export default function Atelier() {
       <main className="min-h-screen py-16 md:py-24">
         <div className="container max-w-7xl mx-auto px-4">
           {/* Phase Indicator with Reset */}
-          <PhaseIndicator currentPhase={phase} onReset={handleReset} />
+          <PhaseIndicator currentPhase={phase} onReset={handleReset} isNL={isNL} />
 
           {/* Help sidebar */}
           <HelpSidebar isNL={isNL} />
