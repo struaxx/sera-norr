@@ -157,6 +157,61 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Form submission saved:", data.id);
 
+    // Send email notification to admin
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (resendApiKey) {
+      try {
+        const subjectMap: Record<string, string> = {
+          'algemeen': 'Algemene vraag',
+          'maatwerk': 'Maatwerk',
+          'samenwerking': 'Samenwerking',
+        };
+        const subjectLabel = body.subject ? (subjectMap[body.subject] || body.subject) : 'Contact';
+        
+        const adminHtml = `<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a1a;padding:20px}
+table{width:100%;border-collapse:collapse;margin:15px 0}
+td,th{padding:10px;text-align:left;border-bottom:1px solid #ddd}
+th{background:#f5f5f5;font-weight:500;width:120px}
+.msg{background:#f9f9f9;padding:20px;margin:15px 0;white-space:pre-wrap}
+</style></head><body>
+<h1>📩 Nieuw contactformulier</h1>
+<table>
+<tr><th>Naam</th><td>${sanitizeString(body.name) || '-'}</td></tr>
+<tr><th>Email</th><td><a href="mailto:${body.email}">${body.email}</a></td></tr>
+${body.phone ? `<tr><th>Telefoon</th><td>${sanitizeString(body.phone)}</td></tr>` : ''}
+<tr><th>Onderwerp</th><td>${subjectLabel}</td></tr>
+<tr><th>Type</th><td>${body.form_type}</td></tr>
+</table>
+<h2>Bericht</h2>
+<div class="msg">${sanitizeString(body.message) || '-'}</div>
+<p style="color:#999;font-size:11px">Verzonden op ${new Date().toLocaleString('nl-NL', { timeZone: 'Europe/Amsterdam' })}</p>
+</body></html>`;
+
+        const emailRes = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendApiKey}` },
+          body: JSON.stringify({
+            from: "SERA NORR <onboarding@resend.dev>",
+            to: ["info@sera-norr.com"],
+            subject: `📩 ${subjectLabel} — ${sanitizeString(body.name) || 'Onbekend'}`,
+            html: adminHtml,
+          }),
+        });
+        const emailData = await emailRes.json();
+        if (!emailRes.ok) {
+          console.error("Resend error:", emailData);
+        } else {
+          console.log("Admin notification sent, id:", emailData.id);
+        }
+      } catch (emailError) {
+        console.error("Failed to send admin notification:", emailError);
+      }
+    } else {
+      console.warn("RESEND_API_KEY not configured, skipping email notification");
+    }
+
     return new Response(
       JSON.stringify({ success: true, id: data.id }),
       { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
