@@ -558,7 +558,7 @@ function CustomRequestToggle({
   const isActive = isOpen || value.length > 0;
 
   return (
-    <div className="mt-3 pt-3 border-t border-border">
+    <div className="mt-4 pt-4 border-t border-border/60">
       <button
         onClick={() => {
           const next = !isOpen;
@@ -566,19 +566,28 @@ function CustomRequestToggle({
           if (!next) onChange('');
         }}
         className={cn(
-          "flex items-center gap-2 text-xs transition-colors",
-          isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+          "w-full flex items-center gap-3 px-3 py-2.5 rounded-sm border transition-all duration-200",
+          isActive
+            ? "border-foreground/30 bg-foreground/5 text-foreground"
+            : "border-dashed border-border hover:border-foreground/30 text-muted-foreground hover:text-foreground"
         )}
       >
-        <MessageSquare className="w-3.5 h-3.5" />
-        <span>{label || (isNL ? 'Anders / op aanvraag' : 'Other / on request')}</span>
-        {value && <Check className="w-3 h-3 text-foreground" />}
+        <MessageSquare className="w-4 h-4 flex-shrink-0" />
+        <div className="flex-1 text-left">
+          <span className="text-xs font-medium">{label || (isNL ? 'Anders / op aanvraag' : 'Other / on request')}</span>
+          {!isActive && (
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              {isNL ? 'Heeft u iets anders in gedachten? Laat het ons weten.' : 'Have something else in mind? Let us know.'}
+            </p>
+          )}
+        </div>
+        {value && <Check className="w-4 h-4 text-foreground flex-shrink-0" />}
       </button>
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="mt-2"
+          className="mt-3"
         >
           <textarea
             value={value}
@@ -586,6 +595,7 @@ function CustomRequestToggle({
             placeholder={isNL ? 'Beschrijf uw wens...' : 'Describe your preference...'}
             className="w-full text-sm bg-secondary/50 border border-border rounded-sm p-3 resize-none focus:outline-none focus:ring-1 focus:ring-foreground/30 placeholder:text-muted-foreground/60"
             rows={2}
+            autoFocus
           />
         </motion.div>
       )}
