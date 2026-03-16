@@ -148,11 +148,11 @@ const Contact = () => {
             
             {/* Email contact */}
             <a 
-              href="mailto:info@seranorr.com" 
+              href="mailto:info@sera-norr.com" 
               className="inline-flex items-center gap-3 text-body-md text-muted-foreground hover:text-foreground transition-colors"
             >
               <Mail className="w-4 h-4" strokeWidth={1.5} />
-              info@seranorr.com
+              info@sera-norr.com
             </a>
           </div>
         </div>

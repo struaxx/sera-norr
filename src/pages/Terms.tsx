@@ -33,7 +33,7 @@ export default function Terms() {
               <ul className="space-y-1 text-sm">
                 <li><strong>SERA NORR</strong></li>
                 <li>{isNL ? 'KvK-nummer' : 'Chamber of Commerce (KvK)'}: 89004213</li>
-                <li>E-mail: info@seranorr.com</li>
+                <li>E-mail: info@sera-norr.com</li>
                 <li>{isNL ? 'Vestiging: Nederland' : 'Based in: The Netherlands'}</li>
               </ul>
             </section>

@@ -84,7 +84,7 @@ ${body.wantsCall ? '<p>📞 U heeft aangegeven interesse te hebben in een advies
 <p style="color:#666;font-size:12px;margin-top:30px">Met vriendelijke groet,<br>Het SERA NORR team</p>
 </div>
 <div class="tr">Handgemaakt op bestelling &nbsp;•&nbsp; Ontworpen in NL &nbsp;•&nbsp; 2 jaar garantie</div>
-<div class="ft"><p>info@seranorr.com | sera-norr.com</p><p>Dit is een automatisch gegenereerd bericht.</p></div>
+<div class="ft"><p>info@sera-norr.com | sera-norr.com</p><p>Dit is een automatisch gegenereerd bericht.</p></div>
 </div></body></html>`;
 }
 
