@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Instagram, Linkedin, Mail } from "lucide-react";
+import { Instagram, Mail } from "lucide-react";
 import { CookiePreferencesButton } from "@/components/CookieBanner";
 
 export function Footer() {
@@ -29,11 +29,8 @@ export function Footer() {
 
             {/* Social */}
             <div className="mt-6 flex items-center gap-4">
-              <a href="https://instagram.com/seranorr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href="https://www.instagram.com/sera.norr/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Instagram className="h-5 w-5" />
-              </a>
-              <a href="https://linkedin.com/company/seranorr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin className="h-5 w-5" />
               </a>
             </div>
           </div>
