@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Phone } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@/components/layout';
 import { SEOHead } from '@/components/seo';
 import { Button } from '@/components/ui/button';
