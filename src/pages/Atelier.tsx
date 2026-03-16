@@ -206,7 +206,8 @@ export default function Atelier() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const isNL = true;
+  const { i18n } = useTranslation();
+  const isNL = i18n.language === 'nl';
 
   return (
     <Layout>
