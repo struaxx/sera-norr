@@ -37,12 +37,22 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
   // Lerp helper
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-  // Get container dimensions
-  const getDimensions = useCallback(() => {
-    if (!containerRef.current) return { w: 600, h: 300, cx: 300, cy: 150 };
+  // Cached container dimensions — updated on resize, not every frame
+  const cachedDimsRef = useRef({ w: 600, h: 300, cx: 300, cy: 150 });
+
+  const updateDimensions = useCallback(() => {
+    if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    return { w: rect.width, h: rect.height, cx: rect.width / 2, cy: rect.height / 2 };
+    cachedDimsRef.current = { w: rect.width, h: rect.height, cx: rect.width / 2, cy: rect.height / 2 };
   }, []);
+
+  // Update dimensions on resize
+  useEffect(() => {
+    updateDimensions();
+    const onResize = () => updateDimensions();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [updateDimensions]);
 
   // Animation loop
   useEffect(() => {
@@ -52,7 +62,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
     const hoverRadius = isMobile ? 110 : 180;
 
     const animate = () => {
-      const { w, h, cx, cy } = getDimensions();
+      const { w, h, cx, cy } = cachedDimsRef.current;
       timeRef.current += 0.008;
       const t = timeRef.current;
 
