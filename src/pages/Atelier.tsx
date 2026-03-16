@@ -237,14 +237,14 @@ export default function Atelier() {
                 <ConfiguratorPhase 
                   onBack={handleReset}
                   onContinue={() => handlePhaseTransition('dossier')}
-                  isNL={true}
+                  isNL={isNL}
                 />
               )}
 
               {phase === 'dossier' && (
                 <DossierPhase 
                   onBack={() => handlePhaseTransition('configurator')}
-                  isNL={true}
+                  isNL={isNL}
                 />
               )}
             </motion.div>
