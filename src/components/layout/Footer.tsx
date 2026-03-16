@@ -21,9 +21,9 @@ export function Footer() {
             
             {/* Contact info */}
             <div className="mt-6 space-y-2">
-              <a href="mailto:info@seranorr.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
+              <a href="mailto:info@sera-norr.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
                 <Mail className="h-4 w-4" />
-                info@seranorr.com
+                info@sera-norr.com
               </a>
             </div>
 
