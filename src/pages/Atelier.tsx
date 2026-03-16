@@ -16,9 +16,9 @@ import { loadConfiguration } from '@/lib/configurator/api';
 import { PRESETS } from '@/lib/configurator/presets';
 
 // Phase indicator component with reset - NOW 2 STEPS ONLY
-function PhaseIndicator({ currentPhase, onReset }: { currentPhase: AtelierPhase; onReset: () => void }) {
+function PhaseIndicator({ currentPhase, onReset, isNL }: { currentPhase: AtelierPhase; onReset: () => void; isNL: boolean }) {
   const phases: { id: AtelierPhase; label: string; step: number }[] = [
-    { id: 'configurator', label: 'Ontwerp', step: 1 },
+    { id: 'configurator', label: isNL ? 'Ontwerp' : 'Design', step: 1 },
     { id: 'dossier', label: 'Dossier', step: 2 },
   ];
 
