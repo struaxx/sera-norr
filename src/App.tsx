@@ -20,7 +20,7 @@ const Journal = lazy(() => import("./pages/Journal"));
 
 
 const Care = lazy(() => import("./pages/Care"));
-const Insights = lazy(() => import("./pages/Insights"));
+
 const Shipping = lazy(() => import("./pages/Shipping"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -47,7 +47,7 @@ const App = () => (
             
             <Route path="/lookbook" element={<Collections />} />
             <Route path="/care" element={<Care />} />
-            <Route path="/insights" element={<Insights />} />
+            
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
