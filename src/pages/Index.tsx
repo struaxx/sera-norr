@@ -13,7 +13,7 @@ import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
-import heroImage from "@/assets/hero-homepage.png";
+import heroImage from "@/assets/hero-restaurant-marble.jpeg";
 
 
 const Index = () => {
