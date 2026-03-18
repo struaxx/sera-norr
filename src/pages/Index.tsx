@@ -67,7 +67,7 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/98 via-foreground/90 to-foreground/68" />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/76 via-foreground/38 to-foreground/62" />
           <div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--foreground)/0.50)_0%,hsl(var(--foreground)/0.34)_30%,transparent_66%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_88%_at_center,hsl(var(--foreground)/0.56)_0%,hsl(var(--foreground)/0.40)_42%,transparent_78%)]" />
         </div>
         
         {/* Content - centered */}
