@@ -79,8 +79,10 @@ export function Header() {
           <Link
             to="/"
             className={cn(
-              "font-serif text-xl lg:text-2xl tracking-[0.15em] transition-colors duration-300",
-              isLightText ? "text-background" : "text-foreground"
+              "relative isolate font-serif text-xl lg:text-2xl tracking-[0.15em] transition-colors duration-300",
+              isLightText
+                ? "text-background [text-shadow:0_2px_14px_hsl(var(--foreground)/0.75)] before:absolute before:left-1/2 before:top-1/2 before:-z-10 before:h-10 before:w-[calc(100%+3.5rem)] before:-translate-x-1/2 before:-translate-y-1/2 before:bg-[radial-gradient(ellipse_at_center,hsl(var(--foreground)/0.48)_0%,hsl(var(--foreground)/0.26)_52%,transparent_78%)] before:blur-lg"
+                : "text-foreground"
             )}
           >
             SERA NORR
