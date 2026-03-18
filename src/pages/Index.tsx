@@ -63,15 +63,17 @@ const Index = () => {
             className="w-full h-full object-cover"
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/78 via-foreground/34 to-foreground/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground/18 via-transparent to-foreground/12" />
+          <div className="absolute inset-x-0 top-0 h-[42%] bg-gradient-to-b from-foreground/22 to-transparent" />
         </div>
         
         {/* Content - centered */}
         <div className="relative z-10 w-full pb-20 lg:pb-24">
           <div className="container mx-auto px-6 lg:px-12">
-            <div className="max-w-2xl mx-auto text-center">
+            <div className="max-w-2xl mx-auto text-center [text-shadow:0_2px_18px_hsl(var(--foreground)/0.28)]">
               {/* Micro-label */}
-              <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/60 mb-4">
+              <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/82 mb-4">
                 {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
               </p>
               
@@ -81,7 +83,7 @@ const Index = () => {
               </h1>
               
               {/* Subcopy */}
-              <p className="font-sans text-base lg:text-lg text-background/80 max-w-md mx-auto mb-8">
+              <p className="font-sans text-base lg:text-lg text-background/92 max-w-md mx-auto mb-8">
                 {isNL 
                   ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
                   : "Travertine, marble and selected stone types. Made to measure."}
@@ -89,13 +91,13 @@ const Index = () => {
               
               {/* Dual CTAs */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
+                <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8 shadow-[0_10px_30px_hsl(var(--foreground)/0.18)]">
                   <Link to="/atelier">
                     {isNL ? "Ontwerp uw tafel" : "Design your table"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild variant="ghost" size="default" className="text-background/80 hover:text-background hover:bg-background/10 h-12 px-6">
+                <Button asChild variant="ghost" size="default" className="text-background/88 hover:text-background hover:bg-background/10 h-12 px-6">
                   <a href="#collecties">
                     {isNL ? "Ontdek de collecties" : "Discover collections"}
                   </a>
@@ -103,11 +105,11 @@ const Index = () => {
               </div>
               
               {/* Trust rail */}
-              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/50">
+              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/70">
                 <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
-                <span className="hidden sm:inline text-background/30">·</span>
+                <span className="hidden sm:inline text-background/40">·</span>
                 <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
-                <span className="hidden sm:inline text-background/30">·</span>
+                <span className="hidden sm:inline text-background/40">·</span>
                 <span>{isNL ? '12–16 weken' : '12–16 weeks'}</span>
               </div>
             </div>
