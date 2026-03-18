@@ -63,18 +63,19 @@ const Index = () => {
             className="w-full h-full object-cover"
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-foreground/38" />
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/98 via-foreground/90 to-foreground/62" />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/72 via-foreground/34 to-foreground/58" />
-          <div className="absolute inset-x-0 top-0 h-[68%] bg-gradient-to-b from-foreground/76 via-foreground/38 to-transparent" />
+          <div className="absolute inset-0 bg-foreground/42" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/98 via-foreground/90 to-foreground/68" />
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground/76 via-foreground/38 to-foreground/62" />
+          <div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--foreground)/0.50)_0%,hsl(var(--foreground)/0.34)_30%,transparent_66%)]" />
         </div>
         
         {/* Content - centered */}
         <div className="relative z-10 w-full pb-20 lg:pb-24">
           <div className="container mx-auto px-6 lg:px-12">
-            <div className="max-w-2xl mx-auto text-center [text-shadow:0_6px_28px_hsl(var(--foreground)/0.52)]">
+            <div className="max-w-3xl mx-auto text-center [text-shadow:0_8px_32px_hsl(var(--foreground)/0.72)]">
               {/* Micro-label */}
-              <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/92 mb-4">
+              <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/96 mb-4">
                 {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
               </p>
               
@@ -84,7 +85,7 @@ const Index = () => {
               </h1>
               
               {/* Subcopy */}
-              <p className="font-sans text-base lg:text-lg text-background/90 max-w-md mx-auto mb-8">
+              <p className="font-sans text-base lg:text-lg font-medium text-background max-w-2xl mx-auto mb-8">
                 {isNL 
                   ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
                   : "Travertine, marble and selected stone types. Made to measure."}
@@ -98,7 +99,7 @@ const Index = () => {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild variant="ghost" size="default" className="text-background/92 hover:text-background hover:bg-background/12 h-12 px-6">
+                <Button asChild variant="ghost" size="default" className="text-background hover:text-background hover:bg-background/12 h-12 px-6">
                   <a href="#collecties">
                     {isNL ? "Ontdek de collecties" : "Discover collections"}
                   </a>
@@ -106,11 +107,11 @@ const Index = () => {
               </div>
               
               {/* Trust rail */}
-              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/84">
+              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/92">
                 <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
-                <span className="hidden sm:inline text-background/56">·</span>
+                <span className="hidden sm:inline text-background/64">·</span>
                 <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
-                <span className="hidden sm:inline text-background/56">·</span>
+                <span className="hidden sm:inline text-background/64">·</span>
                 <span>{isNL ? '12–16 weken' : '12–16 weeks'}</span>
               </div>
             </div>
@@ -118,9 +119,9 @@ const Index = () => {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background/62">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background/72">
           <span className="text-[10px] uppercase tracking-[0.2em]">{t('home.scroll')}</span>
-          <div className="w-px h-8 bg-background/40" />
+          <div className="w-px h-8 bg-background/48" />
         </div>
       </section>
 
