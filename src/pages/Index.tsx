@@ -63,9 +63,9 @@ const Index = () => {
             className="w-full h-full object-cover"
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/88 via-foreground/52 to-foreground/22" />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/32 via-foreground/10 to-foreground/22" />
-          <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-foreground/38 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/92 via-foreground/66 to-foreground/34" />
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground/44 via-foreground/18 to-foreground/34" />
+          <div className="absolute inset-x-0 top-0 h-[56%] bg-gradient-to-b from-foreground/52 to-transparent" />
         </div>
         
         {/* Content - centered */}
@@ -78,12 +78,12 @@ const Index = () => {
               </p>
               
               {/* H1 */}
-              <h1 className="font-serif font-semibold text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-background mb-4 leading-[1.05] tracking-[-0.02em]">
+              <h1 className="font-serif font-semibold text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-white mb-4 leading-[1.05] tracking-[-0.02em]">
                 {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
               </h1>
               
               {/* Subcopy */}
-              <p className="font-sans text-base lg:text-lg text-background/92 max-w-md mx-auto mb-8">
+              <p className="font-sans text-base lg:text-lg text-white/92 max-w-md mx-auto mb-8">
                 {isNL 
                   ? "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." 
                   : "Travertine, marble and selected stone types. Made to measure."}
