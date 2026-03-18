@@ -75,7 +75,7 @@ const Index = () => {
           <div className="container mx-auto px-6 lg:px-12">
             <div className="max-w-3xl mx-auto text-center [text-shadow:0_8px_32px_hsl(var(--foreground)/0.72)]">
               {/* Micro-label */}
-              <p className="inline-block bg-foreground/42 px-3 py-1 text-[10px] font-sans uppercase tracking-[0.25em] text-background shadow-[0_4px_18px_hsl(var(--foreground)/0.45)] backdrop-blur-[2px] mb-4 font-extrabold">
+              <p className="inline-block text-[10px] font-sans uppercase tracking-[0.25em] text-background mb-4 font-extrabold">
                 {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
               </p>
               
