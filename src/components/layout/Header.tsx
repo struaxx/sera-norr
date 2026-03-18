@@ -47,7 +47,11 @@ export function Header() {
             : "bg-transparent py-6 lg:py-8"
         )}
       >
-        <nav className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
+        {isLightText && (
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
+        )}
+
+        <nav className="relative z-10 container mx-auto px-6 lg:px-12 flex items-center justify-between">
           {/* Left Navigation */}
           <div className="hidden lg:flex lg:flex-1 items-center gap-10">
             {navLinks.slice(0, 2).map((link) => (
@@ -57,7 +61,7 @@ export function Header() {
                 className={cn(
                   "font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300 link-underline",
                   isLightText
-                    ? "text-white/80 hover:text-white"
+                    ? "text-background/90 hover:text-background"
                     : location.pathname === link.path
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
@@ -76,7 +80,7 @@ export function Header() {
             to="/"
             className={cn(
               "font-serif text-xl lg:text-2xl tracking-[0.15em] transition-colors duration-300",
-              isLightText ? "text-white" : "text-foreground"
+              isLightText ? "text-background" : "text-foreground"
             )}
           >
             SERA NORR
@@ -91,7 +95,7 @@ export function Header() {
                 className={cn(
                   "font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300 link-underline",
                   isLightText
-                    ? "text-white/80 hover:text-white"
+                    ? "text-background/90 hover:text-background"
                     : location.pathname === link.path
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
@@ -109,7 +113,7 @@ export function Header() {
               size="sm"
               className={cn(
                 "h-9 px-4 text-[11px] uppercase tracking-[0.1em]",
-                isLightText && "border-white/40 text-white hover:bg-white hover:text-foreground"
+                isLightText && "border-background/50 text-background hover:bg-background hover:text-foreground"
               )}
             >
               <Link to="/atelier">
@@ -125,7 +129,7 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={cn(
                 "p-2 -mr-2 transition-colors duration-300",
-                isLightText ? "text-white" : "text-foreground"
+                isLightText ? "text-background" : "text-foreground"
               )}
               aria-label="Toggle menu"
             >
