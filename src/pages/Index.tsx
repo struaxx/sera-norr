@@ -63,9 +63,9 @@ const Index = () => {
             className="w-full h-full object-cover"
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/88 via-foreground/52 to-foreground/22" />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/32 via-foreground/10 to-foreground/22" />
-          <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-foreground/38 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/92 via-foreground/66 to-foreground/34" />
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground/44 via-foreground/18 to-foreground/34" />
+          <div className="absolute inset-x-0 top-0 h-[56%] bg-gradient-to-b from-foreground/52 to-transparent" />
         </div>
         
         {/* Content - centered */}
