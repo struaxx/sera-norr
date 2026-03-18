@@ -13,7 +13,7 @@ import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
-import heroImage from "@/assets/hero-homepage.png";
+import heroImage from "@/assets/hero-restaurant-marble.jpeg";
 
 
 const Index = () => {
@@ -63,9 +63,9 @@ const Index = () => {
             className="w-full h-full object-cover"
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/78 via-foreground/34 to-foreground/10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/18 via-transparent to-foreground/12" />
-          <div className="absolute inset-x-0 top-0 h-[42%] bg-gradient-to-b from-foreground/22 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/88 via-foreground/52 to-foreground/22" />
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground/32 via-foreground/10 to-foreground/22" />
+          <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-foreground/38 to-transparent" />
         </div>
         
         {/* Content - centered */}
