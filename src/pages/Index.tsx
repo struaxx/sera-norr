@@ -107,11 +107,11 @@ const Index = () => {
               </div>
               
               {/* Trust rail */}
-              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/92">
+              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background">
                 <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
-                <span className="hidden sm:inline text-background/64">·</span>
+                <span className="hidden sm:inline text-background/70">·</span>
                 <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
-                <span className="hidden sm:inline text-background/64">·</span>
+                <span className="hidden sm:inline text-background/70">·</span>
                 <span>{isNL ? '12–16 weken' : '12–16 weeks'}</span>
               </div>
             </div>
@@ -119,9 +119,9 @@ const Index = () => {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background/72">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background">
           <span className="text-[10px] uppercase tracking-[0.2em]">{t('home.scroll')}</span>
-          <div className="w-px h-8 bg-background/48" />
+          <div className="w-px h-8 bg-background/60" />
         </div>
       </section>
 
