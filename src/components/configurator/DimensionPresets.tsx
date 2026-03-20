@@ -194,7 +194,7 @@ export function ThicknessSelector({
               key={preset.id}
               onClick={() => onChange(preset.value)}
               className={cn(
-                "relative flex items-center justify-center py-3 px-4 rounded-sm border transition-all duration-200 text-center",
+                "relative flex items-center justify-between py-3 px-4 rounded-sm border transition-all duration-200",
                 selected
                   ? "border-foreground bg-foreground/5"
                   : "border-border hover:border-foreground/50"
@@ -205,7 +205,7 @@ export function ThicknessSelector({
               </span>
               
               {selected && (
-                <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-foreground rounded-full flex items-center justify-center">
+                <div className="ml-2 w-4 h-4 shrink-0 bg-foreground rounded-full flex items-center justify-center">
                   <Check className="w-2.5 h-2.5 text-background" />
                 </div>
               )}
