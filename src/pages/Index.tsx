@@ -107,11 +107,11 @@ const Index = () => {
               </div>
               
               {/* Trust rail */}
-              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background/92">
+              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background">
                 <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
-                <span className="hidden sm:inline text-background/64">·</span>
+                <span className="hidden sm:inline text-background/70">·</span>
                 <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
-                <span className="hidden sm:inline text-background/64">·</span>
+                <span className="hidden sm:inline text-background/70">·</span>
                 <span>{isNL ? '12–16 weken' : '12–16 weeks'}</span>
               </div>
             </div>
