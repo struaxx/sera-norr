@@ -119,9 +119,9 @@ const Index = () => {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background/72">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background">
           <span className="text-[10px] uppercase tracking-[0.2em]">{t('home.scroll')}</span>
-          <div className="w-px h-8 bg-background/48" />
+          <div className="w-px h-8 bg-background/60" />
         </div>
       </section>
 
