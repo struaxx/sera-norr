@@ -857,16 +857,18 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between pt-8 border-t border-border">
-        <Button variant="ghost" onClick={onBack}>
+      <div className="flex items-center justify-between gap-3 pt-8 border-t border-border">
+        <Button variant="ghost" onClick={onBack} className="shrink-0 min-w-0">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          {isNL ? 'Reset ontwerp' : 'Reset design'}
+          <span className="hidden sm:inline">{isNL ? 'Reset ontwerp' : 'Reset design'}</span>
+          <span className="sm:hidden">Reset</span>
         </Button>
         <Button variant="atelier" onClick={() => {
           syncToStore();
           onContinue();
-        }}>
-          {isNL ? 'Bekijk dossier' : 'View dossier'}
+        }} className="shrink-0 min-w-0">
+          <span className="hidden sm:inline">{isNL ? 'Bekijk dossier' : 'View dossier'}</span>
+          <span className="sm:hidden">Dossier</span>
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
