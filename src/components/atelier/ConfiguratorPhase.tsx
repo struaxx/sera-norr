@@ -703,7 +703,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
   }, [legStyle]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 overflow-x-hidden">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
