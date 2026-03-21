@@ -331,7 +331,7 @@ const Lookbook = () => {
                   </span>
                   <div className="aspect-[4/5] bg-background overflow-hidden relative">
                     {item.image ? (
-                      <img 
+                      <BlurImage 
                         src={item.image} 
                         alt={`${item.title} — ${item.stone} ${item.dimensions}`}
                         className="w-full h-full object-cover"
