@@ -243,6 +243,10 @@ const Collections = () => {
                         }}
                       />
                     )}
+                    {/* DEBUG: filename overlay */}
+                    <div className="absolute top-2 left-2 right-2 bg-black/70 text-white text-[9px] px-2 py-1 z-10 pointer-events-none break-all">
+                      #{item.id} — {item.image?.split('/').pop()}
+                    </div>
                     
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/80 transition-all duration-500 flex flex-col justify-end p-4 lg:p-5">
