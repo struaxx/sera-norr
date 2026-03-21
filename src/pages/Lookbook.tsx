@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BlurImage } from "@/components/ui/blur-image";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout";
