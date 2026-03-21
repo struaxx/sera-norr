@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BlurImage } from "@/components/ui/blur-image";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout";
@@ -330,7 +331,7 @@ const Lookbook = () => {
                   </span>
                   <div className="aspect-[4/5] bg-background overflow-hidden relative">
                     {item.image ? (
-                      <img 
+                      <BlurImage 
                         src={item.image} 
                         alt={`${item.title} — ${item.stone} ${item.dimensions}`}
                         className="w-full h-full object-cover"
