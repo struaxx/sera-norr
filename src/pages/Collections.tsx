@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Hairline } from "@/components/ui/hairline";
+import { BlurImage } from "@/components/ui/blur-image";
 
 // Lookbook item type
 interface LookbookItem {
