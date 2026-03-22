@@ -194,7 +194,7 @@ const Collections = () => {
       {/* ========================================
           PINTEREST MASONRY GRID
           ======================================== */}
-      <section className="py-8 lg:py-12 bg-background min-h-screen">
+      <section className="py-8 lg:py-12 bg-background min-h-screen" id="lookbook-grid">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 auto-rows-[minmax(200px,auto)]">
             <AnimatePresence mode="popLayout">
