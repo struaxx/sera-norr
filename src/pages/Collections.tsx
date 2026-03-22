@@ -245,6 +245,10 @@ const Collections = () => {
                       />
                     )}
                     
+                    {/* Number label for identification */}
+                    <div className="absolute top-2 left-2 z-10 bg-foreground text-background text-xs font-mono px-2 py-1 rounded">
+                      {index + 1}
+                    </div>
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/80 transition-all duration-500 flex flex-col justify-end p-4 lg:p-5">
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-4 group-hover:translate-y-0">
