@@ -46,6 +46,7 @@ const Collections = () => {
 
   // Lookbook items with varied sizes for Pinterest masonry effect
   const items: LookbookItem[] = isNL ? [
+    { id: "22", name: "Viola Amsterdam", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Ovaal", feel: "Statement", description: "Ovale eettafel in Calacatta Viola marmer, badend in gouden licht aan de Amsterdamse gracht.", aspectRatio: "portrait", size: "tall", image: "/lookbook/hf_viola_dining_amsterdam.jpeg" },
     { id: "1", name: "Arco Dining", collection: "VANTA", stone: "Calacatta Viola", type: "Eettafel", shape: "Ovaal", feel: "Sculpturaal", description: "Monumentale eettafel met krachtige, ronde basis en ellipsvormig blad.", aspectRatio: "portrait", size: "large", image: "/lookbook/marble-oval-dining.png" },
     { id: "2", name: "Solido Console", collection: "VANTA", stone: "Calacatta Viola", type: "Console", shape: "Rechthoek", feel: "Statement", description: "Console met massieve blokbasis, gedefinieerd door paarse adering.", aspectRatio: "landscape", size: "normal", image: "/lookbook/marble-oval-fluted.png" },
     { id: "3", name: "Rondo Coffee", collection: "TERRA", stone: "Travertin", type: "Salontafel", shape: "Rond", feel: "Rustig", description: "Gestapelde ringen vormen een organische salontafel in warm travertin.", aspectRatio: "square", size: "normal", image: "/lookbook/travertine-round-fluted.png" },
