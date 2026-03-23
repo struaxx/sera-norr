@@ -238,32 +238,8 @@ function CollectiesSection({
           <RoomReveal isNL={isNL} />
         </motion.div>
 
-        {/* Lookbook preview link */}
-        <motion.div
-          variants={variants.fadeUp}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}>
-          
-          <Link to="/collections" className="group block">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8">
-              {[
-              { src: '/lookbook/marble-round-livingroom.png', alt: isNL ? 'Ronde marmeren tafel in woonkamer setting' : 'Round marble table in living room setting' },
-              { src: '/lookbook/travertine-oval-slab.png', alt: isNL ? 'Ovale travertin eettafel met massieve slab basis' : 'Oval travertine dining table with massive slab base' },
-              { src: '/lookbook/calacatta-viola-round.png', alt: isNL ? 'Ronde Calacatta Viola marmeren tafel' : 'Round Calacatta Viola marble table' },
-              { src: '/lookbook/travertine-round-cone.png', alt: isNL ? 'Ronde travertin salontafel met conische basis' : 'Round travertine coffee table with conical base' }].
-              map((img, i) =>
-              <div key={i} className="aspect-[4/5] overflow-hidden bg-secondary/50">
-                  <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy" />
-                
-                </div>
-              )}
-            </div>
-          </Link>
-        </motion.div>
+        {/* Lookbook preview link — rotating images */}
+        <LookbookPreviewGrid isNL={isNL} variants={variants} isInView={isInView} />
 
         {/* Single CTA to lookbook */}
         <motion.div
