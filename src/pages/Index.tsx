@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { SEOHead, baseSchema } from "@/components/seo";
 import { Hairline } from "@/components/ui/hairline";
 
-import { ValuePillars, AtelierSteps } from "@/components/homepage";
+import { ValuePillars, AtelierSteps, LookbookPreviewGrid } from "@/components/homepage";
 import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
