@@ -15,6 +15,10 @@ const allImages = [
   '/lookbook/travertine-oval-fluted.png',
   '/lookbook/marble-coffee-fluted.png',
   '/lookbook/travertine-coffee-fluted.png',
+  '/lookbook/hf_viola_countryside.jpeg',
+  '/lookbook/hf_viola_townhouse.jpeg',
+  '/lookbook/hf_viola_tuscany.jpeg',
+  '/lookbook/hf_viola_nordic.jpeg',
 ];
 
 function shuffle<T>(arr: T[]): T[] {
