@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import type { ConfiguratorState, ProductType, TableShape } from '@/lib/configurator';
 import { DIMENSION_CONSTRAINTS } from '@/lib/configurator';
