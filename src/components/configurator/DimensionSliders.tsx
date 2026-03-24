@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import type { ConfiguratorState, ProductType, TableShape } from '@/lib/configurator';
 import { DIMENSION_CONSTRAINTS } from '@/lib/configurator';
@@ -124,24 +125,38 @@ export function DimensionSliders({
           </div>
         </div>
 
-        {/* Thickness */}
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">{isNL ? 'Bladdikte' : 'Thickness'}</span>
-            <span className="text-sm font-medium tabular-nums">{dimensions.thickness} cm</span>
-          </div>
-          <Slider
-            value={[dimensions.thickness]}
-            onValueChange={(v) => updateDimension('thickness', v[0])}
-            min={constraints.thickness.min}
-            max={constraints.thickness.max}
-            step={constraints.thickness.step}
-            className="touch-pan-y"
-            aria-label={isNL ? 'Bladdikte' : 'Thickness'}
-          />
-          <div className="flex justify-between text-[10px] text-muted-foreground">
-            <span>{constraints.thickness.min}cm</span>
-            <span>{constraints.thickness.max}cm</span>
+        {/* Thickness - discrete options */}
+        <div className="space-y-3">
+          <span className="text-sm text-muted-foreground">{isNL ? 'Bladdikte' : 'Thickness'}</span>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { value: 2, label: '20mm', sublabel: isNL ? '(standaard)' : '(standard)' },
+              { value: 3.6, label: '36mm', sublabel: '' },
+              { value: 4, label: '40mm', sublabel: '' },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => updateDimension('thickness', opt.value)}
+                className={cn(
+                  "relative px-3 py-3 text-xs font-medium border rounded-sm transition-all duration-200 text-center",
+                  dimensions.thickness === opt.value
+                    ? "border-foreground bg-foreground/5"
+                    : "border-border hover:border-foreground/50"
+                )}
+              >
+                {opt.label}
+                {opt.sublabel && (
+                  <span className="block text-[10px] text-muted-foreground font-normal mt-0.5">
+                    {opt.sublabel}
+                  </span>
+                )}
+                {dimensions.thickness === opt.value && (
+                  <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-foreground rounded-full flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 text-background" />
+                  </div>
+                )}
+              </button>
+            ))}
           </div>
         </div>
       </div>
