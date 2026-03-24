@@ -168,11 +168,6 @@ function LegCard({ leg, isSelected, isCompatible, onSelect, isNL = true }: LegCa
       
       <span className="text-xs font-medium block">{leg.name}</span>
       
-      {leg.priceUplift > 0 && isCompatible && (
-        <span className="text-[10px] text-muted-foreground mt-1">
-          +€{leg.priceUplift.toLocaleString('nl-NL')}
-        </span>
-      )}
 
       {isSelected && (
         <div className="absolute top-2 right-2 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
