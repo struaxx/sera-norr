@@ -229,11 +229,12 @@ function ThicknessSelectorV3({
 }) {
   const options = [
     { value: 20, label: '20mm', labelDetail: isNL ? '(standaard)' : '(standard)' },
-    { value: 30, label: '30mm', labelDetail: '' },
+    { value: 36, label: '36mm', labelDetail: '' },
+    { value: 40, label: '40mm', labelDetail: '' },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
       {options.map(o => {
         const selected = value === o.value;
         return (
@@ -303,9 +304,6 @@ function LegSelectorV3({
         )}
       >
         <span className="text-xs font-medium">{isNL ? leg.labelNL : leg.label}</span>
-        {leg.priceUplift > 0 && (
-          <span className="text-[10px] text-muted-foreground mt-1">+€{leg.priceUplift}</span>
-        )}
         {isSelected && (
           <div className="absolute top-2 right-2 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
             <Check className="w-3 h-3 text-background" />
