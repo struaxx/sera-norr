@@ -739,28 +739,30 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left - 3D Viewer (sticky) */}
         <div className="lg:col-span-7">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <div className="aspect-[4/3] w-full">
-              <Suspense fallback={<ViewerSkeleton />}>
-                <ConfiguratorViewerV3
-                  shape={shape}
-                  lengthMm={lengthMm}
-                  widthMm={widthMm}
-                  heightMm={heightMm}
-                  thicknessMm={thicknessMm}
-                  legStyle={legStyle}
-                  stoneId={stoneId}
-                  edgeProfile={edgeProfile}
-                  onConfigResolved={handleConfigResolved}
-                  onPresetLoad={handlePresetLoad}
-                  isNL={isNL}
-                />
-              </Suspense>
-            </div>
-          </motion.div>
+          <div className="lg:sticky lg:top-24">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <div className="aspect-[4/3] w-full">
+                <Suspense fallback={<ViewerSkeleton />}>
+                  <ConfiguratorViewerV3
+                    shape={shape}
+                    lengthMm={lengthMm}
+                    widthMm={widthMm}
+                    heightMm={heightMm}
+                    thicknessMm={thicknessMm}
+                    legStyle={legStyle}
+                    stoneId={stoneId}
+                    edgeProfile={edgeProfile}
+                    onConfigResolved={handleConfigResolved}
+                    onPresetLoad={handlePresetLoad}
+                    isNL={isNL}
+                  />
+                </Suspense>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Right - Config Panels */}
