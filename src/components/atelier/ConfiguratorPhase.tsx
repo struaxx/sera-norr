@@ -739,70 +739,73 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left - 3D Viewer */}
         <div className="lg:col-span-7 space-y-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="sticky top-24"
-          >
-            <Suspense fallback={<ViewerSkeleton />}>
-              <ConfiguratorViewerV3
-                shape={shape}
-                lengthMm={lengthMm}
-                widthMm={widthMm}
-                heightMm={heightMm}
-                thicknessMm={thicknessMm}
-                legStyle={legStyle}
-                stoneId={stoneId}
-                edgeProfile={edgeProfile}
-                onConfigResolved={handleConfigResolved}
-                onPresetLoad={handlePresetLoad}
-                isNL={isNL}
-              />
-            </Suspense>
-
-            {/* Selection summary - under 3D viewer */}
+          {/* 3D Viewer - independently sticky */}
+          <div className="lg:sticky lg:top-24">
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 bg-background border border-foreground/20 rounded-sm p-4"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
             >
-              <div className="space-y-2 mb-3">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{isNL ? 'Uw selectie' : 'Your selection'}</p>
-                  <h4 className="text-sm font-medium">
-                    {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {toCm(lengthMm)}×{toCm(widthMm)} cm
-                  </h4>
-                </div>
-                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                  <span>{resolved?.legDefinition?.[isNL ? 'labelNL' : 'label'] ?? legStyle}</span>
-                  <span>•</span>
-                  <span>{thicknessMm}mm blad • {toCm(heightMm)} cm hoog</span>
-                  <span>•</span>
-                  <span>{(() => {
-                    const displayCount = resolved?.legStyle === 'hourglass' ? 2 : (resolved?.legCount ?? 0);
-                    return `${displayCount || '?'} ${isNL ? (displayCount === 1 ? 'poot' : 'poten') : 'legs'}`;
-                  })()}</span>
-                </div>
+              <div className="aspect-[4/3] w-full">
+                <Suspense fallback={<ViewerSkeleton />}>
+                  <ConfiguratorViewerV3
+                    shape={shape}
+                    lengthMm={lengthMm}
+                    widthMm={widthMm}
+                    heightMm={heightMm}
+                    thicknessMm={thicknessMm}
+                    legStyle={legStyle}
+                    stoneId={stoneId}
+                    edgeProfile={edgeProfile}
+                    onConfigResolved={handleConfigResolved}
+                    onPresetLoad={handlePresetLoad}
+                    isNL={isNL}
+                  />
+                </Suspense>
               </div>
-
-              <Button variant="atelier" className="w-full" onClick={() => {
-                // Sync local state to Zustand store before transitioning
-                syncToStore();
-                onContinue();
-              }}>
-                {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
             </motion.div>
+          </div>
 
-            <div className="mt-3 flex items-center justify-center gap-6 text-xs text-muted-foreground">
-              <span>{isNL ? 'Handgemaakt op bestelling' : 'Handmade to order'}</span>
-              <span>•</span>
-              <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
-              <span>•</span>
-              <span>{isNL ? '2 jaar garantie' : '2-year warranty'}</span>
+          {/* Selection summary + CTA - scrolls naturally */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-background border border-foreground/20 rounded-sm p-4"
+          >
+            <div className="space-y-2 mb-3">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{isNL ? 'Uw selectie' : 'Your selection'}</p>
+                <h4 className="text-sm font-medium">
+                  {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {toCm(lengthMm)}×{toCm(widthMm)} cm
+                </h4>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                <span>{resolved?.legDefinition?.[isNL ? 'labelNL' : 'label'] ?? legStyle}</span>
+                <span>•</span>
+                <span>{thicknessMm}mm blad • {toCm(heightMm)} cm hoog</span>
+                <span>•</span>
+                <span>{(() => {
+                  const displayCount = resolved?.legStyle === 'hourglass' ? 2 : (resolved?.legCount ?? 0);
+                  return `${displayCount || '?'} ${isNL ? (displayCount === 1 ? 'poot' : 'poten') : 'legs'}`;
+                })()}</span>
+              </div>
             </div>
+
+            <Button variant="atelier" className="w-full" onClick={() => {
+              syncToStore();
+              onContinue();
+            }}>
+              {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
           </motion.div>
+
+          <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
+            <span>{isNL ? 'Handgemaakt op bestelling' : 'Handmade to order'}</span>
+            <span>•</span>
+            <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
+            <span>•</span>
+            <span>{isNL ? '2 jaar garantie' : '2-year warranty'}</span>
+          </div>
         </div>
 
         {/* Right - Config Panels */}
