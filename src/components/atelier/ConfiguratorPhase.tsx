@@ -812,6 +812,48 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
         </div>
       </div>
 
+      {/* Selection summary + CTA - below grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-background border border-foreground/20 rounded-sm p-4 max-w-xl mx-auto"
+      >
+        <div className="space-y-2 mb-3">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{isNL ? 'Uw selectie' : 'Your selection'}</p>
+            <h4 className="text-sm font-medium">
+              {SHAPE_DEFINITIONS.find(s => s.id === shape)?.[isNL ? 'labelNL' : 'label']} – {toCm(lengthMm)}×{toCm(widthMm)} cm
+            </h4>
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+            <span>{resolved?.legDefinition?.[isNL ? 'labelNL' : 'label'] ?? legStyle}</span>
+            <span>•</span>
+            <span>{thicknessMm}mm blad • {toCm(heightMm)} cm hoog</span>
+            <span>•</span>
+            <span>{(() => {
+              const displayCount = resolved?.legStyle === 'hourglass' ? 2 : (resolved?.legCount ?? 0);
+              return `${displayCount || '?'} ${isNL ? (displayCount === 1 ? 'poot' : 'poten') : 'legs'}`;
+            })()}</span>
+          </div>
+        </div>
+
+        <Button variant="atelier" className="w-full" onClick={() => {
+          syncToStore();
+          onContinue();
+        }}>
+          {isNL ? 'Vraag voorstel aan' : 'Request proposal'}
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </motion.div>
+
+      <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
+        <span>{isNL ? 'Handgemaakt op bestelling' : 'Handmade to order'}</span>
+        <span>•</span>
+        <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
+        <span>•</span>
+        <span>{isNL ? '2 jaar garantie' : '2-year warranty'}</span>
+      </div>
+
       {/* Navigation */}
       <div className="flex items-center justify-between gap-3 pt-8 border-t border-border">
         <Button variant="ghost" onClick={onBack} className="shrink-0 min-w-0">
