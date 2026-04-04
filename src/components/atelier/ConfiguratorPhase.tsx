@@ -738,7 +738,7 @@ export function ConfiguratorPhase({ onBack, onContinue, isNL = true }: Configura
       {/* Main Layout */}
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left - 3D Viewer (sticky) */}
-        <div className="lg:col-span-7 lg:self-start lg:sticky lg:top-24">
+        <div className="lg:col-span-7">
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
