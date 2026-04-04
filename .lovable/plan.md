@@ -1,23 +1,52 @@
 
 
-## Plan: Nieuwe foto's toevoegen + layout-aanpassingen Collections & Lookbook
+## Probleem
 
-### Wat er verandert
+De 3D-viewer heeft `sticky top-24`, maar het sticky blok bevat ook de selectie-samenvatting, CTA-knop en garantie-badges. Dat maakt het geheel te hoog voor het scherm — waardoor het sticky-effect niet werkt en de viewer uit beeld verdwijnt bij scrollen.
 
-**1. Nieuwe foto's toevoegen aan beide pagina's**
-Er zijn 18 nieuwe `hf_*` foto's in `public/lookbook/`. Deze worden toegevoegd als extra items aan zowel:
-- `src/pages/Collections.tsx` — het masonry grid (nu 12 items, wordt ~30)
-- `src/pages/Lookbook.tsx` — de lookbook galerij (nu 12 items, wordt ~30)
+## Oplossing
 
-Elke nieuwe foto krijgt een passende naam, collectie (VANTA/TERRA), steensoort, en type op basis van de bestandsnamen.
+De 3D-viewer loskoppelen van de samenvatting zodat alleen de viewer sticky is, en de samenvatting + CTA eronder valt (buiten het sticky blok).
 
-**2. Sticky filter bar verwijderen (Collections)**
-De hele `<section>` met de sticky filter bar (ALLES / VANTA / TERRA / EETTAFELS / etc.) wordt verwijderd uit `Collections.tsx`. De bijbehorende filter state (`activeFilter`, `filterOptions`, filter logic) wordt ook opgeruimd. Alle items worden altijd getoond.
+### Stappen
 
-**3. Duidelijke grens tussen header en foto's (Collections)**
-In plaats van de zwevende overgang wordt er een zichtbare `border-b border-foreground/10` of een `<Hairline>` component toegevoegd onderaan de header section, zodat er een duidelijke visuele scheiding is voor het fotogrid begint.
+1. **Split het sticky blok** in `ConfiguratorPhase.tsx`:
+   - Wrap alleen de `ConfiguratorViewerV3` in een `sticky top-24` container
+   - Verplaats de selectie-samenvatting, CTA-knop en trust-badges naar een apart, niet-sticky blok eronder
 
-### Bestanden die worden aangepast
-- `src/pages/Collections.tsx` — nieuwe items, filter verwijderen, separator toevoegen
-- `src/pages/Lookbook.tsx` — nieuwe items toevoegen
+2. **Viewer compacter op desktop**: De viewer krijgt `aspect-[4/3]` op desktop zodat hij altijd in het zichtbare deel van het scherm past (met ruimte voor de header).
+
+3. **Mobiel**: Op mobiel (`< lg`) is sticky niet actief — daar scrollt alles normaal, wat logisch is op kleine schermen.
+
+### Technisch detail
+
+```text
+Huidige structuur:
+┌─────────────────────┐  ┌──────────────┐
+│  sticky top-24       │  │ Config panels│
+│  ┌─────────────────┐ │  │              │
+│  │ 3D Viewer       │ │  │ Vorm         │
+│  └─────────────────┘ │  │ Afmeting     │
+│  ┌─────────────────┐ │  │ Bladdikte    │
+│  │ Uw selectie     │ │  │ Onderstel    │
+│  │ CTA knop        │ │  │ Steen        │
+│  │ Trust badges    │ │  │ Rand         │
+│  └─────────────────┘ │  └──────────────┘
+└─────────────────────┘
+
+Nieuwe structuur:
+┌─────────────────────┐  ┌──────────────┐
+│  sticky top-24       │  │ Config panels│
+│  ┌─────────────────┐ │  │              │
+│  │ 3D Viewer       │ │  │ Vorm         │
+│  └─────────────────┘ │  │ Afmeting     │
+└─────────────────────┘  │ Bladdikte    │
+┌─────────────────────┐  │ Onderstel    │
+│  Uw selectie        │  │ Steen        │
+│  CTA knop           │  │ Rand         │
+│  Trust badges       │  └──────────────┘
+└─────────────────────┘
+```
+
+**Alleen 1 bestand wijzigt:** `src/components/atelier/ConfiguratorPhase.tsx`
 
