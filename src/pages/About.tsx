@@ -47,6 +47,12 @@ const About = () => {
 
   return (
     <Layout>
+      <BreadcrumbSchema
+        items={[
+          { name: "SERA NORR", url: "https://sera-norr.com" },
+          { name: "Over ons", url: "https://sera-norr.com/about" },
+        ]}
+      />
       <SEOHead 
         title={seoTitle}
         description={seoDescription}

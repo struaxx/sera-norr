@@ -45,6 +45,7 @@ const Index = () => {
   return (
     <Layout>
       <WebSiteJsonLd />
+      <BreadcrumbSchema items={[{ name: "SERA NORR", url: "https://sera-norr.com" }]} />
       <SEOHead
         title={seoTitle}
         description={seoDescription}

@@ -211,6 +211,12 @@ export default function Atelier() {
 
   return (
     <Layout>
+      <BreadcrumbSchema
+        items={[
+          { name: "SERA NORR", url: "https://sera-norr.com" },
+          { name: "Configurator", url: "https://sera-norr.com/atelier" },
+        ]}
+      />
       <SEOHead 
         title={isNL ? "Atelier | Ontwerp uw maatwerk stuk | SERA NORR" : "Atelier | Design your bespoke piece | SERA NORR"}
         description={isNL ? "Stel uw unieke natuurstenen meubel samen in ons digitale atelier. Kies materiaal, afmetingen en afwerking voor een persoonlijk voorstel." : "Create your unique natural stone furniture in our digital atelier. Choose material, dimensions and finish for a personal proposal."}

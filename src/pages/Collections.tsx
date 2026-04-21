@@ -144,6 +144,12 @@ const Collections = () => {
   return (
     <Layout>
       <CollectionsSchema />
+      <BreadcrumbSchema
+        items={[
+          { name: "SERA NORR", url: "https://sera-norr.com" },
+          { name: "Collecties", url: "https://sera-norr.com/collections" },
+        ]}
+      />
       <SEOHead 
         title={seoTitle}
         description={seoDescription}
