@@ -119,8 +119,10 @@ export function LookbookPhase({ onContinue, isNL = true }: LookbookPhaseProps) {
             <div className="absolute inset-0 bg-secondary/30">
               <img 
                 src={collection.image} 
-                alt={collection.name}
+                alt={`${collection.name} stenen meubels collectie SERA NORR`}
                 className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             
@@ -197,8 +199,10 @@ export function LookbookPhase({ onContinue, isNL = true }: LookbookPhaseProps) {
                 >
                   <img 
                     src={item.image} 
-                    alt={item.name}
+                    alt={`${item.name} natuursteen meubel SERA NORR`}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute bottom-0 left-0 right-0 p-3">

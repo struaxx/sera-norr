@@ -192,8 +192,10 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       <div className="relative overflow-hidden rounded-sm aspect-[16/9] lg:aspect-[21/9]">
         <img
           src={afterSrc}
-          alt={isNL ? "Kamer met tafel" : "Room with table"}
+          alt={isNL ? "Interieur met stenen tafel SERA NORR" : "Interior with stone table SERA NORR"}
           className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
         />
       </div>
     );
@@ -217,10 +219,12 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       {/* 1. Before layer — empty room */}
       <img
         src={beforeSrc}
-        alt={isNL ? "Lege kamer" : "Empty room"}
+        alt={isNL ? "Leeg interieur voor SERA NORR tafel" : "Empty interior before SERA NORR table"}
 className="absolute inset-0 w-full h-full object-cover"
         style={{ objectPosition: 'center 65%' }}
         draggable={false}
+        loading="lazy"
+        decoding="async"
       />
 
       {/* 2. After layer — circular clip-path reveal (always visible, auto-animating) */}
@@ -231,10 +235,12 @@ className="absolute inset-0 w-full h-full object-cover"
       >
         <img
           src={afterSrc}
-          alt={isNL ? "Kamer met tafel" : "Room with table"}
+          alt={isNL ? "Interieur met stenen tafel SERA NORR" : "Interior with stone table SERA NORR"}
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: 'center 65%' }}
           draggable={false}
+          loading="lazy"
+          decoding="async"
         />
       </div>
 

@@ -61,7 +61,11 @@ const Index = () => {
           <img
             src={heroImage}
             alt={isNL ? "SERA NORR - Luxe stenen meubels op maat" : "SERA NORR - Luxury bespoke stone furniture"}
-            className="w-full h-full object-cover" />
+            className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
           
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-foreground/42" />

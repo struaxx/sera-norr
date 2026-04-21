@@ -410,8 +410,10 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                   <img 
                     key={item.id}
                     src={item.image}
-                    alt={item.name}
+                    alt={`${item.name} inspiratie SERA NORR`}
                     className="w-16 h-16 rounded-sm object-cover flex-shrink-0"
+                    loading="lazy"
+                    decoding="async"
                   />
                 ))}
               </div>
