@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           vendor: ["react", "react-dom"],
           router: ["react-router-dom"],
+          "3d": ["three", "@react-three/fiber", "@react-three/drei"],
           ui: [
             "@radix-ui/react-accordion",
             "@radix-ui/react-alert-dialog",
