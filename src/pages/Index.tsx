@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { SEOHead, baseSchema, WebSiteJsonLd } from "@/components/seo";
+import { SEOHead, baseSchema, WebSiteJsonLd, BreadcrumbSchema } from "@/components/seo";
 import { Hairline } from "@/components/ui/hairline";
 
 import { ValuePillars, AtelierSteps, LookbookPreviewGrid } from "@/components/homepage";
@@ -45,6 +45,7 @@ const Index = () => {
   return (
     <Layout>
       <WebSiteJsonLd />
+      <BreadcrumbSchema items={[{ name: "SERA NORR", url: "https://sera-norr.com" }]} />
       <SEOHead
         title={seoTitle}
         description={seoDescription}
