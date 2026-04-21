@@ -224,6 +224,20 @@ export default function Atelier() {
 
       <main className="min-h-screen py-16 md:py-24">
         <div className="container max-w-7xl mx-auto px-4">
+          {/* SEO: Visible H1 + intro to prevent Soft 404 */}
+          <header className="mb-10 md:mb-14 max-w-3xl">
+            <h1 className="font-serif text-3xl md:text-5xl text-foreground leading-tight mb-4">
+              {isNL
+                ? "Configureer uw natuurstenen tafel op maat"
+                : "Configure your bespoke natural stone table"}
+            </h1>
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              {isNL
+                ? "Ontwerp uw unieke tafel in onze interactieve 3D-configurator. Kies uw gewenste steensoort, afmetingen en afwerking. Wij vervaardigen elke tafel ambachtelijk op maat in ons atelier."
+                : "Design your unique table in our interactive 3D configurator. Choose your preferred stone, dimensions and finish. Each table is handcrafted to order in our atelier."}
+            </p>
+          </header>
+
           {/* Phase Indicator with Reset */}
           <PhaseIndicator currentPhase={phase} onReset={handleReset} isNL={isNL} />
 
