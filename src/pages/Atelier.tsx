@@ -233,7 +233,7 @@ export default function Atelier() {
             </h1>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               {isNL
-                ? "Ontwerp uw unieke tafel in onze interactieve 3D-configurator. Kies uw gewenste steensoort, afmetingen en afwerking. Wij vervaardigen elke tafel ambachtelijk op maat in ons atelier."
+                ? "Ontwerp uw unieke tafel in onze 3D-configurator. Kies steensoort, afmetingen en afwerking. Ambachtelijk gemaakt op maat."
                 : "Design your unique table in our interactive 3D configurator. Choose your preferred stone, dimensions and finish. Each table is handcrafted to order in our atelier."}
             </p>
           </header>
