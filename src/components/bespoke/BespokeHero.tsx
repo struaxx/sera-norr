@@ -264,8 +264,10 @@ const BespokeHero = () => {
             >
               <img 
                 src={terraImage} 
-                alt={isNL ? "Travertin detail" : "Travertine detail"} 
-                className="w-full h-full object-cover" 
+                alt={isNL ? "Travertin eettafel detail SERA NORR" : "Travertine table detail SERA NORR"} 
+                className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </motion.div>
             
@@ -281,8 +283,10 @@ const BespokeHero = () => {
             >
               <img 
                 src={vantaImage} 
-                alt={isNL ? "Atelier detail" : "Atelier detail"} 
-                className="w-full h-full object-cover" 
+                alt={isNL ? "Marmeren tafel atelier detail SERA NORR" : "Marble table atelier detail SERA NORR"} 
+                className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </motion.div>
             

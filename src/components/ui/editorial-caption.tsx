@@ -96,6 +96,8 @@ export function ImageWithCaption({
             src={src}
             alt={alt}
             className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       </div>

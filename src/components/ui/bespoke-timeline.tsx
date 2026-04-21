@@ -65,6 +65,8 @@ export function BespokeTimeline({
                 src={supportImage} 
                 alt={supportImageAlt}
                 className="w-full h-full object-cover opacity-80"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

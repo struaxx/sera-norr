@@ -63,6 +63,9 @@ const About = () => {
             src={atelierImage}
             alt={isNL ? "SERA NORR atelier werkplaats" : "SERA NORR atelier workspace"}
             className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/30 to-foreground/10" />
         </div>
