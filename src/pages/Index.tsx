@@ -44,6 +44,7 @@ const Index = () => {
 
   return (
     <Layout>
+      <WebSiteJsonLd />
       <SEOHead
         title={seoTitle}
         description={seoDescription}
