@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '@/components/layout';
-import { SEOHead } from '@/components/seo';
+import { SEOHead, BreadcrumbSchema } from '@/components/seo';
 import { Button } from '@/components/ui/button';
 import { useConfiguratorStore, type AtelierPhase } from '@/stores/configurator-store';
 import { ConfiguratorPhase, DossierPhase } from '@/components/atelier';

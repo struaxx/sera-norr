@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, X } from "lucide-react";
-import { SEOHead, generateBreadcrumbSchema, CollectionsSchema } from "@/components/seo";
+import { SEOHead, generateBreadcrumbSchema, CollectionsSchema, BreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";

@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
+import { SEOHead, generateBreadcrumbSchema, BreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { Hairline } from "@/components/ui/hairline";
 import { motion } from "framer-motion";

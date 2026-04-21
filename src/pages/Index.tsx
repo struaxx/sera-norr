@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { SEOHead, baseSchema, WebSiteJsonLd } from "@/components/seo";
+import { SEOHead, baseSchema, WebSiteJsonLd, BreadcrumbSchema } from "@/components/seo";
 import { Hairline } from "@/components/ui/hairline";
 
 import { ValuePillars, AtelierSteps, LookbookPreviewGrid } from "@/components/homepage";
