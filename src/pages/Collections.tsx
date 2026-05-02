@@ -260,6 +260,18 @@ const Collections = () => {
                           <span className="px-2 py-0.5 text-[8px] uppercase tracking-[0.1em] bg-background/10 text-background/80">
                             {item.stone}
                           </span>
+                          {(() => {
+                            const t = item.type.toLowerCase();
+                            const isDining = t.includes('eettafel') || t.includes('dining');
+                            const isCoffee = t.includes('salontafel') || t.includes('coffee');
+                            if (!isDining && !isCoffee) return null;
+                            const price = isDining ? '€3.000' : '€1.950';
+                            return (
+                              <span className="px-2 py-0.5 text-[8px] uppercase tracking-[0.1em] bg-background/15 text-background">
+                                {isNL ? `vanaf ${price}` : `from ${price.replace('.', ',')}`}
+                              </span>
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>

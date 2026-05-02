@@ -93,8 +93,8 @@ const Index = () => {
               {/* Subcopy */}
               <p className="font-sans text-base lg:text-lg font-medium text-background max-w-2xl mx-auto mb-8">
                 {isNL ?
-                "Travertin, marmer en geselecteerde steensoorten. Op maat gemaakt." :
-                "Travertine, marble and selected stone types. Made to measure."}
+                "Maatwerk in marmer, vanaf €1.950." :
+                "Bespoke in marble, from €1,950."}
               </p>
               
               {/* Dual CTAs */}
