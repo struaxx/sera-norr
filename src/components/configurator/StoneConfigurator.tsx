@@ -1,9 +1,21 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { tierStructure, type CategoryKey, type TierKey } from "@/config/tiers";
+
+// ============================================
+// GA4 helper
+// ============================================
+
+function gaEvent(name: string, params: Record<string, unknown> = {}) {
+  if (typeof window === "undefined") return;
+  const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+  if (typeof w.gtag === "function") {
+    w.gtag("event", name, params);
+  }
+}
 
 // ============================================
 // Pricing data
@@ -72,7 +84,8 @@ function formatSurcharge(value: number): string {
 
 export interface StoneConfiguratorProps {
   category: CategoryKey;          // "diningTables" | "coffeeTables"
-  tier: TierKey;                  // "essenza" | "signature"
+  tier?: TierKey;                 // initial tier; user can switch
+  allowTierSwitch?: boolean;      // show Essenza/Signature toggle
   productName?: string;           // Used for the request URL
   className?: string;
 }
@@ -81,16 +94,49 @@ const STEP_LABELS = ["Steensoort", "Formaat", "Onderstel"] as const;
 
 export function StoneConfigurator({
   category,
-  tier,
+  tier: initialTier = "essenza",
+  allowTierSwitch = true,
   productName,
   className,
 }: StoneConfiguratorProps) {
+  const [tier, setTier] = useState<TierKey>(initialTier);
   const tierConfig = tierStructure[category][tier];
   const sizes = category === "diningTables" ? DINING_SIZES : COFFEE_SIZES;
 
   const [stone, setStone] = useState<string>(tierConfig.stones[0]);
   const [size, setSize] = useState<Size>(sizes[0]);
   const [base, setBase] = useState<string>(tierConfig.bases[0]);
+
+  // Reset stone/base if they no longer exist after a tier switch
+  useEffect(() => {
+    if (!tierConfig.stones.includes(stone as never)) {
+      setStone(tierConfig.stones[0]);
+    }
+    if (!tierConfig.bases.includes(base as never)) {
+      setBase(tierConfig.bases[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tier]);
+
+  // GA4: configurator_started (once per mount)
+  const startedRef = useRef(false);
+  useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    gaEvent("configurator_started", {
+      category,
+      tier,
+      product_name: productName,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // GA4: tier_selected on change
+  const handleTierChange = (next: TierKey) => {
+    if (next === tier) return;
+    setTier(next);
+    gaEvent("tier_selected", { category, tier: next });
+  };
 
   const stoneSurcharge = STONE_SURCHARGES[stone] ?? 0;
   const baseSurcharge = BASE_SURCHARGES[base] ?? 0;
@@ -122,6 +168,37 @@ export function StoneConfigurator({
         <p className="text-sm text-muted-foreground max-w-lg">
           {tierConfig.description}.
         </p>
+
+        {/* Tier switch */}
+        {allowTierSwitch && (
+          <div
+            role="tablist"
+            aria-label="Niveau"
+            className="mt-6 inline-flex border border-foreground/10"
+          >
+            {(["essenza", "signature"] as TierKey[]).map((t) => {
+              const active = tier === t;
+              const cfg = tierStructure[category][t];
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => handleTierChange(t)}
+                  className={cn(
+                    "px-4 py-2 text-xs uppercase tracking-[0.15em] transition-colors",
+                    active
+                      ? "bg-foreground text-background"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {cfg.name} · vanaf {formatEUR(cfg.priceFrom)}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* ============ STAP 1: STEENSOORT ============ */}
@@ -254,7 +331,19 @@ export function StoneConfigurator({
             </p>
           </div>
           <Button asChild variant="atelier" size="lg">
-            <Link to={requestUrl}>
+            <Link
+              to={requestUrl}
+              onClick={() =>
+                gaEvent("configurator_completed", {
+                  category,
+                  tier,
+                  stone,
+                  size: size.label,
+                  base,
+                  total,
+                })
+              }
+            >
               Vraag deze configuratie aan
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
