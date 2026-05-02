@@ -12,6 +12,7 @@ import { SEOHead, BreadcrumbSchema } from '@/components/seo';
 import { Button } from '@/components/ui/button';
 import { useConfiguratorStore, type AtelierPhase } from '@/stores/configurator-store';
 import { ConfiguratorPhase, DossierPhase } from '@/components/atelier';
+import { StoneConfigurator } from '@/components/configurator';
 import { loadConfiguration } from '@/lib/configurator/api';
 import { PRESETS } from '@/lib/configurator/presets';
 
@@ -270,8 +271,77 @@ export default function Atelier() {
               )}
             </motion.div>
           </AnimatePresence>
+
+          {/* ============================================
+               Snelle prijsconfigurator (Essenza / Signature)
+               Onder de bestaande 3D-flow.
+               ============================================ */}
+          <section
+            id="snelle-configurator"
+            aria-labelledby="snelle-configurator-title"
+            className="mt-24 md:mt-32 pt-16 md:pt-20 border-t border-foreground/10"
+          >
+            <div className="max-w-3xl mb-10">
+              <p className="text-[10px] font-sans uppercase tracking-[0.25em] text-muted-foreground mb-3">
+                {isNL ? "Snelle configurator" : "Quick configurator"}
+              </p>
+              <h2
+                id="snelle-configurator-title"
+                className="font-serif text-3xl md:text-4xl text-foreground leading-tight mb-4"
+              >
+                {isNL
+                  ? "Liever direct een prijsindicatie?"
+                  : "Prefer a quick price estimate?"}
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                {isNL
+                  ? "Kies type, niveau, steensoort, formaat en onderstel. U ziet direct een transparante vanaf-prijs."
+                  : "Pick a type, level, stone, size and base. See a transparent starting price right away."}
+              </p>
+            </div>
+
+            <QuickConfigurator />
+          </section>
         </div>
       </main>
     </Layout>
+  );
+}
+
+// ============================================
+// Quick configurator wrapper — type tabs (eettafel/koffietafel)
+// ============================================
+function QuickConfigurator() {
+  const { i18n } = useTranslation();
+  const isNL = i18n.language === 'nl';
+  const [category, setCategory] = useState<'diningTables' | 'coffeeTables'>('diningTables');
+
+  return (
+    <div>
+      <div role="tablist" aria-label={isNL ? "Type" : "Type"} className="inline-flex border border-foreground/10 mb-10">
+        {([
+          { id: 'diningTables', label: isNL ? 'Eettafel' : 'Dining table' },
+          { id: 'coffeeTables', label: isNL ? 'Koffietafel' : 'Coffee table' },
+        ] as const).map((opt) => {
+          const active = category === opt.id;
+          return (
+            <button
+              key={opt.id}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => setCategory(opt.id)}
+              className={`px-4 py-2 text-xs uppercase tracking-[0.15em] transition-colors ${
+                active ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <StoneConfigurator key={category} category={category} tier="essenza" allowTierSwitch />
+    </div>
   );
 }
