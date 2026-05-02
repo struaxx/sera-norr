@@ -2,7 +2,7 @@
 // Atelier Page - 2-Phase Flow (Ontwerp → Dossier)
 // ============================================
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Phone } from 'lucide-react';
