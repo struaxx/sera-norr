@@ -25,7 +25,7 @@ const STONE_SURCHARGES: Record<string, number> = {
   "Travertijn Classico": 0,
   "Light Emperador": 0,
   "Statuario": 500,
-  "Calacatta Viola": 2500,
+  "Calacatta Viola": 500,
   "Nero Marquina": 500,
 };
 
@@ -39,14 +39,14 @@ const STONE_SWATCHES: Record<string, { bg: string; ring: string }> = {
 
 const BASE_SURCHARGES: Record<string, number> = {
   "Recht stalen onderstel": 0,
-  "Centrale kolom": 200,
+  "Centrale kolom": 150,
   "Recht stalen frame": 0,
   "Massieve marmer voet": 300,
   "Conische marmer poten": 450,
-  "Bronzen onderstel": 800,
+  "Bronzen onderstel": 300,
   "Gegoten staal": 600,
-  "Brons": 400,
-  "Premium staal": 250,
+  "Brons": 300,
+  "Premium staal": 200,
 };
 
 type Size = { label: string; surcharge: number };
@@ -55,13 +55,13 @@ const DINING_SIZES: Size[] = [
   { label: "180x90", surcharge: 0 },
   { label: "200x100", surcharge: 200 },
   { label: "220x100", surcharge: 400 },
-  { label: "240x110", surcharge: 700 },
+  { label: "240x110", surcharge: 600 },
 ];
 
 const COFFEE_SIZES: Size[] = [
   { label: "80x80", surcharge: 0 },
-  { label: "100x60", surcharge: 150 },
-  { label: "120x70", surcharge: 300 },
+  { label: "100x60", surcharge: 100 },
+  { label: "120x70", surcharge: 200 },
 ];
 
 // ============================================
