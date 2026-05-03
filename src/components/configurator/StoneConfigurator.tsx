@@ -27,6 +27,7 @@ const STONE_SURCHARGES: Record<string, number> = {
   "Statuario": 500,
   "Calacatta Viola": 500,
   "Nero Marquina": 500,
+  "Statuario Extra": 0,
 };
 
 const STONE_SWATCHES: Record<string, { bg: string; ring: string }> = {
@@ -35,6 +36,7 @@ const STONE_SWATCHES: Record<string, { bg: string; ring: string }> = {
   "Statuario":           { bg: "bg-[#F2EFE9]", ring: "ring-[#CFC9BD]" },
   "Calacatta Viola":     { bg: "bg-[#7A6478]", ring: "ring-[#5C4A5C]" },
   "Nero Marquina":       { bg: "bg-[#2A2A2A]", ring: "ring-[#111111]" },
+  "Statuario Extra":     { bg: "bg-[#F5F2EC]", ring: "ring-[#D5CFC1]" },
 };
 
 const BASE_SURCHARGES: Record<string, number> = {
@@ -47,6 +49,7 @@ const BASE_SURCHARGES: Record<string, number> = {
   "Gegoten staal": 600,
   "Brons": 300,
   "Premium staal": 200,
+  "Gegoten bronzen voet": 0,
 };
 
 type Size = { label: string; surcharge: number };
@@ -62,6 +65,12 @@ const COFFEE_SIZES: Size[] = [
   { label: "80x80", surcharge: 0 },
   { label: "100x60", surcharge: 100 },
   { label: "120x70", surcharge: 200 },
+];
+
+const ATELIER_DINING_SIZES: Size[] = [
+  { label: "200x100", surcharge: 0 },
+  { label: "220x100", surcharge: 300 },
+  { label: "240x110", surcharge: 600 },
 ];
 
 // ============================================
