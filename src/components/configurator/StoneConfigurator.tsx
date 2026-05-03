@@ -191,11 +191,14 @@ export function StoneConfigurator({
           <div
             role="tablist"
             aria-label="Niveau"
-            className="mt-6 inline-flex border border-foreground/10"
+            className="mt-6 inline-flex flex-wrap border border-foreground/10"
           >
-            {(["essenza", "signature"] as TierKey[]).map((t) => {
-              const active = tier === t;
+            {(["essenza", "signature", "atelier"] as TierKey[]).map((t) => {
               const cfg = tierStructure[category][t];
+              if (!cfg) return null;
+              const active = tier === t;
+              const isSignature = t === "signature";
+              const isAtelier = t === "atelier";
               return (
                 <button
                   key={t}
@@ -204,13 +207,23 @@ export function StoneConfigurator({
                   aria-selected={active}
                   onClick={() => handleTierChange(t)}
                   className={cn(
-                    "px-4 py-2 text-xs uppercase tracking-[0.15em] transition-colors",
+                    "relative px-4 py-2 text-xs uppercase tracking-[0.15em] transition-colors",
                     active
                       ? "bg-foreground text-background"
                       : "text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  {cfg.name} · vanaf {formatEUR(cfg.priceFrom)}
+                  {isSignature && (
+                    <span className="absolute -top-2 right-2 px-1.5 py-0.5 text-[8px] tracking-[0.15em] bg-foreground text-background">
+                      MEEST GEKOZEN
+                    </span>
+                  )}
+                  <span className="block">{cfg.name} · vanaf {formatEUR(cfg.priceFrom)}</span>
+                  {isAtelier && (
+                    <span className={cn("block mt-1 text-[9px] normal-case tracking-normal", active ? "text-background/70" : "text-muted-foreground")}>
+                      Statuario Extra, hand-finished, genummerd 1/12
+                    </span>
+                  )}
                 </button>
               );
             })}
