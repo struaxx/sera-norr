@@ -10,7 +10,6 @@ import { motion } from "framer-motion";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 import atelierImage from "@/assets/about-atelier.jpg";
-import materialsImage from "@/assets/about-materials.jpg";
 import heroImage from "@/assets/hero-homepage.png";
 
 const About = () => {
