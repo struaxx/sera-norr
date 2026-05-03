@@ -16,13 +16,13 @@ const About = () => {
   const { i18n } = useTranslation();
   const isNL = i18n.language === 'nl';
 
-  const seoTitle = isNL 
-    ? "Over SERA NORR | Online Atelier voor Maatwerk Natuursteenmeubels"
-    : "About SERA NORR | Online Atelier for Bespoke Natural Stone Furniture";
+  const seoTitle = isNL
+    ? "Over Sera Norr | Laurens Soedito & Ls Capital"
+    : "About Sera Norr | Laurens Soedito & Ls Capital";
 
   const seoDescription = isNL
-    ? "SERA NORR is een online atelier voor sculpturale meubels in natuursteen. Ontworpen in Nederland uit travertin, Calacatta Viola en andere geselecteerde steensoorten."
-    : "SERA NORR is an online atelier for sculptural natural stone furniture. Designed in the Netherlands from travertine, Calacatta Viola and other selected stones.";
+    ? "Sera Norr opgericht door Laurens Soedito, managing director Ls Capital. Het verhaal achter het atelier."
+    : "Sera Norr founded by Laurens Soedito, managing director of Ls Capital. The story behind the atelier.";
 
   const aboutPageSchema = {
     '@context': 'https://schema.org',
