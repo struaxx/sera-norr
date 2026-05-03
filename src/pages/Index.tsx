@@ -32,12 +32,12 @@ const Index = () => {
   };
 
   const seoTitle = isNL ?
-  "SERA NORR — Luxe natuursteen meubels op maat | Online atelier" :
-  "SERA NORR — Luxury Natural Stone Furniture | Online Atelier";
+  "Sera Norr — Maatwerk Stenen Meubels | Vanaf €1.950" :
+  "Sera Norr — Bespoke Stone Furniture | From €1,950";
 
   const seoDescription = isNL ?
-  "Online atelier voor maatwerk tafels en consoles in travertin en marmer. Van ontwerp en visualisatie tot white-glove levering in Nederland." :
-  "Online atelier for bespoke tables and consoles in travertine and marble. From design and visualization to white-glove delivery in the Netherlands.";
+  "Handgemaakte eettafels en salontafels in Calacatta Viola, Travertijn en Statuario. Op maat, white-glove geleverd." :
+  "Handcrafted dining and coffee tables in Calacatta Viola, Travertine and Statuario. Bespoke, white-glove delivery.";
 
   const seoKeywords = isNL ?
   "SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel" :
