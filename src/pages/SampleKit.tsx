@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { Hairline } from "@/components/ui/hairline";
+import { Hairline, MicroLabel } from "@/components/ui/hairline";
 import { SEOHead } from "@/components/seo";
 
 const samples = [
@@ -38,7 +38,7 @@ export default function SampleKit() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Hairline label="Sample Kit" />
+            <MicroLabel>Sample Kit</MicroLabel>
             <h1 className="mt-8 font-serif text-5xl md:text-6xl lg:text-7xl text-foreground leading-[1.05] tracking-tight">
               Voel het verschil. Dan beslist u.
             </h1>
@@ -70,7 +70,7 @@ export default function SampleKit() {
       {/* WHAT IS IN THE BOX */}
       <section className="bg-secondary/30 border-t border-border py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12 max-w-4xl">
-          <Hairline label="In de box" />
+          <MicroLabel>In de box</MicroLabel>
           <h2 className="mt-8 font-serif text-4xl md:text-5xl text-foreground leading-tight">
             Zes monsters, zorgvuldig gekozen
           </h2>
@@ -97,7 +97,7 @@ export default function SampleKit() {
       {/* WHY 25 EURO */}
       <section className="bg-background border-t border-border py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
-          <Hairline label="Waarom €25" />
+          <MicroLabel>Waarom €25</MicroLabel>
           <h2 className="mt-8 font-serif text-4xl md:text-5xl text-foreground leading-tight">
             Niet gratis — met opzet.
           </h2>
@@ -114,7 +114,7 @@ export default function SampleKit() {
       {/* HOW IT WORKS */}
       <section className="bg-secondary/30 border-t border-border py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12 max-w-4xl">
-          <Hairline label="Zo werkt het" />
+          <MicroLabel>Zo werkt het</MicroLabel>
           <h2 className="mt-8 font-serif text-4xl md:text-5xl text-foreground leading-tight">
             Vier stappen
           </h2>
