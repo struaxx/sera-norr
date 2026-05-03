@@ -46,6 +46,11 @@ export function Footer() {
                   Lookbook
                 </Link>
               </li>
+              <li>
+                <Link to="/sample-kit" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">
+                  Marmer Atlas Sample Kit
+                </Link>
+              </li>
             </ul>
           </div>
 
