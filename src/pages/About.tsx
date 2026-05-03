@@ -10,7 +10,6 @@ import { motion } from "framer-motion";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 import atelierImage from "@/assets/about-atelier.jpg";
-import materialsImage from "@/assets/about-materials.jpg";
 import heroImage from "@/assets/hero-homepage.png";
 
 const About = () => {
@@ -95,17 +94,14 @@ const About = () => {
         </div>
       </section>
 
-      {/* Origin Story - Editorial Split */}
-      <OriginSection isNL={isNL} />
+      {/* Founder Story */}
+      <FounderStorySection isNL={isNL} />
 
-      {/* Material Philosophy - Image + Text */}
-      <MaterialSection isNL={isNL} />
+      {/* Founder's Guarantee - 3 columns */}
+      <GuaranteeSection isNL={isNL} />
 
-      {/* Values - Numbered Grid */}
-      <ValuesSection isNL={isNL} />
-
-      {/* Process - How We Work */}
-      <ProcessSection isNL={isNL} />
+      {/* Info blocks: Selectie / Maatwerk / Nazorg */}
+      <InfoBlocksSection isNL={isNL} />
 
       {/* CTA Band */}
       <section className="py-20 lg:py-28 bg-foreground text-background">
@@ -135,7 +131,7 @@ const About = () => {
   );
 };
 
-function OriginSection({ isNL }: { isNL: boolean }) {
+function FounderStorySection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
   return (
@@ -148,7 +144,7 @@ function OriginSection({ isNL }: { isNL: boolean }) {
         >
           <div className="flex items-center gap-6 mb-16 lg:mb-20">
             <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">{isNL ? 'Oorsprong' : 'Origin'}</span>
+            <span className="micro-label shrink-0">{isNL ? 'Het verhaal' : 'The story'}</span>
             <Hairline className="flex-1" />
           </div>
 
@@ -156,20 +152,20 @@ function OriginSection({ isNL }: { isNL: boolean }) {
             <div>
               <h2 className="font-serif text-display-sm text-foreground leading-tight">
                 {isNL 
-                  ? 'Objecten gevormd door materiaal, proportie en stilte.'
-                  : 'Objects shaped by material, proportion, and silence.'}
+                  ? 'Een tafel is geen meubel. Het is het middelpunt van een leven.'
+                  : 'A table is not furniture. It is the centre of a life.'}
               </h2>
             </div>
             <div className="space-y-6">
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'SERA NORR ontstond vanuit een eenvoudige overtuiging: meubels moeten meer zijn dan functioneel. Elk stuk begint bij de steen—zijn gewicht, zijn geschiedenis, zijn karakter. We leggen geen vormen op. We luisteren naar het materiaal.'
-                  : 'SERA NORR was born from a simple conviction: furniture should be more than functional. Each piece begins with stone—its weight, its history, its character. We don\'t impose forms. We listen to the material.'}
+                  ? 'SERA NORR is ontstaan uit een eenvoudige overtuiging: een tafel is geen meubel, maar het middelpunt van een leven. Elke steen die wij selecteren wordt met de hand gekozen in de Italiaanse en Spaanse groeven. Elk stuk draagt de signatuur van de aarde zelf.'
+                  : 'SERA NORR was born from a simple conviction: a table is not furniture, but the centre of a life. Every stone we select is chosen by hand in the Italian and Spanish quarries. Each piece carries the signature of the earth itself.'}
               </p>
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'Onze naam verwijst naar het noordelijke licht—de zachte, diffuse kwaliteit die waarheid onthult in oppervlakken. Zoals dat licht zoeken wij de inherente schoonheid van zeldzame materialen te verlichten.'
-                  : 'Our name draws from the northern light—the soft, diffused quality that reveals truth in surfaces. Like that light, we seek to illuminate the inherent beauty of rare materials.'}
+                  ? 'We werken uitsluitend op aanvraag. Geen voorraad, geen compromissen. Elke tafel wordt gemaakt voor één persoon, in één ruimte, voor een leven lang.'
+                  : 'We work exclusively to order. No stock, no compromises. Every table is made for one person, in one room, for a lifetime.'}
               </p>
             </div>
           </div>
@@ -179,89 +175,21 @@ function OriginSection({ isNL }: { isNL: boolean }) {
   );
 }
 
-function MaterialSection({ isNL }: { isNL: boolean }) {
+function GuaranteeSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
-  return (
-    <section className="bg-secondary/20" ref={ref}>
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        {/* Image */}
-        <div className="aspect-[4/5] lg:aspect-auto overflow-hidden">
-          <motion.img
-            src={materialsImage}
-            alt={isNL ? "Travertin en marmer samples" : "Travertine and marble samples"}
-            className="w-full h-full object-cover"
-            variants={variants.fadeUp}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-          />
-        </div>
-        
-        {/* Text */}
-        <motion.div 
-          className="flex items-center py-16 lg:py-24 px-6 lg:px-16 xl:px-24"
-          variants={variants.fadeUp}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <div className="max-w-md">
-            <p className="micro-label mb-6">
-              {isNL ? 'Materiaal' : 'Material'}
-            </p>
-            <h2 className="font-serif text-display-sm text-foreground mb-6">
-              {isNL ? 'Geselecteerd, niet gesourced.' : 'Selected, not sourced.'}
-            </h2>
-            <div className="space-y-5">
-              <p className="text-body-md text-muted-foreground leading-relaxed">
-                {isNL
-                  ? 'We werken uitsluitend met travertin en marmer. Twee materialen, zorgvuldig geselecteerd op kleur, textuur en structurele integriteit.'
-                  : 'We work exclusively with travertine and marble. Two materials, carefully selected for colour, texture and structural integrity.'}
-              </p>
-              <p className="text-body-md text-muted-foreground leading-relaxed">
-                {isNL
-                  ? 'Elke plaat wordt beoordeeld voordat deze het atelier binnenkomt. We zoeken niet naar perfectie—we zoeken naar karakter.'
-                  : 'Every slab is assessed before entering the atelier. We don\'t look for perfection—we look for character.'}
-              </p>
-            </div>
-            <Hairline className="my-8" />
-            <div className="flex gap-12">
-              <div>
-                <p className="font-serif text-2xl text-foreground">30+</p>
-                <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground mt-1">
-                  {isNL ? 'Steensoorten' : 'Stone types'}
-                </p>
-              </div>
-              <div>
-                <p className="font-serif text-2xl text-foreground">2</p>
-                <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground mt-1">
-                  {isNL ? 'Collecties' : 'Collections'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function ValuesSection({ isNL }: { isNL: boolean }) {
-  const { ref, isInView, variants } = useScrollReveal();
-
-  const values = isNL ? [
-    { title: 'Sculpturale intentie', description: 'Elk stuk bestaat op het snijvlak van meubel en object. We beschouwen negatieve ruimte even zorgvuldig als vorm.' },
-    { title: 'Ontworpen in Nederland', description: 'Elk ontwerp ontstaat in onze Nederlandse studio, in samenwerking met ambachtslieden wereldwijd.' },
-    { title: 'Permanentie', description: 'We creëren objecten bedoeld om generaties mee te gaan. Stukken die worden geërfd, niet vervangen.' },
-    { title: 'Ingetogenheid', description: 'Ware luxe ligt in wat wordt weggelaten. We ontwerpen met bewuste terughoudendheid.' },
+  const items = isNL ? [
+    { title: 'Atelier Garantie', description: '2 jaar garantie op vakmanschap en constructie. Elk stuk wordt vóór levering door ons atelier eindgekeurd.' },
+    { title: 'Levenslang Advies', description: 'Wij blijven bereikbaar voor vragen over onderhoud, verplaatsing of restauratie. Voor altijd, zonder einddatum.' },
+    { title: 'Echtheidsverklaring', description: 'Elk stuk wordt geleverd met een certificaat van herkomst: groeve, slabnummer en signatuur van de meester-steenzetter.' },
   ] : [
-    { title: 'Sculptural intent', description: 'Each piece exists at the intersection of furniture and object. We consider negative space as carefully as form.' },
-    { title: 'Designed in the Netherlands', description: 'Every design originates in our Dutch studio, collaborating with artisans worldwide.' },
-    { title: 'Permanence', description: 'We create objects meant to last generations. Pieces that will be inherited, not replaced.' },
-    { title: 'Restraint', description: 'True luxury lies in what is left out. We design with deliberate restraint.' },
+    { title: 'Atelier Guarantee', description: '2-year guarantee on craftsmanship and construction. Every piece passes a final atelier inspection before delivery.' },
+    { title: 'Lifetime Advice', description: 'We remain reachable for questions on care, relocation or restoration. Forever, with no end date.' },
+    { title: 'Certificate of Authenticity', description: 'Each piece is delivered with a certificate of origin: quarry, slab number and signature of the master stonemason.' },
   ];
 
   return (
-    <section className="py-24 lg:py-32" ref={ref}>
+    <section className="py-24 lg:py-32 bg-secondary/20" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         <motion.div
           variants={variants.fadeUp}
@@ -270,12 +198,18 @@ function ValuesSection({ isNL }: { isNL: boolean }) {
         >
           <div className="flex items-center gap-6 mb-16 lg:mb-20">
             <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">{isNL ? 'Waarden' : 'Values'}</span>
+            <span className="micro-label shrink-0">{isNL ? "Founder's Guarantee" : "Founder's Guarantee"}</span>
             <Hairline className="flex-1" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-foreground/8">
-            {values.map((value, index) => (
+          <div className="max-w-xl mx-auto text-center mb-16">
+            <h2 className="font-serif text-display-sm text-foreground">
+              {isNL ? 'Drie beloftes, voor altijd' : 'Three promises, forever'}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-foreground/10 border border-foreground/10">
+            {items.map((value, index) => (
               <div key={index} className="bg-background p-8 lg:p-12">
                 <span className="font-serif text-[48px] lg:text-[64px] text-foreground/[0.04] leading-none block mb-4">
                   0{index + 1}
@@ -295,23 +229,57 @@ function ValuesSection({ isNL }: { isNL: boolean }) {
   );
 }
 
-function ProcessSection({ isNL }: { isNL: boolean }) {
+function InfoBlocksSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
-  const steps = isNL ? [
-    { label: '01', title: 'Configureer', description: 'Kies vorm, materiaal, afmetingen en afwerking in ons digitaal atelier.' },
-    { label: '02', title: 'Persoonlijk voorstel', description: 'Wij bevestigen uw keuzes en presenteren een voorstel binnen 48 uur.' },
-    { label: '03', title: 'Vervaardiging', description: 'Uw stuk wordt met de hand gemaakt door gespecialiseerde ambachtslieden. Levertijd: 12–16 weken.' },
-    { label: '04', title: 'White-glove levering', description: 'Bezorgd en geplaatst op locatie in Nederland en België.' },
+  const blocks = isNL ? [
+    {
+      label: 'Selectie',
+      title: 'Hoe wij stenen kiezen',
+      description: 'Wij bezoeken groeven in Italië en Spanje persoonlijk. Elke slab wordt beoordeeld op aderpatroon, kleurdiepte en structurele integriteit. Slechts één op de tien slabs haalt het atelier.',
+      tone: 'beige',
+    },
+    {
+      label: 'Maatwerk',
+      title: 'Het proces van aanvraag tot levering',
+      description: 'Na uw aanvraag volgt een persoonlijk gesprek, een dossier met slab-foto\'s en een definitief ontwerp. Productie 12–16 weken. White-glove levering en plaatsing in Nederland en België.',
+      tone: 'stone',
+    },
+    {
+      label: 'Nazorg',
+      title: 'Levenslange begeleiding',
+      description: 'Onderhoudskit bij levering, jaarlijkse digitale check-in en een levenslange lijn voor advies. Restauratie of herplaatsing — wij blijven uw aanspreekpunt.',
+      tone: 'graphite',
+    },
   ] : [
-    { label: '01', title: 'Configure', description: 'Choose shape, material, dimensions and finish in our digital atelier.' },
-    { label: '02', title: 'Personal proposal', description: 'We confirm your choices and present a proposal within 48 hours.' },
-    { label: '03', title: 'Craftsmanship', description: 'Your piece is handcrafted by specialised artisans. Lead time: 12–16 weeks.' },
-    { label: '04', title: 'White-glove delivery', description: 'Delivered and placed on location in the Netherlands and Belgium.' },
+    {
+      label: 'Selection',
+      title: 'How we choose stone',
+      description: 'We visit quarries in Italy and Spain in person. Every slab is assessed on veining, depth of colour and structural integrity. Only one in ten slabs reaches the atelier.',
+      tone: 'beige',
+    },
+    {
+      label: 'Bespoke',
+      title: 'From request to delivery',
+      description: 'Following your request: a personal conversation, a dossier with slab photographs and a final design. Production 12–16 weeks. White-glove delivery and placement in the Netherlands and Belgium.',
+      tone: 'stone',
+    },
+    {
+      label: 'Aftercare',
+      title: 'Lifetime guidance',
+      description: 'A care kit at delivery, an annual digital check-in and a lifetime line for advice. Restoration or relocation — we remain your point of contact.',
+      tone: 'graphite',
+    },
   ];
 
+  const toneClass: Record<string, string> = {
+    beige: 'bg-[hsl(35_25%_82%)]',
+    stone: 'bg-[hsl(30_8%_62%)]',
+    graphite: 'bg-[hsl(220_6%_28%)]',
+  };
+
   return (
-    <section className="py-24 lg:py-32 bg-secondary/20" ref={ref}>
+    <section className="py-24 lg:py-32" ref={ref}>
       <div className="container mx-auto px-6 lg:px-12">
         <motion.div
           variants={variants.fadeUp}
@@ -320,31 +288,26 @@ function ProcessSection({ isNL }: { isNL: boolean }) {
         >
           <div className="flex items-center gap-6 mb-16 lg:mb-20">
             <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">{isNL ? 'Werkwijze' : 'Process'}</span>
+            <span className="micro-label shrink-0">{isNL ? 'Werkwijze' : 'How we work'}</span>
             <Hairline className="flex-1" />
           </div>
 
-          <div className="max-w-xl mx-auto text-center mb-16">
-            <h2 className="font-serif text-display-sm text-foreground">
-              {isNL ? 'Van ontwerp tot plaatsing' : 'From design to placement'}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
-            {steps.map((step) => (
-              <div key={step.label} className="relative">
-                <div className="border-t border-foreground/10 pt-6">
-                  <span className="text-[11px] font-sans font-medium uppercase tracking-[0.15em] text-muted-foreground">
-                    {step.label}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+            {blocks.map((b) => (
+              <article key={b.label} className="border border-foreground/10 bg-background overflow-hidden flex flex-col">
+                <div className={`${toneClass[b.tone]} aspect-[4/3]`} aria-hidden />
+                <div className="p-8 lg:p-10 flex-1 flex flex-col">
+                  <span className="text-[11px] font-sans font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                    {b.label}
                   </span>
-                  <h3 className="font-serif text-lg text-foreground mt-3 mb-2">
-                    {step.title}
+                  <h3 className="font-serif text-xl text-foreground mt-3 mb-3">
+                    {b.title}
                   </h3>
                   <p className="text-body-sm text-muted-foreground leading-relaxed">
-                    {step.description}
+                    {b.description}
                   </p>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </motion.div>
