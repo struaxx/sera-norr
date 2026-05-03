@@ -19,7 +19,8 @@ export function Header() {
   const navLinks = [
     { name: t('nav.collections'), path: "/collections" },
     { name: "Atelier", path: "/atelier" },
-    { name: t('nav.contact'), path: "/contact" },
+    { name: "Aanvraag", path: "/aanvraag" },
+    { name: t('nav.about', 'Over'), path: "/over" },
   ];
 
   useEffect(() => {

@@ -56,8 +56,9 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               <li><Link to="/atelier" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">Atelier</Link></li>
+              <li><Link to="/founders" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">Founders Programma</Link></li>
               <li><Link to="/care" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.materialsCare')}</Link></li>
-              <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.about')}</Link></li>
+              <li><Link to="/over" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.about')}</Link></li>
               <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.contact')}</Link></li>
             </ul>
           </div>
