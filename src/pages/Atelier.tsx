@@ -60,6 +60,13 @@ export default function Atelier() {
           <HelpSidebar isNL={isNL} />
 
           <section id="configurator">
+            <div className="mb-10 max-w-3xl bg-foreground/[0.03] px-6 py-5">
+              <p className="text-sm italic text-muted-foreground leading-relaxed">
+                {isNL
+                  ? "Ter vergelijking: een Bulthaup b3-keuken met marmeren werkblad start bij €35.000. Een Saarinen Tulip-replica in Carrara kost €2.400 — machine-cut, geen maatwerk. Onze tafel: 2,4m bookmatched Calacatta, volledig op maat, levenslang — €4.850."
+                  : "For context: a Bulthaup b3 kitchen with a marble worktop starts at €35,000. A Saarinen Tulip replica in Carrara costs €2,400 — machine-cut, not bespoke. Our table: 2.4m bookmatched Calacatta, fully bespoke, for life — €4,850."}
+              </p>
+            </div>
             <QuickConfigurator />
           </section>
 
