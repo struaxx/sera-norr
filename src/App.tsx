@@ -22,6 +22,7 @@ const Journal = lazy(() => import("./pages/Journal"));
 const Care = lazy(() => import("./pages/Care"));
 const Founders = lazy(() => import("./pages/Founders"));
 const Aanvraag = lazy(() => import("./pages/Aanvraag"));
+const SampleKit = lazy(() => import("./pages/SampleKit"));
 
 const Shipping = lazy(() => import("./pages/Shipping"));
 const Privacy = lazy(() => import("./pages/Privacy"));
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/care" element={<Care />} />
             <Route path="/founders" element={<Founders />} />
             <Route path="/aanvraag" element={<Aanvraag />} />
+            <Route path="/sample-kit" element={<SampleKit />} />
             
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/privacy" element={<Privacy />} />
