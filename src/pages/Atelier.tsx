@@ -38,8 +38,8 @@ export default function Atelier() {
         ]}
       />
       <SEOHead
-        title={isNL ? "Atelier | Configureer uw maatwerk tafel | SERA NORR" : "Atelier | Configure your bespoke table | SERA NORR"}
-        description={isNL ? "Stel uw natuurstenen tafel samen: kies steensoort, formaat en onderstel. Direct een transparante vanaf-prijs." : "Configure your natural stone table: choose stone, size and base. See a transparent starting price."}
+        title={isNL ? "Configureer Uw Tafel — Sera Norr Atelier" : "Configure Your Table — Sera Norr Atelier"}
+        description={isNL ? "Steensoort, formaat, onderstel. Directe prijsindicatie. Geen verplichtingen." : "Stone, size, base. Instant price indication. No obligations."}
       />
 
       <main className="min-h-screen py-16 md:py-24">
