@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { CookieBanner } from "@/components/CookieBanner";
 
@@ -44,7 +44,8 @@ const App = () => (
             <Route path="/bespoke" element={<Bespoke />} />
             <Route path="/atelier" element={<Atelier />} />
             <Route path="/configurator" element={<Bespoke />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/over" element={<About />} />
+            <Route path="/about" element={<Navigate to="/over" replace />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/journal" element={<Journal />} />
             
