@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Upload, X } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,93 +12,82 @@ import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 
 type Choice = { value: string; label: string };
-
-type StepKey = "product" | "stone" | "size" | "leadtime" | "budget" | "contact";
+type StepKey = "room" | "budget" | "timeline" | "postcode" | "photo" | "contact";
 
 const STEPS: { key: StepKey; label: string; question: string; options?: Choice[] }[] = [
   {
-    key: "product",
-    label: "Product",
-    question: "Welk product wilt u?",
+    key: "room",
+    label: "Ruimte",
+    question: "Voor welke ruimte is dit?",
     options: [
-      { value: "eettafel", label: "Eettafel" },
-      { value: "salontafel", label: "Salontafel" },
-      { value: "beide", label: "Beide" },
-      { value: "onbekend", label: "Nog niet zeker" },
-    ],
-  },
-  {
-    key: "stone",
-    label: "Steensoort",
-    question: "Welke steensoort spreekt u aan?",
-    options: [
-      { value: "travertijn", label: "Travertijn" },
-      { value: "marmer-licht", label: "Marmer — licht" },
-      { value: "marmer-donker", label: "Marmer — donker" },
-      { value: "advies", label: "Ik laat me adviseren" },
-    ],
-  },
-  {
-    key: "size",
-    label: "Afmeting",
-    question: "Wat is de beoogde afmeting?",
-    options: [
-      { value: "klein", label: "Klein — tot 160 cm" },
-      { value: "standaard", label: "Standaard — 160 tot 200 cm" },
-      { value: "groot", label: "Groot — 200 cm en groter" },
-      { value: "onbekend", label: "Weet ik nog niet" },
-    ],
-  },
-  {
-    key: "leadtime",
-    label: "Levertijd",
-    question: "Wat is uw gewenste levertijd?",
-    options: [
-      { value: "flexibel", label: "Flexibel" },
-      { value: "3-4-mnd", label: "3 tot 4 maanden" },
-      { value: "kort", label: "Korter dan 3 maanden" },
+      { value: "eetkamer", label: "Eetkamer" },
+      { value: "woonkamer", label: "Woonkamer" },
+      { value: "beide", label: "Beide ruimtes" },
+      { value: "b2b", label: "B2B / Project" },
     ],
   },
   {
     key: "budget",
     label: "Budget",
-    question: "Wat is uw budget?",
+    question: "Wat is uw indicatief budget?",
     options: [
-      { value: "1950-3000", label: "€1.950 — €3.000" },
+      { value: "2000-3000", label: "€2.000 — €3.000" },
       { value: "3000-5000", label: "€3.000 — €5.000" },
-      { value: "5000+", label: "€5.000 en hoger" },
+      { value: "5000-8000+", label: "€5.000 — €8.000 of meer" },
+      { value: "begeleiding", label: "Ik laat me begeleiden" },
     ],
   },
   {
-    key: "contact",
-    label: "Contact",
-    question: "Hoe kunnen we u bereiken?",
+    key: "timeline",
+    label: "Tijdlijn",
+    question: "Wanneer wilt u de tafel ontvangen?",
+    options: [
+      { value: "2mnd", label: "Binnen 2 maanden" },
+      { value: "3-6mnd", label: "3 tot 6 maanden" },
+      { value: "orientatie", label: "Ik oriënteer mij nog" },
+    ],
   },
+  { key: "postcode", label: "Postcode", question: "Wat is uw postcode?" },
+  { key: "photo", label: "Foto", question: "Upload een foto van de ruimte" },
+  { key: "contact", label: "Contact", question: "Hoe kunnen we u bereiken?" },
 ];
 
+const postcodeSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{4}\s?[A-Za-z]{2}$/, { message: "Vul een geldige postcode in (bijv. 1234 AB)" });
+
 const contactSchema = z.object({
-  name: z
+  name: z.string().trim().min(2, { message: "Vul uw naam in" }).max(100, { message: "Naam is te lang" }),
+  email: z.string().trim().email({ message: "Vul een geldig e-mailadres in" }).max(255, { message: "E-mailadres is te lang" }),
+  phone: z
     .string()
     .trim()
-    .min(2, { message: "Vul uw naam in" })
-    .max(100, { message: "Naam is te lang" }),
-  email: z
-    .string()
-    .trim()
-    .email({ message: "Vul een geldig e-mailadres in" })
-    .max(255, { message: "E-mailadres is te lang" }),
+    .max(30, { message: "Telefoonnummer is te lang" })
+    .optional()
+    .or(z.literal("")),
 });
 
-type Answers = Partial<Record<StepKey, string>> & { name?: string; email?: string };
+type Answers = {
+  room?: string;
+  budget?: string;
+  timeline?: string;
+  postcode?: string;
+  photo?: File | null;
+  name?: string;
+  email?: string;
+  phone?: string;
+};
 
 export default function Aanvraag() {
   const [params] = useSearchParams();
   const isFounder = params.get("founder") === "true";
 
   const [stepIdx, setStepIdx] = useState(0);
-  const [answers, setAnswers] = useState<Answers>({});
-  const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
+  const [answers, setAnswers] = useState<Answers>({ photo: null });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const step = STEPS[stepIdx];
   const total = STEPS.length;
@@ -111,12 +100,40 @@ export default function Aanvraag() {
     }
   }
 
+  function nextFromPostcode() {
+    const r = postcodeSchema.safeParse(answers.postcode ?? "");
+    if (!r.success) {
+      setErrors({ postcode: r.error.issues[0]?.message ?? "Ongeldige postcode" });
+      return;
+    }
+    setErrors({});
+    setStepIdx((i) => i + 1);
+  }
+
+  function handleFile(file: File | null) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setErrors({ photo: "Alleen afbeeldingen toegestaan" });
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors({ photo: "Bestand mag maximaal 5MB zijn" });
+      return;
+    }
+    setErrors({});
+    setAnswers((a) => ({ ...a, photo: file }));
+  }
+
   function submitContact() {
-    const result = contactSchema.safeParse({ name: answers.name ?? "", email: answers.email ?? "" });
+    const result = contactSchema.safeParse({
+      name: answers.name ?? "",
+      email: answers.email ?? "",
+      phone: answers.phone ?? "",
+    });
     if (!result.success) {
-      const fe: { name?: string; email?: string } = {};
+      const fe: Record<string, string> = {};
       result.error.issues.forEach((i) => {
-        const k = i.path[0] as "name" | "email";
+        const k = String(i.path[0]);
         if (!fe[k]) fe[k] = i.message;
       });
       setErrors(fe);
@@ -129,22 +146,22 @@ export default function Aanvraag() {
 
   const outcome = useMemo(() => {
     const b = answers.budget;
-    if (b === "5000+") {
+    if (b === "5000-8000+" || b === "begeleiding") {
       return {
-        title: "Wij plannen een persoonlijk gesprek in",
-        body: "Verwacht onze uitnodiging binnen 24 uur. U kunt ook direct een moment kiezen via onderstaande agenda.",
-        cta: { label: "Plan een gesprek", href: "https://calendly.com/sera-norr/intake" },
+        title: "Plan een gratis gesprek van 20 minuten",
+        body: "Tijdens dit korte gesprek bespreken wij uw ruimte, smaak en wensen, en stellen wij een passend voorstel samen.",
+        cta: { label: "Plan een gratis gesprek van 20 minuten", href: "https://calendly.com/sera-norr/consult" },
       };
     }
     if (b === "3000-5000") {
       return {
-        title: "Ons team neemt binnen 24 uur contact op met een voorstel",
-        body: "U ontvangt per e-mail een eerste voorstel met passende steensoorten, afmetingen en richtprijs.",
+        title: "Wij nemen binnen 24 uur contact op",
+        body: "Wij nemen binnen 24 uur contact op voor een persoonlijk voorstel.",
       };
     }
     return {
-      title: "Wij sturen u onze exclusieve steencollectie lookbook toe",
-      body: "U ontvangt het lookbook met al onze geselecteerde steensoorten en richtprijzen in uw mailbox.",
+      title: "Marmer Atlas 2026 onderweg",
+      body: "Wij sturen u het Marmer Atlas 2026 lookbook toe — ons complete materiaaloverzicht.",
     };
   }, [answers.budget]);
 
@@ -164,9 +181,7 @@ export default function Aanvraag() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-10 border border-background/20 px-5 py-4 flex items-center gap-3"
             >
-              <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/50">
-                Founder
-              </span>
+              <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/50">Founder</span>
               <Hairline className="flex-1 bg-background/20" />
               <span className="font-sans text-xs text-background/80">
                 U vraagt aan als Founder — 25% korting wordt automatisch toegepast.
@@ -199,14 +214,27 @@ export default function Aanvraag() {
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.4 }}
               >
-                <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-[-0.01em] text-background leading-[1.1] mb-12">
+                <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-[-0.01em] text-background leading-[1.1] mb-4">
                   {step.question}
                 </h1>
 
+                {step.key === "postcode" && (
+                  <p className="font-sans text-sm text-background/60 mb-10">
+                    Wij leveren door heel Nederland en België.
+                  </p>
+                )}
+                {step.key === "photo" && (
+                  <p className="font-sans text-sm text-background/60 mb-10">
+                    Dit helpt ons een beter voorstel te maken (optioneel).
+                  </p>
+                )}
+                {(step.key !== "postcode" && step.key !== "photo") && <div className="mb-12" />}
+
+                {/* Choice options */}
                 {step.options && (
                   <div className="space-y-3">
                     {step.options.map((opt) => {
-                      const selected = answers[step.key] === opt.value;
+                      const selected = (answers as Record<string, unknown>)[step.key] === opt.value;
                       return (
                         <button
                           key={opt.value}
@@ -218,15 +246,11 @@ export default function Aanvraag() {
                             selected && "border-background bg-background/[0.06]"
                           )}
                         >
-                          <span className="font-serif text-lg md:text-xl text-background">
-                            {opt.label}
-                          </span>
+                          <span className="font-serif text-lg md:text-xl text-background">{opt.label}</span>
                           <span
                             className={cn(
                               "h-5 w-5 border rounded-full flex items-center justify-center shrink-0 transition-all",
-                              selected
-                                ? "border-background bg-background"
-                                : "border-background/30"
+                              selected ? "border-background bg-background" : "border-background/30"
                             )}
                           >
                             {selected && <Check className="h-3 w-3 text-foreground" strokeWidth={2.5} />}
@@ -237,6 +261,66 @@ export default function Aanvraag() {
                   </div>
                 )}
 
+                {/* Postcode */}
+                {step.key === "postcode" && (
+                  <div>
+                    <Input
+                      value={answers.postcode ?? ""}
+                      onChange={(e) => setAnswers((a) => ({ ...a, postcode: e.target.value.toUpperCase() }))}
+                      maxLength={7}
+                      placeholder="1234 AB"
+                      className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
+                    />
+                    {errors.postcode && (
+                      <p className="mt-2 text-xs text-destructive-foreground/90">{errors.postcode}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Photo upload */}
+                {step.key === "photo" && (
+                  <div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
+                    />
+                    {!answers.photo ? (
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full border border-dashed border-background/30 hover:border-background/60 transition-colors px-6 py-12 flex flex-col items-center justify-center gap-3"
+                      >
+                        <Upload className="h-6 w-6 text-background/50" />
+                        <span className="font-sans text-sm text-background/70">Kies een afbeelding (max 5MB)</span>
+                      </button>
+                    ) : (
+                      <div className="border border-background/20 px-5 py-4 flex items-center justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="font-sans text-sm text-background truncate">{answers.photo.name}</p>
+                          <p className="font-sans text-[11px] text-background/50">
+                            {(answers.photo.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setAnswers((a) => ({ ...a, photo: null }))}
+                          className="text-background/60 hover:text-background"
+                          aria-label="Verwijderen"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    )}
+                    {errors.photo && (
+                      <p className="mt-2 text-xs text-destructive-foreground/90">{errors.photo}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Contact */}
                 {step.key === "contact" && (
                   <div className="space-y-6">
                     <div>
@@ -250,9 +334,7 @@ export default function Aanvraag() {
                         placeholder="Uw naam"
                         className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
                       />
-                      {errors.name && (
-                        <p className="mt-2 text-xs text-destructive-foreground/90">{errors.name}</p>
-                      )}
+                      {errors.name && <p className="mt-2 text-xs text-destructive-foreground/90">{errors.name}</p>}
                     </div>
                     <div>
                       <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">
@@ -266,9 +348,21 @@ export default function Aanvraag() {
                         placeholder="naam@voorbeeld.nl"
                         className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
                       />
-                      {errors.email && (
-                        <p className="mt-2 text-xs text-destructive-foreground/90">{errors.email}</p>
-                      )}
+                      {errors.email && <p className="mt-2 text-xs text-destructive-foreground/90">{errors.email}</p>}
+                    </div>
+                    <div>
+                      <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">
+                        Telefoonnummer (optioneel)
+                      </label>
+                      <Input
+                        type="tel"
+                        value={answers.phone ?? ""}
+                        onChange={(e) => setAnswers((a) => ({ ...a, phone: e.target.value }))}
+                        maxLength={30}
+                        placeholder="+31 6 12 34 56 78"
+                        className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
+                      />
+                      {errors.phone && <p className="mt-2 text-xs text-destructive-foreground/90">{errors.phone}</p>}
                     </div>
                   </div>
                 )}
@@ -281,14 +375,46 @@ export default function Aanvraag() {
                     onClick={() => setStepIdx((i) => Math.max(0, i - 1))}
                     className={cn(
                       "inline-flex items-center gap-2 font-sans text-[11px] uppercase tracking-[0.2em] transition-opacity",
-                      stepIdx === 0
-                        ? "opacity-30 pointer-events-none"
-                        : "text-background/70 hover:text-background"
+                      stepIdx === 0 ? "opacity-30 pointer-events-none" : "text-background/70 hover:text-background"
                     )}
                   >
                     <ArrowLeft className="h-3 w-3" />
                     Terug
                   </button>
+
+                  {step.key === "postcode" && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={nextFromPostcode}
+                      className="border-background/40 text-background hover:bg-background hover:text-foreground"
+                    >
+                      Volgende
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  )}
+
+                  {step.key === "photo" && (
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setStepIdx((i) => i + 1)}
+                        className="font-sans text-[11px] uppercase tracking-[0.2em] text-background/70 hover:text-background"
+                      >
+                        Overslaan
+                      </button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setStepIdx((i) => i + 1)}
+                        disabled={!answers.photo}
+                        className="border-background/40 text-background hover:bg-background hover:text-foreground"
+                      >
+                        Volgende
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
 
                   {step.key === "contact" && (
                     <Button
@@ -340,14 +466,22 @@ export default function Aanvraag() {
                     Uw aanvraag
                   </p>
                   <dl className="space-y-3 font-sans text-sm">
-                    {STEPS.slice(0, 5).map((s) => (
+                    {STEPS.filter((s) => s.options).map((s) => (
                       <div key={s.key} className="flex justify-between gap-6 border-b border-background/10 py-2">
                         <dt className="text-background/50">{s.label}</dt>
                         <dd className="text-background/90 text-right">
-                          {s.options?.find((o) => o.value === answers[s.key])?.label ?? "—"}
+                          {s.options?.find((o) => o.value === (answers as Record<string, unknown>)[s.key])?.label ?? "—"}
                         </dd>
                       </div>
                     ))}
+                    <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+                      <dt className="text-background/50">Postcode</dt>
+                      <dd className="text-background/90 text-right">{answers.postcode ?? "—"}</dd>
+                    </div>
+                    <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+                      <dt className="text-background/50">Foto</dt>
+                      <dd className="text-background/90 text-right">{answers.photo ? answers.photo.name : "—"}</dd>
+                    </div>
                     {isFounder && (
                       <div className="flex justify-between gap-6 border-b border-background/10 py-2">
                         <dt className="text-background/50">Programma</dt>
