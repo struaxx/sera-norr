@@ -110,7 +110,12 @@ export function StoneConfigurator({
 }: StoneConfiguratorProps) {
   const [tier, setTier] = useState<TierKey>(initialTier);
   const tierConfig = tierStructure[category][tier];
-  const sizes = category === "diningTables" ? DINING_SIZES : COFFEE_SIZES;
+  const sizes =
+    tier === "atelier" && category === "diningTables"
+      ? ATELIER_DINING_SIZES
+      : category === "diningTables"
+        ? DINING_SIZES
+        : COFFEE_SIZES;
 
   const [stone, setStone] = useState<string>(tierConfig.stones[0]);
   const [size, setSize] = useState<Size>(sizes[0]);
@@ -123,6 +128,9 @@ export function StoneConfigurator({
     }
     if (!tierConfig.bases.includes(base as never)) {
       setBase(tierConfig.bases[0]);
+    }
+    if (!sizes.find((s) => s.label === size.label)) {
+      setSize(sizes[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tier]);
