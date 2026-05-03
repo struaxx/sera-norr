@@ -27,6 +27,7 @@ const STONE_SURCHARGES: Record<string, number> = {
   "Statuario": 500,
   "Calacatta Viola": 500,
   "Nero Marquina": 500,
+  "Statuario Extra": 0,
 };
 
 const STONE_SWATCHES: Record<string, { bg: string; ring: string }> = {
@@ -35,6 +36,7 @@ const STONE_SWATCHES: Record<string, { bg: string; ring: string }> = {
   "Statuario":           { bg: "bg-[#F2EFE9]", ring: "ring-[#CFC9BD]" },
   "Calacatta Viola":     { bg: "bg-[#7A6478]", ring: "ring-[#5C4A5C]" },
   "Nero Marquina":       { bg: "bg-[#2A2A2A]", ring: "ring-[#111111]" },
+  "Statuario Extra":     { bg: "bg-[#F5F2EC]", ring: "ring-[#D5CFC1]" },
 };
 
 const BASE_SURCHARGES: Record<string, number> = {
@@ -47,6 +49,7 @@ const BASE_SURCHARGES: Record<string, number> = {
   "Gegoten staal": 600,
   "Brons": 300,
   "Premium staal": 200,
+  "Gegoten bronzen voet": 0,
 };
 
 type Size = { label: string; surcharge: number };
@@ -62,6 +65,12 @@ const COFFEE_SIZES: Size[] = [
   { label: "80x80", surcharge: 0 },
   { label: "100x60", surcharge: 100 },
   { label: "120x70", surcharge: 200 },
+];
+
+const ATELIER_DINING_SIZES: Size[] = [
+  { label: "200x100", surcharge: 0 },
+  { label: "220x100", surcharge: 300 },
+  { label: "240x110", surcharge: 600 },
 ];
 
 // ============================================
@@ -101,7 +110,12 @@ export function StoneConfigurator({
 }: StoneConfiguratorProps) {
   const [tier, setTier] = useState<TierKey>(initialTier);
   const tierConfig = tierStructure[category][tier];
-  const sizes = category === "diningTables" ? DINING_SIZES : COFFEE_SIZES;
+  const sizes =
+    tier === "atelier" && category === "diningTables"
+      ? ATELIER_DINING_SIZES
+      : category === "diningTables"
+        ? DINING_SIZES
+        : COFFEE_SIZES;
 
   const [stone, setStone] = useState<string>(tierConfig.stones[0]);
   const [size, setSize] = useState<Size>(sizes[0]);
@@ -114,6 +128,9 @@ export function StoneConfigurator({
     }
     if (!tierConfig.bases.includes(base as never)) {
       setBase(tierConfig.bases[0]);
+    }
+    if (!sizes.find((s) => s.label === size.label)) {
+      setSize(sizes[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tier]);
@@ -174,11 +191,14 @@ export function StoneConfigurator({
           <div
             role="tablist"
             aria-label="Niveau"
-            className="mt-6 inline-flex border border-foreground/10"
+            className="mt-6 inline-flex flex-wrap border border-foreground/10"
           >
-            {(["essenza", "signature"] as TierKey[]).map((t) => {
-              const active = tier === t;
+            {(["essenza", "signature", "atelier"] as TierKey[]).map((t) => {
               const cfg = tierStructure[category][t];
+              if (!cfg) return null;
+              const active = tier === t;
+              const isSignature = t === "signature";
+              const isAtelier = t === "atelier";
               return (
                 <button
                   key={t}
@@ -187,13 +207,23 @@ export function StoneConfigurator({
                   aria-selected={active}
                   onClick={() => handleTierChange(t)}
                   className={cn(
-                    "px-4 py-2 text-xs uppercase tracking-[0.15em] transition-colors",
+                    "relative px-4 py-2 text-xs uppercase tracking-[0.15em] transition-colors",
                     active
                       ? "bg-foreground text-background"
                       : "text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  {cfg.name} · vanaf {formatEUR(cfg.priceFrom)}
+                  {isSignature && (
+                    <span className="absolute -top-2 right-2 px-1.5 py-0.5 text-[8px] tracking-[0.15em] bg-foreground text-background">
+                      MEEST GEKOZEN
+                    </span>
+                  )}
+                  <span className="block">{cfg.name} · vanaf {formatEUR(cfg.priceFrom)}</span>
+                  {isAtelier && (
+                    <span className={cn("block mt-1 text-[9px] normal-case tracking-normal", active ? "text-background/70" : "text-muted-foreground")}>
+                      Statuario Extra, hand-finished, genummerd 1/12
+                    </span>
+                  )}
                 </button>
               );
             })}
