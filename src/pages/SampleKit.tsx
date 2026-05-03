@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { Hairline, MicroLabel } from "@/components/ui/hairline";
+import { MicroLabel } from "@/components/ui/hairline";
 import { SEOHead } from "@/components/seo";
 
 const samples = [
