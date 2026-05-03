@@ -27,16 +27,16 @@ const About = () => {
   const aboutPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
-    '@id': 'https://sera-norr.com/about/#page',
+    '@id': 'https://sera-norr.com/over/#page',
     name: isNL ? 'Over SERA NORR' : 'About SERA NORR',
     description: seoDescription,
-    url: 'https://sera-norr.com/about',
+    url: 'https://sera-norr.com/over',
     mainEntity: { '@id': 'https://sera-norr.com/#organization' },
   };
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: isNL ? 'Over Ons' : 'About', url: '/about' },
+    { name: isNL ? 'Over Ons' : 'About', url: '/over' },
   ]);
 
   const combinedSchema = {
@@ -49,7 +49,7 @@ const About = () => {
       <BreadcrumbSchema
         items={[
           { name: "SERA NORR", url: "https://sera-norr.com" },
-          { name: "Over ons", url: "https://sera-norr.com/about" },
+          { name: "Over ons", url: "https://sera-norr.com/over" },
         ]}
       />
       <SEOHead 
@@ -84,12 +84,29 @@ const About = () => {
               <h1 className="font-serif text-display-md lg:text-display-lg text-background mb-4">
                 {isNL ? 'Vorm volgt materiaal.' : 'Form follows material.'}
               </h1>
+              <p className="font-serif text-background/85 text-xl lg:text-2xl italic mb-4">
+                {isNL ? 'Het verhaal achter Sera Norr.' : 'The story behind Sera Norr.'}
+              </p>
               <p className="text-background/70 text-body-lg max-w-lg">
                 {isNL 
                   ? 'Een maatwerk atelier gewijd aan het sculpturale potentieel van natuursteen.'
                   : 'A bespoke atelier dedicated to the sculptural potential of natural stone.'}
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section heading: identifies this as the Over page */}
+      <section className="pt-20 lg:pt-28 pb-2">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-3xl">
+            <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-muted-foreground mb-4">
+              {isNL ? 'Het Atelier' : 'The Atelier'}
+            </p>
+            <h2 className="font-serif text-display-sm lg:text-display-md text-foreground">
+              {isNL ? 'Wie wij zijn' : 'Who we are'}
+            </h2>
           </div>
         </div>
       </section>
