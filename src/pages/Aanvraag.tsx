@@ -1,7 +1,7 @@
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Upload, X } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -11,160 +11,481 @@ import { Hairline } from "@/components/ui/hairline";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 
+type CurrentStep = 1 | 2 | 3 | 4 | 5 | 6;
+type StepName = "RUIMTE" | "BUDGET" | "TIJDLIJN" | "LOCATIE" | "FOTO" | "CONTACT";
 type Choice = { value: string; label: string };
-type StepKey = "room" | "budget" | "timeline" | "postcode" | "photo" | "contact";
 
-const STEPS: { key: StepKey; label: string; question: string; options?: Choice[] }[] = [
-  {
-    key: "room",
-    label: "Ruimte",
-    question: "Voor welke ruimte is dit?",
-    options: [
-      { value: "eetkamer", label: "Eetkamer" },
-      { value: "woonkamer", label: "Woonkamer" },
-      { value: "beide", label: "Beide ruimtes" },
-      { value: "b2b", label: "B2B / Project" },
-    ],
-  },
-  {
-    key: "budget",
-    label: "Budget",
-    question: "Wat is uw indicatief budget?",
-    options: [
-      { value: "2000-3000", label: "€2.000 — €3.000" },
-      { value: "3000-5000", label: "€3.000 — €5.000" },
-      { value: "5000-8000+", label: "€5.000 — €8.000 of meer" },
-      { value: "begeleiding", label: "Ik laat me begeleiden" },
-    ],
-  },
-  {
-    key: "timeline",
-    label: "Tijdlijn",
-    question: "Wanneer wilt u de tafel ontvangen?",
-    options: [
-      { value: "2mnd", label: "Binnen 2 maanden" },
-      { value: "3-6mnd", label: "3 tot 6 maanden" },
-      { value: "orientatie", label: "Ik oriënteer mij nog" },
-    ],
-  },
-  { key: "postcode", label: "Postcode", question: "Wat is uw postcode?" },
-  { key: "photo", label: "Foto", question: "Upload een foto van de ruimte" },
-  { key: "contact", label: "Contact", question: "Hoe kunnen we u bereiken?" },
+type FormValues = {
+  room: string;
+  budget: string;
+  timeline: string;
+  postcode: string;
+  photo: File | null;
+  name: string;
+  email: string;
+  phone: string;
+};
+
+const TOTAL_STEPS = 6;
+
+const STEP_NAMES: Record<CurrentStep, StepName> = {
+  1: "RUIMTE",
+  2: "BUDGET",
+  3: "TIJDLIJN",
+  4: "LOCATIE",
+  5: "FOTO",
+  6: "CONTACT",
+};
+
+const ROOM_OPTIONS: Choice[] = [
+  { value: "eetkamer", label: "Eetkamer" },
+  { value: "woonkamer", label: "Woonkamer" },
+  { value: "beide-ruimtes", label: "Beide ruimtes" },
+  { value: "b2b-project", label: "B2B / Project" },
+];
+
+const BUDGET_OPTIONS: Choice[] = [
+  { value: "2000-3000", label: "€2.000–3.000" },
+  { value: "3000-5000", label: "€3.000–5.000" },
+  { value: "5000-8000", label: "€5.000–8.000" },
+  { value: "8000-plus", label: "€8.000+" },
+  { value: "begeleid", label: "Ik laat me begeleiden" },
+];
+
+const TIMELINE_OPTIONS: Choice[] = [
+  { value: "binnen-3-maanden", label: "Binnen 3 maanden" },
+  { value: "3-6-maanden", label: "3–6 maanden" },
+  { value: "meer-dan-6-maanden", label: "Meer dan 6 maanden" },
+  { value: "nog-niet-zeker", label: "Nog niet zeker" },
 ];
 
 const postcodeSchema = z
   .string()
   .trim()
-  .regex(/^\d{4}\s?[A-Za-z]{2}$/, { message: "Vul een geldige postcode in (bijv. 1234 AB)" });
+  .regex(/^\d{4}\s?[A-Za-z]{2}$/, { message: "Vul een geldige postcode in, bijvoorbeeld 1234 AB." });
 
 const contactSchema = z.object({
-  name: z.string().trim().min(2, { message: "Vul uw naam in" }).max(100, { message: "Naam is te lang" }),
-  email: z.string().trim().email({ message: "Vul een geldig e-mailadres in" }).max(255, { message: "E-mailadres is te lang" }),
-  phone: z
-    .string()
-    .trim()
-    .max(30, { message: "Telefoonnummer is te lang" })
-    .optional()
-    .or(z.literal("")),
+  name: z.string().trim().min(2, { message: "Vul uw naam in." }).max(100, { message: "Naam is te lang." }),
+  email: z.string().trim().email({ message: "Vul een geldig e-mailadres in." }).max(255, { message: "E-mailadres is te lang." }),
+  phone: z.string().trim().max(30, { message: "Telefoonnummer is te lang." }).optional().or(z.literal("")),
 });
 
-type Answers = {
-  room?: string;
-  budget?: string;
-  timeline?: string;
-  postcode?: string;
-  photo?: File | null;
-  name?: string;
-  email?: string;
-  phone?: string;
+const initialFormValues: FormValues = {
+  room: "",
+  budget: "",
+  timeline: "",
+  postcode: "",
+  photo: null,
+  name: "",
+  email: "",
+  phone: "",
 };
 
 export default function Aanvraag() {
   const [params] = useSearchParams();
   const isFounder = params.get("founder") === "true";
-
-  const [stepIdx, setStepIdx] = useState(0);
-  const [answers, setAnswers] = useState<Answers>({ photo: null });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitted, setSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const step = STEPS[stepIdx];
-  const total = STEPS.length;
-  const progress = ((submitted ? total : stepIdx) / total) * 100;
+  const [currentStep, setCurrentStep] = useState<CurrentStep>(1);
+  const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitted, setSubmitted] = useState(false);
 
-  function selectOption(value: string) {
-    const key = step.key;
-    setAnswers((a) => ({ ...a, [key]: value }));
-    if (stepIdx < total - 1) {
-      setStepIdx((i) => i + 1);
-    }
+  const progress = submitted ? 100 : (currentStep / TOTAL_STEPS) * 100;
+
+  function updateFormValue<K extends keyof FormValues>(key: K, value: FormValues[K]) {
+    setFormValues((values) => ({ ...values, [key]: value }));
+    setErrors((current) => {
+      if (!current[key]) return current;
+      const next = { ...current };
+      delete next[key];
+      return next;
+    });
+  }
+
+  function goToNextStep() {
+    setCurrentStep((step) => Math.min(TOTAL_STEPS, step + 1) as CurrentStep);
+  }
+
+  function goToPreviousStep() {
+    setCurrentStep((step) => Math.max(1, step - 1) as CurrentStep);
+  }
+
+  function selectChoice(key: "room" | "budget" | "timeline", value: string) {
+    updateFormValue(key, value);
+    goToNextStep();
   }
 
   function nextFromPostcode() {
-    const r = postcodeSchema.safeParse(answers.postcode ?? "");
-    if (!r.success) {
-      setErrors({ postcode: r.error.issues[0]?.message ?? "Ongeldige postcode" });
+    const result = postcodeSchema.safeParse(formValues.postcode);
+    if (!result.success) {
+      setErrors({ postcode: result.error.issues[0]?.message ?? "Vul een geldige postcode in." });
       return;
     }
     setErrors({});
-    setStepIdx((i) => i + 1);
+    goToNextStep();
   }
 
   function handleFile(file: File | null) {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      setErrors({ photo: "Alleen afbeeldingen toegestaan" });
+      setErrors({ photo: "Upload een afbeelding." });
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      setErrors({ photo: "Bestand mag maximaal 5MB zijn" });
+      setErrors({ photo: "Bestand mag maximaal 5MB zijn." });
       return;
     }
     setErrors({});
-    setAnswers((a) => ({ ...a, photo: file }));
+    updateFormValue("photo", file);
   }
 
-  function submitContact() {
+  function submitForm() {
     const result = contactSchema.safeParse({
-      name: answers.name ?? "",
-      email: answers.email ?? "",
-      phone: answers.phone ?? "",
+      name: formValues.name,
+      email: formValues.email,
+      phone: formValues.phone,
     });
+
     if (!result.success) {
-      const fe: Record<string, string> = {};
-      result.error.issues.forEach((i) => {
-        const k = String(i.path[0]);
-        if (!fe[k]) fe[k] = i.message;
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const key = String(issue.path[0]);
+        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
       });
-      setErrors(fe);
+      setErrors(fieldErrors);
       return;
     }
+
     setErrors({});
     setSubmitted(true);
-    toast({ title: "Aanvraag verstuurd", description: "Wij nemen spoedig contact op." });
+    toast({ title: "Aanvraag verstuurd", description: "Bedankt. Wij nemen binnen 24 uur contact met u op." });
   }
 
-  const outcome = useMemo(() => {
-    const b = answers.budget;
-    if (b === "5000-8000+" || b === "begeleiding") {
-      return {
-        title: "Plan een gratis gesprek van 20 minuten",
-        body: "Tijdens dit korte gesprek bespreken wij uw ruimte, smaak en wensen, en stellen wij een passend voorstel samen.",
-        cta: { label: "Plan een gratis gesprek van 20 minuten", href: "https://calendly.com/sera-norr/consult" },
-      };
+  function getChoiceLabel(options: Choice[], value: string) {
+    return options.find((option) => option.value === value)?.label ?? "—";
+  }
+
+  function renderChoiceButton(option: Choice, selected: boolean, onClick: () => void) {
+    return (
+      <button
+        key={option.value}
+        type="button"
+        onClick={onClick}
+        className={cn(
+          "w-full text-left flex items-center justify-between gap-4 px-6 py-5 border transition-all duration-300",
+          "border-background/20 hover:border-background/60 hover:bg-background/[0.04]",
+          selected && "border-background bg-background/[0.06]"
+        )}
+      >
+        <span className="font-serif text-lg md:text-xl text-background">{option.label}</span>
+        <span
+          className={cn(
+            "h-5 w-5 border rounded-full flex items-center justify-center shrink-0 transition-all",
+            selected ? "border-background bg-background" : "border-background/30"
+          )}
+        >
+          {selected && <Check className="h-3 w-3 text-foreground" strokeWidth={2.5} />}
+        </span>
+      </button>
+    );
+  }
+
+  function renderStep() {
+    if (currentStep === 1) {
+      return (
+        <div>
+          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
+            Voor welke ruimte is dit?
+          </h1>
+          <div className="space-y-3">
+            {ROOM_OPTIONS.map((option) =>
+              renderChoiceButton(option, formValues.room === option.value, () => selectChoice("room", option.value))
+            )}
+          </div>
+        </div>
+      );
     }
-    if (b === "3000-5000") {
-      return {
-        title: "Wij nemen binnen 24 uur contact op",
-        body: "Wij nemen binnen 24 uur contact op voor een persoonlijk voorstel.",
-      };
+
+    if (currentStep === 2) {
+      return (
+        <div>
+          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
+            Wat is uw budget?
+          </h1>
+          <div className="space-y-3">
+            {BUDGET_OPTIONS.map((option) =>
+              renderChoiceButton(option, formValues.budget === option.value, () => selectChoice("budget", option.value))
+            )}
+          </div>
+        </div>
+      );
     }
-    return {
-      title: "Marmer Atlas 2026 onderweg",
-      body: "Wij sturen u het Marmer Atlas 2026 lookbook toe — ons complete materiaaloverzicht.",
-    };
-  }, [answers.budget]);
+
+    if (currentStep === 3) {
+      return (
+        <div>
+          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
+            Wanneer wilt u de tafel hebben?
+          </h1>
+          <div className="space-y-3">
+            {TIMELINE_OPTIONS.map((option) =>
+              renderChoiceButton(option, formValues.timeline === option.value, () => selectChoice("timeline", option.value))
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    if (currentStep === 4) {
+      return (
+        <div>
+          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-10">
+            Uw postcode (voor bezorgplanning)
+          </h1>
+          <Input
+            value={formValues.postcode}
+            onChange={(event) => updateFormValue("postcode", event.target.value.toUpperCase())}
+            maxLength={7}
+            placeholder="1234 AB"
+            className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
+          />
+          {errors.postcode && <p className="mt-3 text-xs text-background/70">{errors.postcode}</p>}
+          <div className="mt-12 flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={nextFromPostcode}
+              className="border-background/40 text-background hover:bg-background hover:text-foreground"
+            >
+              Volgende
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    if (currentStep === 5) {
+      return (
+        <div>
+          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-4">
+            Upload een foto van uw ruimte (optioneel)
+          </h1>
+          <p className="font-sans text-sm text-background/60 mb-10">Zo kunnen wij beter inschatten welke steen past.</p>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            onChange={(event) => handleFile(event.target.files?.[0] ?? null)}
+          />
+
+          {!formValues.photo ? (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full border border-dashed border-background/30 hover:border-background/60 transition-colors px-6 py-12 flex flex-col items-center justify-center gap-3"
+            >
+              <Upload className="h-6 w-6 text-background/50" />
+              <span className="font-sans text-sm text-background/70">Kies een afbeelding</span>
+            </button>
+          ) : (
+            <div className="border border-background/20 px-5 py-4 flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="font-sans text-sm text-background truncate">{formValues.photo.name}</p>
+                <p className="font-sans text-[11px] text-background/50">
+                  {(formValues.photo.size / 1024 / 1024).toFixed(2)} MB
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => updateFormValue("photo", null)}
+                className="text-background/60 hover:text-background"
+                aria-label="Foto verwijderen"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+
+          {errors.photo && <p className="mt-3 text-xs text-background/70">{errors.photo}</p>}
+
+          <div className="mt-12 flex items-center justify-end gap-4">
+            <button
+              type="button"
+              onClick={goToNextStep}
+              className="font-sans text-[11px] uppercase tracking-[0.2em] text-background/70 hover:text-background"
+            >
+              Overslaan
+            </button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={goToNextStep}
+              className="border-background/40 text-background hover:bg-background hover:text-foreground"
+            >
+              Volgende
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-10">
+          Hoe mogen wij u bereiken?
+        </h1>
+        <div className="space-y-6">
+          <div>
+            <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">Naam</label>
+            <Input
+              value={formValues.name}
+              onChange={(event) => updateFormValue("name", event.target.value)}
+              maxLength={100}
+              placeholder="Uw naam"
+              className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
+            />
+            {errors.name && <p className="mt-3 text-xs text-background/70">{errors.name}</p>}
+          </div>
+
+          <div>
+            <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">
+              E-mailadres
+            </label>
+            <Input
+              type="email"
+              value={formValues.email}
+              onChange={(event) => updateFormValue("email", event.target.value)}
+              maxLength={255}
+              placeholder="naam@voorbeeld.nl"
+              className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
+            />
+            {errors.email && <p className="mt-3 text-xs text-background/70">{errors.email}</p>}
+          </div>
+
+          <div>
+            <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">
+              Telefoonnummer (optioneel)
+            </label>
+            <Input
+              type="tel"
+              value={formValues.phone}
+              onChange={(event) => updateFormValue("phone", event.target.value)}
+              maxLength={30}
+              placeholder="+31 6 12 34 56 78"
+              className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
+            />
+            {errors.phone && <p className="mt-3 text-xs text-background/70">{errors.phone}</p>}
+          </div>
+        </div>
+
+        <div className="mt-12 flex justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={submitForm}
+            className="border-background/40 text-background hover:bg-background hover:text-foreground"
+          >
+            Aanvraag versturen
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  function renderSubmittedState() {
+    const highBudget = ["5000-8000", "8000-plus", "begeleid"].includes(formValues.budget);
+    const midBudget = formValues.budget === "3000-5000";
+
+    return (
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/50 mb-6">
+          Bedankt{formValues.name ? `, ${formValues.name.split(" ")[0]}` : ""}
+        </p>
+        <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-8">
+          Bedankt. Wij nemen binnen 24 uur contact met u op.
+        </h1>
+
+        {highBudget && (
+          <div className="space-y-6">
+            <p className="font-sans text-base md:text-lg text-background/70 leading-relaxed max-w-xl">
+              Uw aanvraag past bij een persoonlijk ateliergesprek. Plan direct een gratis gesprek van 20 minuten.
+            </p>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-background/40 text-background hover:bg-background hover:text-foreground"
+            >
+              <a href="https://calendly.com/sera-norr/consult" target="_blank" rel="noopener noreferrer">
+                Plan een gratis gesprek van 20 minuten
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+        )}
+
+        {midBudget && (
+          <p className="font-sans text-base md:text-lg text-background/70 leading-relaxed max-w-xl">
+            Wij nemen binnen 24 uur contact op voor een persoonlijk voorstel.
+          </p>
+        )}
+
+        {!highBudget && !midBudget && (
+          <div className="space-y-6">
+            <p className="font-sans text-base md:text-lg text-background/70 leading-relaxed max-w-xl">
+              Wij sturen u het Marmer Atlas 2026 lookbook toe — ons complete materiaaloverzicht.
+            </p>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-background/40 text-background hover:bg-background hover:text-foreground"
+            >
+              <a href="/collections">Bekijk het lookbook</a>
+            </Button>
+          </div>
+        )}
+
+        <div className="mt-16 pt-10 border-t border-background/10">
+          <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/50 mb-6">Uw aanvraag</p>
+          <dl className="space-y-3 font-sans text-sm">
+            <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+              <dt className="text-background/50">Ruimte</dt>
+              <dd className="text-background/90 text-right">{getChoiceLabel(ROOM_OPTIONS, formValues.room)}</dd>
+            </div>
+            <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+              <dt className="text-background/50">Budget</dt>
+              <dd className="text-background/90 text-right">{getChoiceLabel(BUDGET_OPTIONS, formValues.budget)}</dd>
+            </div>
+            <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+              <dt className="text-background/50">Tijdlijn</dt>
+              <dd className="text-background/90 text-right">{getChoiceLabel(TIMELINE_OPTIONS, formValues.timeline)}</dd>
+            </div>
+            <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+              <dt className="text-background/50">Postcode</dt>
+              <dd className="text-background/90 text-right">{formValues.postcode || "—"}</dd>
+            </div>
+            <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+              <dt className="text-background/50">Foto</dt>
+              <dd className="text-background/90 text-right">{formValues.photo ? formValues.photo.name : "—"}</dd>
+            </div>
+            {isFounder && (
+              <div className="flex justify-between gap-6 border-b border-background/10 py-2">
+                <dt className="text-background/50">Programma</dt>
+                <dd className="text-background/90 text-right">Founder — 25% korting</dd>
+              </div>
+            )}
+          </dl>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <Layout>
@@ -176,7 +497,7 @@ export default function Aanvraag() {
 
       <section className="bg-foreground text-background min-h-screen pt-32 pb-24 lg:pt-40 lg:pb-32">
         <div className="container mx-auto px-6 lg:px-12 max-w-2xl">
-          {isFounder && (
+          {isFounder && !submitted && (
             <motion.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -190,310 +511,46 @@ export default function Aanvraag() {
             </motion.div>
           )}
 
-          {/* Progress */}
           <div className="mb-12">
-            <div className="flex items-center justify-between font-sans text-[10px] uppercase tracking-[0.3em] text-background/50 mb-3">
-              <span>{submitted ? "Voltooid" : `Stap ${stepIdx + 1} van ${total}`}</span>
-              <span>{step.label}</span>
+            <div className="flex items-center justify-between gap-6 font-sans text-[10px] uppercase tracking-[0.3em] text-background/50 mb-3">
+              <span>{submitted ? "VOLTOOID" : `STAP ${currentStep} VAN ${TOTAL_STEPS}`}</span>
+              <span>{submitted ? "AANVRAAG" : STEP_NAMES[currentStep]}</span>
             </div>
             <div className="h-px bg-background/10 relative overflow-hidden">
               <motion.div
                 className="absolute inset-y-0 left-0 bg-background"
                 initial={false}
                 animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               />
             </div>
           </div>
 
-          <AnimatePresence mode="wait">
-            {!submitted ? (
-              <motion.div
-                key={`step-${stepIdx}`}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
-              >
-                <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-[-0.01em] text-background leading-[1.1] mb-4">
-                  {step.question}
-                </h1>
+          {submitted ? (
+            renderSubmittedState()
+          ) : (
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              {renderStep()}
 
-                {step.key === "postcode" && (
-                  <p className="font-sans text-sm text-background/60 mb-10">
-                    Wij leveren door heel Nederland en België.
-                  </p>
-                )}
-                {step.key === "photo" && (
-                  <p className="font-sans text-sm text-background/60 mb-10">
-                    Dit helpt ons een beter voorstel te maken (optioneel).
-                  </p>
-                )}
-                {(step.key !== "postcode" && step.key !== "photo") && <div className="mb-12" />}
-
-                {/* Choice options */}
-                {step.options && (
-                  <div className="space-y-3">
-                    {step.options.map((opt) => {
-                      const selected = (answers as Record<string, unknown>)[step.key] === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => selectOption(opt.value)}
-                          className={cn(
-                            "w-full text-left flex items-center justify-between gap-4 px-6 py-5 border transition-all duration-300",
-                            "border-background/20 hover:border-background/60 hover:bg-background/[0.04]",
-                            selected && "border-background bg-background/[0.06]"
-                          )}
-                        >
-                          <span className="font-serif text-lg md:text-xl text-background">{opt.label}</span>
-                          <span
-                            className={cn(
-                              "h-5 w-5 border rounded-full flex items-center justify-center shrink-0 transition-all",
-                              selected ? "border-background bg-background" : "border-background/30"
-                            )}
-                          >
-                            {selected && <Check className="h-3 w-3 text-foreground" strokeWidth={2.5} />}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* Postcode */}
-                {step.key === "postcode" && (
-                  <div>
-                    <Input
-                      value={answers.postcode ?? ""}
-                      onChange={(e) => setAnswers((a) => ({ ...a, postcode: e.target.value.toUpperCase() }))}
-                      maxLength={7}
-                      placeholder="1234 AB"
-                      className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
-                    />
-                    {errors.postcode && (
-                      <p className="mt-2 text-xs text-destructive-foreground/90">{errors.postcode}</p>
-                    )}
-                  </div>
-                )}
-
-                {/* Photo upload */}
-                {step.key === "photo" && (
-                  <div>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      className="sr-only"
-                      onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
-                    />
-                    {!answers.photo ? (
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="w-full border border-dashed border-background/30 hover:border-background/60 transition-colors px-6 py-12 flex flex-col items-center justify-center gap-3"
-                      >
-                        <Upload className="h-6 w-6 text-background/50" />
-                        <span className="font-sans text-sm text-background/70">Kies een afbeelding (max 5MB)</span>
-                      </button>
-                    ) : (
-                      <div className="border border-background/20 px-5 py-4 flex items-center justify-between gap-4">
-                        <div className="min-w-0">
-                          <p className="font-sans text-sm text-background truncate">{answers.photo.name}</p>
-                          <p className="font-sans text-[11px] text-background/50">
-                            {(answers.photo.size / 1024 / 1024).toFixed(2)} MB
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setAnswers((a) => ({ ...a, photo: null }))}
-                          className="text-background/60 hover:text-background"
-                          aria-label="Verwijderen"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    )}
-                    {errors.photo && (
-                      <p className="mt-2 text-xs text-destructive-foreground/90">{errors.photo}</p>
-                    )}
-                  </div>
-                )}
-
-                {/* Contact */}
-                {step.key === "contact" && (
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">
-                        Naam
-                      </label>
-                      <Input
-                        value={answers.name ?? ""}
-                        onChange={(e) => setAnswers((a) => ({ ...a, name: e.target.value }))}
-                        maxLength={100}
-                        placeholder="Uw naam"
-                        className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
-                      />
-                      {errors.name && <p className="mt-2 text-xs text-destructive-foreground/90">{errors.name}</p>}
-                    </div>
-                    <div>
-                      <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">
-                        E-mailadres
-                      </label>
-                      <Input
-                        type="email"
-                        value={answers.email ?? ""}
-                        onChange={(e) => setAnswers((a) => ({ ...a, email: e.target.value }))}
-                        maxLength={255}
-                        placeholder="naam@voorbeeld.nl"
-                        className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
-                      />
-                      {errors.email && <p className="mt-2 text-xs text-destructive-foreground/90">{errors.email}</p>}
-                    </div>
-                    <div>
-                      <label className="block font-sans text-[10px] uppercase tracking-[0.3em] text-background/60 mb-3">
-                        Telefoonnummer (optioneel)
-                      </label>
-                      <Input
-                        type="tel"
-                        value={answers.phone ?? ""}
-                        onChange={(e) => setAnswers((a) => ({ ...a, phone: e.target.value }))}
-                        maxLength={30}
-                        placeholder="+31 6 12 34 56 78"
-                        className="h-14 bg-transparent border-x-0 border-t-0 border-b border-background/20 rounded-none px-0 text-background text-lg font-serif placeholder:text-background/30 focus-visible:ring-0 focus-visible:border-background"
-                      />
-                      {errors.phone && <p className="mt-2 text-xs text-destructive-foreground/90">{errors.phone}</p>}
-                    </div>
-                  </div>
-                )}
-
-                {/* Navigation */}
-                <div className="mt-12 flex items-center justify-between">
+              {currentStep > 1 && (
+                <div className="mt-12">
                   <button
                     type="button"
-                    disabled={stepIdx === 0}
-                    onClick={() => setStepIdx((i) => Math.max(0, i - 1))}
-                    className={cn(
-                      "inline-flex items-center gap-2 font-sans text-[11px] uppercase tracking-[0.2em] transition-opacity",
-                      stepIdx === 0 ? "opacity-30 pointer-events-none" : "text-background/70 hover:text-background"
-                    )}
+                    onClick={goToPreviousStep}
+                    className="inline-flex items-center gap-2 font-sans text-[11px] uppercase tracking-[0.2em] text-background/70 hover:text-background"
                   >
                     <ArrowLeft className="h-3 w-3" />
                     Terug
                   </button>
-
-                  {step.key === "postcode" && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={nextFromPostcode}
-                      className="border-background/40 text-background hover:bg-background hover:text-foreground"
-                    >
-                      Volgende
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  )}
-
-                  {step.key === "photo" && (
-                    <div className="flex items-center gap-4">
-                      <button
-                        type="button"
-                        onClick={() => setStepIdx((i) => i + 1)}
-                        className="font-sans text-[11px] uppercase tracking-[0.2em] text-background/70 hover:text-background"
-                      >
-                        Overslaan
-                      </button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setStepIdx((i) => i + 1)}
-                        disabled={!answers.photo}
-                        className="border-background/40 text-background hover:bg-background hover:text-foreground"
-                      >
-                        Volgende
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-
-                  {step.key === "contact" && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={submitContact}
-                      className="border-background/40 text-background hover:bg-background hover:text-foreground"
-                    >
-                      Aanvraag versturen
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  )}
                 </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="outcome"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/50 mb-6">
-                  Bedankt, {answers.name?.split(" ")[0]}
-                </p>
-                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-[-0.01em] text-background leading-[1.1] mb-8">
-                  {outcome.title}
-                </h2>
-                <p className="font-sans text-base md:text-lg text-background/70 leading-relaxed max-w-xl mb-12">
-                  {outcome.body}
-                </p>
-
-                {outcome.cta && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="lg"
-                    className="border-background/40 text-background hover:bg-background hover:text-foreground"
-                  >
-                    <a href={outcome.cta.href} target="_blank" rel="noopener noreferrer">
-                      {outcome.cta.label}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </a>
-                  </Button>
-                )}
-
-                {/* Recap */}
-                <div className="mt-16 pt-10 border-t border-background/10">
-                  <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/50 mb-6">
-                    Uw aanvraag
-                  </p>
-                  <dl className="space-y-3 font-sans text-sm">
-                    {STEPS.filter((s) => s.options).map((s) => (
-                      <div key={s.key} className="flex justify-between gap-6 border-b border-background/10 py-2">
-                        <dt className="text-background/50">{s.label}</dt>
-                        <dd className="text-background/90 text-right">
-                          {s.options?.find((o) => o.value === (answers as Record<string, unknown>)[s.key])?.label ?? "—"}
-                        </dd>
-                      </div>
-                    ))}
-                    <div className="flex justify-between gap-6 border-b border-background/10 py-2">
-                      <dt className="text-background/50">Postcode</dt>
-                      <dd className="text-background/90 text-right">{answers.postcode ?? "—"}</dd>
-                    </div>
-                    <div className="flex justify-between gap-6 border-b border-background/10 py-2">
-                      <dt className="text-background/50">Foto</dt>
-                      <dd className="text-background/90 text-right">{answers.photo ? answers.photo.name : "—"}</dd>
-                    </div>
-                    {isFounder && (
-                      <div className="flex justify-between gap-6 border-b border-background/10 py-2">
-                        <dt className="text-background/50">Programma</dt>
-                        <dd className="text-background/90 text-right">Founder — 25% korting</dd>
-                      </div>
-                    )}
-                  </dl>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              )}
+            </motion.div>
+          )}
         </div>
       </section>
     </Layout>
