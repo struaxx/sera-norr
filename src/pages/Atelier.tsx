@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { useConfiguratorStore, type AtelierPhase } from '@/stores/configurator-store';
 import { ConfiguratorPhase, DossierPhase } from '@/components/atelier';
 import { StoneConfigurator } from '@/components/configurator';
+import { PricingBreakdown } from '@/components/trust';
 import { loadConfiguration } from '@/lib/configurator/api';
 import { PRESETS } from '@/lib/configurator/presets';
 
@@ -301,6 +302,16 @@ export default function Atelier() {
             </div>
 
             <QuickConfigurator />
+          </section>
+
+          {/* ============================================
+               Transparante kostenopbouw — 3 voorbeeldprojecten
+               ============================================ */}
+          <section
+            id="kostenopbouw"
+            className="mt-24 md:mt-32 pt-16 md:pt-20 border-t border-foreground/10"
+          >
+            <PricingBreakdown />
           </section>
         </div>
       </main>
