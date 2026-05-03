@@ -163,13 +163,90 @@ export default function Founders() {
             </p>
           </div>
 
-          <div className="mt-16 text-center">
+          <p className="mt-16 max-w-2xl mx-auto text-center font-serif italic text-sm text-muted-foreground leading-relaxed">
+            Ter vergelijking: een Bulthaup-keuken met marmeren werkblad start bij €35.000.
+            Een Founders-tafel van Sera Norr — op maat, bookmatched, levenslang —
+            kost €6.375 (Founders-korting van 25% op €8.500).
+          </p>
+
+          <div className="mt-8 text-center">
             <Button asChild variant="sera-primary" size="lg">
               <Link to="/aanvraag?founder=true">
                 Word Founder — Claim uw plek
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Founder profile */}
+      <section className="bg-background border-t border-foreground/10 py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+          <div className="text-center mb-16">
+            <p className="font-sans text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-4">
+              Over de oprichter
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-foreground">
+              Wie staat er achter Sera Norr
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-[300px_1fr] gap-10 lg:gap-16 items-start">
+            <div
+              className="bg-foreground/5 border border-foreground/10 flex items-center justify-center text-muted-foreground font-sans text-xs uppercase tracking-[0.25em]"
+              style={{ width: "100%", maxWidth: 300, aspectRatio: "3 / 4" }}
+            >
+              Foto Laurens
+            </div>
+            <div>
+              <h3 className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-foreground mb-2">
+                Laurens Soedito
+              </h3>
+              <p className="font-sans text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
+                Oprichter Sera Norr · Managing Director Ls Capital
+              </p>
+              <p className="font-sans text-base text-foreground/80 leading-relaxed mb-5">
+                Via Ls Capital heb ik de afgelopen jaren tientallen high-end interieurbouw-projecten
+                begeleid in Nederland. Ik ken de markt, de leveranciers, en de standaard die
+                premium kopers verwachten. Sera Norr is het logische vervolg: hetzelfde niveau,
+                maar in natuursteen.
+              </p>
+              <p className="font-sans text-base text-foreground/80 leading-relaxed">
+                Dat betekent dat u niet met een webshop te maken heeft, maar met iemand die uw
+                investering begrijpt en persoonlijk verantwoordelijk is voor het eindresultaat.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Founders Guarantee */}
+      <section className="bg-foreground text-background py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+          <div className="border border-background/20 p-10 md:p-14">
+            <p className="font-sans text-[11px] uppercase tracking-[0.3em] text-background/50 mb-6">
+              Founders Guarantee
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-background mb-8 leading-tight">
+              Mijn persoonlijke garantie
+            </h2>
+            <p className="font-sans text-base md:text-lg text-background/80 leading-relaxed mb-10">
+              Ik sta met mijn naam voor elk stuk dat wij leveren. Niet tevreden binnen 30 dagen
+              na levering? Volledig terugbetaald, ophalen op mijn kosten. Geen procedure,
+              geen discussie.
+            </p>
+            <div className="pt-8 border-t border-background/15">
+              <p className="font-serif italic text-xl text-background mb-2">
+                Laurens Soedito
+              </p>
+              <p className="font-sans text-xs uppercase tracking-[0.25em] text-background/50">
+                Oprichter Sera Norr en Ls Capital
+              </p>
+              <p className="mt-6 font-sans text-sm text-background/70">
+                Telefonisch bereikbaar via WhatsApp: +31 6 [VOEGHIERTOENUMMER]
+              </p>
+            </div>
           </div>
         </div>
       </section>
