@@ -169,8 +169,8 @@ export default function Aanvraag() {
   return (
     <Layout>
       <SEOHead
-        title="Aanvraag — SERA NORR"
-        description="Start uw aanvraag voor een maatwerk natuursteenmeubel. Een korte vragenlijst van zes stappen — wij reageren binnen 24 uur."
+        title="Aanvraag — Sera Norr"
+        description="Persoonlijk voorstel binnen 48 uur. Start uw aanvraag."
         noindex
       />
 
