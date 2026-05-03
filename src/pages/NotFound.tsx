@@ -56,7 +56,7 @@ const NotFound = () => {
                 {isNL ? "Collecties" : "Collections"}
               </Link>
               <Link 
-                to="/about" 
+                to="/over" 
                 className="text-foreground/70 hover:text-foreground transition-colors underline underline-offset-4"
               >
                 {isNL ? "Over ons" : "About"}
