@@ -94,9 +94,10 @@ export default function Aanvraag() {
   const progress = ((submitted ? total : stepIdx) / total) * 100;
 
   function selectOption(value: string) {
-    setAnswers((a) => ({ ...a, [step.key]: value }));
+    const key = step.key;
+    setAnswers((a) => ({ ...a, [key]: value }));
     if (stepIdx < total - 1) {
-      setTimeout(() => setStepIdx((i) => i + 1), 180);
+      setStepIdx((i) => i + 1);
     }
   }
 
@@ -168,8 +169,8 @@ export default function Aanvraag() {
   return (
     <Layout>
       <SEOHead
-        title="Aanvraag — SERA NORR"
-        description="Start uw aanvraag voor een maatwerk natuursteenmeubel. Een korte vragenlijst van zes stappen — wij reageren binnen 24 uur."
+        title="Aanvraag — Sera Norr"
+        description="Persoonlijk voorstel binnen 48 uur. Start uw aanvraag."
         noindex
       />
 
@@ -208,11 +209,11 @@ export default function Aanvraag() {
           <AnimatePresence mode="wait">
             {!submitted ? (
               <motion.div
-                key={step.key}
-                initial={{ opacity: 0, y: 12 }}
+                key={`step-${stepIdx}`}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.4 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
               >
                 <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-[-0.01em] text-background leading-[1.1] mb-4">
                   {step.question}

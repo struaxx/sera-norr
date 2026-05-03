@@ -31,13 +31,13 @@ const Collections = () => {
   const isNL = (i18n.resolvedLanguage ?? i18n.language ?? 'nl').toLowerCase().startsWith('nl');
   const [selectedItem, setSelectedItem] = useState<LookbookItem | null>(null);
 
-  const seoTitle = isNL 
-    ? "Collecties | SERA NORR — Lookbook & Inspiratie"
-    : "Collections | SERA NORR — Lookbook & Inspiration";
+  const seoTitle = isNL
+    ? "Collecties — Sera Norr | Eettafels vanaf €2.950"
+    : "Collections — Sera Norr | Dining Tables from €2,950";
 
   const seoDescription = isNL
-    ? "Ontdek de SERA NORR lookbook: sculptural stone furniture in travertin en marmer. Inspiratie voor uw maatwerk project."
-    : "Discover the SERA NORR lookbook: sculptural stone furniture in travertine and marble. Inspiration for your bespoke project.";
+    ? "Handgemaakte stenen meubels. Eettafels vanaf €2.950, salontafels vanaf €1.950."
+    : "Handcrafted stone furniture. Dining tables from €2,950, coffee tables from €1,950.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },

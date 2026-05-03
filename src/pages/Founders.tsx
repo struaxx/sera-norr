@@ -48,8 +48,8 @@ export default function Founders() {
   return (
     <Layout>
       <SEOHead
-        title="Founders Programma — Word een van de 12 | SERA NORR"
-        description="Eenmalige kans: word een van de eerste 12 SERA NORR Founders. 25% korting, genummerde bronzen plaquette en lifetime toegang tot nieuwe steencollecties."
+        title="Founders Programma — 25% Korting | Sera Norr"
+        description="Word een van de 12 Founders. 25% korting, genummerde plaquette, persoonlijke fotoshoot."
       />
 
       {/* Hero */}
