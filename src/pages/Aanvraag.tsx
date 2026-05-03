@@ -192,54 +192,58 @@ export default function Aanvraag() {
   }
 
   function renderStep() {
-    if (currentStep === 1) {
-      return (
-        <div>
-          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
-            Voor welke ruimte is dit?
-          </h1>
-          <div className="space-y-3">
-            {ROOM_OPTIONS.map((option) =>
-              renderChoiceButton(option, formValues.room === option.value, () => selectChoice("room", option.value))
-            )}
+    switch (currentStep) {
+      case 1:
+        return (
+          <div>
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
+              Voor welke ruimte is dit?
+            </h1>
+            <div className="space-y-3">
+              {ROOM_OPTIONS.map((option) =>
+                renderChoiceButton(option, formValues.room === option.value, () =>
+                  selectChoice("room", option.value)
+                )
+              )}
+            </div>
           </div>
-        </div>
-      );
-    }
+        );
 
-    if (currentStep === 2) {
-      return (
-        <div>
-          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
-            Wat is uw budget?
-          </h1>
-          <div className="space-y-3">
-            {BUDGET_OPTIONS.map((option) =>
-              renderChoiceButton(option, formValues.budget === option.value, () => selectChoice("budget", option.value))
-            )}
+      case 2:
+        return (
+          <div>
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
+              Wat is uw budget?
+            </h1>
+            <div className="space-y-3">
+              {BUDGET_OPTIONS.map((option) =>
+                renderChoiceButton(option, formValues.budget === option.value, () =>
+                  selectChoice("budget", option.value)
+                )
+              )}
+            </div>
           </div>
-        </div>
-      );
-    }
+        );
 
-    if (currentStep === 3) {
-      return (
-        <div>
-          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
-            Wanneer wilt u de tafel hebben?
-          </h1>
-          <div className="space-y-3">
-            {TIMELINE_OPTIONS.map((option) =>
-              renderChoiceButton(option, formValues.timeline === option.value, () => selectChoice("timeline", option.value))
-            )}
+      case 3:
+        return (
+          <div>
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-12">
+              Wanneer wilt u de tafel hebben?
+            </h1>
+            <div className="space-y-3">
+              {TIMELINE_OPTIONS.map((option) =>
+                renderChoiceButton(option, formValues.timeline === option.value, () =>
+                  selectChoice("timeline", option.value)
+                )
+              )}
+            </div>
           </div>
-        </div>
-      );
-    }
+        );
 
-    if (currentStep === 4) {
-      return (
-        <div>
+      case 4:
+        return (
+          <div>
           <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-10">
             Uw postcode (voor bezorgplanning)
           </h1>
@@ -262,13 +266,12 @@ export default function Aanvraag() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-        </div>
-      );
-    }
+          </div>
+        );
 
-    if (currentStep === 5) {
-      return (
-        <div>
+      case 5:
+        return (
+          <div>
           <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-4">
             Upload een foto van uw ruimte (optioneel)
           </h1>
@@ -330,12 +333,12 @@ export default function Aanvraag() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-        </div>
-      );
-    }
+          </div>
+        );
 
-    return (
-      <div>
+      case 6:
+        return (
+          <div>
         <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-background leading-[1.1] mb-10">
           Hoe mogen wij u bereiken?
         </h1>
@@ -394,8 +397,12 @@ export default function Aanvraag() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
-      </div>
-    );
+          </div>
+        );
+
+      default:
+        return null;
+    }
   }
 
   function renderSubmittedState() {
