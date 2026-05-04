@@ -112,7 +112,7 @@ function QuickConfigurator() {
         })}
       </div>
 
-      <StoneConfigurator key={category} category={category} tier="essenza" allowTierSwitch />
+      <StoneConfigurator key={category} />
     </div>
   );
 }
