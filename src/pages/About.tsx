@@ -204,9 +204,9 @@ function GuaranteeSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
   const items = isNL ? [
-    { title: 'Atelier Garantie', description: '2 jaar garantie op vakmanschap en constructie. Elk stuk wordt vóór levering door ons atelier eindgekeurd.' },
-    { title: 'Levenslang Advies', description: 'Wij blijven bereikbaar voor vragen over onderhoud, verplaatsing of restauratie. Voor altijd, zonder einddatum.' },
-    { title: 'Echtheidsverklaring', description: 'Elk stuk wordt geleverd met een certificaat van herkomst: groeve, slabnummer en signatuur van de meester-steenzetter.' },
+    { title: 'Certificaat van authenticiteit', description: 'Elk Sera Norr meubel wordt geleverd met een certificaat van authenticiteit en de exacte herkomst van het marmer — groeve, slabnummer en signatuur.' },
+    { title: '10 jaar garantie', description: '10-jarige garantie op vakmanschap en constructie. Elk stuk wordt vóór levering door ons atelier eindgekeurd.' },
+    { title: 'Levenslang advies', description: 'Wij blijven bereikbaar voor vragen over onderhoud, verplaatsing of restauratie. Voor altijd, zonder einddatum.' },
   ] : [
     { title: 'Atelier Guarantee', description: '2-year guarantee on craftsmanship and construction. Every piece passes a final atelier inspection before delivery.' },
     { title: 'Lifetime Advice', description: 'We remain reachable for questions on care, relocation or restoration. Forever, with no end date.' },
