@@ -117,6 +117,9 @@ const About = () => {
       {/* Founder's Guarantee - 3 columns */}
       <GuaranteeSection isNL={isNL} />
 
+      {/* Referentieprojecten */}
+      <ReferenceProjectsSection isNL={isNL} />
+
       {/* Info blocks: Selectie / Maatwerk / Nazorg */}
       <InfoBlocksSection isNL={isNL} />
 
