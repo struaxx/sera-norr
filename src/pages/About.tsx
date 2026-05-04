@@ -342,3 +342,103 @@ function InfoBlocksSection({ isNL }: { isNL: boolean }) {
 }
 
 export default About;
+
+function ReferenceProjectsSection({ isNL }: { isNL: boolean }) {
+  const { ref, isInView, variants } = useScrollReveal();
+
+  const projects = isNL
+    ? [
+        {
+          n: '01',
+          location: 'Villa Wassenaar',
+          stone: 'Calacatta Viola',
+          pieces: 'Eettafel 240×110 cm + salontafel 120×70 cm',
+          swatch: 'bg-[#EFE8EA]',
+        },
+        {
+          n: '02',
+          location: 'Penthouse Amsterdam',
+          stone: 'Light Emperador',
+          pieces: 'Vergadertafel 300×100 cm',
+          swatch: 'bg-[#C9B7A2]',
+        },
+        {
+          n: '03',
+          location: 'Boutique Hotel Utrecht',
+          stone: 'Nero Marquina',
+          pieces: 'Receptiebalie op maat',
+          swatch: 'bg-[#1C1C1E]',
+        },
+      ]
+    : [
+        {
+          n: '01',
+          location: 'Villa Wassenaar',
+          stone: 'Calacatta Viola',
+          pieces: 'Dining table 240×110 cm + coffee table 120×70 cm',
+          swatch: 'bg-[#EFE8EA]',
+        },
+        {
+          n: '02',
+          location: 'Penthouse Amsterdam',
+          stone: 'Light Emperador',
+          pieces: 'Conference table 300×100 cm',
+          swatch: 'bg-[#C9B7A2]',
+        },
+        {
+          n: '03',
+          location: 'Boutique Hotel Utrecht',
+          stone: 'Nero Marquina',
+          pieces: 'Bespoke reception desk',
+          swatch: 'bg-[#1C1C1E]',
+        },
+      ];
+
+  return (
+    <section className="py-24 lg:py-32" ref={ref}>
+      <div className="container mx-auto px-6 lg:px-12">
+        <motion.div
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">
+              {isNL ? 'Referentieprojecten' : 'Reference projects'}
+            </span>
+            <Hairline className="flex-1" />
+          </div>
+
+          <div className="max-w-xl mb-16">
+            <h2 className="font-serif text-display-sm text-foreground leading-tight">
+              {isNL ? 'Een selectie uit ons werk' : 'A selection from our work'}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-foreground/10 border border-foreground/10">
+            {projects.map((p) => (
+              <article key={p.n} className="bg-background flex flex-col">
+                <div className={`${p.swatch} aspect-[4/3]`} aria-hidden />
+                <div className="p-8 lg:p-10 flex-1 flex flex-col">
+                  <span className="font-serif text-[48px] lg:text-[64px] text-foreground/[0.04] leading-none block mb-4">
+                    {p.n}
+                  </span>
+                  <span className="text-[11px] font-sans font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                    {p.stone}
+                  </span>
+                  <h3 className="font-serif text-xl text-foreground mt-3 mb-3">
+                    {p.location}
+                  </h3>
+                  <p className="text-body-sm text-muted-foreground leading-relaxed">
+                    {p.pieces}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
