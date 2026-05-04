@@ -57,7 +57,6 @@ export default function StoneConfigurator() {
 
   const availableStones = tierStones[tier] ?? [];
   const visibleStone = availableStones.includes(stone) ? stone : availableStones[0];
-  const stoneTextColor = darkStones.includes(visibleStone) ? '#f0e8d8' : '#2a1f12';
 
   const gradientStops: Record<string, string[]> = {
     travertijn: ['#e8d9be', '#c8b48a', '#d6c4a2'],
