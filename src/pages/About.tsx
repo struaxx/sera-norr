@@ -117,6 +117,9 @@ const About = () => {
       {/* Founder's Guarantee - 3 columns */}
       <GuaranteeSection isNL={isNL} />
 
+      {/* Referentieprojecten */}
+      <ReferenceProjectsSection isNL={isNL} />
+
       {/* Info blocks: Selectie / Maatwerk / Nazorg */}
       <InfoBlocksSection isNL={isNL} />
 
@@ -169,20 +172,25 @@ function FounderStorySection({ isNL }: { isNL: boolean }) {
             <div>
               <h2 className="font-serif text-display-sm text-foreground leading-tight">
                 {isNL 
-                  ? 'Een tafel is geen meubel. Het is het middelpunt van een leven.'
+                  ? 'Twee ontwerpers. Eén obsessie: marmer dat blijft.'
                   : 'A table is not furniture. It is the centre of a life.'}
               </h2>
             </div>
             <div className="space-y-6">
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'SERA NORR is ontstaan uit een eenvoudige overtuiging: een tafel is geen meubel, maar het middelpunt van een leven. Elke steen die wij selecteren wordt met de hand gekozen in de Italiaanse en Spaanse groeven. Elk stuk draagt de signatuur van de aarde zelf.'
+                  ? 'Sera Norr is geboren uit frustratie — over meubelstukken die schitterend ogen in een showroom maar vlak worden in een echt interieur. We wilden anders.'
                   : 'SERA NORR was born from a simple conviction: a table is not furniture, but the centre of a life. Every stone we select is chosen by hand in the Italian and Spanish quarries. Each piece carries the signature of the earth itself.'}
               </p>
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'We werken uitsluitend op aanvraag. Geen voorraad, geen compromissen. Elke tafel wordt gemaakt voor één persoon, in één ruimte, voor een leven lang.'
+                  ? 'Elk meubel begint niet op tekenpapier maar in de steengroeve. We selecteren onze marmerblokken persoonlijk in Italië en Portugal, op oog, op textuur, op karakter.'
                   : 'We work exclusively to order. No stock, no compromises. Every table is made for one person, in one room, for a lifetime.'}
+              </p>
+              <p className="text-body-md text-muted-foreground leading-relaxed">
+                {isNL
+                  ? 'Wij geloven dat een marmeren tafel geen meubel is maar een beslissing voor tientallen jaren. Sera Norr staat voor volledige transparantie: u ziet exact wat u betaalt en waarom.'
+                  : 'We believe a marble table is not furniture but a decision for decades. Sera Norr stands for complete transparency: you see exactly what you pay for, and why.'}
               </p>
             </div>
           </div>
@@ -196,9 +204,9 @@ function GuaranteeSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
   const items = isNL ? [
-    { title: 'Atelier Garantie', description: '2 jaar garantie op vakmanschap en constructie. Elk stuk wordt vóór levering door ons atelier eindgekeurd.' },
-    { title: 'Levenslang Advies', description: 'Wij blijven bereikbaar voor vragen over onderhoud, verplaatsing of restauratie. Voor altijd, zonder einddatum.' },
-    { title: 'Echtheidsverklaring', description: 'Elk stuk wordt geleverd met een certificaat van herkomst: groeve, slabnummer en signatuur van de meester-steenzetter.' },
+    { title: 'Certificaat van authenticiteit', description: 'Elk Sera Norr meubel wordt geleverd met een certificaat van authenticiteit en de exacte herkomst van het marmer — groeve, slabnummer en signatuur.' },
+    { title: '10 jaar garantie', description: '10-jarige garantie op vakmanschap en constructie. Elk stuk wordt vóór levering door ons atelier eindgekeurd.' },
+    { title: 'Levenslang advies', description: 'Wij blijven bereikbaar voor vragen over onderhoud, verplaatsing of restauratie. Voor altijd, zonder einddatum.' },
   ] : [
     { title: 'Atelier Guarantee', description: '2-year guarantee on craftsmanship and construction. Every piece passes a final atelier inspection before delivery.' },
     { title: 'Lifetime Advice', description: 'We remain reachable for questions on care, relocation or restoration. Forever, with no end date.' },
@@ -334,3 +342,103 @@ function InfoBlocksSection({ isNL }: { isNL: boolean }) {
 }
 
 export default About;
+
+function ReferenceProjectsSection({ isNL }: { isNL: boolean }) {
+  const { ref, isInView, variants } = useScrollReveal();
+
+  const projects = isNL
+    ? [
+        {
+          n: '01',
+          location: 'Villa Wassenaar',
+          stone: 'Calacatta Viola',
+          pieces: 'Eettafel 240×110 cm + salontafel 120×70 cm',
+          swatch: 'bg-[#EFE8EA]',
+        },
+        {
+          n: '02',
+          location: 'Penthouse Amsterdam',
+          stone: 'Light Emperador',
+          pieces: 'Vergadertafel 300×100 cm',
+          swatch: 'bg-[#C9B7A2]',
+        },
+        {
+          n: '03',
+          location: 'Boutique Hotel Utrecht',
+          stone: 'Nero Marquina',
+          pieces: 'Receptiebalie op maat',
+          swatch: 'bg-[#1C1C1E]',
+        },
+      ]
+    : [
+        {
+          n: '01',
+          location: 'Villa Wassenaar',
+          stone: 'Calacatta Viola',
+          pieces: 'Dining table 240×110 cm + coffee table 120×70 cm',
+          swatch: 'bg-[#EFE8EA]',
+        },
+        {
+          n: '02',
+          location: 'Penthouse Amsterdam',
+          stone: 'Light Emperador',
+          pieces: 'Conference table 300×100 cm',
+          swatch: 'bg-[#C9B7A2]',
+        },
+        {
+          n: '03',
+          location: 'Boutique Hotel Utrecht',
+          stone: 'Nero Marquina',
+          pieces: 'Bespoke reception desk',
+          swatch: 'bg-[#1C1C1E]',
+        },
+      ];
+
+  return (
+    <section className="py-24 lg:py-32" ref={ref}>
+      <div className="container mx-auto px-6 lg:px-12">
+        <motion.div
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <div className="flex items-center gap-6 mb-16 lg:mb-20">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">
+              {isNL ? 'Referentieprojecten' : 'Reference projects'}
+            </span>
+            <Hairline className="flex-1" />
+          </div>
+
+          <div className="max-w-xl mb-16">
+            <h2 className="font-serif text-display-sm text-foreground leading-tight">
+              {isNL ? 'Een selectie uit ons werk' : 'A selection from our work'}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-foreground/10 border border-foreground/10">
+            {projects.map((p) => (
+              <article key={p.n} className="bg-background flex flex-col">
+                <div className={`${p.swatch} aspect-[4/3]`} aria-hidden />
+                <div className="p-8 lg:p-10 flex-1 flex flex-col">
+                  <span className="font-serif text-[48px] lg:text-[64px] text-foreground/[0.04] leading-none block mb-4">
+                    {p.n}
+                  </span>
+                  <span className="text-[11px] font-sans font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                    {p.stone}
+                  </span>
+                  <h3 className="font-serif text-xl text-foreground mt-3 mb-3">
+                    {p.location}
+                  </h3>
+                  <p className="text-body-sm text-muted-foreground leading-relaxed">
+                    {p.pieces}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
