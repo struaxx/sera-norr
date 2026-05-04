@@ -8,4 +8,4 @@ export { DimensionSliders } from './DimensionSliders';
 export { EdgeProfileSelector, BaseSelector } from './EdgeBaseSelector';
 export { ExtrasSelector } from './ExtrasSelector';
 export { StickyDossier } from './StickyDossier';
-export { StoneConfigurator, type StoneConfiguratorProps } from './StoneConfigurator';
+export { default as StoneConfigurator } from './StoneConfigurator';
