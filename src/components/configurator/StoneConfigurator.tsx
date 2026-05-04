@@ -57,8 +57,15 @@ export default function StoneConfigurator() {
 
   const availableStones = tierStones[tier] ?? [];
   const visibleStone = availableStones.includes(stone) ? stone : availableStones[0];
-  const stoneBg = marbleTextures[visibleStone];
-  const stoneTextColor = darkStones.includes(visibleStone) ? '#f0e8d8' : '#2a1f12';
+
+  const gradientStops: Record<string, string[]> = {
+    travertijn: ['#e8d9be', '#c8b48a', '#d6c4a2'],
+    emperador: ['#5c3d1e', '#4e3518', '#7a5228'],
+    calacatta: ['#f4ede0', '#e8dcc8', '#f0e8d8'],
+    statuario: ['#f8f5f0', '#ece8e2', '#f5f1eb'],
+  };
+  const activeStops = gradientStops[visibleStone] ?? gradientStops.calacatta;
+  const gradId = `marbleGrad-${visibleStone}`;
 
   const roundSizes = ['⌀120', '⌀140', '⌀160', 'Maatwerk'];
   const rectSizes = ['200x90', '220x100', '240x100', 'Maatwerk'];
@@ -77,31 +84,81 @@ export default function StoneConfigurator() {
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', background: '#0a0a0a', minHeight: '600px' }}>
-      {/* LEFT: marble panel */}
+      {/* LEFT: marble panel with SVG table silhouette */}
       <div
         style={{
           flex: 1,
           minWidth: '320px',
           minHeight: '500px',
-          background: stoneBg,
-          transition: 'background 0.6s ease',
+          background: 'radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #0a0a0a 80%)',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
           position: 'relative',
         }}
       >
-        <div style={{ padding: '40px' }}>
-          <div style={{ fontSize: '11px', letterSpacing: '0.2em', color: stoneTextColor, opacity: 0.7, marginBottom: '12px' }}>
-            STEENSOORT
-          </div>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', color: stoneTextColor, margin: 0, fontWeight: 400 }}>
+        <div style={{ flex: 1, minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 600 400"
+            preserveAspectRatio="xMidYMid meet"
+            style={{ minHeight: '360px', display: 'block' }}
+          >
+            <defs>
+              <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={activeStops[0]} />
+                <stop offset="50%" stopColor={activeStops[1]} />
+                <stop offset="100%" stopColor={activeStops[2]} />
+              </linearGradient>
+              <filter id="marbleVein" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence type="turbulence" baseFrequency="0.025 0.006" numOctaves="3" result="noise" />
+                <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
+                <feBlend in="SourceGraphic" in2="gray" mode="overlay" result="blended" />
+                <feComposite in="blended" in2="SourceGraphic" operator="in" />
+              </filter>
+              <filter id="tableShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="18" stdDeviation="22" floodColor="#000" floodOpacity="0.55" />
+              </filter>
+            </defs>
+            <g filter="url(#tableShadow)">
+              {shape === 'rond' ? (
+                <ellipse
+                  cx="300"
+                  cy="200"
+                  rx="170"
+                  ry="150"
+                  fill={`url(#${gradId})`}
+                  filter="url(#marbleVein)"
+                />
+              ) : (
+                <rect
+                  x="60"
+                  y="100"
+                  width="480"
+                  height="200"
+                  rx="12"
+                  fill={`url(#${gradId})`}
+                  filter="url(#marbleVein)"
+                />
+              )}
+            </g>
+            {/* highlight sheen */}
+            {shape === 'rond' ? (
+              <ellipse cx="260" cy="150" rx="80" ry="30" fill="#ffffff" opacity="0.08" />
+            ) : (
+              <rect x="90" y="115" width="200" height="30" rx="6" fill="#ffffff" opacity="0.08" />
+            )}
+          </svg>
+        </div>
+        <div style={{ padding: '24px 32px 32px' }}>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '34px', color: '#f0e8d8', margin: 0, fontWeight: 400, letterSpacing: '0.01em' }}>
             {stoneNames[visibleStone]}
           </h2>
-        </div>
-        <div style={{ padding: '40px' }}>
-          <div style={{ fontSize: '11px', letterSpacing: '0.2em', color: '#c9a96e' }}>
-            {tiers.find((t) => t.id === tier)?.name.toUpperCase()}
+          <div style={{ fontSize: '11px', letterSpacing: '0.25em', color: '#c9a96e', marginTop: '10px', textTransform: 'uppercase' }}>
+            {tiers.find((t) => t.id === tier)?.name}
+          </div>
+          <div style={{ fontSize: '13px', color: '#888', marginTop: '6px', fontFamily: 'Georgia, serif' }}>
+            € {total.toLocaleString('nl-NL')}
           </div>
         </div>
       </div>
