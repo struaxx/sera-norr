@@ -172,20 +172,25 @@ function FounderStorySection({ isNL }: { isNL: boolean }) {
             <div>
               <h2 className="font-serif text-display-sm text-foreground leading-tight">
                 {isNL 
-                  ? 'Een tafel is geen meubel. Het is het middelpunt van een leven.'
+                  ? 'Twee ontwerpers. Eén obsessie: marmer dat blijft.'
                   : 'A table is not furniture. It is the centre of a life.'}
               </h2>
             </div>
             <div className="space-y-6">
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'SERA NORR is ontstaan uit een eenvoudige overtuiging: een tafel is geen meubel, maar het middelpunt van een leven. Elke steen die wij selecteren wordt met de hand gekozen in de Italiaanse en Spaanse groeven. Elk stuk draagt de signatuur van de aarde zelf.'
+                  ? 'Sera Norr is geboren uit frustratie — over meubelstukken die schitterend ogen in een showroom maar vlak worden in een echt interieur. We wilden anders.'
                   : 'SERA NORR was born from a simple conviction: a table is not furniture, but the centre of a life. Every stone we select is chosen by hand in the Italian and Spanish quarries. Each piece carries the signature of the earth itself.'}
               </p>
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'We werken uitsluitend op aanvraag. Geen voorraad, geen compromissen. Elke tafel wordt gemaakt voor één persoon, in één ruimte, voor een leven lang.'
+                  ? 'Elk meubel begint niet op tekenpapier maar in de steengroeve. We selecteren onze marmerblokken persoonlijk in Italië en Portugal, op oog, op textuur, op karakter.'
                   : 'We work exclusively to order. No stock, no compromises. Every table is made for one person, in one room, for a lifetime.'}
+              </p>
+              <p className="text-body-md text-muted-foreground leading-relaxed">
+                {isNL
+                  ? 'Wij geloven dat een marmeren tafel geen meubel is maar een beslissing voor tientallen jaren. Sera Norr staat voor volledige transparantie: u ziet exact wat u betaalt en waarom.'
+                  : 'We believe a marble table is not furniture but a decision for decades. Sera Norr stands for complete transparency: you see exactly what you pay for, and why.'}
               </p>
             </div>
           </div>
