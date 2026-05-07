@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   STONE_OPTIONS,
   SHAPE_OPTIONS,
@@ -75,6 +75,20 @@ export default function StoneConfigurator() {
   const [legStyle, setLegStyle]   = useState<RuleLegStyle>('cylindrical');
   const [finish, setFinish]       = useState<'gepolijst' | 'gezoet' | 'geborsteld'>('gepolijst');
   const [customSize, setCustomSize] = useState<boolean>(false);
+
+  useEffect(() => {
+    const valid = getValidLegCounts(shape);
+    if (!valid.includes(legCount)) {
+      setLegCount(valid[0]);
+    }
+  }, [shape]);
+
+  useEffect(() => {
+    const valid = getValidLegStyles(shape, legCount);
+    if (!valid.find(o => o.id === legStyle)) {
+      setLegStyle(valid[0].id);
+    }
+  }, [shape, legCount]);
 
   const total =
     TIER_BASE_PRICE[tier] +
