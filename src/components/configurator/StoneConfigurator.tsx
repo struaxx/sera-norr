@@ -8,6 +8,8 @@ import {
 } from './options';
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
 import { PricingBreakdown } from '@/components/trust';
+import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
+import { stateToViewerProps } from './stateMapping';
 
 const TIER_BASE_PRICE: Record<'essenza' | 'signature' | 'atelier', number> = {
   essenza: 2950,
@@ -138,8 +140,13 @@ export default function StoneConfigurator() {
         </div>
       </div>
 
-      {/* 5. 3D viewer placeholder (Subtaak 6 mounts ConfiguratorViewerV3) */}
-      <div className="w-full aspect-[4/3] bg-sera-bg-deep rounded-sm mb-12" aria-label="3D viewer placeholder" />
+      {/* 5. 3D viewer */}
+      <div className="mb-12">
+        <ConfiguratorViewerV3
+          {...stateToViewerProps({ stoneId, shape, lengthMm, widthMm, legStyle })}
+          className="w-full aspect-[4/3] bg-sera-bg-deep rounded-sm"
+        />
+      </div>
 
       {/* 6. Tier cards */}
       <div className="mb-12">
