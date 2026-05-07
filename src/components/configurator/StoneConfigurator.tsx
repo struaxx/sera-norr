@@ -1,380 +1,360 @@
 import { useState } from 'react';
+import {
+  STONE_OPTIONS,
+  SHAPE_OPTIONS,
+  getValidLegCounts,
+  getValidLegStyles,
+  type LegCount,
+} from './options';
+import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
+import { PricingBreakdown } from '@/components/trust';
 
-const basePrice: Record<string, number> = { essenza: 2950, signature: 4850, atelier: 8200 };
-const stoneExtra: Record<string, number> = { travertijn: 0, emperador: 200, calacatta: 500, statuario: 800 };
-const finishExtra: Record<string, number> = { gepolijst: 0, gezoet: 200, geborsteld: 150 };
-
-const marbleTextures: Record<string, string> = {
-  travertijn: 'linear-gradient(135deg, #e8d9be 0%, #d4c4a0 25%, #c8b48a 50%, #d6c4a2 75%, #e2d4b8 100%)',
-  emperador: 'linear-gradient(155deg, #5c3d1e 0%, #7a5228 20%, #4e3518 40%, #6b4520 60%, #3e2810 80%, #5a3d1c 100%)',
-  calacatta: 'linear-gradient(140deg, #f4ede0 0%, #ede0cc 20%, #f0e8d8 40%, #e8dcc8 60%, #f2eadc 80%, #ede4d2 100%)',
-  statuario: 'linear-gradient(125deg, #f8f5f0 0%, #f0ece6 30%, #f5f1eb 60%, #ece8e2 100%)',
+const TIER_BASE_PRICE: Record<'essenza' | 'signature' | 'atelier', number> = {
+  essenza: 2950,
+  signature: 4850,
+  atelier: 8200,
 };
 
-const stoneNames: Record<string, string> = {
-  travertijn: 'Travertijn Classico',
-  emperador: 'Light Emperador',
-  calacatta: 'Calacatta Viola',
-  statuario: 'Statuario',
+const STONE_EXTRA: Record<string, number> = {
+  'classic-cloudy': 0,
+  'tiramisu': 0,
+  'light-emprador': 200,
+  'dark-emperador': 200,
+  'calacatta-viola': 500,
 };
 
-const tierStones: Record<string, string[]> = {
-  essenza: ['travertijn', 'emperador'],
-  signature: ['travertijn', 'emperador', 'calacatta'],
-  atelier: ['calacatta', 'statuario'],
+const FINISH_EXTRA: Record<'gepolijst' | 'gezoet' | 'geborsteld', number> = {
+  gepolijst: 0,
+  gezoet: 200,
+  geborsteld: 150,
 };
 
-const darkStones = ['emperador'];
-
-const tiers = [
-  { id: 'essenza', name: 'Essenza', price: 'vanaf €2.950', sub: 'Licht Mediterraan', badge: '' },
-  { id: 'signature', name: 'Signature', price: 'vanaf €4.850', sub: 'Onze bestseller', badge: 'MEEST GEKOZEN' },
-  { id: 'atelier', name: 'Atelier Edition', price: 'vanaf €8.200', sub: 'Genummerd 1/12', badge: '' },
+const TIERS = [
+  { id: 'essenza' as const,   name: 'Essenza',         price: 'vanaf €2.950', sub: 'Licht Mediterraan', badge: '' },
+  { id: 'signature' as const, name: 'Signature',       price: 'vanaf €4.850', sub: 'Onze bestseller',   badge: 'MEEST GEKOZEN' },
+  { id: 'atelier' as const,   name: 'Atelier Edition', price: 'vanaf €8.200', sub: 'Genummerd 1/12',    badge: '' },
 ];
 
-const finishes = [
-  { id: 'gepolijst', label: 'Gepolijst', extra: '' },
-  { id: 'gezoet', label: 'Gezoet', extra: '+€200' },
-  { id: 'geborsteld', label: 'Geborsteld', extra: '+€150' },
+const FINISHES = [
+  { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
+  { id: 'gezoet' as const,     label: 'Gezoet',     extra: '+€200' },
+  { id: 'geborsteld' as const, label: 'Geborsteld', extra: '+€150' },
 ];
 
-const bases = [
-  { id: 'slim-zwart', label: 'Slim staal zwart' },
-  { id: 'slim-goud', label: 'Slim staal goud' },
-  { id: 'eiken', label: 'Massief eiken' },
-  { id: 'smeedijzer', label: 'Smeedijzer' },
+interface SizePreset {
+  label: string;
+  lengthMm: number;
+  widthMm: number;
+}
+
+const RECT_PRESETS: SizePreset[] = [
+  { label: '200 × 100 cm', lengthMm: 2000, widthMm: 1000 },
+  { label: '220 × 100 cm', lengthMm: 2200, widthMm: 1000 },
+  { label: '240 × 100 cm', lengthMm: 2400, widthMm: 1000 },
 ];
+
+const ROUND_PRESETS: SizePreset[] = [
+  { label: '⌀ 120 cm', lengthMm: 1200, widthMm: 1200 },
+  { label: '⌀ 140 cm', lengthMm: 1400, widthMm: 1400 },
+  { label: '⌀ 160 cm', lengthMm: 1600, widthMm: 1600 },
+];
+
+const sectionLabel = 'block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-3';
+const pillBase = 'px-4 py-2.5 text-xs uppercase tracking-[0.1em] border rounded-sm transition-colors';
+const pillSelected = 'bg-sera-surface text-sera-inverted border-sera-surface';
+const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:border-sera-surface';
 
 export default function StoneConfigurator() {
-  const [tier, setTier] = useState('signature');
-  const [stone, setStone] = useState('calacatta');
-  const [shape, setShape] = useState('rechthoek');
-  const [size, setSize] = useState('220x100');
-  const [finish, setFinish] = useState('gepolijst');
-  const [base, setBase] = useState('slim-zwart');
+  const [tableType, setTableType] = useState<'eettafel' | 'koffietafel'>('eettafel');
+  const [tier, setTier]           = useState<'essenza' | 'signature' | 'atelier'>('signature');
+  const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
+  const [shape, setShape]         = useState<RuleShape>('corner');
+  const [lengthMm, setLengthMm]   = useState<number>(2200);
+  const [widthMm, setWidthMm]     = useState<number>(1000);
+  const [legCount, setLegCount]   = useState<LegCount>(2);
+  const [legStyle, setLegStyle]   = useState<RuleLegStyle>('cylindrical');
+  const [finish, setFinish]       = useState<'gepolijst' | 'gezoet' | 'geborsteld'>('gepolijst');
+  const [customSize, setCustomSize] = useState<boolean>(false);
 
-  const total = (basePrice[tier] ?? 4850) + (stoneExtra[stone] ?? 0) + (finishExtra[finish] ?? 0);
+  const total =
+    TIER_BASE_PRICE[tier] +
+    (STONE_EXTRA[stoneId] ?? 0) +
+    FINISH_EXTRA[finish];
 
-  const availableStones = tierStones[tier] ?? [];
-  const visibleStone = availableStones.includes(stone) ? stone : availableStones[0];
+  const validLegCounts = getValidLegCounts(shape);
+  const validLegStyles = getValidLegStyles(shape, legCount);
+  const sizePresets = shape === 'round' ? ROUND_PRESETS : RECT_PRESETS;
 
-  const gradientStops: Record<string, string[]> = {
-    travertijn: ['#e8d9be', '#c8b48a', '#d6c4a2'],
-    emperador: ['#5c3d1e', '#4e3518', '#7a5228'],
-    calacatta: ['#f4ede0', '#e8dcc8', '#f0e8d8'],
-    statuario: ['#f8f5f0', '#ece8e2', '#f5f1eb'],
-  };
-  const activeStops = gradientStops[visibleStone] ?? gradientStops.calacatta;
-  const gradId = `marbleGrad-${visibleStone}`;
-
-  const roundSizes = ['⌀120', '⌀140', '⌀160', 'Maatwerk'];
-  const rectSizes = ['200x90', '220x100', '240x100', 'Maatwerk'];
-  const sizes = shape === 'rond' ? roundSizes : rectSizes;
-
-  const labelStyle = {
-    fontSize: '11px',
-    letterSpacing: '0.15em',
-    color: '#c9a96e',
-    marginBottom: '12px',
-    display: 'block',
-    textTransform: 'uppercase' as const,
-  };
-
-  const sectionStyle = { marginBottom: '32px' };
+  const isPresetSelected = (p: SizePreset) =>
+    !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', background: '#0a0a0a', minHeight: '600px' }}>
-      {/* LEFT: marble panel with SVG table silhouette */}
-      <div
-        style={{
-          flex: 1,
-          minWidth: '320px',
-          minHeight: '500px',
-          background: 'radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #0a0a0a 80%)',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-        }}
-      >
-        <div style={{ flex: 1, minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 600 400"
-            preserveAspectRatio="xMidYMid meet"
-            style={{ minHeight: '360px', display: 'block' }}
-          >
-            <defs>
-              <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={activeStops[0]} />
-                <stop offset="50%" stopColor={activeStops[1]} />
-                <stop offset="100%" stopColor={activeStops[2]} />
-              </linearGradient>
-              <filter id="marbleVein" x="0%" y="0%" width="100%" height="100%">
-                <feTurbulence type="turbulence" baseFrequency="0.025 0.006" numOctaves="3" result="noise" />
-                <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
-                <feBlend in="SourceGraphic" in2="gray" mode="overlay" result="blended" />
-                <feComposite in="blended" in2="SourceGraphic" operator="in" />
-              </filter>
-              <filter id="tableShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="18" stdDeviation="22" floodColor="#000" floodOpacity="0.55" />
-              </filter>
-            </defs>
-            <g filter="url(#tableShadow)">
-              {shape === 'rond' ? (
-                <ellipse
-                  cx="300"
-                  cy="200"
-                  rx="170"
-                  ry="150"
-                  fill={`url(#${gradId})`}
-                  filter="url(#marbleVein)"
-                />
-              ) : (
-                <rect
-                  x="60"
-                  y="100"
-                  width="480"
-                  height="200"
-                  rx="12"
-                  fill={`url(#${gradId})`}
-                  filter="url(#marbleVein)"
-                />
-              )}
-            </g>
-            {/* highlight sheen */}
-            {shape === 'rond' ? (
-              <ellipse cx="260" cy="150" rx="80" ry="30" fill="#ffffff" opacity="0.08" />
-            ) : (
-              <rect x="90" y="115" width="200" height="30" rx="6" fill="#ffffff" opacity="0.08" />
-            )}
-          </svg>
-        </div>
-        <div style={{ padding: '24px 32px 32px' }}>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '34px', color: '#f0e8d8', margin: 0, fontWeight: 400, letterSpacing: '0.01em' }}>
-            {stoneNames[visibleStone]}
-          </h2>
-          <div style={{ fontSize: '11px', letterSpacing: '0.25em', color: '#c9a96e', marginTop: '10px', textTransform: 'uppercase' }}>
-            {tiers.find((t) => t.id === tier)?.name}
-          </div>
-          <div style={{ fontSize: '13px', color: '#888', marginTop: '6px', fontFamily: 'Georgia, serif' }}>
-            € {total.toLocaleString('nl-NL')}
-          </div>
+    <div className="bg-sera-bg text-sera-text">
+      {/* 1. Heading */}
+      <h2 className="font-serif text-3xl md:text-5xl text-sera-text leading-tight mb-4">
+        Configureer uw natuurstenen tafel op maat
+      </h2>
+
+      {/* 2. Subtitle */}
+      <p className="text-base md:text-lg text-sera-text-soft leading-relaxed mb-8 max-w-3xl">
+        Kies steensoort, formaat en onderstel. U ziet direct een transparante vanaf-prijs voor uw configuratie.
+      </p>
+
+      {/* 3. Anchor box */}
+      <div className="mb-10 max-w-3xl bg-sera-bg-deep px-6 py-5 rounded-sm">
+        <p className="text-sm italic text-sera-text-soft leading-relaxed font-serif">
+          Ter vergelijking: een Bulthaup b3-keuken met marmeren werkblad start bij €35.000. Een Saarinen Tulip-replica in Carrara kost €2.400 — machine-cut, geen maatwerk. Onze tafel: 2,4m bookmatched Calacatta, volledig op maat, levenslang — €4.850.
+        </p>
+      </div>
+
+      {/* 4. Tafel-type toggle */}
+      <div className="mb-10">
+        <span className={sectionLabel}>Type tafel</span>
+        <div className="inline-flex gap-2">
+          {(['eettafel', 'koffietafel'] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTableType(t)}
+              className={`${pillBase} ${tableType === t ? pillSelected : pillIdle}`}
+            >
+              {t === 'eettafel' ? 'Eettafel' : 'Koffietafel'}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* RIGHT: options */}
-      <div style={{ flex: 1, minWidth: '320px', padding: '48px 40px', background: '#0a0a0a', color: '#f0e8d8' }}>
-        {/* SERIE */}
-        <div style={sectionStyle}>
-          <span style={labelStyle}>SERIE</span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {tiers.map((t) => {
-              const selected = tier === t.id;
-              return (
-                <div
-                  key={t.id}
-                  onClick={() => setTier(t.id)}
-                  style={{
-                    flex: '1 1 100px',
-                    cursor: 'pointer',
-                    padding: '14px 12px',
-                    border: selected ? '2px solid #c9a96e' : '1px solid #2a2a2a',
-                    background: selected ? '#1a1208' : 'transparent',
-                    position: 'relative',
-                    borderRadius: '2px',
-                  }}
-                >
-                  {t.badge && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '-8px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        background: '#c9a96e',
-                        color: '#0a0a0a',
-                        fontSize: '10px',
-                        padding: '2px 6px',
-                        letterSpacing: '0.1em',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {t.badge}
-                    </div>
-                  )}
-                  <div style={{ fontFamily: 'Georgia, serif', fontSize: '15px', color: '#f0e8d8', marginBottom: '4px' }}>
-                    {t.name}
+      {/* 5. 3D viewer placeholder (Subtaak 6 mounts ConfiguratorViewerV3) */}
+      <div className="w-full aspect-[4/3] bg-sera-bg-deep rounded-sm mb-12" aria-label="3D viewer placeholder" />
+
+      {/* 6. Tier cards */}
+      <div className="mb-12">
+        <span className={sectionLabel}>Serie</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {TIERS.map((t) => {
+            const selected = tier === t.id;
+            return (
+              <div key={t.id} className="relative">
+                {t.badge && (
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-sera-text-soft mb-2">
+                    {t.badge}
                   </div>
-                  <div style={{ fontSize: '11px', color: '#c9a96e', marginBottom: '4px' }}>{t.price}</div>
-                  <div style={{ fontSize: '10px', color: '#888', fontStyle: 'italic' }}>{t.sub}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* STEEN */}
-        <div style={sectionStyle}>
-          <span style={labelStyle}>STEEN</span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
-            {availableStones.map((s) => {
-              const selected = visibleStone === s;
-              return (
-                <div key={s} style={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => setStone(s)}>
-                  <div
-                    style={{
-                      width: '70px',
-                      height: '70px',
-                      borderRadius: '4px',
-                      background: marbleTextures[s],
-                      outline: selected ? '2px solid #c9a96e' : 'none',
-                      outlineOffset: '2px',
-                    }}
-                  />
-                  <div style={{ fontSize: '10px', color: '#aaa', marginTop: '8px' }}>{stoneNames[s]}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* FORMAAT */}
-        <div style={sectionStyle}>
-          <span style={labelStyle}>FORMAAT</span>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-            {['rond', 'rechthoek'].map((sh) => {
-              const selected = shape === sh;
-              return (
+                )}
                 <button
-                  key={sh}
-                  onClick={() => {
-                    setShape(sh);
-                    setSize(sh === 'rond' ? '⌀140' : '220x100');
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '12px',
-                    cursor: 'pointer',
-                    background: selected ? '#c9a96e' : 'transparent',
-                    color: selected ? '#0a0a0a' : '#f0e8d8',
-                    border: '1px solid ' + (selected ? '#c9a96e' : '#2a2a2a'),
-                    fontSize: '12px',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                  }}
+                  type="button"
+                  onClick={() => setTier(t.id)}
+                  className={`w-full text-left bg-transparent border rounded-sm p-6 transition-colors ${
+                    selected
+                      ? 'border-sera-surface bg-sera-bg-deep'
+                      : 'border-sera-text-soft/20 hover:border-sera-text-soft/50'
+                  }`}
                 >
-                  {sh}
+                  <div className="font-serif text-xl text-sera-text mb-2">{t.name}</div>
+                  <div className="text-sm text-sera-text mb-1">{t.price}</div>
+                  <div className="text-xs italic text-sera-text-soft">{t.sub}</div>
                 </button>
-              );
-            })}
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {sizes.map((sz) => {
-              const selected = size === sz;
-              return (
-                <button
-                  key={sz}
-                  onClick={() => setSize(sz)}
-                  style={{
-                    flex: '1 1 80px',
-                    padding: '10px',
-                    cursor: 'pointer',
-                    background: selected ? '#c9a96e' : 'transparent',
-                    color: selected ? '#0a0a0a' : '#f0e8d8',
-                    border: '1px solid ' + (selected ? '#c9a96e' : '#2a2a2a'),
-                    fontSize: '12px',
-                  }}
-                >
-                  {sz}
-                </button>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* AFWERKING */}
-        <div style={sectionStyle}>
-          <span style={labelStyle}>AFWERKING</span>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            {finishes.map((f) => {
-              const selected = finish === f.id;
-              return (
-                <button
-                  key={f.id}
-                  onClick={() => setFinish(f.id)}
-                  style={{
-                    flex: 1,
-                    padding: '12px 8px',
-                    cursor: 'pointer',
-                    background: selected ? '#c9a96e' : 'transparent',
-                    color: selected ? '#0a0a0a' : '#f0e8d8',
-                    border: '1px solid ' + (selected ? '#c9a96e' : '#2a2a2a'),
-                    fontSize: '12px',
-                  }}
-                >
-                  {f.label} {f.extra && <span style={{ opacity: 0.7, fontSize: '10px' }}>{f.extra}</span>}
-                </button>
-              );
-            })}
-          </div>
+      {/* 7. STEEN */}
+      <div className="mb-12">
+        <span className={sectionLabel}>Steen</span>
+        <div className="flex flex-wrap gap-4">
+          {STONE_OPTIONS.map((s) => {
+            const selected = stoneId === s.id;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setStoneId(s.id)}
+                className="flex flex-col items-center text-center gap-2"
+              >
+                <div
+                  className={`w-16 h-16 rounded-sm bg-sera-bg-deep border ${
+                    selected ? 'ring-1 ring-sera-surface ring-offset-2 ring-offset-sera-bg border-sera-surface' : 'border-sera-text-soft/30'
+                  }`}
+                />
+                <div className="text-[11px] text-sera-text-soft">{s.label}</div>
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {/* ONDERSTEL */}
-        <div style={sectionStyle}>
-          <span style={labelStyle}>ONDERSTEL</span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {bases.map((b) => {
-              const selected = base === b.id;
-              return (
-                <button
-                  key={b.id}
-                  onClick={() => setBase(b.id)}
-                  style={{
-                    flex: '1 1 140px',
-                    padding: '12px',
-                    cursor: 'pointer',
-                    background: selected ? '#c9a96e' : 'transparent',
-                    color: selected ? '#0a0a0a' : '#f0e8d8',
-                    border: '1px solid ' + (selected ? '#c9a96e' : '#2a2a2a'),
-                    fontSize: '12px',
-                  }}
-                >
-                  {b.label}
-                </button>
-              );
-            })}
-          </div>
+      {/* 8. VORM */}
+      <div className="mb-12">
+        <span className={sectionLabel}>Vorm</span>
+        <div className="flex flex-wrap gap-2">
+          {SHAPE_OPTIONS.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setShape(s.id)}
+              className={`${pillBase} ${shape === s.id ? pillSelected : pillIdle}`}
+            >
+              {s.label}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* PRIJS + CTA */}
-        <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '1px solid #2a2a2a' }}>
-          <div style={{ fontFamily: 'Georgia, serif', fontSize: '2.5rem', color: '#c9a96e', lineHeight: 1 }}>
-            €{total.toLocaleString('nl-NL')}
-          </div>
-          <div style={{ fontSize: '11px', color: '#888', marginTop: '8px', marginBottom: '20px' }}>
-            Inclusief BTW · Transport inbegrepen · 2 jaar garantie
-          </div>
+      {/* 9. FORMAAT */}
+      <div className="mb-12">
+        <span className={sectionLabel}>Formaat</span>
+        <div className="flex flex-wrap gap-2 mb-3">
+          {sizePresets.map((p) => (
+            <button
+              key={p.label}
+              type="button"
+              onClick={() => {
+                setCustomSize(false);
+                setLengthMm(p.lengthMm);
+                setWidthMm(p.widthMm);
+              }}
+              className={`${pillBase} ${isPresetSelected(p) ? pillSelected : pillIdle}`}
+            >
+              {p.label}
+            </button>
+          ))}
           <button
-            onClick={() => {
-              window.location.href = '/aanvraag';
-            }}
-            style={{
-              width: '100%',
-              background: '#c9a96e',
-              color: '#0a0a0a',
-              padding: '16px',
-              letterSpacing: '0.1em',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '13px',
-              textTransform: 'uppercase',
-              fontWeight: 600,
-            }}
+            type="button"
+            onClick={() => setCustomSize(true)}
+            className={`${pillBase} ${customSize ? pillSelected : pillIdle}`}
           >
-            Start uw aanvraag →
+            Maatwerk
           </button>
         </div>
+
+        {customSize && (
+          <div className="flex flex-wrap gap-3 mt-3 max-w-md">
+            {shape === 'round' ? (
+              <label className="flex flex-col text-xs text-sera-text-soft">
+                <span className="mb-1 uppercase tracking-[0.1em]">Diameter (mm)</span>
+                <input
+                  type="number"
+                  min={600}
+                  max={2400}
+                  step={10}
+                  value={lengthMm}
+                  onChange={(e) => {
+                    const v = Number(e.target.value);
+                    setLengthMm(v);
+                    setWidthMm(v);
+                  }}
+                  className="w-32 px-3 py-2 bg-sera-bg-deep border border-sera-text-soft/30 text-sera-text rounded-sm"
+                />
+              </label>
+            ) : (
+              <>
+                <label className="flex flex-col text-xs text-sera-text-soft">
+                  <span className="mb-1 uppercase tracking-[0.1em]">Lengte (mm)</span>
+                  <input
+                    type="number"
+                    min={1200}
+                    max={3600}
+                    step={10}
+                    value={lengthMm}
+                    onChange={(e) => setLengthMm(Number(e.target.value))}
+                    className="w-32 px-3 py-2 bg-sera-bg-deep border border-sera-text-soft/30 text-sera-text rounded-sm"
+                  />
+                </label>
+                <label className="flex flex-col text-xs text-sera-text-soft">
+                  <span className="mb-1 uppercase tracking-[0.1em]">Breedte (mm)</span>
+                  <input
+                    type="number"
+                    min={700}
+                    max={1400}
+                    step={10}
+                    value={widthMm}
+                    onChange={(e) => setWidthMm(Number(e.target.value))}
+                    className="w-32 px-3 py-2 bg-sera-bg-deep border border-sera-text-soft/30 text-sera-text rounded-sm"
+                  />
+                </label>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 10. AANTAL POTEN — hide when only one option */}
+      {validLegCounts.length > 1 && (
+        <div className="mb-12">
+          <span className={sectionLabel}>Aantal poten</span>
+          <div className="flex flex-wrap gap-2">
+            {validLegCounts.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setLegCount(c)}
+                className={`${pillBase} min-w-[60px] ${legCount === c ? pillSelected : pillIdle}`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 11. POOTSTIJL */}
+      <div className="mb-12">
+        <span className={sectionLabel}>Pootstijl</span>
+        <div className="flex flex-wrap gap-2">
+          {validLegStyles.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              onClick={() => setLegStyle(o.id)}
+              className={`${pillBase} ${legStyle === o.id ? pillSelected : pillIdle}`}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 12. AFWERKING */}
+      <div className="mb-12">
+        <span className={sectionLabel}>Afwerking</span>
+        <div className="flex flex-wrap gap-2">
+          {FINISHES.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setFinish(f.id)}
+              className={`${pillBase} ${finish === f.id ? pillSelected : pillIdle}`}
+            >
+              {f.label}
+              {f.extra && <span className="ml-2 opacity-70 normal-case tracking-normal">{f.extra}</span>}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 13 + 14. Live total + trust line */}
+      <div className="border-t border-sera-text-soft/20 pt-8 mb-6">
+        <div className="font-serif text-4xl md:text-5xl text-sera-text leading-none">
+          €{total.toLocaleString('nl-NL')}
+        </div>
+        <div className="text-xs text-sera-text-soft mt-3">
+          Inclusief BTW · Transport inbegrepen · 2 jaar garantie
+        </div>
+      </div>
+
+      {/* 15. CTA */}
+      <button
+        type="button"
+        onClick={() => { window.location.href = '/aanvraag'; }}
+        className="w-full md:w-auto md:px-12 py-4 bg-sera-surface text-sera-inverted hover:bg-sera-text text-xs uppercase tracking-[0.15em] rounded-sm transition-colors"
+      >
+        Start uw aanvraag →
+      </button>
+
+      {/* 16. Transparante kostenopbouw */}
+      <div className="mt-24 pt-16 border-t border-sera-text-soft/20">
+        <PricingBreakdown />
       </div>
     </div>
   );
