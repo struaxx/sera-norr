@@ -73,6 +73,16 @@ export default {
         charcoal: "hsl(var(--charcoal))",
         brass: "hsl(var(--brass))",
         marble: "hsl(var(--marble))",
+        sera: {
+          bg:             '#F5F1EA',
+          'bg-deep':      '#EBE5DB',
+          surface:        '#2A2620',
+          text:           '#1F1B16',
+          'text-soft':    '#6B6358',
+          inverted:       '#F5F1EA',
+          accent:         '#A89878',
+          'accent-hover': '#8D7E62',
+        },
       },
       boxShadow: {
         "soft": "var(--shadow-soft)",
