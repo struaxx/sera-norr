@@ -42,3 +42,28 @@ export const LEG_STYLE_OPTIONS: LegStyleOption[] = [
   { id: 'v_legs',              label: 'V-poten',       category: 'fixed' },
   { id: 'd_legs',              label: 'D-poten',       category: 'fixed' },
 ];
+
+/**
+ * Product rules:
+ * - Round table: 1 central pedestal leg only (thicker for stability).
+ * - Ovale / Ellips / Corner: customer picks legCount.
+ *   - 1 = single thick central pedestal (any pedestal style)
+ *   - 2 = two pedestals spaced apart (any pedestal style)
+ *   - 4 = four fixed legs (v_legs or d_legs)
+ */
+
+export const getValidLegCounts = (shape: RuleShape): LegCount[] => {
+  if (shape === 'round') return [1];
+  return [1, 2, 4];
+};
+
+export const getValidLegStyles = (
+  shape: RuleShape,
+  legCount: LegCount
+): LegStyleOption[] => {
+  if (shape === 'round' || legCount === 1 || legCount === 2) {
+    return LEG_STYLE_OPTIONS.filter(o => o.category === 'pedestal');
+  }
+  // legCount === 4
+  return LEG_STYLE_OPTIONS.filter(o => o.category === 'fixed');
+};
