@@ -19,9 +19,9 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { TableMeshV3, type TableMeshV3Props } from './TableMeshV3';
 import { resolveConfiguration, type ResolvedConfiguration } from '@/lib/configurator/engine/resolveConfiguration';
-import { TEST_PRESETS, type TestPreset, getValidLegStyles } from '@/lib/configurator/rules/productRules';
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
-import { Eye, RotateCcw, Move3D, ZoomIn, RefreshCw, Bug, Maximize2 } from 'lucide-react';
+import type { TestPreset } from '@/lib/configurator/rules/productRules';
+import { RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { mmToM } from '@/lib/configurator/units';
 
@@ -173,8 +173,6 @@ export function ConfiguratorViewerV3({
 }: ConfiguratorViewerV3Props) {
   const [cameraMode, setCameraMode] = useState<CameraMode>('default');
   const [autoRotate, setAutoRotate] = useState(true);
-  const [showDebug, setShowDebug] = useState(false);
-  const [showDimensions, setShowDimensions] = useState(false);
 
   // Resolve configuration
   const resolved = useMemo(
@@ -203,9 +201,6 @@ export function ConfiguratorViewerV3({
 
   return (
     <div className={cn("relative w-full aspect-square lg:aspect-[4/3] bg-secondary/30 rounded-sm overflow-hidden", className)}>
-      {/* Debug Overlay */}
-      {showDebug && <DebugOverlay resolved={resolved} fov={currentCamera.fov} />}
-
       {/* Auto-switch notice */}
       <AnimatePresence>
         {resolved.wasAutoSwitched && (
@@ -249,7 +244,6 @@ export function ConfiguratorViewerV3({
             stoneId={stoneId}
             edgeProfile={edgeProfile as any}
           />
-          {showDimensions && <DimensionLabels resolved={resolved} />}
           <ContactShadows
             position={[0, 0.001, 0]}
             opacity={0.5}
@@ -274,79 +268,16 @@ export function ConfiguratorViewerV3({
         />
       </Canvas>
 
-      {/* Bottom Controls */}
-      <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end pointer-events-none">
-        {/* Left controls */}
-        <div className="flex gap-2 pointer-events-auto">
-          <button
-            onClick={() => setAutoRotate(!autoRotate)}
-            className={cn(
-              "p-2.5 rounded-sm transition-all backdrop-blur-sm",
-              autoRotate ? "bg-foreground text-background" : "bg-background/80 text-foreground hover:bg-background"
-            )}
-            title="Auto-rotate"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setShowDimensions(!showDimensions)}
-            className={cn(
-              "p-2.5 rounded-sm transition-all backdrop-blur-sm",
-              showDimensions ? "bg-foreground text-background" : "bg-background/80 text-foreground hover:bg-background"
-            )}
-            title="Dimensions"
-          >
-            <Maximize2 className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setShowDebug(!showDebug)}
-            className={cn(
-              "p-2.5 rounded-sm transition-all backdrop-blur-sm",
-              showDebug ? "bg-foreground text-background" : "bg-background/80 text-foreground hover:bg-background"
-            )}
-            title="Debug overlay"
-          >
-            <Bug className="w-4 h-4" />
-          </button>
-          <button
-            onClick={resetView}
-            className="p-2.5 rounded-sm transition-all backdrop-blur-sm bg-background/80 text-foreground hover:bg-background"
-            title="Reset view"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Center hint */}
-        <p className="text-[10px] text-muted-foreground tracking-wider uppercase hidden sm:block">
-          {isNL ? 'Sleep om te roteren • Scroll om te zoomen' : 'Drag to rotate • Scroll to zoom'}
-        </p>
-
-        {/* Right controls - camera presets */}
-        <div className="flex gap-1 pointer-events-auto">
-          {([
-            { mode: 'default' as CameraMode, icon: Move3D, label: '3D' },
-            { mode: 'top' as CameraMode, icon: Eye, label: 'Top' },
-            { mode: 'detail' as CameraMode, icon: ZoomIn, label: 'Detail' },
-          ]).map(({ mode, icon: Icon, label }) => (
-            <button
-              key={mode}
-              onClick={() => {
-                setCameraMode(mode);
-                setAutoRotate(mode === 'default');
-              }}
-              className={cn(
-                "px-3 py-2 rounded-sm text-[10px] uppercase tracking-wider transition-all backdrop-blur-sm flex items-center gap-1.5",
-                cameraMode === mode
-                  ? "bg-foreground text-background"
-                  : "bg-background/80 text-foreground hover:bg-background"
-              )}
-            >
-              <Icon className="w-3 h-3" />
-              <span className="hidden sm:inline">{label}</span>
-            </button>
-          ))}
-        </div>
+      {/* Reset view (only user-facing control) */}
+      <div className="absolute bottom-4 right-4 pointer-events-auto">
+        <button
+          onClick={resetView}
+          className="p-2.5 rounded-sm transition-all backdrop-blur-sm bg-background/80 text-foreground hover:bg-background"
+          title={isNL ? 'Reset weergave' : 'Reset view'}
+          aria-label={isNL ? 'Reset weergave' : 'Reset view'}
+        >
+          <RefreshCw className="w-4 h-4" />
+        </button>
       </div>
 
     </div>
