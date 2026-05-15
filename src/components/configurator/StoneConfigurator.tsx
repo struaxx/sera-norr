@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import {
   STONE_OPTIONS,
   SHAPE_OPTIONS,
+  LEG_STYLE_OPTIONS,
   getValidLegCounts,
   getValidLegStyles,
   type LegCount,
 } from './options';
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
-import { PricingBreakdown } from '@/components/trust';
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
 import { stateToViewerProps } from './stateMapping';
 
@@ -100,6 +100,21 @@ export default function StoneConfigurator() {
   const validLegCounts = getValidLegCounts(shape);
   const validLegStyles = getValidLegStyles(shape, legCount);
   const sizePresets = shape === 'round' ? ROUND_PRESETS : RECT_PRESETS;
+
+  const stoneLabel = STONE_OPTIONS.find(s => s.id === stoneId)?.label ?? '';
+  const legStyleLabel = LEG_STYLE_OPTIONS.find(o => o.id === legStyle)?.label ?? '';
+
+  const marmerplaat = Math.round(total * 0.60);
+  const bewerking   = Math.round(total * 0.20);
+  const onderstel   = Math.round(total * 0.12);
+  const afwerking   = total - (marmerplaat + bewerking + onderstel);
+  const breakdown = [
+    { label: `Marmerplaat ${stoneLabel}`,                 amount: marmerplaat },
+    { label: 'Bewerkingskosten (snijden, polish)',        amount: bewerking },
+    { label: `${legStyleLabel} ${legCount}×`,             amount: onderstel },
+    { label: 'Afwerking & transport',                     amount: afwerking },
+  ];
+  const fmt = (n: number) => `€${n.toLocaleString('nl-NL')}`;
 
   const isPresetSelected = (p: SizePreset) =>
     !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
@@ -364,6 +379,28 @@ export default function StoneConfigurator() {
         </div>
       </div>
 
+      {/* 14b. Reactive cost breakdown */}
+      {total > 0 && (
+        <div className="border-t border-sera-text-soft/20 pt-6 pb-6 mb-6">
+          <span className={sectionLabel}>Transparantie</span>
+          <ul>
+            {breakdown.map((row) => (
+              <li
+                key={row.label}
+                className="flex items-baseline justify-between py-3 border-b border-sera-text-soft/15"
+              >
+                <span className="text-sera-text text-sm">{row.label}</span>
+                <span className="text-sera-text text-sm tabular-nums">{fmt(row.amount)}</span>
+              </li>
+            ))}
+            <li className="flex items-baseline justify-between py-3">
+              <span className="text-sera-text text-base font-medium uppercase tracking-[0.1em]">Totaal</span>
+              <span className="text-sera-text text-base font-medium tabular-nums">{fmt(total)}</span>
+            </li>
+          </ul>
+        </div>
+      )}
+
       {/* 15. CTA */}
       <button
         type="button"
@@ -372,11 +409,6 @@ export default function StoneConfigurator() {
       >
         Start uw aanvraag →
       </button>
-
-      {/* 16. Transparante kostenopbouw */}
-      <div className="mt-24 pt-16 border-t border-sera-text-soft/20">
-        <PricingBreakdown />
-      </div>
     </div>
   );
 }
