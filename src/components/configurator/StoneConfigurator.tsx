@@ -209,10 +209,17 @@ export default function StoneConfigurator() {
                 className="flex flex-col items-center text-center gap-2"
               >
                 <div
-                  className={`w-16 h-16 rounded-sm bg-sera-bg-deep border ${
+                  className={`w-16 h-16 rounded-sm overflow-hidden border ${
                     selected ? 'ring-1 ring-sera-surface ring-offset-2 ring-offset-sera-bg border-sera-surface' : 'border-sera-text-soft/30'
                   }`}
-                />
+                >
+                  <img
+                    src={s.texture}
+                    alt={s.label}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
                 <div className="text-[11px] text-sera-text-soft">{s.label}</div>
               </button>
             );
