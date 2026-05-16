@@ -4,14 +4,15 @@ export interface StoneOption {
   id: string;
   label: string;
   family: 'travertijn' | 'marmer';
+  texture: string;
 }
 
 export const STONE_OPTIONS: StoneOption[] = [
-  { id: 'classic-cloudy',  label: 'Classic Cloudy',  family: 'travertijn' },
-  { id: 'tiramisu',        label: 'Tiramisu',        family: 'travertijn' },
-  { id: 'light-emprador',  label: 'Light Emperador', family: 'marmer' },
-  { id: 'dark-emperador',  label: 'Dark Emperador',  family: 'marmer' },
-  { id: 'calacatta-viola', label: 'Calacatta Viola', family: 'marmer' },
+  { id: 'classic-cloudy',  label: 'Classic Cloudy',  family: 'travertijn', texture: '/textures/stones/classic-cloudy-seamless.jpg' },
+  { id: 'tiramisu',        label: 'Tiramisu',        family: 'travertijn', texture: '/textures/stones/tiramisu-seamless.jpg' },
+  { id: 'light-emprador',  label: 'Light Emperador', family: 'marmer',     texture: '/textures/stones/light-emperador-seamless.jpg' },
+  { id: 'dark-emperador',  label: 'Dark Emperador',  family: 'marmer',     texture: '/textures/stones/dark-emperador-seamless.jpg' },
+  { id: 'calacatta-viola', label: 'Calacatta Viola', family: 'marmer',     texture: '/textures/stones/calacatta-viola-seamless.jpg' },
 ];
 
 export interface ShapeOption {
