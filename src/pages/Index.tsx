@@ -32,8 +32,8 @@ const Index = () => {
   };
 
   const seoTitle = isNL ?
-  "Sera Norr — Maatwerk Stenen Meubels | Vanaf €1.950" :
-  "Sera Norr — Bespoke Stone Furniture | From €1,950";
+  "SERA NORR — Stenen Meubels op Maat" :
+  "SERA NORR — Bespoke Stone Furniture";
 
   const seoDescription = isNL ?
   "Handgemaakte eettafels en salontafels in Calacatta Viola, Travertijn en Statuario. Op maat, white-glove geleverd." :
