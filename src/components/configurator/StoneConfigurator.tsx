@@ -11,33 +11,11 @@ import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRu
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
 import { stateToViewerProps } from './stateMapping';
 
-const TIER_BASE_PRICE: Record<'essenza' | 'signature' | 'atelier', number> = {
-  essenza: 2950,
-  signature: 4850,
-  atelier: 8200,
-};
-
-const STONE_EXTRA: Record<string, number> = {
-  'classic-cloudy': 0,
-  'tiramisu': 0,
-  'light-emprador': 200,
-  'dark-emperador': 200,
-  'calacatta-viola': 500,
-};
-
-const FINISH_EXTRA: Record<'gepolijst' | 'gezoet' | 'geborsteld', number> = {
-  gepolijst: 0,
-  gezoet: 200,
-  geborsteld: 150,
-};
-
-const TIERS = [
-  { id: 'essenza' as const,   name: 'Essenza',         price: 'vanaf €2.950', sub: 'Licht Mediterraan', badge: '' },
-  { id: 'signature' as const, name: 'Signature',       price: 'vanaf €4.850', sub: 'Onze bestseller',   badge: 'MEEST GEKOZEN' },
-  { id: 'atelier' as const,   name: 'Atelier Edition', price: 'vanaf €8.200', sub: 'Genummerd 1/12',    badge: '' },
-];
-
 const FINISHES = [
+  { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
+  { id: 'gezoet' as const,     label: 'Gezoet',     extra: '+€200' },
+  { id: 'geborsteld' as const, label: 'Geborsteld', extra: '+€150' },
+];
   { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
   { id: 'gezoet' as const,     label: 'Gezoet',     extra: '+€200' },
   { id: 'geborsteld' as const, label: 'Geborsteld', extra: '+€150' },
