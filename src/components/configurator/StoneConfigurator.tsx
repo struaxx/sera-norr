@@ -16,10 +16,6 @@ const FINISHES = [
   { id: 'gezoet' as const,     label: 'Gezoet',     extra: '+€200' },
   { id: 'geborsteld' as const, label: 'Geborsteld', extra: '+€150' },
 ];
-  { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
-  { id: 'gezoet' as const,     label: 'Gezoet',     extra: '+€200' },
-  { id: 'geborsteld' as const, label: 'Geborsteld', extra: '+€150' },
-];
 
 interface SizePreset {
   label: string;
