@@ -68,6 +68,8 @@ export default function StoneConfigurator() {
   const validLegCounts = getValidLegCounts(shape);
   const validLegStyles = getValidLegStyles(shape, legCount);
   const sizePresets = shape === 'round' ? ROUND_PRESETS : RECT_PRESETS;
+
+  const isPresetSelected = (p: SizePreset) =>
     !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
 
   return (
