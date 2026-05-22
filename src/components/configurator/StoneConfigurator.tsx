@@ -43,7 +43,6 @@ const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:b
 export default function StoneConfigurator() {
   const [tableType, setTableType] = useState<'eettafel' | 'koffietafel'>('eettafel');
   const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
-  const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
   const [shape, setShape]         = useState<RuleShape>('corner');
   const [lengthMm, setLengthMm]   = useState<number>(2200);
   const [widthMm, setWidthMm]     = useState<number>(1000);
@@ -67,8 +66,8 @@ export default function StoneConfigurator() {
   }, [shape, legCount]);
 
   const validLegCounts = getValidLegCounts(shape);
-
-  const isPresetSelected = (p: SizePreset) =>
+  const validLegStyles = getValidLegStyles(shape, legCount);
+  const sizePresets = shape === 'round' ? ROUND_PRESETS : RECT_PRESETS;
     !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
 
   return (
