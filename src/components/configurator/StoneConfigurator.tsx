@@ -11,32 +11,6 @@ import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRu
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
 import { stateToViewerProps } from './stateMapping';
 
-const TIER_BASE_PRICE: Record<'essenza' | 'signature' | 'atelier', number> = {
-  essenza: 2950,
-  signature: 4850,
-  atelier: 8200,
-};
-
-const STONE_EXTRA: Record<string, number> = {
-  'classic-cloudy': 0,
-  'tiramisu': 0,
-  'light-emprador': 200,
-  'dark-emperador': 200,
-  'calacatta-viola': 500,
-};
-
-const FINISH_EXTRA: Record<'gepolijst' | 'gezoet' | 'geborsteld', number> = {
-  gepolijst: 0,
-  gezoet: 200,
-  geborsteld: 150,
-};
-
-const TIERS = [
-  { id: 'essenza' as const,   name: 'Essenza',         price: 'vanaf €2.950', sub: 'Licht Mediterraan', badge: '' },
-  { id: 'signature' as const, name: 'Signature',       price: 'vanaf €4.850', sub: 'Onze bestseller',   badge: 'MEEST GEKOZEN' },
-  { id: 'atelier' as const,   name: 'Atelier Edition', price: 'vanaf €8.200', sub: 'Genummerd 1/12',    badge: '' },
-];
-
 const FINISHES = [
   { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
   { id: 'gezoet' as const,     label: 'Gezoet',     extra: '+€200' },
@@ -68,7 +42,6 @@ const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:b
 
 export default function StoneConfigurator() {
   const [tableType, setTableType] = useState<'eettafel' | 'koffietafel'>('eettafel');
-  const [tier, setTier]           = useState<'essenza' | 'signature' | 'atelier'>('signature');
   const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
   const [shape, setShape]         = useState<RuleShape>('corner');
   const [lengthMm, setLengthMm]   = useState<number>(2200);
@@ -92,29 +65,9 @@ export default function StoneConfigurator() {
     }
   }, [shape, legCount]);
 
-  const total =
-    TIER_BASE_PRICE[tier] +
-    (STONE_EXTRA[stoneId] ?? 0) +
-    FINISH_EXTRA[finish];
-
   const validLegCounts = getValidLegCounts(shape);
   const validLegStyles = getValidLegStyles(shape, legCount);
   const sizePresets = shape === 'round' ? ROUND_PRESETS : RECT_PRESETS;
-
-  const stoneLabel = STONE_OPTIONS.find(s => s.id === stoneId)?.label ?? '';
-  const legStyleLabel = LEG_STYLE_OPTIONS.find(o => o.id === legStyle)?.label ?? '';
-
-  const marmerplaat = Math.round(total * 0.60);
-  const bewerking   = Math.round(total * 0.20);
-  const onderstel   = Math.round(total * 0.12);
-  const afwerking   = total - (marmerplaat + bewerking + onderstel);
-  const breakdown = [
-    { label: `Marmerplaat ${stoneLabel}`,                 amount: marmerplaat },
-    { label: 'Bewerkingskosten (snijden, polish)',        amount: bewerking },
-    { label: `${legStyleLabel} ${legCount}×`,             amount: onderstel },
-    { label: 'Afwerking & transport',                     amount: afwerking },
-  ];
-  const fmt = (n: number) => `€${n.toLocaleString('nl-NL')}`;
 
   const isPresetSelected = (p: SizePreset) =>
     !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
@@ -163,39 +116,7 @@ export default function StoneConfigurator() {
         />
       </div>
 
-      {/* 6. Tier cards */}
-      <div className="mb-12">
-        <span className={sectionLabel}>Serie</span>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {TIERS.map((t) => {
-            const selected = tier === t.id;
-            return (
-              <div key={t.id} className="relative">
-                {t.badge && (
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-sera-text-soft mb-2">
-                    {t.badge}
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setTier(t.id)}
-                  className={`w-full text-left bg-transparent border rounded-sm p-6 transition-colors ${
-                    selected
-                      ? 'border-sera-surface bg-sera-bg-deep'
-                      : 'border-sera-text-soft/20 hover:border-sera-text-soft/50'
-                  }`}
-                >
-                  <div className="font-serif text-xl text-sera-text mb-2">{t.name}</div>
-                  <div className="text-sm text-sera-text mb-1">{t.price}</div>
-                  <div className="text-xs italic text-sera-text-soft">{t.sub}</div>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 7. STEEN */}
+      {/* 6. STEEN */}
       <div className="mb-12">
         <span className={sectionLabel}>Steen</span>
         <div className="flex flex-wrap gap-4">
@@ -376,37 +297,12 @@ export default function StoneConfigurator() {
         </div>
       </div>
 
-      {/* 13 + 14. Live total + trust line */}
+      {/* Price display replaced in Step 3 */}
       <div className="border-t border-sera-text-soft/20 pt-8 mb-6">
-        <div className="font-serif text-4xl md:text-5xl text-sera-text leading-none">
-          €{total.toLocaleString('nl-NL')}
-        </div>
-        <div className="text-xs text-sera-text-soft mt-3">
-          Inclusief BTW · Transport inbegrepen · 2 jaar garantie
+        <div className="text-xs text-sera-text-soft italic">
+          Indicatieve prijsrange wordt berekend op basis van uw configuratie...
         </div>
       </div>
-
-      {/* 14b. Reactive cost breakdown */}
-      {total > 0 && (
-        <div className="border-t border-sera-text-soft/20 pt-6 pb-6 mb-6">
-          <span className={sectionLabel}>Transparantie</span>
-          <ul>
-            {breakdown.map((row) => (
-              <li
-                key={row.label}
-                className="flex items-baseline justify-between py-3 border-b border-sera-text-soft/15"
-              >
-                <span className="text-sera-text text-sm">{row.label}</span>
-                <span className="text-sera-text text-sm tabular-nums">{fmt(row.amount)}</span>
-              </li>
-            ))}
-            <li className="flex items-baseline justify-between py-3">
-              <span className="text-sera-text text-base font-medium uppercase tracking-[0.1em]">Totaal</span>
-              <span className="text-sera-text text-base font-medium tabular-nums">{fmt(total)}</span>
-            </li>
-          </ul>
-        </div>
-      )}
 
       {/* 15. CTA */}
       <button
