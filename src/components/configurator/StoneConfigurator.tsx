@@ -73,6 +73,8 @@ export default function StoneConfigurator() {
   const isPresetSelected = (p: SizePreset) =>
     !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
 
+  const range = computeRange({ stoneId, lengthMm, widthMm, legCount, finish });
+
   return (
     <div className="bg-sera-bg text-sera-text">
       {/* 1. Heading */}
