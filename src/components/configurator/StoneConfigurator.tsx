@@ -87,12 +87,6 @@ export default function StoneConfigurator() {
         Kies steensoort, formaat en onderstel. U ziet direct een transparante vanaf-prijs voor uw configuratie.
       </p>
 
-      {/* 3. Anchor box */}
-      <div className="mb-10 max-w-3xl bg-sera-bg-deep px-6 py-5 rounded-sm">
-        <p className="text-sm italic text-sera-text-soft leading-relaxed font-serif">
-          Ter vergelijking: een Bulthaup b3-keuken met marmeren werkblad start bij €35.000. Een Saarinen Tulip-replica in Carrara kost €2.400 — machine-cut, geen maatwerk. Onze tafel: 2,4m bookmatched Calacatta, volledig op maat, levenslang — €4.850.
-        </p>
-      </div>
 
       {/* 4. Tafel-type toggle */}
       <div className="mb-10">
