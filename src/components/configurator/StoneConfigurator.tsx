@@ -10,6 +10,7 @@ import {
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
 import { stateToViewerProps } from './stateMapping';
+import { computeRange } from './pricing';
 
 const FINISHES = [
   { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
