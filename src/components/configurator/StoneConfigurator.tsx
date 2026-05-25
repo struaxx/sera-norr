@@ -10,6 +10,7 @@ import {
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
 import { stateToViewerProps } from './stateMapping';
+import { computeRange } from './pricing';
 
 const FINISHES = [
   { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
@@ -71,6 +72,8 @@ export default function StoneConfigurator() {
 
   const isPresetSelected = (p: SizePreset) =>
     !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
+
+  const range = computeRange({ stoneId, lengthMm, widthMm, legCount, finish });
 
   return (
     <div className="bg-sera-bg text-sera-text">
@@ -297,11 +300,18 @@ export default function StoneConfigurator() {
         </div>
       </div>
 
-      {/* Price display replaced in Step 3 */}
-      <div className="border-t border-sera-text-soft/20 pt-8 mb-6">
-        <div className="text-xs text-sera-text-soft italic">
-          Indicatieve prijsrange wordt berekend op basis van uw configuratie...
+      <div className="border-t border-sera-text-soft/20 pt-6">
+        <span className="block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-2">
+          Indicatie
+        </span>
+        <div className="font-serif text-3xl text-sera-text">
+          €{range.low.toLocaleString('nl-NL')} – €{range.high.toLocaleString('nl-NL')}
         </div>
+        <p className="text-sm text-sera-text-soft mt-3 max-w-md">
+          Maatwerk in natuursteen. Uw exacte prijs ontvangt u in een persoonlijk
+          voorstel, afgestemd op de gekozen slab, afwerking en levering.
+          Inclusief BTW · Transport inbegrepen.
+        </p>
       </div>
 
       {/* 15. CTA */}
