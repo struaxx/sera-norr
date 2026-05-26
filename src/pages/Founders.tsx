@@ -108,7 +108,7 @@ export default function Founders() {
 
           <div className="mt-12">
             <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
-              <Link to="/aanvraag?founder=true">
+              <Link to="/contact?subject=founders">
                 Word Founder — Claim uw plek
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -171,7 +171,7 @@ export default function Founders() {
 
           <div className="mt-8 text-center">
             <Button asChild variant="sera-primary" size="lg">
-              <Link to="/aanvraag?founder=true">
+              <Link to="/contact?subject=founders">
                 Word Founder — Claim uw plek
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
