@@ -44,7 +44,6 @@ const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:b
 
 export default function StoneConfigurator() {
   const navigate = useNavigate();
-  const [tableType, setTableType] = useState<'eettafel' | 'koffietafel'>('eettafel');
   const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
   const [shape, setShape]         = useState<RuleShape>('corner');
   const [lengthMm, setLengthMm]   = useState<number>(2200);
@@ -89,23 +88,6 @@ export default function StoneConfigurator() {
         Kies steensoort, formaat en onderstel. U ziet direct een transparante vanaf-prijs voor uw configuratie.
       </p>
 
-
-      {/* 4. Tafel-type toggle */}
-      <div className="mb-10">
-        <span className={sectionLabel}>Type tafel</span>
-        <div className="inline-flex gap-2">
-          {(['eettafel', 'koffietafel'] as const).map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setTableType(t)}
-              className={`${pillBase} ${tableType === t ? pillSelected : pillIdle}`}
-            >
-              {t === 'eettafel' ? 'Eettafel' : 'Koffietafel'}
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* 5. 3D viewer */}
       <div className="mb-12">
