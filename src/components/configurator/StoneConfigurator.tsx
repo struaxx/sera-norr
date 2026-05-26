@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   STONE_OPTIONS,
   SHAPE_OPTIONS,
@@ -42,6 +43,7 @@ const pillSelected = 'bg-sera-surface text-sera-inverted border-sera-surface';
 const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:border-sera-surface';
 
 export default function StoneConfigurator() {
+  const navigate = useNavigate();
   const [tableType, setTableType] = useState<'eettafel' | 'koffietafel'>('eettafel');
   const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
   const [shape, setShape]         = useState<RuleShape>('corner');
@@ -311,7 +313,18 @@ export default function StoneConfigurator() {
       {/* 15. CTA */}
       <button
         type="button"
-        onClick={() => { window.location.href = '/aanvraag'; }}
+        onClick={() => {
+          const params = new URLSearchParams({
+            stoneId,
+            shape,
+            lengthMm: String(lengthMm),
+            widthMm: String(widthMm),
+            legCount: String(legCount),
+            legStyle,
+            finish,
+          });
+          navigate(`/voorstel?${params.toString()}`);
+        }}
         className="w-full md:w-auto md:px-12 py-4 bg-sera-surface text-sera-inverted hover:bg-sera-text text-xs uppercase tracking-[0.15em] rounded-sm transition-colors"
       >
         Start uw aanvraag →

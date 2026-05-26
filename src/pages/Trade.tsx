@@ -34,7 +34,6 @@ const tiers = [
 
 const included = [
   "PDF materiaalstaten per steensoort (voor bestek en specificaties)",
-  "Sample kit gratis bij eerste aanvraag (waarde €25)",
   "Projectprijzen op aanvraag voor orders 4+ stuks",
   "NDA beschikbaar voor confidentieel ontwerpwerk",
 ];

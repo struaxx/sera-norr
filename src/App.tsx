@@ -23,6 +23,7 @@ const Care = lazy(() => import("./pages/Care"));
 const Founders = lazy(() => import("./pages/Founders"));
 const Voorstel = lazy(() => import("./pages/Voorstel"));
 const Trade = lazy(() => import("./pages/Trade"));
+const CollectionDetail = lazy(() => import("./pages/CollectionDetail"));
 
 const Shipping = lazy(() => import("./pages/Shipping"));
 const Privacy = lazy(() => import("./pages/Privacy"));
