@@ -192,7 +192,6 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               baseName,
               customStoneRequest: customStoneName,
               notes: contact.notes,
-              wantsCall,
               leadTime,
             },
           });
@@ -433,8 +432,8 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   {isNL 
-                    ? 'Wij nemen binnen 24 uur contact met u op.'
-                    : 'We will contact you within 24 hours.'}
+                    ? 'Wij nemen zo spoedig mogelijk contact met u op.'
+                    : 'We will be in touch as soon as possible.'}
                 </p>
               </div>
 
@@ -497,27 +496,6 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                 </div>
               </div>
 
-              {/* Soft CTA - Consultation only */}
-              <div className="border-t border-border pt-6 space-y-4">
-                <div className="flex items-start gap-3">
-                  <Checkbox 
-                    id="call" 
-                    checked={wantsCall}
-                    onCheckedChange={(checked) => setWantsCall(checked === true)}
-                  />
-                  <div>
-                    <Label htmlFor="call" className="text-sm cursor-pointer">
-                      <Phone className="w-4 h-4 inline mr-2" />
-                      {isNL ? 'Plan een adviesgesprek' : 'Schedule a consultation'}
-                    </Label>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {isNL 
-                        ? '15 minuten telefonisch of video (gratis)'
-                        : '15 minutes phone or video (free)'}
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Submit Button */}
@@ -606,8 +584,8 @@ function SuccessScreen({ buildCode, shareUrl, isNL }: { buildCode: string; share
         </h2>
         <p className="text-muted-foreground">
           {isNL 
-            ? 'Wij nemen binnen 24 uur contact met u op om uw project te bespreken. U ontvangt een bevestiging per e-mail.'
-            : 'We will contact you within 24 hours to discuss your project. You will receive a confirmation email.'}
+            ? 'Wij nemen zo spoedig mogelijk contact met u op om uw project te bespreken. U ontvangt een bevestiging per e-mail.'
+            : 'We will be in touch as soon as possible to discuss your project. You will receive a confirmation email.'}
         </p>
       </div>
 
