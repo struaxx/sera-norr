@@ -10,7 +10,6 @@ import { Hairline } from "@/components/ui/hairline";
 
 import { ValuePillars, AtelierSteps, LookbookPreviewGrid } from "@/components/homepage";
 import { RoomReveal } from "@/components/RoomReveal";
-import { FoundersBanner } from "@/components/FoundersBanner";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -52,8 +51,6 @@ const Index = () => {
         description={seoDescription}
         keywords={seoKeywords}
         structuredData={baseSchema} />
-
-      <FoundersBanner />
 
       {/* ============================================
            HERO - Dual CTA: Ontwerp uw tafel + Collecties
