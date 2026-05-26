@@ -88,15 +88,17 @@ export default function StoneConfigurator() {
         Kies steensoort, formaat en onderstel. U ziet direct een transparante vanaf-prijs voor uw configuratie.
       </p>
 
+      <div className="lg:grid lg:grid-cols-[3fr_2fr] lg:gap-12 lg:items-start">
+        {/* 5. 3D viewer — sticky on desktop */}
+        <div className="mb-12 lg:mb-0 lg:sticky lg:top-32 lg:self-start">
+          <ConfiguratorViewerV3
+            {...stateToViewerProps({ stoneId, shape, lengthMm, widthMm, legStyle })}
+            className="w-full aspect-[4/3] max-h-[calc(100vh-10rem)] bg-sera-bg-deep rounded-sm"
+          />
+        </div>
 
-      {/* 5. 3D viewer */}
-      <div className="mb-12">
-        <ConfiguratorViewerV3
-          {...stateToViewerProps({ stoneId, shape, lengthMm, widthMm, legStyle })}
-          className="w-full aspect-[4/3] bg-sera-bg-deep rounded-sm"
-        />
-      </div>
-
+        {/* Controls column */}
+        <div>
       {/* 6. STEEN */}
       <div className="mb-12">
         <span className={sectionLabel}>Steen</span>
@@ -311,6 +313,8 @@ export default function StoneConfigurator() {
       >
         Start uw aanvraag →
       </button>
+        </div>
+      </div>
     </div>
   );
 }
