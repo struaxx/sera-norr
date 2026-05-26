@@ -38,11 +38,11 @@ export function BlurImage({
 
   return (
     <>
-      {/* Blur placeholder — uses CSS background color matching the brand palette */}
+      {/* Neutral grey placeholder — stays visible until image loads, or permanently on error */}
       <div
         className={cn(
-          "absolute inset-0 bg-secondary/40 transition-opacity duration-500",
-          isLoaded ? "opacity-0" : "opacity-100"
+          "absolute inset-0 bg-muted transition-opacity duration-500",
+          isLoaded && !hasError ? "opacity-0" : "opacity-100"
         )}
         aria-hidden="true"
       />
