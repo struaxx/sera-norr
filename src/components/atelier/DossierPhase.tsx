@@ -24,7 +24,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { useConfiguratorStore } from '@/stores/configurator-store';
 import { 
@@ -54,7 +53,6 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [wantsCall, setWantsCall] = useState(false);
   
   const [contact, setContact] = useState({
     name: '',
@@ -165,7 +163,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
         },
         contact: {
           ...contact,
-          notes: `${contact.notes}${wantsCall ? '\n\n[Wil adviesgesprek plannen]' : ''}${customStoneName ? `\n\n[Custom steen aanvraag: ${customStoneName}]` : ''}${customRequests && Object.keys(customRequests).length > 0 ? `\n\n[Aanvullende wensen: ${Object.entries(customRequests).map(([k, v]) => `${k}: ${v}`).join(', ')}]` : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
+          notes: `${contact.notes}${customStoneName ? `\n\n[Custom steen aanvraag: ${customStoneName}]` : ''}${customRequests && Object.keys(customRequests).length > 0 ? `\n\n[Aanvullende wensen: ${Object.entries(customRequests).map(([k, v]) => `${k}: ${v}`).join(', ')}]` : ''}\n\n[Service inbegrepen: White-glove levering, plaatsing, nivelleren, verpakking retour, onderhoudsadvies]`,
         },
         inspirationItems: inspirationItems.map(i => i.id),
       });
