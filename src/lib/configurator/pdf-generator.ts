@@ -243,7 +243,7 @@ export async function generateDossierPDF({
   pdf.setTextColor(brandDark);
   pdf.setFontSize(11);
   pdf.setFont('helvetica', 'bold');
-  pdf.text(isNL ? 'Wij nemen binnen 24 uur contact met u op.' : 'We will contact you within 24 hours.', margin, yPos);
+  pdf.text(isNL ? 'Wij nemen zo spoedig mogelijk contact met u op.' : 'We will be in touch as soon as possible.', margin, yPos);
   yPos += 8;
 
   pdf.setTextColor(brandMuted);

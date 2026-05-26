@@ -34,7 +34,6 @@ const tiers = [
 
 const included = [
   "PDF materiaalstaten per steensoort (voor bestek en specificaties)",
-  "Sample kit gratis bij eerste aanvraag (waarde €25)",
   "Projectprijzen op aanvraag voor orders 4+ stuks",
   "NDA beschikbaar voor confidentieel ontwerpwerk",
 ];
@@ -66,7 +65,7 @@ export default function Trade() {
                 variant="outline"
                 className="border-background/40 text-background hover:bg-background hover:text-foreground group"
               >
-                <Link to="/aanvraag">
+                <Link to="/contact">
                   Trade toegang aanvragen
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
@@ -166,7 +165,7 @@ export default function Trade() {
               variant="outline"
               className="border-background/40 text-background hover:bg-background hover:text-foreground group"
             >
-              <Link to="/aanvraag?type=trade">
+              <Link to="/contact?subject=trade">
                 Trade toegang aanvragen
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>

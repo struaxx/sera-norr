@@ -16,11 +16,9 @@ export function Header() {
   // Check if on homepage (transparent header with hero)
   const isHomePage = location.pathname === "/";
 
-  // Updated navigation: Collecties, Atelier (replaces Bespoke), Contact
+  // Simplified navigation: Collecties · Over · [Ontwerp uw tafel CTA]
   const navLinks = [
     { name: t('nav.collections'), path: "/collections" },
-    { name: "Atelier", path: "/atelier" },
-    { name: "Aanvraag", path: "/aanvraag" },
     { name: t('nav.about', 'Over'), path: "/over" },
   ];
 
@@ -60,7 +58,7 @@ export function Header() {
         )}>
           {/* Left Navigation */}
           <div className="hidden lg:flex lg:flex-1 items-center gap-10">
-            {navLinks.slice(0, 2).map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -96,22 +94,6 @@ export function Header() {
 
           {/* Right Navigation with sticky CTA */}
           <div className="hidden lg:flex lg:flex-1 items-center justify-end gap-8">
-            {navLinks.slice(2).map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={cn(
-                  "font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300 link-underline",
-                  isLightText
-                    ? "text-background/90 hover:text-background"
-                    : location.pathname === link.path
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
             <LanguageSwitcher isLight={isLightText} />
             
             {/* Sticky Atelier CTA */}
