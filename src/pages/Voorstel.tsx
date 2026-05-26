@@ -1,66 +1,110 @@
-import { useState, useRef } from "react";
+import { useState, useMemo } from "react";
+import { useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Upload, Check, Calendar } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { trackLeadSubmit } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  STONE_OPTIONS,
+  SHAPE_OPTIONS,
+  LEG_STYLE_OPTIONS,
+} from "@/components/configurator/options";
+import { computeRange } from "@/components/configurator/pricing";
 
-type FormStep = 'form' | 'success';
+const FINISH_LABELS: Record<string, string> = {
+  gepolijst: "Gepolijst",
+  gezoet: "Gezoet",
+  geborsteld: "Geborsteld",
+};
+
+const shapeCode = (id: string) => {
+  switch (id) {
+    case "round": return "RO";
+    case "ovale": return "OV";
+    case "ellips": return "EL";
+    case "corner": return "RE";
+    default: return "XX";
+  }
+};
+
+const stoneCode = (id: string) => {
+  const map: Record<string, string> = {
+    "classic-cloudy": "CC",
+    "tiramisu": "TI",
+    "light-emprador": "LE",
+    "dark-emperador": "DE",
+    "calacatta-viola": "CV",
+  };
+  return map[id] ?? "XX";
+};
 
 const Voorstel = () => {
   const { i18n } = useTranslation();
-  const isNL = i18n.language === 'nl';
+  const isNL = i18n.language === "nl";
   const { toast } = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [step, setStep] = useState<FormStep>('form');
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const [submitted, setSubmitted] = useState(false);
+
   const [formData, setFormData] = useState({
-    type: "",
-    vorm: "",
-    afmeting: "",
-    customAfmeting: "",
-    steenvoorkeur: "",
-    afwerking: "",
-    postcode: "",
-    timing: "",
-    budget: "",
+    name: "",
     email: "",
-    telefoon: "",
-    opmerkingen: "",
+    phone: "",
+    postcode: "",
+    notes: "",
     honeypot: "",
   });
 
-  // Dimension presets per type
-  const dimensionPresets: Record<string, string[]> = {
-    eettafel: isNL 
-      ? ['180×90 cm', '200×100 cm', '220×100 cm', '240×100 cm', '260×100 cm', 'Anders']
-      : ['180×90 cm', '200×100 cm', '220×100 cm', '240×100 cm', '260×100 cm', 'Other'],
-    salontafel: isNL
-      ? ['100×60 cm', '120×70 cm', '140×80 cm', 'Anders']
-      : ['100×60 cm', '120×70 cm', '140×80 cm', 'Other'],
-    console: isNL
-      ? ['140×35 cm', '160×40 cm', '180×45 cm', 'Anders']
-      : ['140×35 cm', '160×40 cm', '180×45 cm', 'Other'],
-    bijzettafel: isNL
-      ? ['Ø40 cm', 'Ø45 cm', 'Ø50 cm', 'Anders']
-      : ['Ø40 cm', 'Ø45 cm', 'Ø50 cm', 'Other'],
-    anders: [],
-  };
+  // Read configuration from URL
+  const stoneId = searchParams.get("stoneId") ?? "calacatta-viola";
+  const shape = searchParams.get("shape") ?? "corner";
+  const lengthMm = Number(searchParams.get("lengthMm") ?? 2200);
+  const widthMm = Number(searchParams.get("widthMm") ?? 1000);
+  const legCount = (Number(searchParams.get("legCount") ?? 2) as 1 | 2 | 4);
+  const legStyle = searchParams.get("legStyle") ?? "cylindrical";
+  const finish = searchParams.get("finish") ?? "gepolijst";
+
+  const stone = STONE_OPTIONS.find((s) => s.id === stoneId);
+  const shapeOpt = SHAPE_OPTIONS.find((s) => s.id === shape);
+  const legStyleOpt = LEG_STYLE_OPTIONS.find((o) => o.id === legStyle);
+
+  const stoneLabel = stone?.label ?? stoneId;
+  const shapeLabel = shapeOpt?.label ?? shape;
+  const finishLabel = FINISH_LABELS[finish] ?? finish;
+  const legStyleLabel = legStyleOpt?.label ?? legStyle;
+
+  const dimensions =
+    shape === "round"
+      ? `⌀ ${(lengthMm / 10).toFixed(0)} cm`
+      : `${(lengthMm / 10).toFixed(0)} × ${(widthMm / 10).toFixed(0)} cm`;
+
+  const onderstel = `${legCount} × ${legStyleLabel}`;
+
+  const range = useMemo(
+    () => computeRange({ stoneId, lengthMm, widthMm, legCount, finish: finish as any }),
+    [stoneId, lengthMm, widthMm, legCount, finish]
+  );
+
+  const dossierCode = `SN-${shapeCode(shape)}-${stoneCode(stoneId)}-${(lengthMm / 10).toFixed(0)}x${(widthMm / 10).toFixed(0)}`;
+
+  const dossier = [
+    { label: "Vorm", value: shapeLabel },
+    { label: "Afmetingen", value: dimensions },
+    { label: "Steensoort", value: stoneLabel },
+    { label: "Afwerking", value: finishLabel },
+    { label: "Onderstel", value: onderstel },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Client-side validation
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       toast({
@@ -71,178 +115,99 @@ const Voorstel = () => {
     }
 
     setIsSubmitting(true);
-
     try {
       const metadata = {
-        type: formData.type,
-        vorm: formData.vorm,
-        afmeting: formData.customAfmeting || formData.afmeting,
-        steenvoorkeur: formData.steenvoorkeur,
-        afwerking: formData.afwerking,
+        dossierCode,
+        stoneId,
+        stone: stoneLabel,
+        shape,
+        shapeLabel,
+        lengthMm,
+        widthMm,
+        dimensions,
+        legCount,
+        legStyle,
+        onderstel,
+        finish,
+        finishLabel,
+        indicatieLow: range.low,
+        indicatieHigh: range.high,
         postcode: formData.postcode,
-        timing: formData.timing,
-        budget: formData.budget,
       };
 
-      const { error } = await supabase.functions.invoke('submit-form', {
+      const { error } = await supabase.functions.invoke("submit-form", {
         body: {
-          form_type: 'voorstel',
+          form_type: "voorstel",
           email: formData.email,
-          phone: formData.telefoon,
-          message: formData.opmerkingen,
+          phone: formData.phone,
+          message: formData.notes,
           metadata,
           honeypot: formData.honeypot,
         },
       });
-
       if (error) throw error;
 
-      // Track lead submission
-      trackLeadSubmit('voorstel' as const, {
-        productType: formData.type,
-        stone: formData.steenvoorkeur,
-        budget: formData.budget,
+      trackLeadSubmit("voorstel" as const, {
+        productType: "tafel",
+        stone: stoneLabel,
       });
 
-      // Show success state
-      setStep('success');
-
+      setSubmitted(true);
       toast({
         title: isNL ? "Aanvraag ontvangen" : "Request received",
-        description: isNL ? "Wij reageren binnen 48 uur." : "We will respond within 48 hours.",
+        description: isNL
+          ? "Wij nemen zo spoedig mogelijk contact met u op."
+          : "We will be in touch as soon as possible.",
       });
-    } catch (error: any) {
-      if (import.meta.env.DEV) {
-        console.error("Form submission error:", error);
-      }
-      
-      if (error.message?.includes("429") || error.message?.includes("Too many")) {
-        toast({
-          title: isNL ? "Te veel pogingen" : "Too many attempts",
-          description: isNL ? "Probeer het later opnieuw." : "Please try again later.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: isNL ? "Verzenden mislukt" : "Submission failed",
-          description: isNL ? "Probeer het opnieuw." : "Please try again.",
-          variant: "destructive",
-        });
-      }
+    } catch (err: any) {
+      if (import.meta.env.DEV) console.error("Submit error", err);
+      toast({
+        title: isNL ? "Verzenden mislukt" : "Submission failed",
+        description: isNL ? "Probeer het opnieuw." : "Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFileName(file.name);
-    }
-  };
-
-  const seoTitle = isNL 
-    ? "Ontvang voorstel binnen 48 uur | SERA NORR"
-    : "Receive proposal within 48 hours | SERA NORR";
-
+  const seoTitle = isNL
+    ? "Uw voorstel — Sera Norr"
+    : "Your proposal — Sera Norr";
   const seoDescription = isNL
-    ? "Deel uw afmetingen en voorkeuren — wij maken een voorstel op maat. Prijs op aanvraag. SERA NORR online atelier voor maatwerk natuursteenmeubels."
-    : "Share your dimensions and preferences — we create a tailored proposal. Price on request. SERA NORR online atelier for bespoke natural stone furniture.";
+    ? "Bekijk uw configuratie en vraag vrijblijvend een persoonlijk voorstel aan."
+    : "Review your configuration and request a personal proposal.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: isNL ? 'Voorstel' : 'Proposal', url: '/proposal' },
+    { name: "Home", url: "/" },
+    { name: isNL ? "Voorstel" : "Proposal", url: "/voorstel" },
   ]);
 
-  const showVormField = ['eettafel', 'salontafel'].includes(formData.type);
-  const showDimensionPresets = formData.type && formData.type !== 'anders';
-
-  if (step === 'success') {
+  if (submitted) {
     return (
       <Layout>
-        <SEOHead 
-          title={seoTitle}
-          description={seoDescription}
-          structuredData={breadcrumbSchema}
-        />
-        
+        <SEOHead title={seoTitle} description={seoDescription} structuredData={breadcrumbSchema} />
         <section className="pt-28 lg:pt-36 pb-16 lg:pb-24 bg-background min-h-screen">
-          <div className="container mx-auto px-6 lg:px-12 max-w-2xl">
-            {/* Success Header */}
-            <div className="text-center mb-10">
-              <div className="w-16 h-16 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-6">
-                <Check className="h-8 w-8" />
-              </div>
-              <h1 className="font-serif text-display-sm text-foreground mb-3">
-                {isNL ? "Dank u — wij reageren binnen 48 uur." : "Thank you — we will respond within 48 hours."}
-              </h1>
-              <p className="text-muted-foreground text-body-md">
-                {isNL ? "Vrijblijvend — geen verplichtingen." : "No obligation — no commitments."}
-              </p>
+          <div className="container mx-auto px-6 lg:px-12 max-w-2xl text-center">
+            <div className="w-16 h-16 rounded-full bg-foreground text-background flex items-center justify-center mx-auto mb-6">
+              <Check className="h-8 w-8" />
             </div>
-
-            {/* Summary Card */}
-            <div className="bg-secondary/30 border border-border/30 p-6 mb-8">
-              <h2 className="font-serif text-lg text-foreground mb-4">
-                {isNL ? "Uw selectie" : "Your selection"}
-              </h2>
-              <dl className="space-y-2 text-sm">
-                {formData.type && (
-                  <div className="flex justify-between">
-                    <dt className="text-muted-foreground">{isNL ? "Type" : "Type"}</dt>
-                    <dd className="text-foreground capitalize">{formData.type}</dd>
-                  </div>
-                )}
-                {formData.vorm && (
-                  <div className="flex justify-between">
-                    <dt className="text-muted-foreground">{isNL ? "Vorm" : "Shape"}</dt>
-                    <dd className="text-foreground capitalize">{formData.vorm}</dd>
-                  </div>
-                )}
-                {(formData.afmeting || formData.customAfmeting) && (
-                  <div className="flex justify-between">
-                    <dt className="text-muted-foreground">{isNL ? "Afmeting" : "Dimensions"}</dt>
-                    <dd className="text-foreground">{formData.customAfmeting || formData.afmeting}</dd>
-                  </div>
-                )}
-                {formData.steenvoorkeur && (
-                  <div className="flex justify-between">
-                    <dt className="text-muted-foreground">{isNL ? "Steenvoorkeur" : "Stone preference"}</dt>
-                    <dd className="text-foreground">{formData.steenvoorkeur}</dd>
-                  </div>
-                )}
-                {formData.afwerking && (
-                  <div className="flex justify-between">
-                    <dt className="text-muted-foreground">{isNL ? "Afwerking" : "Finish"}</dt>
-                    <dd className="text-foreground">{formData.afwerking}</dd>
-                  </div>
-                )}
-                {formData.budget && (
-                  <div className="flex justify-between">
-                    <dt className="text-muted-foreground">{isNL ? "Budgetrange" : "Budget range"}</dt>
-                    <dd className="text-foreground">{formData.budget}</dd>
-                  </div>
-                )}
-                {formData.timing && (
-                  <div className="flex justify-between">
-                    <dt className="text-muted-foreground">{isNL ? "Timing" : "Timing"}</dt>
-                    <dd className="text-foreground">{formData.timing}</dd>
-                  </div>
-                )}
-              </dl>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button asChild variant="atelier-filled" size="lg">
-                <Link to="/contact">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  {isNL ? "Plan vrijblijvend gesprek" : "Schedule free consultation"}
-                </Link>
-              </Button>
-              <Button asChild variant="atelier" size="lg">
+            <h1 className="font-serif text-display-sm text-foreground mb-3">
+              {isNL ? "Aanvraag ontvangen" : "Request received"}
+            </h1>
+            <p className="text-muted-foreground text-body-md mb-2">
+              {isNL
+                ? "Dank u. Wij nemen zo spoedig mogelijk contact met u op."
+                : "Thank you. We will be in touch as soon as possible."}
+            </p>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-6">
+              {isNL ? "Dossiernummer" : "Dossier number"}
+            </p>
+            <p className="font-mono text-lg text-foreground">{dossierCode}</p>
+            <div className="mt-10">
+              <Button asChild variant="atelier">
                 <Link to="/collections">
-                  {isNL ? "Bekijk online voorbeelden" : "View online examples"}
+                  {isNL ? "Bekijk stijlcollecties" : "View style collections"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -255,356 +220,128 @@ const Voorstel = () => {
 
   return (
     <Layout>
-      <SEOHead 
-        title={seoTitle}
-        description={seoDescription}
-        structuredData={breadcrumbSchema}
-      />
-      
+      <SEOHead title={seoTitle} description={seoDescription} structuredData={breadcrumbSchema} />
       <section className="pt-28 lg:pt-36 pb-16 lg:pb-24 bg-background">
-        <div className="container mx-auto px-6 lg:px-12 max-w-2xl">
-          {/* Header */}
-          <header className="text-center mb-10">
+        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+          <header className="mb-10">
             <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
-              {isNL ? "Maatwerk Atelier" : "Bespoke Atelier"}
+              {isNL ? "Uw configuratie" : "Your configuration"}
             </p>
             <h1 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
-              {isNL ? "Ontvang voorstel binnen 48 uur" : "Receive proposal within 48 hours"}
+              {isNL ? "Vraag vrijblijvend voorstel aan" : "Request a personal proposal"}
             </h1>
-            <p className="text-muted-foreground text-body-md max-w-lg mx-auto">
-              {isNL 
-                ? "Deel uw afmetingen en voorkeuren — wij maken een voorstel op maat. Prijs op aanvraag."
-                : "Share your dimensions and preferences — we create a tailored proposal. Price on request."}
+            <p className="text-muted-foreground text-body-md max-w-xl">
+              {isNL
+                ? "Hieronder vindt u de samenvatting van uw ontwerp. Vul uw gegevens in en wij sturen u een voorstel op maat."
+                : "Below is the summary of your design. Share your details and we will send you a tailored proposal."}
             </p>
           </header>
 
+          {/* Dossier */}
+          <div className="border border-border/60 rounded-sm p-6 mb-10 bg-secondary/20">
+            <div className="flex items-baseline justify-between mb-5">
+              <h2 className="font-serif text-xl text-foreground">{isNL ? "Dossier" : "Dossier"}</h2>
+              <span className="font-mono text-xs text-muted-foreground">{dossierCode}</span>
+            </div>
+            <dl className="space-y-3">
+              {dossier.map((row) => (
+                <div key={row.label} className="flex justify-between border-b border-border/30 pb-2 text-sm">
+                  <dt className="text-muted-foreground uppercase tracking-[0.1em] text-xs">{row.label}</dt>
+                  <dd className="text-foreground">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-6 pt-4 border-t border-border/40">
+              <span className="block text-[11px] uppercase tracking-[0.15em] text-muted-foreground mb-1">
+                {isNL ? "Indicatie" : "Indication"}
+              </span>
+              <div className="font-serif text-2xl text-foreground">
+                €{range.low.toLocaleString("nl-NL")} – €{range.high.toLocaleString("nl-NL")}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                {isNL
+                  ? "Inclusief BTW · Transport inbegrepen · Exacte prijs in uw voorstel."
+                  : "Incl. VAT · Transport included · Exact price in your proposal."}
+              </p>
+            </div>
+          </div>
+
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Honeypot field - hidden from users */}
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="absolute -left-[9999px]" aria-hidden="true">
               <label htmlFor="website-voorstel">Website</label>
               <input
                 id="website-voorstel"
                 type="text"
-                name="website"
                 value={formData.honeypot}
                 onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
                 tabIndex={-1}
                 autoComplete="off"
               />
             </div>
-            
-            {/* Type */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">
-                {isNL ? "Type meubel" : "Type of furniture"} *
-              </Label>
-              <RadioGroup
-                value={formData.type}
-                onValueChange={(value) => setFormData({ ...formData, type: value, afmeting: '', vorm: '' })}
-                className="grid grid-cols-2 sm:grid-cols-3 gap-2"
-              >
-                {[
-                  { value: 'eettafel', label: isNL ? 'Eettafel' : 'Dining table' },
-                  { value: 'salontafel', label: isNL ? 'Salontafel' : 'Coffee table' },
-                  { value: 'console', label: 'Console' },
-                  { value: 'bijzettafel', label: isNL ? 'Bijzettafel' : 'Side table' },
-                  { value: 'anders', label: isNL ? 'Anders' : 'Other' },
-                ].map((item) => (
-                  <div key={item.value}>
-                    <RadioGroupItem value={item.value} id={item.value} className="peer sr-only" />
-                    <Label
-                      htmlFor={item.value}
-                      className="flex items-center justify-center px-4 py-3 border border-border/50 text-sm cursor-pointer transition-all peer-data-[state=checked]:border-foreground peer-data-[state=checked]:bg-foreground peer-data-[state=checked]:text-background hover:border-foreground/50"
-                    >
-                      {item.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
+
+            <div>
+              <Label htmlFor="name">{isNL ? "Naam" : "Name"} *</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
             </div>
 
-            {/* Vorm (conditional) */}
-            {showVormField && (
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">
-                  {isNL ? "Vorm" : "Shape"}
-                </Label>
-                <RadioGroup
-                  value={formData.vorm}
-                  onValueChange={(value) => setFormData({ ...formData, vorm: value })}
-                  className="flex gap-2"
-                >
-                  {[
-                    { value: 'rond', label: isNL ? 'Rond' : 'Round' },
-                    { value: 'ovaal', label: isNL ? 'Ovaal' : 'Oval' },
-                    { value: 'rechthoek', label: isNL ? 'Rechthoek' : 'Rectangle' },
-                  ].map((item) => (
-                    <div key={item.value}>
-                      <RadioGroupItem value={item.value} id={`vorm-${item.value}`} className="peer sr-only" />
-                      <Label
-                        htmlFor={`vorm-${item.value}`}
-                        className="flex items-center justify-center px-4 py-3 border border-border/50 text-sm cursor-pointer transition-all peer-data-[state=checked]:border-foreground peer-data-[state=checked]:bg-foreground peer-data-[state=checked]:text-background hover:border-foreground/50"
-                      >
-                        {item.label}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-            )}
-
-            {/* Afmeting */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">
-                {isNL ? "Afmeting indicatie" : "Dimension indication"} *
-              </Label>
-              {showDimensionPresets && (
-                <RadioGroup
-                  value={formData.afmeting}
-                  onValueChange={(value) => setFormData({ ...formData, afmeting: value })}
-                  className="grid grid-cols-2 sm:grid-cols-3 gap-2"
-                >
-                  {dimensionPresets[formData.type]?.map((preset) => (
-                    <div key={preset}>
-                      <RadioGroupItem value={preset} id={`dim-${preset}`} className="peer sr-only" />
-                      <Label
-                        htmlFor={`dim-${preset}`}
-                        className="flex items-center justify-center px-4 py-3 border border-border/50 text-sm cursor-pointer transition-all peer-data-[state=checked]:border-foreground peer-data-[state=checked]:bg-foreground peer-data-[state=checked]:text-background hover:border-foreground/50"
-                      >
-                        {preset}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              )}
-              {(formData.afmeting === 'Anders' || formData.afmeting === 'Other' || formData.type === 'anders') && (
-                <Input
-                  placeholder={isNL ? "Bijv. 250×110 cm" : "E.g. 250×110 cm"}
-                  value={formData.customAfmeting}
-                  onChange={(e) => setFormData({ ...formData, customAfmeting: e.target.value })}
-                  className="mt-2"
-                />
-              )}
+            <div>
+              <Label htmlFor="email">{isNL ? "E-mail" : "Email"} *</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
             </div>
 
-            {/* Steenvoorkeur */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">
-                {isNL ? "Steenvoorkeur" : "Stone preference"} *
+            <div>
+              <Label htmlFor="phone">
+                {isNL ? "Telefoon" : "Phone"}{" "}
+                <span className="text-muted-foreground text-xs">({isNL ? "optioneel" : "optional"})</span>
               </Label>
-              <RadioGroup
-                value={formData.steenvoorkeur}
-                onValueChange={(value) => setFormData({ ...formData, steenvoorkeur: value })}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-2"
-              >
-                {[
-                  { value: 'travertin', label: isNL ? 'Travertin (warm)' : 'Travertine (warm)' },
-                  { value: 'marmer-licht', label: isNL ? 'Marmer licht (airy)' : 'Light marble (airy)' },
-                  { value: 'marmer-donker', label: isNL ? 'Marmer donker (dramatic)' : 'Dark marble (dramatic)' },
-                  { value: 'calacatta', label: 'Calacatta statement (premium)' },
-                  { value: 'advies', label: isNL ? 'Ik wil advies' : 'I want advice' },
-                ].map((item) => (
-                  <div key={item.value}>
-                    <RadioGroupItem value={item.value} id={`stone-${item.value}`} className="peer sr-only" />
-                    <Label
-                      htmlFor={`stone-${item.value}`}
-                      className="flex items-center justify-center px-4 py-3 border border-border/50 text-sm cursor-pointer transition-all peer-data-[state=checked]:border-foreground peer-data-[state=checked]:bg-foreground peer-data-[state=checked]:text-background hover:border-foreground/50"
-                    >
-                      {item.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
+              <Input
+                id="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
             </div>
 
-            {/* Afwerking */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">
-                {isNL ? "Afwerking rand (optioneel)" : "Edge finish (optional)"}
-              </Label>
-              <RadioGroup
-                value={formData.afwerking}
-                onValueChange={(value) => setFormData({ ...formData, afwerking: value })}
-                className="flex gap-2"
-              >
-                {[
-                  { value: 'strak', label: isNL ? 'Strak' : 'Sharp' },
-                  { value: 'afgerond', label: isNL ? 'Zacht afgerond' : 'Soft rounded' },
-                  { value: 'bevel', label: 'Bevel' },
-                ].map((item) => (
-                  <div key={item.value}>
-                    <RadioGroupItem value={item.value} id={`finish-${item.value}`} className="peer sr-only" />
-                    <Label
-                      htmlFor={`finish-${item.value}`}
-                      className="flex items-center justify-center px-4 py-3 border border-border/50 text-sm cursor-pointer transition-all peer-data-[state=checked]:border-foreground peer-data-[state=checked]:bg-foreground peer-data-[state=checked]:text-background hover:border-foreground/50"
-                    >
-                      {item.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-
-            {/* Postcode */}
-            <div className="space-y-2">
-              <Label htmlFor="postcode" className="text-sm font-medium">
-                {isNL ? "Postcode" : "Postal code"} *
+            <div>
+              <Label htmlFor="postcode">
+                {isNL ? "Postcode" : "Postcode"}{" "}
+                <span className="text-muted-foreground text-xs">({isNL ? "optioneel" : "optional"})</span>
               </Label>
               <Input
                 id="postcode"
-                placeholder={isNL ? "1234 AB" : "1234 AB"}
                 value={formData.postcode}
                 onChange={(e) => setFormData({ ...formData, postcode: e.target.value })}
-                required
-                className="max-w-xs"
               />
             </div>
 
-            {/* Timing */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">
-                {isNL ? "Timing" : "Timing"} *
-              </Label>
-              <RadioGroup
-                value={formData.timing}
-                onValueChange={(value) => setFormData({ ...formData, timing: value })}
-                className="grid grid-cols-2 gap-2"
-              >
-                {[
-                  { value: 'flexibel', label: isNL ? 'Flexibel' : 'Flexible' },
-                  { value: '1-2', label: isNL ? 'Binnen 1–2 maanden' : 'Within 1–2 months' },
-                  { value: '2-4', label: isNL ? '2–4 maanden' : '2–4 months' },
-                  { value: 'later', label: isNL ? 'Later' : 'Later' },
-                ].map((item) => (
-                  <div key={item.value}>
-                    <RadioGroupItem value={item.value} id={`timing-${item.value}`} className="peer sr-only" />
-                    <Label
-                      htmlFor={`timing-${item.value}`}
-                      className="flex items-center justify-center px-4 py-3 border border-border/50 text-sm cursor-pointer transition-all peer-data-[state=checked]:border-foreground peer-data-[state=checked]:bg-foreground peer-data-[state=checked]:text-background hover:border-foreground/50"
-                    >
-                      {item.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-
-            {/* Budget */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">
-                {isNL ? "Budgetrange" : "Budget range"} *
-              </Label>
-              <RadioGroup
-                value={formData.budget}
-                onValueChange={(value) => setFormData({ ...formData, budget: value })}
-                className="grid grid-cols-2 sm:grid-cols-3 gap-2"
-              >
-                {[
-                  { value: '<3000', label: isNL ? 'Onder €3.000' : 'Under €3,000' },
-                  { value: '3000-6000', label: '€3.000–€6.000' },
-                  { value: '6000-10000', label: '€6.000–€10.000' },
-                  { value: '>10000', label: '€10.000+' },
-                  { value: 'advies', label: isNL ? 'Ik wil advies' : 'I want advice' },
-                ].map((item) => (
-                  <div key={item.value}>
-                    <RadioGroupItem value={item.value} id={`budget-${item.value}`} className="peer sr-only" />
-                    <Label
-                      htmlFor={`budget-${item.value}`}
-                      className="flex items-center justify-center px-4 py-3 border border-border/50 text-sm cursor-pointer transition-all peer-data-[state=checked]:border-foreground peer-data-[state=checked]:bg-foreground peer-data-[state=checked]:text-background hover:border-foreground/50"
-                    >
-                      {item.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-
-            {/* Contact Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
-                  {isNL ? "E-mail" : "Email"} *
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder={isNL ? "uw@email.nl" : "your@email.com"}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="telefoon" className="text-sm font-medium">
-                  {isNL ? "Telefoon" : "Phone"} *
-                </Label>
-                <Input
-                  id="telefoon"
-                  type="tel"
-                  placeholder="+31 6 12345678"
-                  value={formData.telefoon}
-                  onChange={(e) => setFormData({ ...formData, telefoon: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* File Upload */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">
-                {isNL ? "Foto van de ruimte (optioneel)" : "Photo of the space (optional)"}
-              </Label>
-              <div 
-                onClick={() => fileInputRef.current?.click()}
-                className="border border-dashed border-border/50 p-6 text-center cursor-pointer hover:border-foreground/50 transition-colors"
-              >
-                <Upload className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">
-                  {fileName || (isNL ? "Klik om te uploaden" : "Click to upload")}
-                </p>
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </div>
-
-            {/* Opmerkingen */}
-            <div className="space-y-2">
-              <Label htmlFor="opmerkingen" className="text-sm font-medium">
-                {isNL ? "Opmerkingen (optioneel)" : "Comments (optional)"}
-              </Label>
+            <div>
+              <Label htmlFor="notes">{isNL ? "Opmerkingen" : "Notes"}</Label>
               <Textarea
-                id="opmerkingen"
-                placeholder={isNL ? "Extra wensen of vragen..." : "Additional wishes or questions..."}
-                value={formData.opmerkingen}
-                onChange={(e) => setFormData({ ...formData, opmerkingen: e.target.value })}
-                rows={3}
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                rows={4}
+                placeholder={isNL ? "Bijzondere wensen of vragen…" : "Special requests or questions…"}
               />
             </div>
 
-            {/* Submit */}
-            <div className="pt-4">
-              <Button 
-                type="submit" 
-                variant="atelier-filled" 
-                size="lg"
-                className="w-full sm:w-auto"
-                disabled={isSubmitting || !formData.type || !formData.steenvoorkeur || !formData.timing || !formData.budget || !formData.email || !formData.telefoon || !formData.postcode}
-              >
-                {isSubmitting 
-                  ? (isNL ? "Verzenden..." : "Submitting...") 
-                  : (isNL ? "Ontvang voorstel" : "Receive proposal")}
-                {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" />}
-              </Button>
-              <p className="text-xs text-muted-foreground mt-3">
-                {isNL ? "Vrijblijvend — geen verplichtingen." : "No obligation — no commitments."}
-              </p>
-            </div>
+            <Button type="submit" variant="atelier-filled" size="lg" disabled={isSubmitting} className="w-full sm:w-auto">
+              {isSubmitting
+                ? (isNL ? "Verzenden…" : "Submitting…")
+                : (isNL ? "Vraag vrijblijvend voorstel aan" : "Request a personal proposal")}
+            </Button>
           </form>
         </div>
       </section>
