@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
+import { FoundersBanner } from "@/components/FoundersBanner";
 
 export function Header() {
   const { t } = useTranslation();
@@ -44,15 +45,19 @@ export function Header() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
           isScrolled
-            ? "bg-background/95 backdrop-blur-sm py-4"
-            : "bg-transparent py-6 lg:py-8"
+            ? "bg-background/95 backdrop-blur-sm"
+            : "bg-transparent"
         )}
       >
+        <FoundersBanner />
         {isLightText && (
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[var(--banner-h,0px)] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
         )}
 
-        <nav className="relative z-10 container mx-auto px-6 lg:px-12 flex items-center justify-between">
+        <nav className={cn(
+          "relative z-10 container mx-auto px-6 lg:px-12 flex items-center justify-between",
+          isScrolled ? "py-4" : "py-6 lg:py-8"
+        )}>
           {/* Left Navigation */}
           <div className="hidden lg:flex lg:flex-1 items-center gap-10">
             {navLinks.slice(0, 2).map((link) => (
