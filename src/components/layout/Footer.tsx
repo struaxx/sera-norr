@@ -29,8 +29,14 @@ export function Footer() {
 
             {/* Social */}
             <div className="mt-6 flex items-center gap-4">
-              <a href="https://www.instagram.com/sera.norr/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a
+                href="https://www.instagram.com/sera.norr/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+              >
                 <Instagram className="h-5 w-5" />
+                <span>@sera.norr</span>
               </a>
             </div>
           </div>
