@@ -6,34 +6,19 @@ import {
   LEG_STYLE_OPTIONS,
   getValidLegCounts,
   getValidLegStyles,
+  getSizeRange,
+  getDefaultSize,
   type LegCount,
 } from './options';
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
 import { stateToViewerProps } from './stateMapping';
 import { computeRange } from './pricing';
+import { Slider } from '@/components/ui/slider';
 
 const FINISHES = [
   { id: 'gepolijst' as const, label: 'Gepolijst', extra: '' },
   { id: 'gezoet'    as const, label: 'Gezoet',    extra: '+€200' },
-];
-
-interface SizePreset {
-  label: string;
-  lengthMm: number;
-  widthMm: number;
-}
-
-const RECT_PRESETS: SizePreset[] = [
-  { label: '200 × 100 cm', lengthMm: 2000, widthMm: 1000 },
-  { label: '220 × 100 cm', lengthMm: 2200, widthMm: 1000 },
-  { label: '240 × 100 cm', lengthMm: 2400, widthMm: 1000 },
-];
-
-const ROUND_PRESETS: SizePreset[] = [
-  { label: '⌀ 120 cm', lengthMm: 1200, widthMm: 1200 },
-  { label: '⌀ 140 cm', lengthMm: 1400, widthMm: 1400 },
-  { label: '⌀ 160 cm', lengthMm: 1600, widthMm: 1600 },
 ];
 
 const sectionLabel = 'block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-3';
@@ -45,12 +30,11 @@ export default function StoneConfigurator() {
   const navigate = useNavigate();
   const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
   const [shape, setShape]         = useState<RuleShape>('corner');
-  const [lengthMm, setLengthMm]   = useState<number>(2200);
-  const [widthMm, setWidthMm]     = useState<number>(1000);
+  const [lengthMm, setLengthMm]   = useState<number>(2000);
+  const [widthMm, setWidthMm]     = useState<number>(900);
   const [legCount, setLegCount]   = useState<LegCount>(2);
   const [legStyle, setLegStyle]   = useState<RuleLegStyle>('cylindrical');
   const [finish, setFinish]       = useState<'gepolijst' | 'gezoet'>('gepolijst');
-  const [customSize, setCustomSize] = useState<boolean>(false);
 
   useEffect(() => {
     const valid = getValidLegCounts(shape);
@@ -70,12 +54,27 @@ export default function StoneConfigurator() {
     }
   }, [shape, legCount]);
 
+  // Vormwissel-fallback voor afmetingen: alleen resetten naar de default
+  // van de nieuwe vorm wanneer minstens één dimensie buiten de nieuwe
+  // range valt. Geldige waarden (bijv. 2000×1000 dat past in zowel
+  // Rechthoek als Ovaal) blijven behouden. Analoog aan de legStyle-logica.
+  useEffect(() => {
+    const r = getSizeRange(shape);
+    const lengthOk = lengthMm >= r.length.min && lengthMm <= r.length.max;
+    const widthOk  = widthMm  >= r.width.min  && widthMm  <= r.width.max;
+    if (!lengthOk || !widthOk) {
+      const def = getDefaultSize(shape);
+      setLengthMm(def.lengthMm);
+      setWidthMm(def.widthMm);
+    } else if (r.diameterOnly && widthMm !== lengthMm) {
+      // Rond: width altijd gelijk aan diameter (=length)
+      setWidthMm(lengthMm);
+    }
+  }, [shape]);
+
   const validLegCounts = getValidLegCounts(shape);
   const validLegStyles = getValidLegStyles(shape, legCount);
-  const sizePresets = shape === 'round' ? ROUND_PRESETS : RECT_PRESETS;
-
-  const isPresetSelected = (p: SizePreset) =>
-    !customSize && p.lengthMm === lengthMm && p.widthMm === widthMm;
+  const sizeRange = getSizeRange(shape);
 
   const range = computeRange({ stoneId, lengthMm, widthMm, legCount, finish });
 
@@ -154,79 +153,52 @@ export default function StoneConfigurator() {
       {/* 9. FORMAAT */}
       <div className="mb-12">
         <span className={sectionLabel}>Formaat</span>
-        <div className="flex flex-wrap gap-2 mb-3">
-          {sizePresets.map((p) => (
-            <button
-              key={p.label}
-              type="button"
-              onClick={() => {
-                setCustomSize(false);
-                setLengthMm(p.lengthMm);
-                setWidthMm(p.widthMm);
-              }}
-              className={`${pillBase} ${isPresetSelected(p) ? pillSelected : pillIdle}`}
-            >
-              {p.label}
-            </button>
-          ))}
-          <button
-            type="button"
-            onClick={() => setCustomSize(true)}
-            className={`${pillBase} ${customSize ? pillSelected : pillIdle}`}
-          >
-            Maatwerk
-          </button>
-        </div>
-
-        {customSize && (
-          <div className="flex flex-wrap gap-3 mt-3 max-w-md">
-            {shape === 'round' ? (
-              <label className="flex flex-col text-xs text-sera-text-soft">
-                <span className="mb-1 uppercase tracking-[0.1em]">Diameter (mm)</span>
-                <input
-                  type="number"
-                  min={600}
-                  max={2400}
-                  step={10}
-                  value={lengthMm}
-                  onChange={(e) => {
-                    const v = Number(e.target.value);
-                    setLengthMm(v);
-                    setWidthMm(v);
-                  }}
-                  className="w-32 px-3 py-2 bg-sera-bg-deep border border-sera-text-soft/30 text-sera-text rounded-sm"
+        <div className="space-y-6 max-w-md">
+          {sizeRange.diameterOnly ? (
+            <div>
+              <div className="flex items-baseline justify-between mb-2">
+                <span className="text-xs uppercase tracking-[0.1em] text-sera-text-soft">Diameter</span>
+                <span className="text-sm text-sera-text tabular-nums">{lengthMm} mm</span>
+              </div>
+              <Slider
+                min={sizeRange.length.min}
+                max={sizeRange.length.max}
+                step={sizeRange.step}
+                value={[lengthMm]}
+                onValueChange={([v]) => { setLengthMm(v); setWidthMm(v); }}
+              />
+            </div>
+          ) : (
+            <>
+              <div>
+                <div className="flex items-baseline justify-between mb-2">
+                  <span className="text-xs uppercase tracking-[0.1em] text-sera-text-soft">Lengte</span>
+                  <span className="text-sm text-sera-text tabular-nums">{lengthMm} mm</span>
+                </div>
+                <Slider
+                  min={sizeRange.length.min}
+                  max={sizeRange.length.max}
+                  step={sizeRange.step}
+                  value={[lengthMm]}
+                  onValueChange={([v]) => setLengthMm(v)}
                 />
-              </label>
-            ) : (
-              <>
-                <label className="flex flex-col text-xs text-sera-text-soft">
-                  <span className="mb-1 uppercase tracking-[0.1em]">Lengte (mm)</span>
-                  <input
-                    type="number"
-                    min={1200}
-                    max={3600}
-                    step={10}
-                    value={lengthMm}
-                    onChange={(e) => setLengthMm(Number(e.target.value))}
-                    className="w-32 px-3 py-2 bg-sera-bg-deep border border-sera-text-soft/30 text-sera-text rounded-sm"
-                  />
-                </label>
-                <label className="flex flex-col text-xs text-sera-text-soft">
-                  <span className="mb-1 uppercase tracking-[0.1em]">Breedte (mm)</span>
-                  <input
-                    type="number"
-                    min={700}
-                    max={1400}
-                    step={10}
-                    value={widthMm}
-                    onChange={(e) => setWidthMm(Number(e.target.value))}
-                    className="w-32 px-3 py-2 bg-sera-bg-deep border border-sera-text-soft/30 text-sera-text rounded-sm"
-                  />
-                </label>
-              </>
-            )}
-          </div>
-        )}
+              </div>
+              <div>
+                <div className="flex items-baseline justify-between mb-2">
+                  <span className="text-xs uppercase tracking-[0.1em] text-sera-text-soft">Breedte</span>
+                  <span className="text-sm text-sera-text tabular-nums">{widthMm} mm</span>
+                </div>
+                <Slider
+                  min={sizeRange.width.min}
+                  max={sizeRange.width.max}
+                  step={sizeRange.step}
+                  value={[widthMm]}
+                  onValueChange={([v]) => setWidthMm(v)}
+                />
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* 10. AANTAL POTEN, hide when only one option */}
