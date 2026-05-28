@@ -93,7 +93,7 @@
   },
   "collections": {
     "hero": {
-      "title": "Collecties",
+      "title": "Lookbook",
       "intro": "SERA NORR toont collecties als vertrekpunt voor maatwerk in steen. U kiest materiaal en basisvorm — wij verfijnen maat, detail en afwerking.",
       "ctaPrimary": "Vraag voorstel aan",
       "ctaSecondary": "Ontdek VANTA"
@@ -153,7 +153,7 @@
       "microcopy": "Binnen 24–48 uur een eerste reactie van het atelier."
     },
     "notFound": "Collectie Niet Gevonden",
-    "viewAllButton": "Bekijk Alle Collecties",
+    "viewAllButton": "Bekijk Lookbook",
     "pieces": "Stukken",
     "requestQuote": "Vraag voorstel aan",
     "customTitle": "Aangepaste afmetingen of materialen?",
