@@ -297,7 +297,7 @@ const BespokeHero = () => {
               initial="hidden"
               animate={isCaptionInView ? "visible" : "hidden"}
             >
-              TERRA / VANTA — {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
+              TERRA / VANTA: {isNL ? 'maatwerk voorbeelden' : 'bespoke examples'}
             </motion.p>
           </div>
         </div>

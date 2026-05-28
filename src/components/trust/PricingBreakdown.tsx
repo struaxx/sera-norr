@@ -21,7 +21,7 @@ const EUR = (n: number) => `€${n.toLocaleString('nl-NL')}`;
 const EXAMPLES: Example[] = [
   {
     id: 'cv-dining-200',
-    title: { nl: 'Calacatta Viola — Ovale eettafel', en: 'Calacatta Viola — Oval dining table' },
+    title: { nl: 'Calacatta Viola: Ovale eettafel', en: 'Calacatta Viola: Oval dining table' },
     subtitle: { nl: '200×100 cm · conische marmer poten', en: '200×100 cm · tapered marble legs' },
     total: 8500,
     swatch: 'bg-[#EFE8EA]',
@@ -34,7 +34,7 @@ const EXAMPLES: Example[] = [
   },
   {
     id: 'le-dining-200',
-    title: { nl: 'Light Emperador — Eettafel', en: 'Light Emperador — Dining table' },
+    title: { nl: 'Light Emperador: Eettafel', en: 'Light Emperador: Dining table' },
     subtitle: { nl: '200×100 cm · stalen frame', en: '200×100 cm · steel frame' },
     total: 3500,
     swatch: 'bg-[#C9B7A2]',
@@ -47,7 +47,7 @@ const EXAMPLES: Example[] = [
   },
   {
     id: 'cv-coffee',
-    title: { nl: 'Calacatta Viola — Koffietafel', en: 'Calacatta Viola — Coffee table' },
+    title: { nl: 'Calacatta Viola: Koffietafel', en: 'Calacatta Viola: Coffee table' },
     subtitle: { nl: '100×60 cm · centrale kolom', en: '100×60 cm · central column' },
     total: 2500,
     swatch: 'bg-[#EFE8EA]',
@@ -160,8 +160,8 @@ export function PricingBreakdown({ className, defaultExampleId }: PricingBreakdo
 
           <p className="text-xs text-muted-foreground mt-6 leading-relaxed">
             {lang === 'nl'
-              ? 'Elke offerte ontvangt u met dezelfde uitsplitsing — slab, atelierwerk, onderstel, transport en eindcontrole apart benoemd.'
-              : 'Every quote we send is itemised the same way — slab, atelier hours, base, transport and final inspection listed separately.'}
+              ? 'Elke offerte ontvangt u met dezelfde uitsplitsing: slab, atelierwerk, onderstel, transport en eindcontrole apart benoemd.'
+              : 'Every quote we send is itemised the same way: slab, atelier hours, base, transport and final inspection listed separately.'}
           </p>
         </div>
       </div>

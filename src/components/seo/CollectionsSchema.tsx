@@ -5,7 +5,7 @@ const collectionsItemList = {
   "@type": "ItemList",
   name: "SERA NORR Collecties",
   description:
-    "Maatwerk meubels in natuursteen — travertin, Calacatta Viola en geselecteerde steensoorten.",
+    "Maatwerk meubels in natuursteen: travertin, Calacatta Viola en geselecteerde steensoorten.",
   itemListElement: [
     {
       "@type": "ListItem",

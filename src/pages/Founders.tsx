@@ -17,7 +17,7 @@ const benefits = [
   },
   {
     title: "Genummerde bronzen plaquette",
-    desc: "Onder uw tafel — 1/12 t/m 12/12. Een blijvend bewijs dat u tot de eerste twaalf behoort.",
+    desc: "Onder uw tafel: 1/12 t/m 12/12. Een blijvend bewijs dat u tot de eerste twaalf behoort.",
   },
   {
     title: "Portfolio fotoshoot",
@@ -62,7 +62,7 @@ export default function Founders() {
             transition={{ duration: 0.6 }}
             className="font-sans text-[11px] uppercase tracking-[0.3em] text-background/60 mb-8"
           >
-            Founders Programma — Eenmalig
+            Founders Programma: Eenmalig
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
@@ -109,7 +109,7 @@ export default function Founders() {
           <div className="mt-12">
             <Button asChild variant="outline" size="lg" className="border-background/40 text-background hover:bg-background hover:text-foreground">
               <Link to="/contact?subject=founders">
-                Word Founder — Claim uw plek
+                Word Founder: Claim uw plek
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -159,7 +159,7 @@ export default function Founders() {
               </span>
             </div>
             <p className="mt-6 font-sans text-sm text-muted-foreground">
-              Een Calacatta Viola eettafel als Founder — 25% onder de atelierprijs.
+              Een Calacatta Viola eettafel als Founder: 25% onder de atelierprijs.
             </p>
           </div>
 
@@ -172,7 +172,7 @@ export default function Founders() {
           <div className="mt-8 text-center">
             <Button asChild variant="sera-primary" size="lg">
               <Link to="/contact?subject=founders">
-                Word Founder — Claim uw plek
+                Word Founder: Claim uw plek
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

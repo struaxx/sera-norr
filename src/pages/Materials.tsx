@@ -94,7 +94,7 @@ export default function Materials() {
                 </div>
               </Link>
               <p className="editorial-caption mt-4">
-                {isNL ? 'Italiaans travertin — thermale oorsprong' : 'Italian travertine — thermal origin'}
+                {isNL ? 'Italiaans travertin: thermale oorsprong' : 'Italian travertine: thermal origin'}
               </p>
             </div>
 
@@ -185,7 +185,7 @@ export default function Materials() {
                 </div>
               </Link>
               <p className="editorial-caption mt-4">
-                {isNL ? 'Calacatta Viola — Apuaanse Alpen' : 'Calacatta Viola — Apuan Alps'}
+                {isNL ? 'Calacatta Viola: Apuaanse Alpen' : 'Calacatta Viola: Apuan Alps'}
               </p>
             </div>
           </div>

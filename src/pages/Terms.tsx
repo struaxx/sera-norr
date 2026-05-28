@@ -41,7 +41,7 @@ export default function Terms() {
             {/* Artikel 1 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 1 — Definities' : 'Article 1 — Definitions'}
+                {isNL ? 'Artikel 1: Definities' : 'Article 1: Definitions'}
               </h2>
               <p>
                 {isNL
@@ -53,7 +53,7 @@ export default function Terms() {
             {/* Artikel 2 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 2 — Toepasselijkheid' : 'Article 2 — Applicability'}
+                {isNL ? 'Artikel 2: Toepasselijkheid' : 'Article 2: Applicability'}
               </h2>
               <p>
                 {isNL
@@ -65,7 +65,7 @@ export default function Terms() {
             {/* Artikel 3 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 3 — Offertes en overeenkomsten' : 'Article 3 — Quotations and agreements'}
+                {isNL ? 'Artikel 3: Offertes en overeenkomsten' : 'Article 3: Quotations and agreements'}
               </h2>
               <p>
                 {isNL
@@ -77,7 +77,7 @@ export default function Terms() {
             {/* Artikel 4 — Retour & Annulering */}
             <section id="retour" className="border-l-2 border-primary/30 pl-6">
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 4 — Herroepingsrecht, retour & annulering' : 'Article 4 — Right of withdrawal, returns & cancellation'}
+                {isNL ? 'Artikel 4: Herroepingsrecht, retour & annulering' : 'Article 4: Right of withdrawal, returns & cancellation'}
               </h2>
 
               <h3 className="font-sans text-sm uppercase tracking-wider text-foreground mt-4 mb-2">
@@ -111,7 +111,7 @@ export default function Terms() {
             {/* Artikel 5 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 5 — Betaling' : 'Article 5 — Payment'}
+                {isNL ? 'Artikel 5: Betaling' : 'Article 5: Payment'}
               </h2>
               <p>
                 {isNL
@@ -123,7 +123,7 @@ export default function Terms() {
             {/* Artikel 6 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 6 — Levering' : 'Article 6 — Delivery'}
+                {isNL ? 'Artikel 6: Levering' : 'Article 6: Delivery'}
               </h2>
               <p>
                 {isNL
@@ -135,7 +135,7 @@ export default function Terms() {
             {/* Artikel 7 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 7 — Garantie' : 'Article 7 — Warranty'}
+                {isNL ? 'Artikel 7: Garantie' : 'Article 7: Warranty'}
               </h2>
               <p>
                 {isNL
@@ -147,7 +147,7 @@ export default function Terms() {
             {/* Artikel 8 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 8 — Aansprakelijkheid' : 'Article 8 — Liability'}
+                {isNL ? 'Artikel 8: Aansprakelijkheid' : 'Article 8: Liability'}
               </h2>
               <p>
                 {isNL
@@ -159,7 +159,7 @@ export default function Terms() {
             {/* Artikel 9 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 9 — Intellectueel eigendom' : 'Article 9 — Intellectual property'}
+                {isNL ? 'Artikel 9: Intellectueel eigendom' : 'Article 9: Intellectual property'}
               </h2>
               <p>
                 {isNL
@@ -171,7 +171,7 @@ export default function Terms() {
             {/* Artikel 10 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 10 — Privacy' : 'Article 10 — Privacy'}
+                {isNL ? 'Artikel 10: Privacy' : 'Article 10: Privacy'}
               </h2>
               <p>
                 {isNL
@@ -186,7 +186,7 @@ export default function Terms() {
             {/* Artikel 11 */}
             <section>
               <h2 className="font-serif text-xl text-foreground mb-3">
-                {isNL ? 'Artikel 11 — Geschillen en toepasselijk recht' : 'Article 11 — Disputes and applicable law'}
+                {isNL ? 'Artikel 11: Geschillen en toepasselijk recht' : 'Article 11: Disputes and applicable law'}
               </h2>
               <p>
                 {isNL

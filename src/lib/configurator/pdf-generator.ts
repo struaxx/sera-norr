@@ -116,7 +116,7 @@ export async function generateDossierPDF({
   pdf.setTextColor(brandDark);
   pdf.setFontSize(20);
   pdf.setFont('helvetica', 'bold');
-  pdf.text(`${shapeName} — ${stoneName}`, margin, yPos);
+  pdf.text(`${shapeName}: ${stoneName}`, margin, yPos);
   yPos += 12;
 
   // ============================================

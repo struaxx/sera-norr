@@ -74,7 +74,7 @@ export function StickyDossier({
       <div className="space-y-3">
         <div className="flex justify-between items-start">
           <span className="text-xs text-muted-foreground">{isNL ? 'Type' : 'Type'}</span>
-          <span className="text-sm text-right">{productName} — {shapeName}</span>
+          <span className="text-sm text-right">{productName}: {shapeName}</span>
         </div>
         <div className="flex justify-between items-start">
           <span className="text-xs text-muted-foreground">{isNL ? 'Afmetingen' : 'Dimensions'}</span>

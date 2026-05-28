@@ -56,7 +56,7 @@ export default function Trade() {
               Ontworpen door u. Gemaakt door ons.
             </h1>
             <p className="mt-8 font-serif italic text-2xl md:text-3xl text-background/70 leading-relaxed">
-              Sera Norr Trade Program — voor interieurontwerpers, architecten en projectontwikkelaars.
+              Sera Norr Trade Program: voor interieurontwerpers, architecten en projectontwikkelaars.
             </p>
             <div className="mt-12">
               <Button

@@ -204,7 +204,7 @@ function GuaranteeSection({ isNL }: { isNL: boolean }) {
   const { ref, isInView, variants } = useScrollReveal();
 
   const items = isNL ? [
-    { title: 'Certificaat van authenticiteit', description: 'Elk Sera Norr meubel wordt geleverd met een certificaat van authenticiteit en de exacte herkomst van het marmer — groeve, slabnummer en signatuur.' },
+    { title: 'Certificaat van authenticiteit', description: 'Elk Sera Norr meubel wordt geleverd met een certificaat van authenticiteit en de exacte herkomst van het marmer: groeve, slabnummer en signatuur.' },
     { title: '10 jaar garantie', description: '10-jarige garantie op vakmanschap en constructie. Elk stuk wordt vóór levering door ons atelier eindgekeurd.' },
     { title: 'Levenslang advies', description: 'Wij blijven bereikbaar voor vragen over onderhoud, verplaatsing of restauratie. Voor altijd, zonder einddatum.' },
   ] : [

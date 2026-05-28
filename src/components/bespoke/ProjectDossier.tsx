@@ -15,8 +15,8 @@ interface ProjectDossierProps {
 
 export function ProjectDossier({ isNL, data, contactData, className }: ProjectDossierProps) {
   const directionLabels: Record<string, string> = {
-    'vanta': 'VANTA — Calacatta Viola',
-    'terra': 'TERRA — Travertin',
+    'vanta': 'VANTA: Calacatta Viola',
+    'terra': 'TERRA: Travertin',
     'other': isNL ? 'Eigen richting' : 'Own direction',
   };
 
