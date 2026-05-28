@@ -68,7 +68,9 @@ const Voorstel = () => {
   const widthMm = Number(searchParams.get("widthMm") ?? 1000);
   const legCount = (Number(searchParams.get("legCount") ?? 2) as 1 | 2 | 4);
   const legStyle = searchParams.get("legStyle") ?? "cylindrical";
-  const finish = searchParams.get("finish") ?? "gepolijst";
+  const rawFinish = searchParams.get("finish") ?? "gepolijst";
+  // Defensive: unknown finish keys (e.g. legacy `geborsteld` URLs) fall back to gepolijst.
+  const finish = rawFinish in FINISH_LABELS ? rawFinish : "gepolijst";
 
   const stone = STONE_OPTIONS.find((s) => s.id === stoneId);
   const shapeOpt = SHAPE_OPTIONS.find((s) => s.id === shape);
@@ -76,7 +78,7 @@ const Voorstel = () => {
 
   const stoneLabel = stone?.label ?? stoneId;
   const shapeLabel = shapeOpt?.label ?? shape;
-  const finishLabel = FINISH_LABELS[finish] ?? finish;
+  const finishLabel = FINISH_LABELS[finish] ?? "Gepolijst";
   const legStyleLabel = legStyleOpt?.label ?? legStyle;
 
   const dimensions =
