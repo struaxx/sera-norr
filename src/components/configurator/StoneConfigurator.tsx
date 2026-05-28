@@ -14,9 +14,8 @@ import { stateToViewerProps } from './stateMapping';
 import { computeRange } from './pricing';
 
 const FINISHES = [
-  { id: 'gepolijst' as const,  label: 'Gepolijst',  extra: '' },
-  { id: 'gezoet' as const,     label: 'Gezoet',     extra: '+€200' },
-  { id: 'geborsteld' as const, label: 'Geborsteld', extra: '+€150' },
+  { id: 'gepolijst' as const, label: 'Gepolijst', extra: '' },
+  { id: 'gezoet'    as const, label: 'Gezoet',    extra: '+€200' },
 ];
 
 interface SizePreset {
@@ -50,7 +49,7 @@ export default function StoneConfigurator() {
   const [widthMm, setWidthMm]     = useState<number>(1000);
   const [legCount, setLegCount]   = useState<LegCount>(2);
   const [legStyle, setLegStyle]   = useState<RuleLegStyle>('cylindrical');
-  const [finish, setFinish]       = useState<'gepolijst' | 'gezoet' | 'geborsteld'>('gepolijst');
+  const [finish, setFinish]       = useState<'gepolijst' | 'gezoet'>('gepolijst');
   const [customSize, setCustomSize] = useState<boolean>(false);
 
   useEffect(() => {

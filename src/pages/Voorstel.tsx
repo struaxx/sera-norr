@@ -21,7 +21,6 @@ import { computeRange } from "@/components/configurator/pricing";
 const FINISH_LABELS: Record<string, string> = {
   gepolijst: "Gepolijst",
   gezoet: "Gezoet",
-  geborsteld: "Geborsteld",
 };
 
 const shapeCode = (id: string) => {
