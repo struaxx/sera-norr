@@ -279,14 +279,14 @@ export default function StoneConfigurator() {
         </div>
       </div>
 
-      <div className="border-t border-sera-text-soft/20 pt-6">
-        <span className="block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-2">
+      <div className="border-t border-sera-text-soft/20 pt-8 pb-8">
+        <span className="block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-3">
           Indicatie
         </span>
         <div className="font-serif text-3xl text-sera-text">
           €{range.low.toLocaleString('nl-NL')} – €{range.high.toLocaleString('nl-NL')}
         </div>
-        <p className="text-sm text-sera-text-soft mt-3 max-w-md">
+        <p className="text-sm text-sera-text-soft mt-5 max-w-md">
           Maatwerk in natuursteen. Uw exacte prijs ontvangt u in een persoonlijk
           voorstel, afgestemd op de gekozen slab, afwerking en levering.
           Inclusief BTW · Transport inbegrepen.
