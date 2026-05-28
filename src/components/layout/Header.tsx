@@ -17,8 +17,14 @@ export function Header() {
   const isHomePage = location.pathname === "/";
 
   // Simplified navigation: Collecties · Over · [Ontwerp uw tafel CTA]
-  const navLinks = [
+  const desktopNavLinks = [
     { name: t('nav.collections'), path: "/collections" },
+    { name: t('nav.about', 'Over'), path: "/over" },
+  ];
+
+  const mobileNavLinks = [
+    { name: t('nav.collections'), path: "/collections" },
+    { name: t('nav.designCta', 'Atelier'), path: "/atelier" },
     { name: t('nav.about', 'Over'), path: "/over" },
   ];
 
@@ -58,7 +64,7 @@ export function Header() {
         )}>
           {/* Left Navigation */}
           <div className="hidden lg:flex lg:flex-1 items-center gap-10">
-            {navLinks.map((link) => (
+            {desktopNavLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -139,7 +145,7 @@ export function Header() {
         )}
       >
         <nav className="flex flex-col items-center justify-center h-full gap-8">
-          {navLinks.map((link, index) => (
+          {mobileNavLinks.map((link, index) => (
             <Link
               key={link.path}
               to={link.path}
