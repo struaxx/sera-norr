@@ -90,6 +90,11 @@ export const SIZE_RANGES: Record<RuleShape, SizeRange> = {
     width:  { min: 700,  max: 1300, default: 900 },
     step: 100,
   },
+  'cut-corner': {
+    length: { min: 1400, max: 3200, default: 2000 },
+    width:  { min: 700,  max: 1300, default: 900 },
+    step: 100,
+  },
   ovale: {
     length: { min: 1400, max: 3000, default: 2000 },
     width:  { min: 800,  max: 1300, default: 1000 },
