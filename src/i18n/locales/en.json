@@ -259,8 +259,8 @@
     "formSuccessDescription": "Thank you for reaching out. We'll respond within 48 hours."
   },
   "footer": {
-    "collections": "Collections",
-    "allCollections": "All collections",
+    "collections": "Lookbook",
+    "allCollections": "All projects",
     "atelier": "Atelier",
     "materialsCare": "Materials & care",
     "service": "Service & Info",
@@ -363,7 +363,7 @@
     "subtitle": "Natural Stone Selection",
     "description": "We work with a carefully curated material palette. Each stone type has unique properties that define the character of the final piece.",
     "learnMore": "Learn more",
-    "viewCollection": "View collection",
+    "viewCollection": "View lookbook",
     "faqTitle": "Frequently asked questions",
     "specifications": "Specifications",
     "specs": {
@@ -467,6 +467,6 @@
     "selectSize": "Select size",
     "selectFinish": "Select finish",
     "notFound": "Product not found",
-    "backToCollections": "Back to collections"
+    "backToCollections": "Back to lookbook"
   }
 }
