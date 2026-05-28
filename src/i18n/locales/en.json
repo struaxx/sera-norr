@@ -37,7 +37,7 @@
     },
     "collections": {
       "title": "Lookbook",
-      "description": "Our collections are material-driven and form the basis for custom work.",
+      "description": "Our work is material-driven and forms the basis for bespoke pieces.",
       "terra_material": "Travertine",
       "terra_description": "Warm tones and natural layering. Timeless and calm.",
       "vanta_material": "Calacatta Viola",
@@ -94,7 +94,7 @@
   "collections": {
     "hero": {
       "title": "Lookbook",
-      "intro": "SERA NORR presents collections as a starting point for bespoke stone furniture. You choose material and base form — we refine size, detail and finish.",
+      "intro": "SERA NORR presents projects as a starting point for bespoke stone furniture. You choose material and base form — we refine size, detail and finish.",
       "ctaPrimary": "Request proposal",
       "ctaSecondary": "Discover VANTA"
     },
@@ -117,7 +117,7 @@
     "other": {
       "name": "Other stone types",
       "subtitle": "Material curation on request",
-      "description": "For projects with a specific colour tone or stone type, we select materials beyond the fixed collections. Verde Alpi, Nero Marquina and other stone types — chosen based on drawing and character.",
+      "description": "For projects with a specific colour tone or stone type, we select materials beyond our standard range. Verde Alpi, Nero Marquina and other stone types — chosen based on drawing and character.",
       "cta": "Request material options",
       "bullet1": "Match on drawing & colour tone",
       "bullet2": "First response within 24–48 hours"
@@ -132,13 +132,13 @@
       "exampleFormat": "Example dimensions"
     },
     "cta": {
-      "discover": "Discover collection",
+      "discover": "Discover lookbook",
       "requestProposal": "Request proposal"
     },
     "process": {
-      "title": "From collection to proposal",
+      "title": "From lookbook to proposal",
       "step1": {
-        "title": "Choose collection + base form",
+        "title": "Choose a project + base form",
         "description": "Select material and furniture type as starting point."
       },
       "step2": {
@@ -152,7 +152,7 @@
       "cta": "Request proposal",
       "microcopy": "First response from the atelier within 24–48 hours."
     },
-    "notFound": "Collection Not Found",
+    "notFound": "Project not found",
     "viewAllButton": "View Lookbook",
     "pieces": "Pieces",
     "requestQuote": "Request proposal",
