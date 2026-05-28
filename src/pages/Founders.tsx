@@ -32,7 +32,7 @@ const benefits = [
 const reviews = [
   {
     quote:
-      "De rust en eerlijkheid van het atelier sprak ons direct aan. Geen verkoopdruk — alleen vakmanschap en dialoog.",
+      "De rust en eerlijkheid van het atelier sprak ons direct aan. Geen verkoopdruk, alleen vakmanschap en dialoog.",
     name: "M. & J. van der Velde",
     location: "Amsterdam",
   },
@@ -88,7 +88,7 @@ export default function Founders() {
           >
             Een eenmalige uitnodiging aan de eerste twaalf klanten om deel uit te
             maken van het SERA NORR verhaal. Wie nu instapt, vormt mee aan wat
-            volgt — en draagt voor altijd een genummerde plaquette onder zijn tafel.
+            volgt, en draagt voor altijd een genummerde plaquette onder zijn tafel.
           </motion.p>
 
           {/* Counter */}
@@ -165,7 +165,7 @@ export default function Founders() {
 
           <p className="mt-16 max-w-2xl mx-auto text-center font-serif italic text-sm text-muted-foreground leading-relaxed">
             Ter vergelijking: een Bulthaup-keuken met marmeren werkblad start bij €35.000.
-            Een Founders-tafel van Sera Norr — op maat, bookmatched, levenslang —
+            Een Founders-tafel van Sera Norr, op maat, bookmatched, levenslang,
             kost €6.375 (Founders-korting van 25% op €8.500).
           </p>
 

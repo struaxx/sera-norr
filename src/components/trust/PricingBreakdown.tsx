@@ -83,8 +83,8 @@ export function PricingBreakdown({ className, defaultExampleId }: PricingBreakdo
         </h2>
         <p className="font-sans text-muted-foreground leading-relaxed">
           {lang === 'nl'
-            ? 'Drie echte projecten, volledig uitgesplitst — van slab tot oplevering. Geen verborgen marges, geen meerwerk achteraf.'
-            : 'Three real projects, fully itemised — from slab to delivery. No hidden margins, no unexpected costs.'}
+            ? 'Drie echte projecten, volledig uitgesplitst, van slab tot oplevering. Geen verborgen marges, geen meerwerk achteraf.'
+            : 'Three real projects, fully itemised, from slab to delivery. No hidden margins, no unexpected costs.'}
         </p>
       </header>
 

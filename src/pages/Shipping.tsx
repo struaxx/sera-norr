@@ -32,8 +32,8 @@ const Shipping = () => {
     : "Shipping & Delivery | SERA NORR";
 
   const seoDescription = isNL
-    ? "White-glove levering inbegrepen bij elk SERA NORR meubel. Plaatsing, verpakkingsafvoer en volledige verzekering — zonder extra kosten."
-    : "White-glove delivery included with every SERA NORR piece. Placement, packaging removal and full insurance — at no extra cost.";
+    ? "White-glove levering inbegrepen bij elk SERA NORR meubel. Plaatsing, verpakkingsafvoer en volledige verzekering, zonder extra kosten."
+    : "White-glove delivery included with every SERA NORR piece. Placement, packaging removal and full insurance, at no extra cost.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -77,8 +77,8 @@ const Shipping = () => {
           </h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             {isNL
-              ? 'White-glove levering is inbegrepen bij elk SERA NORR meubel. Wij verzorgen het transport, de plaatsing en de verpakkingsafvoer — zodat u alleen hoeft te genieten.'
-              : 'White-glove delivery is included with every SERA NORR piece. We handle transport, placement and packaging removal — so all you need to do is enjoy.'}
+              ? 'White-glove levering is inbegrepen bij elk SERA NORR meubel. Wij verzorgen het transport, de plaatsing en de verpakkingsafvoer, zodat u alleen hoeft te genieten.'
+              : 'White-glove delivery is included with every SERA NORR piece. We handle transport, placement and packaging removal, so all you need to do is enjoy.'}
           </p>
         </div>
       </section>
