@@ -1,6 +1,6 @@
 {
   "nav": {
-    "collections": "Collections",
+    "collections": "Lookbook",
     "materials": "Materials",
     "bespoke": "Bespoke",
     "about": "About",
@@ -13,7 +13,7 @@
       "title": "Luxury stone furniture — bespoke crafted in our atelier.",
       "subtitle": "Travertine, marble and other stone types. For interiors that demand calm and character.",
       "ctaPrimary": "Request proposal",
-      "ctaSecondary": "View collections",
+      "ctaSecondary": "View lookbook",
       "trust": {
         "craftsmanship": "Designed in the Netherlands",
         "warranty": "5-year warranty",
@@ -36,16 +36,16 @@
       }
     },
     "collections": {
-      "title": "Collections",
+      "title": "Lookbook",
       "description": "Our collections are material-driven and form the basis for custom work.",
       "terra_material": "Travertine",
       "terra_description": "Warm tones and natural layering. Timeless and calm.",
       "vanta_material": "Calacatta Viola",
       "vanta_description": "Rich veins and pronounced contrast. Sculptural and powerful.",
       "priceOnRequest": "Price on request",
-      "viewCollection": "View collection",
+      "viewCollection": "View lookbook",
       "other": "Other stone types available on request.",
-      "cta": "View all collections"
+      "cta": "View lookbook"
     },
     "process": {
       "title": "From idea to realisation",
