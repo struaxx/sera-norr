@@ -208,7 +208,7 @@ const Voorstel = () => {
             <div className="mt-10">
               <Button asChild variant="atelier">
                 <Link to="/collections">
-                  {isNL ? "Bekijk stijlcollecties" : "View style collections"}
+                  {isNL ? "Bekijk lookbook" : "View lookbook"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

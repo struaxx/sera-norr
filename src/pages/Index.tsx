@@ -26,8 +26,8 @@ const Index = () => {
   const collectionsIntro = {
     title: isNL ? "Travertin & marmer" : "Travertine & marble",
     subtitle: isNL ?
-    "Twee signatuurcollecties, elk met eigen karakter." :
-    "Two signature collections, each with its own character."
+    "Projecten, elk met eigen karakter." :
+    "Projects, each with their own character."
   };
 
   const seoTitle = isNL ?
@@ -228,8 +228,8 @@ function CollectiesSection({
           </h2>
           <p className="text-body-md text-muted-foreground">
             {isNL ?
-            "Twee signatuurcollecties, elk met eigen karakter." :
-            "Two signature collections, each with its own character."}
+            "Projecten, elk met eigen karakter." :
+            "Projects, each with their own character."}
           </p>
         </motion.div>
 
