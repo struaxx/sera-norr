@@ -11,15 +11,15 @@ const Collections = () => {
   const isNL = (i18n.resolvedLanguage ?? i18n.language ?? "nl").toLowerCase().startsWith("nl");
 
   const seoTitle = isNL
-    ? "Stijlcollecties — Sera Norr"
-    : "Style collections — Sera Norr";
+    ? "Lookbook — Sera Norr"
+    : "Lookbook — Sera Norr";
   const seoDescription = isNL
-    ? "Stijlcollecties ter inspiratie: ingerichte interieurs als startpunt voor uw eigen ontwerp in natuursteen."
-    : "Style collections for inspiration: curated interiors as a starting point for your own bespoke stone design.";
+    ? "Lookbook ter inspiratie: ingerichte interieurs als startpunt voor uw eigen ontwerp in natuursteen."
+    : "Lookbook for inspiration: curated interiors as a starting point for your own bespoke stone design.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
-    { name: isNL ? "Stijlcollecties" : "Style collections", url: "/collections" },
+    { name: isNL ? "Lookbook" : "Lookbook", url: "/collections" },
   ]);
 
   return (
@@ -32,7 +32,7 @@ const Collections = () => {
             {isNL ? "Inspiratie" : "Inspiration"}
           </p>
           <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
-            {isNL ? "Stijlcollecties" : "Style collections"}
+            {isNL ? "Lookbook" : "Lookbook"}
           </h1>
           <p className="text-muted-foreground text-body-md max-w-2xl">
             {isNL
@@ -66,7 +66,7 @@ const Collections = () => {
                   </h2>
                   <p className="text-muted-foreground text-body-md mb-6">{c.tagline}</p>
                   <span className="inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground link-underline">
-                    {isNL ? "Bekijk collectie" : "View collection"}
+                    {isNL ? "Bekijk lookbook" : "View lookbook"}
                     <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
                 </div>
