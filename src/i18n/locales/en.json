@@ -93,7 +93,7 @@
   },
   "collections": {
     "hero": {
-      "title": "Collections",
+      "title": "Lookbook",
       "intro": "SERA NORR presents collections as a starting point for bespoke stone furniture. You choose material and base form — we refine size, detail and finish.",
       "ctaPrimary": "Request proposal",
       "ctaSecondary": "Discover VANTA"
@@ -153,7 +153,7 @@
       "microcopy": "First response from the atelier within 24–48 hours."
     },
     "notFound": "Collection Not Found",
-    "viewAllButton": "View All Collections",
+    "viewAllButton": "View Lookbook",
     "pieces": "Pieces",
     "requestQuote": "Request proposal",
     "customTitle": "Custom dimensions or materials?",
