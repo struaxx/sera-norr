@@ -15,8 +15,10 @@ import {
   STONE_OPTIONS,
   SHAPE_OPTIONS,
   LEG_STYLE_OPTIONS,
+  clampSize,
 } from "@/components/configurator/options";
 import { computeRange } from "@/components/configurator/pricing";
+import type { RuleShape } from "@/lib/configurator/rules/productRules";
 
 const FINISH_LABELS: Record<string, string> = {
   gepolijst: "Gepolijst",
@@ -63,9 +65,19 @@ const Voorstel = () => {
 
   // Read configuration from URL
   const stoneId = searchParams.get("stoneId") ?? "calacatta-viola";
-  const shape = searchParams.get("shape") ?? "corner";
-  const lengthMm = Number(searchParams.get("lengthMm") ?? 2200);
-  const widthMm = Number(searchParams.get("widthMm") ?? 1000);
+  const rawShape = searchParams.get("shape") ?? "corner";
+  // Defensive: unknown shape strings fall back to 'corner'.
+  const shape: RuleShape = (SHAPE_OPTIONS.some(s => s.id === rawShape)
+    ? rawShape
+    : "corner") as RuleShape;
+  // Defensive: NaN, missing, or out-of-range mm values (e.g. legacy URLs
+  // with sizes from the old preset system) clamp back to the default
+  // for the current shape. Geen NaN in pricing of dossierCode.
+  const { lengthMm, widthMm } = clampSize(
+    shape,
+    Number(searchParams.get("lengthMm")),
+    Number(searchParams.get("widthMm")),
+  );
   // Defensive: unknown/legacy legCount values (e.g. old shared links with `4`,
   // or junk like `abc` / empty / NaN) fall back to 2, the old "4" rendered
   // V/D-poten which are a 2-leg pair in the model, so 2 is the correct fallback.

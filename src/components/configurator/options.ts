@@ -70,3 +70,74 @@ export const getValidLegStyles = (
   // 2 poten: pedestal-stijlen + V-poten + D-poten (fixed-pair)
   return LEG_STYLE_OPTIONS;
 };
+
+// ============================================
+// SIZE RANGES per vorm (mm, stap 100)
+// Eén bron van waarheid voor sliders + URL-clamping
+// ============================================
+
+export interface SizeRange {
+  length: { min: number; max: number; default: number };
+  width:  { min: number; max: number; default: number };
+  step: number;
+  /** true = één diameter-slider; width volgt length */
+  diameterOnly?: boolean;
+}
+
+export const SIZE_RANGES: Record<RuleShape, SizeRange> = {
+  corner: {
+    length: { min: 1400, max: 3200, default: 2000 },
+    width:  { min: 700,  max: 1300, default: 900 },
+    step: 100,
+  },
+  'cut-corner': {
+    length: { min: 1400, max: 3200, default: 2000 },
+    width:  { min: 700,  max: 1300, default: 900 },
+    step: 100,
+  },
+  ovale: {
+    length: { min: 1400, max: 3000, default: 2000 },
+    width:  { min: 800,  max: 1300, default: 1000 },
+    step: 100,
+  },
+  ellips: {
+    length: { min: 1400, max: 3000, default: 2000 },
+    width:  { min: 800,  max: 1300, default: 1000 },
+    step: 100,
+  },
+  round: {
+    length: { min: 800, max: 1700, default: 1200 },
+    width:  { min: 800, max: 1700, default: 1200 },
+    step: 100,
+    diameterOnly: true,
+  },
+};
+
+export const getSizeRange = (shape: RuleShape): SizeRange => SIZE_RANGES[shape];
+
+export const getDefaultSize = (shape: RuleShape): { lengthMm: number; widthMm: number } => {
+  const r = SIZE_RANGES[shape];
+  return { lengthMm: r.length.default, widthMm: r.width.default };
+};
+
+/**
+ * Clamp/normalize een (lengthMm, widthMm) paar tegen de range van een vorm.
+ * - NaN of buiten range → val terug op default van die vorm.
+ * - Geldige waarden blijven behouden (essentieel voor vormwissel-UX).
+ * - Voor diameterOnly-vormen wordt width gelijk gemaakt aan length.
+ */
+export const clampSize = (
+  shape: RuleShape,
+  lengthMm: number,
+  widthMm: number
+): { lengthMm: number; widthMm: number } => {
+  const r = SIZE_RANGES[shape];
+  const def = getDefaultSize(shape);
+
+  const lengthOk = Number.isFinite(lengthMm) && lengthMm >= r.length.min && lengthMm <= r.length.max;
+  const widthOk  = Number.isFinite(widthMm)  && widthMm  >= r.width.min  && widthMm  <= r.width.max;
+
+  if (!lengthOk || !widthOk) return def;
+  if (r.diameterOnly) return { lengthMm, widthMm: lengthMm };
+  return { lengthMm, widthMm };
+};
