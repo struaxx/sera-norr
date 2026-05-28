@@ -229,7 +229,7 @@ const BespokeHero = () => {
               animate={isTextInView ? "visible" : "hidden"}
               custom={0.85}
             >
-              {isNL ? 'Snelle reactie — geen verplichtingen.' : 'Quick response — no obligations.'}
+              {isNL ? 'Snelle reactie. Geen verplichtingen.' : 'Quick response. No obligations.'}
             </motion.p>
           </div>
           

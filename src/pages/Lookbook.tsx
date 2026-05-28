@@ -391,8 +391,8 @@ const Lookbook = () => {
               </h2>
               <p className="text-background/70 text-body-md mb-10">
                 {isNL 
-                  ? "Deel uw afmetingen en voorkeuren — wij maken een voorstel op maat."
-                  : "Share your dimensions and preferences — we create a tailored proposal."}
+                  ? "Deel uw afmetingen en voorkeuren. Wij maken een voorstel op maat."
+                  : "Share your dimensions and preferences. We create a tailored proposal."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">

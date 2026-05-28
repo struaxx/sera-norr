@@ -135,8 +135,8 @@ const About = () => {
             </h2>
             <p className="text-background/70 text-body-md leading-relaxed mb-10 max-w-md mx-auto">
               {isNL
-                ? 'Configureer uw tafel in ons digitaal atelier. Kies materiaal, afmetingen en afwerking—wij doen de rest.'
-                : 'Configure your table in our digital atelier. Choose material, dimensions and finish—we handle the rest.'}
+                ? 'Configureer uw tafel in ons digitaal atelier. Kies materiaal, afmetingen en afwerking. Wij doen de rest.'
+                : 'Configure your table in our digital atelier. Choose material, dimensions and finish. We handle the rest.'}
             </p>
             <Button asChild variant="sera-primary" size="lg" className="bg-background text-foreground hover:bg-background/95">
               <Link to="/atelier">
@@ -273,7 +273,7 @@ function InfoBlocksSection({ isNL }: { isNL: boolean }) {
     {
       label: 'Nazorg',
       title: 'Levenslange begeleiding',
-      description: 'Onderhoudskit bij levering, jaarlijkse digitale check-in en een levenslange lijn voor advies. Restauratie of herplaatsing — wij blijven uw aanspreekpunt.',
+      description: 'Onderhoudskit bij levering, jaarlijkse digitale check-in en een levenslange lijn voor advies. Restauratie of herplaatsing. Wij blijven uw aanspreekpunt.',
       tone: 'graphite',
     },
   ] : [
@@ -292,7 +292,7 @@ function InfoBlocksSection({ isNL }: { isNL: boolean }) {
     {
       label: 'Aftercare',
       title: 'Lifetime guidance',
-      description: 'A care kit at delivery, an annual digital check-in and a lifetime line for advice. Restoration or relocation — we remain your point of contact.',
+      description: 'A care kit at delivery, an annual digital check-in and a lifetime line for advice. Restoration or relocation. We remain your point of contact.',
       tone: 'graphite',
     },
   ];
