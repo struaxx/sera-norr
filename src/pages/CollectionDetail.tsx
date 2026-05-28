@@ -19,12 +19,12 @@ const CollectionDetail = () => {
   }
 
   const breadcrumbItems = [
-    { label: isNL ? "Stijlcollecties" : "Style collections", href: "/collections" },
+    { label: isNL ? "Lookbook" : "Lookbook", href: "/collections" },
     { label: collection.name, href: `/collections/${collection.slug}` },
   ];
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
-    { name: isNL ? "Stijlcollecties" : "Style collections", url: "/collections" },
+    { name: isNL ? "Lookbook" : "Lookbook", url: "/collections" },
     { name: collection.name, url: `/collections/${collection.slug}` },
   ]);
 
@@ -42,7 +42,7 @@ const CollectionDetail = () => {
           <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground -ml-4">
             <Link to="/collections">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              {isNL ? "Alle stijlcollecties" : "All style collections"}
+              {isNL ? "Terug naar lookbook" : "Back to lookbook"}
             </Link>
           </Button>
         </div>
@@ -51,7 +51,7 @@ const CollectionDetail = () => {
       <section className="pt-6 lg:pt-10 pb-10 bg-background">
         <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-            {isNL ? "Stijlcollectie" : "Style collection"}
+            {isNL ? "Project" : "Project"}
           </p>
           <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-4">
             {collection.name}
