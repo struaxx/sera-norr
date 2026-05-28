@@ -48,7 +48,7 @@ export default function Materials() {
       <SEOHead
         title={t("materials.seo.title")}
         description={t("materials.seo.description")}
-        titleEn="Natural Stone Materials — Travertine & Marble | SERA NORR"
+        titleEn="Natural Stone Materials, Travertine & Marble | SERA NORR"
         descriptionEn="Discover our curated selection of natural stones: Italian travertine and Calacatta Viola marble. Learn about origins, properties, and care."
         structuredData={generateBreadcrumbSchema(schemaItems)}
       />

@@ -48,7 +48,7 @@ export default function Founders() {
   return (
     <Layout>
       <SEOHead
-        title="Founders Programma — 25% Korting | Sera Norr"
+        title="Founders Programma, 25% Korting | Sera Norr"
         description="Word een van de 12 Founders. 25% korting, genummerde plaquette, persoonlijke fotoshoot."
       />
 
