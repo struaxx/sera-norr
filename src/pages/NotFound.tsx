@@ -31,7 +31,7 @@ const NotFound = () => {
             </Button>
             <Button asChild variant="outline" size="lg" className="gap-2">
               <Link to="/collections">
-                {isNL ? "Bekijk collecties" : "Browse Collections"}
+                {isNL ? "Bekijk lookbook" : "Browse Lookbook"}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>
@@ -53,7 +53,7 @@ const NotFound = () => {
                 to="/collections" 
                 className="text-foreground/70 hover:text-foreground transition-colors underline underline-offset-4"
               >
-                {isNL ? "Collecties" : "Collections"}
+                {isNL ? "Lookbook" : "Lookbook"}
               </Link>
               <Link 
                 to="/over" 
