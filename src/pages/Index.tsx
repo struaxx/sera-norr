@@ -106,7 +106,7 @@ const Index = () => {
                 </Button>
                 <Button asChild variant="ghost" size="default" className="text-background hover:text-background hover:bg-background/12 h-12 px-6">
                   <a href="#collecties">
-                    {isNL ? "Ontdek de collecties" : "Discover collections"}
+                    {isNL ? "Bekijk lookbook" : "View lookbook"}
                   </a>
                 </Button>
               </div>
@@ -213,7 +213,7 @@ function CollectiesSection({
           animate={isInView ? "visible" : "hidden"}>
           
           <Hairline className="flex-1" />
-          <span className="micro-label shrink-0">{isNL ? 'Collecties' : 'Collections'}</span>
+          <span className="micro-label shrink-0">{isNL ? 'Lookbook' : 'Lookbook'}</span>
           <Hairline className="flex-1" />
         </motion.div>
 
