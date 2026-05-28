@@ -308,7 +308,7 @@ export default function StoneConfigurator() {
           });
           navigate(`/voorstel?${params.toString()}`);
         }}
-        className="w-full md:w-auto md:px-12 py-4 bg-sera-surface text-sera-inverted hover:bg-sera-text text-xs uppercase tracking-[0.15em] rounded-sm transition-colors"
+        className="w-full md:w-auto md:px-12 py-4 mt-6 bg-sera-surface text-sera-inverted hover:bg-sera-text text-xs uppercase tracking-[0.15em] rounded-sm transition-colors"
       >
         Start uw aanvraag →
       </button>
