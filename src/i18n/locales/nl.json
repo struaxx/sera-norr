@@ -259,8 +259,8 @@
     "formSuccessDescription": "Bedankt voor het contact opnemen. We reageren binnen 48 uur."
   },
   "footer": {
-    "collections": "Collecties",
-    "allCollections": "Alle collecties",
+    "collections": "Lookbook",
+    "allCollections": "Alle projecten",
     "atelier": "Atelier",
     "materialsCare": "Materialen & onderhoud",
     "service": "Service & Info",
@@ -363,7 +363,7 @@
     "subtitle": "Natuursteen Selectie",
     "description": "We werken met een zorgvuldig geselecteerd materiaalpalet. Elk type steen heeft unieke eigenschappen die het karakter van het eindproduct bepalen.",
     "learnMore": "Meer informatie",
-    "viewCollection": "Bekijk collectie",
+    "viewCollection": "Bekijk lookbook",
     "faqTitle": "Veelgestelde vragen",
     "specifications": "Specificaties",
     "specs": {
@@ -467,6 +467,6 @@
     "selectSize": "Selecteer maat",
     "selectFinish": "Selecteer afwerking",
     "notFound": "Product niet gevonden",
-    "backToCollections": "Terug naar collecties"
+    "backToCollections": "Terug naar lookbook"
   }
 }
