@@ -24,7 +24,7 @@ export function Header() {
 
   const mobileNavLinks = [
     { name: t('nav.collections'), path: "/collections" },
-    { name: t('nav.designCta', 'Atelier'), path: "/atelier" },
+    { name: "Atelier", path: "/atelier" },
     { name: t('nav.about', 'Over'), path: "/over" },
   ];
 
