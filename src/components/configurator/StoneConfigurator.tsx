@@ -92,7 +92,7 @@ export default function StoneConfigurator() {
       </p>
 
       <div className="lg:grid lg:grid-cols-[3fr_2fr] lg:gap-12 lg:items-start">
-        {/* 5. 3D viewer — sticky on desktop */}
+        {/* 5. 3D viewer, sticky on desktop */}
         <div className="mb-12 lg:mb-0 lg:sticky lg:top-32 lg:self-start">
           <ConfiguratorViewerV3
             {...stateToViewerProps({ stoneId, shape, lengthMm, widthMm, legStyle })}
@@ -229,7 +229,7 @@ export default function StoneConfigurator() {
         )}
       </div>
 
-      {/* 10. AANTAL POTEN — hide when only one option */}
+      {/* 10. AANTAL POTEN, hide when only one option */}
       {validLegCounts.length > 1 && (
         <div className="mb-12">
           <span className={sectionLabel}>Aantal poten</span>

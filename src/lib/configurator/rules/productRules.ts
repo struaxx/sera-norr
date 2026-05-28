@@ -5,13 +5,13 @@
 // are defined here. The UI reads from this; never hardcodes.
 
 // ============================================
-// SHAPES — matches UI TableShape exactly
+// SHAPES, matches UI TableShape exactly
 // ============================================
 
 export type RuleShape = 'ellips' | 'round' | 'ovale' | 'corner' | 'cut-corner';
 
 // ============================================
-// LEG STYLES — 9 concrete styles
+// LEG STYLES, 9 concrete styles
 // ============================================
 
 export type RuleLegStyle =
@@ -215,7 +215,7 @@ export function determineLegCount(
   shape: RuleShape,
   lengthMm: number,
 ): number {
-  // Hourglass: GLB contains the full pair — always 1 placement (centered)
+  // Hourglass: GLB contains the full pair, always 1 placement (centered)
   if (legStyle === 'hourglass') return 1;
 
   // Fixed-count styles

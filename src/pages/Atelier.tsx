@@ -1,5 +1,5 @@
 // ============================================
-// Atelier Page — StoneConfigurator mount
+// Atelier Page, StoneConfigurator mount
 // ============================================
 
 import { useTranslation } from 'react-i18next';

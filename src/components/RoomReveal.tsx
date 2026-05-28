@@ -37,7 +37,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
   // Lerp helper
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-  // Cached container dimensions — updated on resize, not every frame
+  // Cached container dimensions, updated on resize, not every frame
   const cachedDimsRef = useRef({ w: 600, h: 300, cx: 300, cy: 150 });
 
   const updateDimensions = useCallback(() => {
@@ -66,7 +66,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       timeRef.current += 0.008;
       const t = timeRef.current;
 
-      // Lissajous auto-position — organic, non-repeating path
+      // Lissajous auto-position, organic, non-repeating path
       autoPosRef.current = {
         x: cx + w * 0.28 * Math.sin(t * 0.31 + 0.5),
         y: cy + h * 0.25 * Math.cos(t * 0.23),
@@ -96,7 +96,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         clipLayerRef.current.style.clipPath = `circle(${r}px at ${x}px ${y}px)`;
       }
 
-      // Cursor ring (desktop) — smooth lerped opacity
+      // Cursor ring (desktop), smooth lerped opacity
       if (cursorRingRef.current) {
         const targetCursorOpacity = isHoveringRef.current ? 1 : 0;
         cursorOpacityRef.current = lerp(cursorOpacityRef.current, targetCursorOpacity, 0.15);
@@ -107,7 +107,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
         cursorRingRef.current.style.opacity = isHoveringRef.current ? "1" : "0";
       }
 
-      // Hint label — gentle pulse when idle, fade out on hover
+      // Hint label, gentle pulse when idle, fade out on hover
       if (hintRef.current) {
         hintRef.current.style.opacity = isHoveringRef.current ? "0" : "1";
       }
@@ -216,7 +216,7 @@ export function RoomReveal({ beforeImage, afterImage, isNL }: RoomRevealProps) {
       onTouchMove={handleTouchMove}
       onTouchEnd={() => { isHoveringRef.current = false; }}
     >
-      {/* 1. Before layer — empty room */}
+      {/* 1. Before layer, empty room */}
       <img
         src={beforeSrc}
         alt={isNL ? "Leeg interieur voor SERA NORR tafel" : "Empty interior before SERA NORR table"}
@@ -227,7 +227,7 @@ className="absolute inset-0 w-full h-full object-cover"
         decoding="async"
       />
 
-      {/* 2. After layer — circular clip-path reveal (always visible, auto-animating) */}
+      {/* 2. After layer, circular clip-path reveal (always visible, auto-animating) */}
       <div
         ref={clipLayerRef}
         className="absolute inset-0"
@@ -244,7 +244,7 @@ className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
 
-      {/* 3. "Ontdek" hint — pulses gently when idle, fades on hover */}
+      {/* 3. "Ontdek" hint, pulses gently when idle, fades on hover */}
       <div
         ref={hintRef}
         className="absolute inset-0 flex items-center justify-center pointer-events-none"

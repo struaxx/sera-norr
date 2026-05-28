@@ -38,7 +38,7 @@ export function BlurImage({
 
   return (
     <>
-      {/* Neutral grey placeholder — stays visible until image loads, or permanently on error */}
+      {/* Neutral grey placeholder, stays visible until image loads, or permanently on error */}
       <div
         className={cn(
           "absolute inset-0 bg-muted transition-opacity duration-500",

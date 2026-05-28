@@ -1,5 +1,5 @@
 // ============================================================
-// PRICING CONFIG — PLACEHOLDER VALUES
+// PRICING CONFIG, PLACEHOLDER VALUES
 // Replace the VUL_IN numbers with real figures from actual quotes.
 // These drive the INDICATIVE RANGE shown in the configurator.
 // The exact price is always determined per order via supplier quote.
@@ -9,21 +9,21 @@
 // configuration in that stone (smallest size, 1 leg, polished).
 // Source these from your real sent quotes later.
 export const STONE_BASE_PRICE: Record<string, number> = {
-  'classic-cloudy':  2950,   // VUL_IN — travertijn, goedkoopst
-  'tiramisu':        2950,   // VUL_IN — travertijn
-  'light-emprador':  3800,   // VUL_IN — marmer
-  'dark-emperador':  3800,   // VUL_IN — marmer
-  'calacatta-viola': 4500,   // VUL_IN — premium marmer, duurst
+  'classic-cloudy':  2950,   // VUL_IN, travertijn, goedkoopst
+  'tiramisu':        2950,   // VUL_IN, travertijn
+  'light-emprador':  3800,   // VUL_IN, marmer
+  'dark-emperador':  3800,   // VUL_IN, marmer
+  'calacatta-viola': 4500,   // VUL_IN, premium marmer, duurst
 };
 
 // How much the indicative price scales with surface area.
 // Base size reference = 2.0 m² (e.g. 200x100cm).
 // Larger tables scale up proportionally to surface area.
 export const BASE_SURFACE_M2 = 2.0;          // reference surface
-export const SURFACE_SCALING = 1.0;          // VUL_IN — 1.0 = linear with m²
+export const SURFACE_SCALING = 1.0;          // VUL_IN, 1.0 = linear with m²
 
 // Surcharge per extra leg beyond the first (indicative).
-export const EXTRA_LEG_SURCHARGE = 600;      // VUL_IN — per extra leg
+export const EXTRA_LEG_SURCHARGE = 600;      // VUL_IN, per extra leg
 
 // Finish surcharges (these you already know).
 export const FINISH_SURCHARGE: Record<string, number> = {
@@ -34,10 +34,10 @@ export const FINISH_SURCHARGE: Record<string, number> = {
 
 // Range width: the indicative range is shown as [low, high] around
 // the computed midpoint. E.g. 0.12 = ±12%.
-export const RANGE_SPREAD = 0.12;            // VUL_IN — ±12%
+export const RANGE_SPREAD = 0.12;            // VUL_IN, ±12%
 
 // ============================================================
-// Calculation — do not edit below unless logic changes
+// Calculation, do not edit below unless logic changes
 // ============================================================
 
 export interface PriceInput {
