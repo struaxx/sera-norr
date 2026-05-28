@@ -173,8 +173,8 @@ const Voorstel = () => {
   };
 
   const seoTitle = isNL
-    ? "Uw voorstel — Sera Norr"
-    : "Your proposal — Sera Norr";
+    ? "Uw voorstel | Sera Norr"
+    : "Your proposal | Sera Norr";
   const seoDescription = isNL
     ? "Bekijk uw configuratie en vraag vrijblijvend een persoonlijk voorstel aan."
     : "Review your configuration and request a personal proposal.";

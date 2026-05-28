@@ -90,8 +90,8 @@ const Contact = () => {
   };
 
   const seoTitle = isNL 
-    ? "Contact — SERA NORR Atelier"
-    : "Contact — SERA NORR Atelier";
+    ? "Contact | SERA NORR Atelier"
+    : "Contact | SERA NORR Atelier";
 
   const seoDescription = isNL
     ? "Neem contact op met SERA NORR. Deel uw vraag of idee voor maatwerk stenen meubels in travertin of marmer."

@@ -31,8 +31,8 @@ const Index = () => {
   };
 
   const seoTitle = isNL ?
-  "SERA NORR — Stenen Meubels op Maat" :
-  "SERA NORR — Bespoke Stone Furniture";
+  "SERA NORR | Stenen Meubels op Maat" :
+  "SERA NORR | Bespoke Stone Furniture";
 
   const seoDescription = isNL ?
   "Handgemaakte eettafels en salontafels in Calacatta Viola, Travertijn en Statuario. Op maat, white-glove geleverd." :
@@ -229,7 +229,7 @@ function CollectiesSection({
           <p className="text-body-md text-muted-foreground">
             {isNL ?
             "Projecten, elk met eigen karakter." :
-            "Projects, each with their own character."}
+            "Projects, each with its own character."}
           </p>
         </motion.div>
 

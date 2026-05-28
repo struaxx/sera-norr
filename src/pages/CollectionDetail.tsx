@@ -31,7 +31,7 @@ const CollectionDetail = () => {
   return (
     <Layout>
       <SEOHead
-        title={`${collection.name} — Sera Norr`}
+        title={`${collection.name} | Sera Norr`}
         description={collection.tagline}
         structuredData={breadcrumbSchema}
       />
@@ -59,8 +59,8 @@ const CollectionDetail = () => {
           <p className="text-muted-foreground text-body-lg max-w-2xl">{collection.tagline}</p>
           <p className="text-muted-foreground text-sm max-w-2xl mt-4">
             {isNL
-              ? "Inspiratie en sfeerbeeld. Geen geleverd project — een startpunt voor uw eigen ontwerp."
-              : "Mood and inspiration. Not a delivered project — a starting point for your own design."}
+              ? "Inspiratie en sfeerbeeld. Geen geleverd project. Een startpunt voor uw eigen ontwerp."
+              : "Mood and inspiration. Not a delivered project. A starting point for your own design."}
           </p>
         </div>
       </section>
