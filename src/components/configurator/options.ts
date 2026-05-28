@@ -27,7 +27,7 @@ export const SHAPE_OPTIONS: ShapeOption[] = [
   { id: 'corner', label: 'Rechthoek' },
 ];
 
-export type LegCount = 1 | 2 | 4;
+export type LegCount = 1 | 2;
 
 export interface LegStyleOption {
   id: RuleLegStyle;
@@ -49,22 +49,24 @@ export const LEG_STYLE_OPTIONS: LegStyleOption[] = [
  * - Round table: 1 central pedestal leg only (thicker for stability).
  * - Ovale / Ellips / Corner: customer picks legCount.
  *   - 1 = single thick central pedestal (any pedestal style)
- *   - 2 = two pedestals spaced apart (any pedestal style)
- *   - 4 = four fixed legs (v_legs or d_legs)
+ *   - 2 = two pedestals spaced apart (any pedestal style) OR
+ *         two fixed-style legs (v_legs / d_legs) — these render as
+ *         a pair in the 3D model (fixedLegCount: 2).
  */
 
 export const getValidLegCounts = (shape: RuleShape): LegCount[] => {
   if (shape === 'round') return [1];
-  return [1, 2, 4];
+  return [1, 2];
 };
 
 export const getValidLegStyles = (
   shape: RuleShape,
   legCount: LegCount
 ): LegStyleOption[] => {
-  if (shape === 'round' || legCount === 1 || legCount === 2) {
+  // 1 poot (of round): alleen pedestal-stijlen
+  if (shape === 'round' || legCount === 1) {
     return LEG_STYLE_OPTIONS.filter(o => o.category === 'pedestal');
   }
-  // legCount === 4
-  return LEG_STYLE_OPTIONS.filter(o => o.category === 'fixed');
+  // 2 poten: pedestal-stijlen + V-poten + D-poten (fixed-pair)
+  return LEG_STYLE_OPTIONS;
 };
