@@ -49,7 +49,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link to="/collections" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">
-                  Collecties
+                  {t('footer.allCollections')}
                 </Link>
               </li>
             </ul>
