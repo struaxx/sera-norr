@@ -88,7 +88,7 @@ export default function Journal() {
       <SEOHead
         title={t("journal.seo.title")}
         description={t("journal.seo.description")}
-        titleEn="Journal — Stone Furniture Insights | SERA NORR"
+        titleEn="Journal, Stone Furniture Insights | SERA NORR"
         descriptionEn="Explore articles on natural stone materials, care guides, interior cases, and European craftsmanship from SERA NORR atelier."
         structuredData={generateBreadcrumbSchema(schemaItems)}
       />

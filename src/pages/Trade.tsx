@@ -42,7 +42,7 @@ export default function Trade() {
   return (
     <Layout>
       <SEOHead
-        title="Trade Program — Sera Norr"
+        title="Trade Program | Sera Norr"
         description="Voor interieurontwerpers, architecten en projectontwikkelaars. Trade-tarieven, prioriteit en persoonlijke slab-selectie."
         noindex
       />

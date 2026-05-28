@@ -63,8 +63,8 @@ export default function MaterialDetail() {
         title={t(`materials.types.${translationKey}.seo.title`)}
         description={t(`materials.types.${translationKey}.seo.description`)}
         titleEn={materialId === "travertine" 
-          ? "Italian Travertine — Origin, Properties & Care | SERA NORR"
-          : "Calacatta Viola Marble — Rare Apuan Marble | SERA NORR"
+          ? "Italian Travertine, Origin, Properties & Care | SERA NORR"
+          : "Calacatta Viola Marble, Rare Apuan Marble | SERA NORR"
         }
         descriptionEn={materialId === "travertine"
           ? "Discover Italian travertine: its thermal origins, unique pitting, warm tones, and how SERA NORR crafts it into sculptural furniture."
