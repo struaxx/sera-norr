@@ -366,8 +366,8 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
               </p>
               <p className="text-[11px] text-muted-foreground leading-relaxed">
                 {isNL 
-                  ? 'Elke tafel is uniek — de definitieve prijs ontvangt u in uw persoonlijk voorstel, afgestemd op slab-keuze, afwerking en levering.'
-                  : 'Every table is unique — you will receive the final price in your personal proposal, tailored to slab selection, finish and delivery.'}
+                  ? 'Elke tafel is uniek. De definitieve prijs ontvangt u in uw persoonlijk voorstel, afgestemd op slab-keuze, afwerking en levering.'
+                  : 'Every table is unique. You will receive the final price in your personal proposal, tailored to slab selection, finish and delivery.'}
               </p>
             </div>
           </div>

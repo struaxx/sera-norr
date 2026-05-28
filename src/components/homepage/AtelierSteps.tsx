@@ -50,8 +50,8 @@ export function AtelierSteps({ isNL }: AtelierStepsProps) {
           </h2>
           <p className="text-body-md text-background/70">
             {isNL 
-              ? "Van inspiratie tot op maat gemaakt — ons digitale atelier begeleidt u." 
-              : "From inspiration to made-to-measure — our digital atelier guides you."}
+              ? "Van inspiratie tot op maat gemaakt. Ons digitale atelier begeleidt u." 
+              : "From inspiration to made-to-measure. Our digital atelier guides you."}
           </p>
         </motion.div>
 
