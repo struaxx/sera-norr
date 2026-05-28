@@ -560,7 +560,7 @@ function VLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerInd
   );
 }
 
-// --- D-Legs: half-cylinder — curved outside, flat inside ---
+// --- D-Legs: half-cylinder, curved outside, flat inside ---
 function DLeg({ radiusM, heightM, stoneId, cornerIndex }: LegProps & { cornerIndex: number }) {
   const geo = useMemo(() => {
     const r = radiusM * 3.2; // bigger D-legs

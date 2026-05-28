@@ -74,7 +74,7 @@ export default function Terms() {
               </p>
             </section>
 
-            {/* Artikel 4 — Retour & Annulering */}
+            {/* Artikel 4, Retour & Annulering */}
             <section id="retour" className="border-l-2 border-primary/30 pl-6">
               <h2 className="font-serif text-xl text-foreground mb-3">
                 {isNL ? 'Artikel 4: Herroepingsrecht, retour & annulering' : 'Article 4: Right of withdrawal, returns & cancellation'}

@@ -50,7 +50,7 @@ export const LEG_STYLE_OPTIONS: LegStyleOption[] = [
  * - Ovale / Ellips / Corner: customer picks legCount.
  *   - 1 = single thick central pedestal (any pedestal style)
  *   - 2 = two pedestals spaced apart (any pedestal style) OR
- *         two fixed-style legs (v_legs / d_legs) — these render as
+ *         two fixed-style legs (v_legs / d_legs), these render as
  *         a pair in the 3D model (fixedLegCount: 2).
  */
 

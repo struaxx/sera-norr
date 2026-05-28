@@ -67,7 +67,7 @@ const Voorstel = () => {
   const lengthMm = Number(searchParams.get("lengthMm") ?? 2200);
   const widthMm = Number(searchParams.get("widthMm") ?? 1000);
   // Defensive: unknown/legacy legCount values (e.g. old shared links with `4`,
-  // or junk like `abc` / empty / NaN) fall back to 2 — the old "4" rendered
+  // or junk like `abc` / empty / NaN) fall back to 2, the old "4" rendered
   // V/D-poten which are a 2-leg pair in the model, so 2 is the correct fallback.
   const rawLegCount = Number(searchParams.get("legCount"));
   const legCount: 1 | 2 = rawLegCount === 1 || rawLegCount === 2 ? rawLegCount : 2;

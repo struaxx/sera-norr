@@ -233,7 +233,7 @@ function CollectiesSection({
           </p>
         </motion.div>
 
-        {/* Room Fit Reveal — hover to see a table appear in the room */}
+        {/* Room Fit Reveal, hover to see a table appear in the room */}
         <motion.div
           className="mb-16"
           variants={variants.fadeUp}
@@ -243,7 +243,7 @@ function CollectiesSection({
           <RoomReveal isNL={isNL} />
         </motion.div>
 
-        {/* Lookbook preview link — rotating images */}
+        {/* Lookbook preview link, rotating images */}
         <LookbookPreviewGrid isNL={isNL} variants={variants} isInView={isInView} />
 
         {/* Single CTA to lookbook */}
