@@ -37,7 +37,7 @@
     },
     "collections": {
       "title": "Lookbook",
-      "description": "Onze collecties zijn materiaalgedreven en vormen de basis voor maatwerk.",
+      "description": "Ons werk is materiaalgedreven en vormt de basis voor maatwerk.",
       "terra_material": "Travertin",
       "terra_description": "Warme tinten en natuurlijke gelaagdheid. Tijdloos en rustig.",
       "vanta_material": "Calacatta Viola",
@@ -94,7 +94,7 @@
   "collections": {
     "hero": {
       "title": "Lookbook",
-      "intro": "SERA NORR toont collecties als vertrekpunt voor maatwerk in steen. U kiest materiaal en basisvorm — wij verfijnen maat, detail en afwerking.",
+      "intro": "SERA NORR toont projecten als vertrekpunt voor maatwerk in steen. U kiest materiaal en basisvorm — wij verfijnen maat, detail en afwerking.",
       "ctaPrimary": "Vraag voorstel aan",
       "ctaSecondary": "Ontdek VANTA"
     },
@@ -117,7 +117,7 @@
     "other": {
       "name": "Andere steensoorten",
       "subtitle": "Materiaalcuratie op aanvraag",
-      "description": "Voor projecten met een specifieke kleurtoon of steensoort selecteren we materialen buiten de vaste collecties. Verde Alpi, Nero Marquina en andere steensoorten — gekozen op tekening en karakter.",
+      "description": "Voor projecten met een specifieke kleurtoon of steensoort selecteren we materialen buiten het vaste aanbod. Verde Alpi, Nero Marquina en andere steensoorten — gekozen op tekening en karakter.",
       "cta": "Vraag materiaalopties aan",
       "bullet1": "Match op tekening & kleurtoon",
       "bullet2": "Eerste reactie binnen 24–48 uur"
@@ -132,13 +132,13 @@
       "exampleFormat": "Voorbeeldformaat"
     },
     "cta": {
-      "discover": "Ontdek collectie",
+      "discover": "Ontdek lookbook",
       "requestProposal": "Vraag voorstel aan"
     },
     "process": {
-      "title": "Van collectie naar voorstel",
+      "title": "Van lookbook naar voorstel",
       "step1": {
-        "title": "Kies collectie + basisvorm",
+        "title": "Kies een project + basisvorm",
         "description": "Selecteer materiaal en type meubel als vertrekpunt."
       },
       "step2": {
@@ -152,7 +152,7 @@
       "cta": "Vraag voorstel aan",
       "microcopy": "Binnen 24–48 uur een eerste reactie van het atelier."
     },
-    "notFound": "Collectie Niet Gevonden",
+    "notFound": "Project niet gevonden",
     "viewAllButton": "Bekijk Lookbook",
     "pieces": "Stukken",
     "requestQuote": "Vraag voorstel aan",
