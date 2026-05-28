@@ -248,7 +248,7 @@ const Contact = () => {
                           <div className="flex flex-col items-start">
                             <span>{isNL ? 'Algemene vraag' : 'General inquiry'}</span>
                             <span className="text-xs text-muted-foreground">
-                              {isNL ? 'Vragen over collectie, levering of atelier' : 'Questions about collection, delivery or atelier'}
+                              {isNL ? 'Vragen over een project, levering of atelier' : 'Questions about a project, delivery or atelier'}
                             </span>
                           </div>
                         </SelectItem>
