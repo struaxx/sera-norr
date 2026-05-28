@@ -33,8 +33,8 @@ export function FoundersBanner() {
         >
           <span>
             {isNL
-              ? "Founders — 25% korting voor de eerste 12 klanten"
-              : "Founders — 25% off for the first 12 clients"}
+              ? "Founders, 25% korting voor de eerste 12 klanten"
+              : "Founders, 25% off for the first 12 clients"}
           </span>
           <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
         </Link>

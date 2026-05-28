@@ -263,7 +263,7 @@ export function DossierPhase({ onBack, isNL = true }: DossierPhaseProps) {
                       SERA NORR Dossier
                     </span>
                   </div>
-                  <h2 className="text-xl font-serif">{shapeName} — {stoneName}</h2>
+                  <h2 className="text-xl font-serif">{shapeName}: {stoneName}</h2>
                   <p className="text-sm text-muted-foreground mt-1 font-mono">
                     #{currentBuildCode}
                   </p>

@@ -8,7 +8,7 @@ SERA NORR ontwerpt en levert sculpturale meubels op maat, eettafels vanaf €3.0
 
 - [Home](/): Introductie tot het atelier en projecten.
 - [Lookbook](/collections): Lookbook van afgeronde projecten in travertin en marmer.
-- [Atelier — Configurator](/atelier): Configureer een tafel op maat met directe prijsindicatie.
+- [Atelier | Configurator](/atelier): Configureer een tafel op maat met directe prijsindicatie.
 - [Bespoke traject](/bespoke): Uitleg van het maatwerkproces van schets tot levering.
 - [Over](/over): Verhaal en visie achter SERA NORR.
 - [Founders](/founders): Founders editie en oprichtingsverhaal.
