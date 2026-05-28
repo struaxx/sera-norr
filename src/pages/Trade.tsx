@@ -29,7 +29,7 @@ const tiers = [
   { label: "Korting", preferred: "20%", partner: "25–30%", premier: "30–35%" },
   { label: "Levertijd", preferred: "Standaard 12–16 wk", partner: "Prioriteit 10–14 wk", premier: "Expedite optie 8 wk" },
   { label: "Slab selectie", preferred: "Standaard", partner: "Pre-selectie", premier: "Persoonlijke slab-visit" },
-  { label: "Dedicated contact", preferred: "Nee", partner: "Ja", premier: "Ja — directe lijn" },
+  { label: "Dedicated contact", preferred: "Nee", partner: "Ja", premier: "Ja, directe lijn" },
 ];
 
 const included = [

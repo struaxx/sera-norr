@@ -179,7 +179,7 @@ function FounderStorySection({ isNL }: { isNL: boolean }) {
             <div className="space-y-6">
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'Sera Norr is geboren uit frustratie — over meubelstukken die schitterend ogen in een showroom maar vlak worden in een echt interieur. We wilden anders.'
+                  ? 'Sera Norr is geboren uit frustratie, over meubelstukken die schitterend ogen in een showroom maar vlak worden in een echt interieur. We wilden anders.'
                   : 'SERA NORR was born from a simple conviction: a table is not furniture, but the centre of a life. Every stone we select is chosen by hand in the Italian and Spanish quarries. Each piece carries the signature of the earth itself.'}
               </p>
               <p className="text-body-md text-muted-foreground leading-relaxed">

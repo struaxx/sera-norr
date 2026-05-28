@@ -333,7 +333,7 @@ const Lookbook = () => {
                     {item.image ? (
                       <BlurImage 
                         src={item.image} 
-                        alt={`${item.title} — ${item.stone} ${item.dimensions}`}
+                        alt={`${item.title}, ${item.stone} ${item.dimensions}`}
                         className="w-full h-full object-cover"
                         loading={index < 8 ? "eager" : "lazy"}
                         decoding={index < 8 ? "sync" : "async"}
