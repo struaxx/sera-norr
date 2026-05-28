@@ -41,7 +41,7 @@ export default function Atelier() {
       />
 
       <main className="min-h-screen bg-sera-bg">
-        <div className="container max-w-7xl mx-auto px-4 py-16 md:py-24">
+        <div className="container max-w-7xl mx-auto px-4 pt-28 pb-16 md:pt-36 md:pb-24">
           <HelpSidebar isNL={isNL} />
           <StoneConfigurator />
         </div>
