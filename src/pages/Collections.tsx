@@ -11,8 +11,8 @@ const Collections = () => {
   const isNL = (i18n.resolvedLanguage ?? i18n.language ?? "nl").toLowerCase().startsWith("nl");
 
   const seoTitle = isNL
-    ? "Lookbook — Sera Norr"
-    : "Lookbook — Sera Norr";
+    ? "Lookbook | Sera Norr"
+    : "Lookbook | Sera Norr";
   const seoDescription = isNL
     ? "Lookbook ter inspiratie: ingerichte interieurs als startpunt voor uw eigen ontwerp in natuursteen."
     : "Lookbook for inspiration: curated interiors as a starting point for your own bespoke stone design.";
@@ -36,8 +36,8 @@ const Collections = () => {
           </h1>
           <p className="text-muted-foreground text-body-md max-w-2xl">
             {isNL
-              ? "Een verzameling sferen die laten zien hoe natuursteen in uiteenlopende interieurs kan landen. Bedoeld ter inspiratie — een startpunt voor uw eigen ontwerp."
-              : "A collection of moods that show how natural stone can land in different interiors. Intended as inspiration — a starting point for your own design."}
+              ? "Een verzameling sferen die laten zien hoe natuursteen in uiteenlopende interieurs kan landen. Bedoeld ter inspiratie. Een startpunt voor uw eigen ontwerp."
+              : "A collection of moods that show how natural stone can land in different interiors. Intended as inspiration. A starting point for your own design."}
           </p>
         </div>
       </section>
