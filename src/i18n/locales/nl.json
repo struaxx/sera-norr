@@ -1,6 +1,6 @@
 {
   "nav": {
-    "collections": "Collecties",
+    "collections": "Lookbook",
     "materials": "Materialen",
     "bespoke": "Maatwerk",
     "about": "Over",
@@ -13,7 +13,7 @@
       "title": "Luxe stenen meubels — op maat gemaakt in ons atelier.",
       "subtitle": "Travertin, marmer en andere steensoorten. Voor interieurs die rust en karakter vragen.",
       "ctaPrimary": "Vraag voorstel aan",
-      "ctaSecondary": "Bekijk collecties",
+      "ctaSecondary": "Bekijk lookbook",
       "trust": {
         "craftsmanship": "Ontworpen in Nederland",
         "warranty": "5 jaar garantie",
@@ -36,16 +36,16 @@
       }
     },
     "collections": {
-      "title": "Collecties",
+      "title": "Lookbook",
       "description": "Onze collecties zijn materiaalgedreven en vormen de basis voor maatwerk.",
       "terra_material": "Travertin",
       "terra_description": "Warme tinten en natuurlijke gelaagdheid. Tijdloos en rustig.",
       "vanta_material": "Calacatta Viola",
       "vanta_description": "Rijke aders en uitgesproken contrast. Sculpturaal en krachtig.",
       "priceOnRequest": "Prijs op aanvraag",
-      "viewCollection": "Bekijk collectie",
+      "viewCollection": "Bekijk lookbook",
       "other": "Andere steensoorten beschikbaar op aanvraag.",
-      "cta": "Bekijk alle collecties"
+      "cta": "Bekijk lookbook"
     },
     "process": {
       "title": "Van idee naar realisatie",
