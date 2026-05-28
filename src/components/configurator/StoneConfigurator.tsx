@@ -61,8 +61,12 @@ export default function StoneConfigurator() {
 
   useEffect(() => {
     const valid = getValidLegStyles(shape, legCount);
-    if (!valid.find(o => o.id === legStyle)) {
-      setLegStyle(valid[0].id);
+    const stillValid = valid.some(o => o.id === legStyle);
+    if (!stillValid) {
+      // Expliciete fallback: 'cylindrical' is een pedestal-stijl en
+      // dus geldig bij elke (shape, legCount) combinatie. Niet leunen
+      // op array-volgorde van getValidLegStyles.
+      setLegStyle('cylindrical');
     }
   }, [shape, legCount]);
 
