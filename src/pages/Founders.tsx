@@ -12,20 +12,12 @@ const FOUNDERS_TOTAL = 12;
 
 const benefits = [
   {
-    title: "25% Founders korting",
-    desc: "Op de normale atelierprijs. Een tafel van €8.500 wordt €6.375.",
-  },
-  {
     title: "Genummerde bronzen plaquette",
-    desc: "Onder uw tafel: 1/12 t/m 12/12. Een blijvend bewijs dat u tot de eerste twaalf behoort.",
+    desc: "Onder uw tafel: 1/12 tot en met 12/12. Een blijvend bewijs dat u tot de eerste twaalf behoort.",
   },
   {
-    title: "Portfolio fotoshoot",
-    desc: "Wij fotograferen het eindresultaat in uw interieur voor het SERA NORR portfolio.",
-  },
-  {
-    title: "Lifetime toegang nieuwe steencollecties",
-    desc: "Founders krijgen als eerste inzage in nieuwe steensoorten en zeldzame slabs.",
+    title: "5% Founders korting",
+    desc: "Een bescheiden gebaar van waardering voor het vertrouwen dat u als een van de eersten in het atelier stelt.",
   },
 ];
 
@@ -48,8 +40,8 @@ export default function Founders() {
   return (
     <Layout>
       <SEOHead
-        title="Founders Programma, 25% Korting | Sera Norr"
-        description="Word een van de 12 Founders. 25% korting, genummerde plaquette, persoonlijke fotoshoot."
+        title="Founders Programma | 12 plekken | Sera Norr"
+        description="Word een van de 12 Founders van Sera Norr. Genummerde bronzen plaquette onder uw tafel en 5% korting als blijvend dank voor uw vroege vertrouwen."
       />
 
       {/* Hero */}
@@ -144,32 +136,7 @@ export default function Founders() {
             ))}
           </div>
 
-          {/* Price example */}
-          <div className="mt-16 border border-foreground/10 p-10 md:p-14 text-center bg-foreground/[0.02]">
-            <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-6">
-              Rekenvoorbeeld
-            </p>
-            <div className="flex items-baseline justify-center gap-6 flex-wrap">
-              <span className="font-serif text-2xl text-muted-foreground line-through decoration-1">
-                €8.500
-              </span>
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
-              <span className="font-serif text-4xl md:text-5xl text-foreground">
-                €6.375
-              </span>
-            </div>
-            <p className="mt-6 font-sans text-sm text-muted-foreground">
-              Een Calacatta Viola eettafel als Founder: 25% onder de atelierprijs.
-            </p>
-          </div>
-
-          <p className="mt-16 max-w-2xl mx-auto text-center font-serif italic text-sm text-muted-foreground leading-relaxed">
-            Ter vergelijking: een Bulthaup-keuken met marmeren werkblad start bij €35.000.
-            Een Founders-tafel van Sera Norr, op maat, bookmatched, levenslang,
-            kost €6.375 (Founders-korting van 25% op €8.500).
-          </p>
-
-          <div className="mt-8 text-center">
+          <div className="mt-16 text-center">
             <Button asChild variant="sera-primary" size="lg">
               <Link to="/contact?subject=founders">
                 Word Founder: Claim uw plek

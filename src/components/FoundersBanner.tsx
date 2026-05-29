@@ -25,16 +25,16 @@ export function FoundersBanner() {
   };
 
   return (
-    <div className="relative z-[60] bg-foreground text-background">
-      <div className="container mx-auto px-6 lg:px-12 py-2.5 flex items-center justify-center gap-4">
+    <div className="relative z-[60] bg-foreground/[0.04] text-muted-foreground border-b border-foreground/10">
+      <div className="container mx-auto px-6 lg:px-12 py-2 flex items-center justify-center gap-4">
         <Link
           to="/founders"
-          className="group inline-flex items-center gap-2 text-[11px] sm:text-xs uppercase tracking-[0.18em] hover:opacity-80 transition-opacity text-center"
+          className="group inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] hover:text-foreground transition-colors text-center"
         >
           <span>
             {isNL
-              ? "Founders, 25% korting voor de eerste 12 klanten"
-              : "Founders, 25% off for the first 12 clients"}
+              ? "Founders programma, 12 plekken beschikbaar"
+              : "Founders programme, 12 spots available"}
           </span>
           <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
         </Link>
@@ -42,9 +42,9 @@ export function FoundersBanner() {
           type="button"
           onClick={handleClose}
           aria-label={isNL ? "Sluit banner" : "Close banner"}
-          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity"
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 p-1 hover:text-foreground transition-colors"
         >
-          <X className="h-3.5 w-3.5" />
+          <X className="h-3 w-3" />
         </button>
       </div>
     </div>
