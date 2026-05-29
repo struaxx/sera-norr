@@ -18,7 +18,7 @@ import { Slider } from '@/components/ui/slider';
 
 const FINISHES = [
   { id: 'gepolijst' as const, label: 'Gepolijst', extra: '' },
-  { id: 'gezoet'    as const, label: 'Gezoet',    extra: '+€200' },
+  { id: 'gezoet'    as const, label: 'Gezoet',    extra: '' },
 ];
 
 const sectionLabel = 'block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-3';
