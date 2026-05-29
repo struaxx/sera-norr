@@ -35,12 +35,12 @@ const Care = () => {
   ];
 
   const seoTitle = isNL 
-    ? "Onderhoud & bescherming | SERA NORR"
-    : "Care & Protection | SERA NORR";
+    ? "Onderhoud & verzorging | SERA NORR"
+    : "Care & maintenance | SERA NORR";
 
   const seoDescription = isNL
-    ? "Natuursteen blijft het mooist met de juiste bescherming en eenvoudig onderhoud. Advies voor travertin en marmer meubels van SERA NORR."
-    : "Natural stone looks best with proper protection and simple care. Advice for travertine and marble furniture from SERA NORR.";
+    ? "Natuursteen is een levend materiaal. Algemene basis plus specifieke verzorging voor marmer, travertijn en kwartsiet."
+    : "Natural stone is a living material. General basics and specific care for marble, travertine and quartzite."
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -54,14 +54,108 @@ const Care = () => {
     '@graph': [breadcrumbSchema, faqSchema],
   };
 
-  const careSteps = isNL ? [
-    { title: 'Dagelijks onderhoud', description: 'Reinig regelmatig met een zachte, licht vochtige doek. Vermijd agressieve middelen.' },
-    { title: 'Impregnatie', description: 'Bescherm het oppervlak met hoogwaardige impregneermiddelen. Jaarlijks voor eettafels.' },
-    { title: 'Advies op maat', description: 'Elk type steen vraagt om aangepaste verzorging. Bij levering ontvangt u advies.' },
+  const basics = isNL ? [
+    {
+      title: 'Dagelijks',
+      description: 'Stof afnemen met een zachte, droge of licht vochtige microvezeldoek. Gemorste vloeistoffen direct opnemen, met name wijn, citrusvruchten, koffie, azijn en olie. Snel handelen voorkomt vlekken.',
+    },
+    {
+      title: 'Schoonmaakmiddelen',
+      description: 'Gebruik pH-neutrale reinigers, speciaal voor natuursteen. Vermijd azijn, citroen, ammoniak, bleek, allesreinigers, schuurmiddelen en glasreiniger. Deze middelen kunnen het oppervlak aantasten.',
+    },
+    {
+      title: 'Bescherming in gebruik',
+      description: 'Gebruik onderzetters onder glazen, vazen en hete pannen. Plaats hete schalen niet rechtstreeks op de steen. Snijden doet u altijd op een snijplank.',
+    },
+    {
+      title: 'Impregneren',
+      description: 'Natuursteen is poreus en wordt bij ons standaard ingespoten met een hoogwaardige impregneer. Herhaal dit elke 12 tot 24 maanden, afhankelijk van gebruik. Eenvoudige test: leg een druppel water op het oppervlak. Parelt het op, dan is de bescherming nog actief. Trekt het binnen seconden in, dan is het tijd voor een nieuwe behandeling.',
+    },
   ] : [
-    { title: 'Daily care', description: 'Clean regularly with a soft, slightly damp cloth. Avoid aggressive products.' },
-    { title: 'Sealing', description: 'Protect the surface with high-quality sealants. Annually for dining tables.' },
-    { title: 'Tailored advice', description: 'Each type of stone requires tailored care. You receive advice upon delivery.' },
+    {
+      title: 'Daily',
+      description: 'Dust with a soft, dry or slightly damp microfibre cloth. Wipe up spills immediately, especially wine, citrus, coffee, vinegar and oil. Acting quickly prevents stains.',
+    },
+    {
+      title: 'Cleaning products',
+      description: 'Use pH-neutral cleaners made for natural stone. Avoid vinegar, lemon, ammonia, bleach, all-purpose cleaners, abrasives and glass cleaner. These can damage the surface.',
+    },
+    {
+      title: 'Protection in use',
+      description: 'Use coasters under glasses, vases and hot pans. Do not place hot dishes directly on the stone. Always cut on a cutting board.',
+    },
+    {
+      title: 'Sealing',
+      description: 'Natural stone is porous and is treated by us with a high-quality sealant as standard. Repeat every 12 to 24 months, depending on use. Simple test: place a drop of water on the surface. If it beads, the protection is still active. If it absorbs within seconds, it is time to reseal.',
+    },
+  ];
+
+  const materials = isNL ? [
+    {
+      name: 'Marmer',
+      examples: 'Calacatta, Carrara, Calacatta Viola, Arabescato, Statuario en vergelijkbare soorten.',
+      character: 'Marmer is kalksteen en reageert gevoelig op zuren. Een druppel citroensap of wijn die te lang blijft staan, kan een lichte matte plek achterlaten. Veel eigenaren waarderen juist deze patina die in de loop der jaren ontstaat als deel van het karakter van marmer.',
+      specifics: [
+        'Op gepolijst marmer zijn matte plekken iets zichtbaarder dan op gezoet marmer.',
+        'Gezoete afwerking is iets vergevingsgezinder voor dagelijks gebruik.',
+        'Vermijd langdurige directe zoninstraling, dit kan kleurverandering geven bij sommige soorten.',
+      ],
+      yearly: 'Eén keer per jaar een grondige reiniging met professionele natuursteenreiniger. Bij lichte doffe plekken of kleine etsingen is een marmer-polijstpoeder verkrijgbaar voor thuisgebruik. Bij twijfel of grotere schade kunt u altijd contact met ons opnemen.',
+    },
+    {
+      name: 'Travertijn',
+      examples: 'Tiramisu, Classic Cloudy, Noce, Romano en vergelijkbare soorten.',
+      character: 'Travertijn is herkenbaar aan de natuurlijke gaatjes en open poriën, ontstaan door warmwaterbronnen. Bij productie worden deze poriën standaard opgevuld. Net als marmer is travertijn kalksteen en gevoelig voor zuren.',
+      specifics: [
+        'Controleer af en toe of de gevulde poriën nog intact zijn. Bij dagelijks gebruik kunnen kleine deeltjes loslaten, dit is normaal en eenvoudig bij te werken.',
+        'Droog het oppervlak goed af na schoonmaken, open poriën kunnen vocht vasthouden.',
+        'Gezoete travertijn heeft een mat oppervlak dat verkleuringen iets sneller absorbeert.',
+      ],
+      yearly: 'Eén keer per jaar grondige reiniging plus controle van de poriën. Een travertijn-vulpasta in de juiste kleur is beschikbaar voor het bijwerken van gaatjes. Wij adviseren u graag bij twijfel.',
+    },
+    {
+      name: 'Kwartsiet',
+      examples: 'Taj Mahal, Mont Blanc, Cristallo, Macaubas en vergelijkbare soorten.',
+      character: 'Kwartsiet is een metamorf gesteente, ontstaan uit zandsteen onder hoge druk. Het is harder dan marmer en minder gevoelig voor zuren en krassen. De meest robuuste keuze voor intensief gebruik.',
+      specifics: [
+        'Echt kwartsiet is bestand tegen citroensap, wijn en de meeste huishoudelijke vloeistoffen, maar blijft poreus. Impregneren blijft daarom belangrijk.',
+        'Verwar kwartsiet niet met kwartscomposiet: kwartsiet is 100% natuursteen, kwartscomposiet is een industrieel product.',
+      ],
+      yearly: 'Eén keer per jaar grondige reiniging en hertesten van de impregneer. Door de hardheid van het materiaal is verder onderhoud zelden nodig.',
+    },
+  ] : [
+    {
+      name: 'Marble',
+      examples: 'Calacatta, Carrara, Calacatta Viola, Arabescato, Statuario and similar types.',
+      character: 'Marble is a limestone and reacts to acids. A drop of lemon juice or wine left too long can leave a slight matte mark. Many owners value this patina that develops over the years as part of marble\u2019s character.',
+      specifics: [
+        'On polished marble, matte spots are slightly more visible than on honed marble.',
+        'A honed finish is a little more forgiving for daily use.',
+        'Avoid prolonged direct sunlight, as this can cause colour change in some types.',
+      ],
+      yearly: 'Once a year, a thorough clean with a professional stone cleaner. For light dull spots or small etchings, a marble polishing powder is available for home use. When in doubt, or for larger damage, please contact us.',
+    },
+    {
+      name: 'Travertine',
+      examples: 'Tiramisu, Classic Cloudy, Noce, Romano and similar types.',
+      character: 'Travertine is recognisable by its natural holes and open pores, formed by hot springs. During production these pores are filled as standard. Like marble, travertine is a limestone and sensitive to acids.',
+      specifics: [
+        'Check now and then whether the filled pores are still intact. With daily use, small particles can come loose. This is normal and easy to touch up.',
+        'Dry the surface well after cleaning, as open pores can hold moisture.',
+        'Honed travertine has a matte surface that absorbs discolouration slightly faster.',
+      ],
+      yearly: 'Once a year a thorough clean and a check of the pores. A travertine filler paste in the matching colour is available to touch up holes. We are happy to advise.',
+    },
+    {
+      name: 'Quartzite',
+      examples: 'Taj Mahal, Mont Blanc, Cristallo, Macaubas and similar types.',
+      character: 'Quartzite is a metamorphic rock, formed from sandstone under high pressure. It is harder than marble and less sensitive to acids and scratches. The most robust choice for intensive use.',
+      specifics: [
+        'True quartzite resists lemon juice, wine and most household liquids, but remains porous. Sealing is therefore still important.',
+        'Do not confuse quartzite with quartz composite: quartzite is 100% natural stone, quartz composite is an industrial product.',
+      ],
+      yearly: 'Once a year a thorough clean and a re-test of the sealant. Thanks to the hardness of the material, further maintenance is rarely needed.',
+    },
   ];
 
   const breadcrumbItems = [
@@ -87,31 +181,35 @@ const Care = () => {
               {isNL ? "Informatie" : "Information"}
             </p>
             <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
-              {isNL ? "Onderhoud & bescherming" : "Care & protection"}
+              {isNL ? "Onderhoud & verzorging" : "Care & maintenance"}
             </h1>
             <p className="text-body-lg text-muted-foreground leading-relaxed max-w-2xl">
               {isNL 
-                ? "Natuursteen blijft het mooist met de juiste bescherming en eenvoudig onderhoud. Wij adviseren wat past bij uw gebruik."
-                : "Natural stone looks best with proper protection and simple care. We advise what suits your use."}
+                ? "Natuursteen is een levend, eerlijk materiaal. Met de juiste verzorging wordt uw tafel mooier met de jaren. Hieronder de algemene basis voor alle natuursteen, gevolgd door de specifieke aandachtspunten per steensoort."
+                : "Natural stone is a living, honest material. With the right care, your table only grows more beautiful over the years. Below the general basics for all natural stone, followed by specific points of attention per stone type."}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Care Steps - Editorial Grid */}
+      {/* General basics - Editorial Grid */}
       <section className="py-24 lg:py-32">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex items-center gap-6 mb-16 lg:mb-20">
             <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">{isNL ? 'Verzorging' : 'Care'}</span>
+            <span className="micro-label shrink-0">{isNL ? 'Algemene basis' : 'General basics'}</span>
             <Hairline className="flex-1" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {careSteps.map((step, index) => (
+          <p className="text-body-md text-muted-foreground max-w-2xl mb-12 lg:mb-16">
+            {isNL ? 'Geldt voor marmer, travertijn en kwartsiet.' : 'Applies to marble, travertine and quartzite.'}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            {basics.map((step, index) => (
               <div key={index} className="relative">
                 <span className="font-serif text-[80px] lg:text-[100px] text-foreground/[0.03] absolute -top-4 -left-2 leading-none select-none pointer-events-none">
-                  0{index + 1}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
                 <div className="relative pt-8">
                   <h3 className="font-serif text-xl text-foreground mb-3">
@@ -127,69 +225,71 @@ const Care = () => {
         </div>
       </section>
 
-      {/* Material Specifics - Editorial Split */}
+      {/* Per stone type - Editorial Cards */}
       <section className="py-24 lg:py-32 bg-secondary/20">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex items-center gap-6 mb-16 lg:mb-20">
             <Hairline className="flex-1" />
-            <span className="micro-label shrink-0">{isNL ? 'Per materiaal' : 'Per material'}</span>
+            <span className="micro-label shrink-0">{isNL ? 'Per steensoort' : 'Per stone type'}</span>
             <Hairline className="flex-1" />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            {/* Travertine */}
-            <div className="p-8 lg:p-10 border border-foreground/8 bg-background">
-              <p className="editorial-caption-label mb-3">01</p>
-              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-4">
-                Travertin
-              </h3>
-              <p className="text-body-md text-muted-foreground leading-relaxed mb-6">
-                {isNL 
-                  ? "Warm en poreus. Impregneert uitstekend en ontwikkelt met de tijd een mooie patina die het karakter verdiept."
-                  : "Warm and porous. Seals excellently and develops a beautiful patina over time that deepens its character."}
-              </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
-                  {isNL ? "Gebruik zachte microvezel doek" : "Use soft microfiber cloth"}
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
-                  {isNL ? "Vermijd zure vloeistoffen" : "Avoid acidic liquids"}
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
-                  {isNL ? "Jaarlijkse impregnatie aanbevolen" : "Annual sealing recommended"}
-                </li>
-              </ul>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+            {materials.map((m, index) => (
+              <div key={m.name} className="p-8 lg:p-10 border border-foreground/8 bg-background flex flex-col">
+                <p className="editorial-caption-label mb-3">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
+                  {m.name}
+                </h3>
+                <p className="text-body-sm text-muted-foreground italic mb-6">
+                  {m.examples}
+                </p>
 
-            {/* Marble */}
-            <div className="p-8 lg:p-10 border border-foreground/8 bg-background">
-              <p className="editorial-caption-label mb-3">02</p>
-              <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-4">
-                {isNL ? "Marmer" : "Marble"}
-              </h3>
-              <p className="text-body-md text-muted-foreground leading-relaxed mb-6">
-                {isNL 
-                  ? "Elegant en delicaat. Vraagt extra aandacht voor zure vloeistoffen. Regelmatige impregnatie beschermt het oppervlak."
-                  : "Elegant and delicate. Requires extra attention for acidic liquids. Regular sealing protects the surface."}
-              </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
-                  {isNL ? "Veeg gemorste vloeistoffen direct op" : "Wipe up spilled liquids immediately"}
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
-                  {isNL ? "Gebruik onderzetters" : "Use coasters"}
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0" />
-                  {isNL ? "pH-neutrale reiniger" : "pH-neutral cleaner"}
-                </li>
-              </ul>
-            </div>
+                <p className="micro-label mb-2">{isNL ? 'Karakter' : 'Character'}</p>
+                <p className="text-body-sm text-muted-foreground leading-relaxed mb-6">
+                  {m.character}
+                </p>
+
+                <p className="micro-label mb-2">{isNL ? 'Specifiek' : 'Specifics'}</p>
+                <ul className="space-y-2 text-sm text-muted-foreground mb-6">
+                  {m.specifics.map((s, i) => (
+                    <li key={i} className="flex gap-3">
+                      <span className="w-1.5 h-1.5 bg-foreground/30 rounded-full shrink-0 mt-2" />
+                      <span className="leading-relaxed">{s}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="micro-label mb-2">{isNL ? 'Jaarlijks' : 'Yearly'}</p>
+                <p className="text-body-sm text-muted-foreground leading-relaxed">
+                  {m.yearly}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Questions or doubts */}
+      <section className="py-20 lg:py-28">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="max-w-2xl">
+            <p className="micro-label mb-4">{isNL ? 'Vragen of twijfel' : 'Questions or doubts'}</p>
+            <h2 className="font-serif text-display-sm text-foreground mb-4">
+              {isNL ? 'Wij denken graag mee.' : 'We are happy to help.'}
+            </h2>
+            <p className="text-body-md text-muted-foreground leading-relaxed mb-8">
+              {isNL
+                ? 'Bij vragen over een vlek, kras of onderhoudssituatie kunt u altijd contact met ons opnemen.'
+                : 'For any question about a stain, scratch or care situation, you are welcome to get in touch.'}
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 text-foreground text-body-sm uppercase tracking-[0.15em] border-b border-foreground/40 hover:border-foreground pb-1 transition-colors"
+            >
+              {isNL ? 'Neem contact op' : 'Get in touch'}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
