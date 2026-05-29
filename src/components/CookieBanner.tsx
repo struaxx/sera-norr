@@ -190,12 +190,13 @@ export function CookieBanner() {
                 </Link>
               </div>
               
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 {showPreferences ? (
                   <Button
                     onClick={handleSavePreferences}
                     variant="atelier-filled"
                     size="sm"
+                    className="w-full sm:w-auto"
                   >
                     {isNL ? 'Voorkeuren opslaan' : 'Save preferences'}
                   </Button>
@@ -205,6 +206,7 @@ export function CookieBanner() {
                       onClick={handleAcceptNecessary}
                       variant="atelier"
                       size="sm"
+                      className="w-full sm:w-auto"
                     >
                       {isNL ? 'Alleen noodzakelijk' : 'Necessary only'}
                     </Button>
@@ -212,6 +214,7 @@ export function CookieBanner() {
                       onClick={handleAcceptAll}
                       variant="atelier-filled"
                       size="sm"
+                      className="w-full sm:w-auto"
                     >
                       {isNL ? 'Alles accepteren' : 'Accept all'}
                     </Button>
