@@ -44,6 +44,15 @@ Deno.serve(async (req) => {
     // Sanitize and validate data
     const sanitizedEmail = payload.email.toLowerCase().trim().slice(0, 255);
     const sessionId = String(payload.session_id || '').slice(0, 50);
+
+    // Require a session_id so we can bind profile writes to the originating
+    // session and prevent arbitrary profile pollution.
+    if (!sessionId || !/^[a-zA-Z0-9_-]{8,50}$/.test(sessionId)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid session' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     const intentLevel = ['low', 'medium', 'high'].includes(payload.intentLevel) 
       ? payload.intentLevel 
       : 'low';
@@ -85,7 +94,23 @@ Deno.serve(async (req) => {
     
     if (supabaseUrl && supabaseKey) {
       const supabase = createClient(supabaseUrl, supabaseKey);
-      
+
+      // Prevent CRM poisoning: only allow updating an existing profile when
+      // the request comes from the same originating session that created it.
+      const { data: existing } = await supabase
+        .from('user_profiles')
+        .select('session_id')
+        .eq('email', sanitizedEmail)
+        .maybeSingle();
+
+      if (existing && existing.session_id && existing.session_id !== sessionId) {
+        console.warn('[identify-user] Session mismatch, refusing upsert for', sanitizedEmail);
+        return new Response(
+          JSON.stringify({ error: 'Forbidden' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
       // Upsert user profile
       const { error: profileError } = await supabase
         .from('user_profiles')
