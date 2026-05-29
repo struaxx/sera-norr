@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { BlurImage } from "@/components/ui/blur-image";
-import { ArrowRight } from "lucide-react";
 import { STYLE_COLLECTIONS } from "@/data/collections";
 
 const Collections = () => {
@@ -26,7 +25,7 @@ const Collections = () => {
     <Layout>
       <SEOHead title={seoTitle} description={seoDescription} structuredData={breadcrumbSchema} />
 
-      <section className="pt-28 lg:pt-36 pb-12 bg-background">
+      <section className="pt-28 lg:pt-36 pb-16 lg:pb-20 bg-background">
         <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
             {isNL ? "Inspiratie" : "Inspiration"}
@@ -43,31 +42,41 @@ const Collections = () => {
       </section>
 
       <section className="pb-24 lg:pb-32 bg-background">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl space-y-8">
-          {STYLE_COLLECTIONS.map((c) => (
+        <div className="flex flex-col">
+          {STYLE_COLLECTIONS.map((c, i) => (
             <Link
               key={c.slug}
               to={`/collections/${c.slug}`}
-              className="group block border border-border/40 hover:border-foreground/40 transition-colors duration-500 rounded-sm overflow-hidden bg-secondary/20"
+              className="group relative block w-full h-[45vh] lg:h-[60vh] overflow-hidden bg-muted border-b border-foreground/5"
             >
-              <div className="grid grid-cols-1 md:grid-cols-5">
-                <div className="md:col-span-3 relative aspect-[16/9] md:aspect-[3/2] bg-muted overflow-hidden">
-                  {c.cover && (
-                    <BlurImage
-                      src={c.cover}
-                      alt={c.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                    />
-                  )}
-                </div>
-                <div className="md:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
-                  <h2 className="font-serif text-2xl lg:text-3xl text-foreground mb-3">
-                    {c.name}
-                  </h2>
-                  <p className="text-muted-foreground text-body-md mb-6">{c.tagline}</p>
-                  <span className="inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground link-underline">
-                    {isNL ? "Bekijk lookbook" : "View lookbook"}
-                    <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              {c.cover && (
+                <BlurImage
+                  src={c.cover}
+                  alt={c.name}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+              )}
+
+              {/* Bottom gradient for legibility (always on) */}
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-foreground/0 to-foreground/0 pointer-events-none" />
+
+              {/* Hover overlay (desktop hover only) */}
+              <div className="absolute inset-0 bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+              {/* Text block */}
+              <div className="absolute bottom-8 left-6 lg:bottom-12 lg:left-12 right-6 lg:right-12 text-background">
+                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/70 mb-3">
+                  {String(i + 1).padStart(2, "0")} {isNL ? "Project" : "Project"}
+                </p>
+                <h2 className="font-serif text-3xl lg:text-5xl text-background">
+                  {c.name}
+                </h2>
+                <div className="overflow-hidden">
+                  <p className="text-sm lg:text-base text-background/85 mt-3 max-w-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                    {c.tagline}
+                  </p>
+                  <span className="inline-block mt-4 text-[10px] uppercase tracking-[0.25em] text-background opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-75 ease-out">
+                    {isNL ? "Bekijk project" : "View project"}
                   </span>
                 </div>
               </div>
