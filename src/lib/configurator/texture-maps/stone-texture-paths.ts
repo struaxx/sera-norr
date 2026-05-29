@@ -58,8 +58,8 @@ export const STONE_TEXTURE_PATHS: Record<string, string> = {
   'panda-white': '/textures/stones/panda-white-seamless.jpg',
   'grand-antique': '/textures/stones/grand-antique-seamless.jpg',
 
-  'light-emprador': '/textures/stones/light-emperador-seamless.jpg',
-  'light-emperador': '/textures/stones/light-emperador-seamless.jpg',
+  'light-emprador': '/textures/stones/light-emperador-seamless.jpg?v=2',
+  'light-emperador': '/textures/stones/light-emperador-seamless.jpg?v=2',
   'dark-emperador': '/textures/stones/dark-emperador-seamless.jpg',
   'daino-reale': '/textures/stones/daino-reale-seamless.jpg',
   'elegant-grey': '/textures/stones/elegant-grey-seamless.jpg',
