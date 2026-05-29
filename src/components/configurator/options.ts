@@ -8,7 +8,7 @@ export interface StoneOption {
 }
 
 export const STONE_OPTIONS: StoneOption[] = [
-  { id: 'classic-cloudy',  label: 'Classic Cloudy',  family: 'travertijn', texture: '/textures/stones/classic-cloudy-seamless.jpg' },
+  { id: 'classic-cloudy',  label: 'Classic Cloudy',  family: 'travertijn', texture: '/textures/stones/classic-cloudy-seamless.jpg?v=2' },
   { id: 'tiramisu',        label: 'Tiramisu',        family: 'travertijn', texture: '/textures/stones/tiramisu-seamless.jpg' },
   { id: 'light-emprador',  label: 'Light Emperador', family: 'marmer',     texture: '/textures/stones/light-emperador-seamless.jpg' },
   { id: 'dark-emperador',  label: 'Dark Emperador',  family: 'marmer',     texture: '/textures/stones/dark-emperador-seamless.jpg' },

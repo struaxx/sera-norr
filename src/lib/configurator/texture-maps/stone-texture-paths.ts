@@ -30,7 +30,7 @@ export const STONE_TEXTURE_PATHS: Record<string, string> = {
   'sbyss-black': '/textures/stones/sbyss-black-seamless.jpg',
 
   'golden-coast': '/textures/stones/golden-coast-seamless.jpg',
-  'classic-cloudy': '/textures/stones/classic-cloudy-seamless.jpg',
+  'classic-cloudy': '/textures/stones/classic-cloudy-seamless.jpg?v=2',
   'classic-light': '/textures/stones/classic-light-seamless.jpg',
   'cream-beige-travertine': '/textures/stones/classic-light-seamless.jpg',
 
