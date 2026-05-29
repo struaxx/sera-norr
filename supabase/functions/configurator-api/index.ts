@@ -237,7 +237,7 @@ async function handleSaveConfig(supabase: any, config: ConfiguratorState, sessio
 
   if (error) {
     console.error('Save config error:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: 'Kon configuratie niet opslaan. Probeer het opnieuw.' };
   }
 
   return { 
