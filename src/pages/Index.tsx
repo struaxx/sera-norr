@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { SEOHead, baseSchema, WebSiteJsonLd, BreadcrumbSchema } from "@/components/seo";
 import { Hairline } from "@/components/ui/hairline";
 
-import { ValuePillars, AtelierSteps, LookbookPreviewGrid } from "@/components/homepage";
+import { ValuePillars, AtelierSteps } from "@/components/homepage";
 import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
@@ -21,14 +21,6 @@ const Index = () => {
   const isNL = i18n.language === 'nl';
 
   usePageTracking();
-
-  // Collection descriptions for the section
-  const collectionsIntro = {
-    title: isNL ? "Travertin & marmer" : "Travertine & marble",
-    subtitle: isNL ?
-    "Projecten, elk met eigen karakter." :
-    "Projects, each with their own character."
-  };
 
   const seoTitle = isNL ?
   "SERA NORR | Stenen Meubels op Maat" :
@@ -105,9 +97,9 @@ const Index = () => {
                   </Link>
                 </Button>
                 <Button asChild variant="ghost" size="default" className="text-background hover:text-background hover:bg-background/12 h-12 px-6">
-                  <a href="#collecties">
+                  <Link to="/collections">
                     {isNL ? "Bekijk lookbook" : "View lookbook"}
-                  </a>
+                  </Link>
                 </Button>
               </div>
               
@@ -240,25 +232,9 @@ function CollectiesSection({
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}>
           
-          <RoomReveal isNL={isNL} />
-        </motion.div>
-
-        {/* Lookbook preview link, rotating images */}
-        <LookbookPreviewGrid isNL={isNL} variants={variants} isInView={isInView} />
-
-        {/* Single CTA to lookbook */}
-        <motion.div
-          className="mt-8 lg:mt-12 text-center"
-          variants={variants.fadeUp}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}>
-          
-          <Button asChild variant="sera-secondary" size="lg">
-            <Link to="/collections">
-              {isNL ? "Bekijk lookbook" : "View lookbook"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <Link to="/collections" className="block group" aria-label={isNL ? "Bekijk lookbook" : "View lookbook"}>
+            <RoomReveal isNL={isNL} />
+          </Link>
         </motion.div>
       </div>
     </section>);
