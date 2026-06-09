@@ -21,7 +21,7 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
     {
       icon: MapPin,
       title: "Ontworpen in Nederland",
-      description: "Elk stuk ontstaat in ons atelier.",
+      description: "Vervaardigd door ons vaste partner-steenatelier.",
     },
     {
       icon: Truck,
@@ -47,7 +47,7 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
     {
       icon: MapPin,
       title: "Designed in Netherlands",
-      description: "Each piece created in our atelier.",
+      description: "Made by our long-term partner stone atelier.",
     },
     {
       icon: Truck,
