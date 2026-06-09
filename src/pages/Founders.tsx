@@ -21,21 +21,6 @@ const benefits = [
   },
 ];
 
-const reviews = [
-  {
-    quote:
-      "De rust en eerlijkheid van het atelier sprak ons direct aan. Geen verkoopdruk, alleen vakmanschap en dialoog.",
-    name: "M. & J. van der Velde",
-    location: "Amsterdam",
-  },
-  {
-    quote:
-      "Een tafel die elk diner een ander gesprek wordt. De Calacatta Viola voelt als een kunstwerk dat we elke dag gebruiken.",
-    name: "L. Bakker",
-    location: "Wassenaar",
-  },
-];
-
 export default function Founders() {
   return (
     <Layout>
@@ -218,35 +203,6 @@ export default function Founders() {
         </div>
       </section>
 
-      {/* Reviews */}
-      <section className="bg-foreground/[0.02] border-t border-foreground/10 py-24 lg:py-32">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
-          <div className="text-center mb-16">
-            <p className="font-sans text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-4">
-              Wat anderen zeggen
-            </p>
-            <h2 className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-foreground">
-              Stemmen uit het atelier
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-10">
-            {reviews.map((r) => (
-              <figure key={r.name} className="border border-foreground/10 p-10 bg-background">
-                <blockquote className="font-serif text-xl md:text-2xl text-foreground leading-relaxed tracking-[-0.005em]">
-                  “{r.quote}”
-                </blockquote>
-                <figcaption className="mt-8 pt-6 border-t border-foreground/10">
-                  <p className="font-sans text-sm text-foreground">{r.name}</p>
-                  <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">
-                    {r.location}
-                  </p>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
     </Layout>
   );
 }
