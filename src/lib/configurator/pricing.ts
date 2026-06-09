@@ -55,7 +55,6 @@ export function calculatePriceEstimate(config: ConfiguratorState): PriceEstimate
   if (extras.sealer) extrasTotal += EXTRAS_PRICING.sealer.price;
   if (extras.delivery) extrasTotal += EXTRAS_PRICING.delivery.price;
   if (extras.installation) extrasTotal += EXTRAS_PRICING.installation.price;
-  if (extras.sampleKit) extrasTotal += EXTRAS_PRICING.sampleKit.price;
 
   // Calculate total estimate
   const materialCost = basePrice * stoneMultiplier * finishMultiplier * thicknessMultiplier;

@@ -146,7 +146,6 @@ const defaultConfig: ConfiguratorState = {
     sealer: false,
     delivery: true,
     installation: true,
-    sampleKit: false,
   },
   spacePhotos: [],
   inspirationImages: [],

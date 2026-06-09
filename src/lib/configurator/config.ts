@@ -324,7 +324,6 @@ export const EXTRAS_PRICING = {
   sealer: { price: 150, name: { nl: 'Steenimpregnatie', en: 'Stone sealer' } },
   delivery: { price: 295, name: { nl: 'Bezorging met zorg', en: 'White-glove delivery' } },
   installation: { price: 195, name: { nl: 'Professionele plaatsing', en: 'Professional installation' } },
-  sampleKit: { price: 45, name: { nl: 'Materiaal sample kit', en: 'Material sample kit' } },
 };
 
 // Base price per square meter (travertine reference)
