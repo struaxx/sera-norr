@@ -44,12 +44,12 @@ const Shipping = () => {
 
   const steps = isNL ? [
     { icon: ShieldCheck, title: 'Goedkeuring ontwerp', description: 'Na uw definitieve akkoord op het ontwerp en de materialen starten wij de productie.' },
-    { icon: Clock, title: 'Productie: 12–16 weken', description: 'Uw meubel wordt op maat vervaardigd in ons atelier. U ontvangt updates over de voortgang.' },
+    { icon: Clock, title: 'Productie: 12–16 weken', description: 'Uw meubel wordt op maat vervaardigd door ons vaste partner-steenatelier. U ontvangt updates over de voortgang.' },
     { icon: Package, title: 'Zorgvuldige verpakking', description: 'Elk stuk wordt individueel beschermd met op maat gemaakte beschermingsmaterialen voor veilig transport.' },
     { icon: Truck, title: 'White-glove levering', description: 'Ons team levert tot in uw ruimte, plaatst het meubel en neemt alle verpakking mee.' },
   ] : [
     { icon: ShieldCheck, title: 'Design approval', description: 'After your final approval of the design and materials, we begin production.' },
-    { icon: Clock, title: 'Production: 12–16 weeks', description: 'Your piece is crafted to order in our atelier. You receive progress updates along the way.' },
+    { icon: Clock, title: 'Production: 12–16 weeks', description: 'Your piece is crafted to order at our long-term partner stone atelier. You receive progress updates along the way.' },
     { icon: Package, title: 'Careful packaging', description: 'Each piece is individually protected with custom-made protective materials for safe transport.' },
     { icon: Truck, title: 'White-glove delivery', description: 'Our team delivers to your room, positions the piece and removes all packaging.' },
   ];
