@@ -195,9 +195,6 @@ export default function Founders() {
               <p className="font-sans text-xs uppercase tracking-[0.25em] text-background/50">
                 Oprichter Sera Norr en Ls Capital
               </p>
-              <p className="mt-6 font-sans text-sm text-background/70">
-                Telefonisch bereikbaar via WhatsApp: +31 6 [VOEGHIERTOENUMMER]
-              </p>
             </div>
           </div>
         </div>
