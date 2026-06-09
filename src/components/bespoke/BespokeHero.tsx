@@ -116,7 +116,7 @@ const BespokeHero = () => {
   const chips = [
     isNL ? 'Prijs op aanvraag' : 'Price on request',
     isNL ? 'Doorlooptijd 12–16 weken' : 'Lead time 12–16 weeks',
-    isNL ? '5 jaar garantie' : '5 year warranty'
+    isNL ? '2 jaar garantie' : '2 year warranty'
   ];
 
   return (
