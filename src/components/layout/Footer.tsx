@@ -91,7 +91,7 @@ export function Footer() {
             </p>
             <span className="hidden md:inline text-muted-foreground/40">|</span>
             <p className="text-muted-foreground/70 text-xs">
-              KvK 89004213
+              KvK 89004213 · BTW NL004680014B63
             </p>
           </div>
           <p className="text-muted-foreground text-sm">{t('footer.crafted')}</p>
