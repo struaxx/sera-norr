@@ -13,13 +13,13 @@ export function ServicePromises({ className, variant = 'default' }: ServicePromi
 
   const promises = isNL ? [
     'Ontworpen in Nederland',
-    '5 jaar garantie op alle stenen meubels',
+    '2 jaar garantie op alle stenen meubels',
     'Professionele levering en plaatsing inbegrepen',
     'Maatwerk mogelijk op aanvraag',
     'Persoonlijk advies vanuit onze studio',
   ] : [
     'Designed in the Netherlands',
-    '5-year warranty on all stone furniture',
+    '2-year warranty on all stone furniture',
     'Professional delivery and installation included',
     'Bespoke customization available on request',
     'Personal consultation in our Amsterdam showroom',

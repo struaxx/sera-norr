@@ -26,7 +26,7 @@ export function USPBullets({ className, variant = 'default' }: USPBulletsProps) 
     },
     {
       icon: Shield,
-      text: isNL ? '5 jaar garantie' : '5-year warranty',
+      text: isNL ? '2 jaar garantie' : '2-year warranty',
     },
   ];
 

@@ -20,7 +20,7 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
     },
     {
       icon: Shield,
-      title: isNL ? '5 Jaar Garantie' : '5 Year Warranty',
+      title: isNL ? '2 Jaar Garantie' : '2 Year Warranty',
       description: isNL ? 'Op alle stenen meubels' : 'On all stone furniture',
     },
     {
