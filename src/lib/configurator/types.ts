@@ -64,7 +64,6 @@ export interface ConfiguratorState {
     sealer: boolean;
     delivery: boolean;
     installation: boolean;
-    sampleKit: boolean;
   };
   
   // Contact info (for dossier)
