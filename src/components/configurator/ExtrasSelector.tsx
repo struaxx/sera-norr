@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Check, Package, Truck, Wrench, Palette } from 'lucide-react';
+import { Check, Truck, Wrench, Palette } from 'lucide-react';
 import type { ConfiguratorState } from '@/lib/configurator';
 import { EXTRAS_PRICING } from '@/lib/configurator';
 import { formatPrice } from '@/lib/configurator';
@@ -15,7 +15,6 @@ const EXTRAS_ICONS = {
   sealer: Palette,
   delivery: Truck,
   installation: Wrench,
-  sampleKit: Package,
 };
 
 const EXTRAS_DESCRIPTIONS = {
@@ -30,10 +29,6 @@ const EXTRAS_DESCRIPTIONS = {
   installation: {
     nl: 'Plaatsing en nivellering door ons team',
     en: 'Installation and leveling by our team',
-  },
-  sampleKit: {
-    nl: 'Materiaalmonsters vooraf ontvangen',
-    en: 'Receive material samples beforehand',
   },
 };
 
@@ -101,16 +96,6 @@ export function ExtrasSelector({ extras, onChange, isNL = true, className }: Ext
           );
         })}
       </div>
-
-      {/* Recommendation */}
-      {!extras.sampleKit && (
-        <p className="text-xs text-muted-foreground italic pt-2">
-          {isNL 
-            ? '💡 Tip: Bestel samples om de steen in uw ruimte te ervaren'
-            : '💡 Tip: Order samples to experience the stone in your space'
-          }
-        </p>
-      )}
     </div>
   );
 }
