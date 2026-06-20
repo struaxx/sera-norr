@@ -43,11 +43,16 @@ const Collections = () => {
 
       <section className="pb-24 lg:pb-32 bg-background">
         <div className="flex flex-col">
-          {STYLE_COLLECTIONS.map((c, i) => (
-            <Link
+          {STYLE_COLLECTIONS.map((c, i) => {
+            const Wrapper: any = c.comingSoon ? "div" : Link;
+            const wrapperProps = c.comingSoon
+              ? { "aria-disabled": true }
+              : { to: `/collections/${c.slug}` };
+            return (
+            <Wrapper
               key={c.slug}
-              to={`/collections/${c.slug}`}
-              className="group relative block w-full h-[45vh] lg:h-[60vh] overflow-hidden bg-muted border-b border-foreground/5"
+              {...wrapperProps}
+              className={`group relative block w-full h-[45vh] lg:h-[60vh] overflow-hidden bg-muted border-b border-foreground/5 ${c.comingSoon ? "cursor-default" : ""}`}
             >
               {c.cover && (
                 <BlurImage
@@ -61,7 +66,9 @@ const Collections = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-foreground/0 to-foreground/0 pointer-events-none" />
 
               {/* Hover overlay (desktop hover only) */}
-              <div className="absolute inset-0 bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              {!c.comingSoon && (
+                <div className="absolute inset-0 bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              )}
 
               {/* Text block */}
               <div className="absolute bottom-8 left-6 lg:bottom-12 lg:left-12 right-6 lg:right-12 text-background">
@@ -71,6 +78,11 @@ const Collections = () => {
                 <h2 className="font-serif text-3xl lg:text-5xl text-background">
                   {c.name}
                 </h2>
+                {c.comingSoon ? (
+                  <p className="mt-4 font-sans text-[10px] uppercase tracking-[0.25em] text-background/80">
+                    {isNL ? "Binnenkort beschikbaar" : "Coming soon"}
+                  </p>
+                ) : (
                 <div className="overflow-hidden">
                   <p className="text-sm lg:text-base text-background/85 mt-3 max-w-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
                     {c.tagline}
@@ -79,9 +91,11 @@ const Collections = () => {
                     {isNL ? "Bekijk project" : "View project"}
                   </span>
                 </div>
+                )}
               </div>
-            </Link>
-          ))}
+            </Wrapper>
+            );
+          })}
         </div>
       </section>
     </Layout>
