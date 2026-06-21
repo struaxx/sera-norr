@@ -99,8 +99,14 @@ const About = () => {
       {/* Founder Story */}
       <FounderStorySection isNL={isNL} />
 
+      {/* Over de oprichter */}
+      <FounderProfileSection isNL={isNL} />
+
       {/* Onze belofte - 2 kaarten */}
       <GuaranteeSection isNL={isNL} />
+
+      {/* Persoonlijke garantie */}
+      <PersonalGuaranteeSection isNL={isNL} />
 
       {/* Hoe wij werken - 4 blokken */}
       <InfoBlocksSection isNL={isNL} />
@@ -245,58 +251,52 @@ function InfoBlocksSection({ isNL }: { isNL: boolean }) {
       label: 'Herkomst',
       title: 'Waar onze steen vandaan komt',
       description: 'Onze steen komt uit de groeven die wereldwijd bekend staan om hun kwaliteit en karakter. Italiaans marmer uit Carrara en de Apuaanse Alpen, travertijn uit Italië en Turkije, kwartsiet uit Brazilië. Per project selecteren wij slabs op tekening, kleur en passend bij uw ontwerp. Geen voorraadsteen, geen toevalstreffer.',
-      tone: 'beige',
+      image: undefined as string | undefined,
     },
     {
       label: 'Productie',
       title: 'Vervaardigd in een vast atelier',
       description: 'Onze meubels worden vervaardigd in een gespecialiseerd steenatelier waarmee wij langdurig samenwerken. Een vaste partner, met ervaren steenhouwers en moderne techniek, die werkt volgens onze specificaties en kwaliteitsnormen.',
-      tone: 'stone',
+      image: undefined as string | undefined,
     },
     {
       label: 'Montage',
       title: 'White-glove levering en plaatsing',
       description: 'Levering en plaatsing verzorgen wij via een gespecialiseerde white-glove partner. Verzekerd transport, voorzichtige plaatsing op locatie, alle verpakking wordt direct meegenomen. Bij grotere of complexere installaties zijn wij zelf aanwezig.',
-      tone: 'graphite',
+      image: undefined as string | undefined,
     },
     {
       label: 'Contact',
       title: 'Eén aanspreekpunt',
       description: 'Korte lijnen. U heeft één aanspreekpunt vanaf eerste vraag tot na oplevering.',
-      tone: 'beige',
+      image: undefined as string | undefined,
     },
   ] : [
     {
       label: 'Origin',
       title: 'Where our stone comes from',
       description: 'Our stone comes from quarries known worldwide for their quality and character. Italian marble from Carrara and the Apuan Alps, travertine from Italy and Turkey, quartzite from Brazil. For each project we select slabs on figure, colour and fit with your design. No stock stone, no coincidence.',
-      tone: 'beige',
+      image: undefined as string | undefined,
     },
     {
       label: 'Production',
       title: 'Made in a dedicated atelier',
       description: 'Our furniture is made in a specialised stone atelier with whom we have a long-term partnership. A fixed partner, with experienced stonemasons and modern technique, working to our specifications and quality standards.',
-      tone: 'stone',
+      image: undefined as string | undefined,
     },
     {
       label: 'Delivery',
       title: 'White-glove delivery and placement',
       description: 'Delivery and placement are handled by a specialised white-glove partner. Insured transport, careful placement on site, all packaging removed immediately. For larger or more complex installations we are present ourselves.',
-      tone: 'graphite',
+      image: undefined as string | undefined,
     },
     {
       label: 'Contact',
       title: 'One point of contact',
       description: 'Short lines. You have one point of contact from first question through to after delivery.',
-      tone: 'beige',
+      image: undefined as string | undefined,
     },
   ];
-
-  const toneClass: Record<string, string> = {
-    beige: 'bg-[hsl(35_25%_82%)]',
-    stone: 'bg-[hsl(30_8%_62%)]',
-    graphite: 'bg-[hsl(220_6%_28%)]',
-  };
 
   return (
     <section className="py-24 lg:py-32" ref={ref}>
@@ -321,7 +321,11 @@ function InfoBlocksSection({ isNL }: { isNL: boolean }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
             {blocks.map((b) => (
               <article key={b.label} className="border border-foreground/10 bg-background overflow-hidden flex flex-col">
-                <div className={`${toneClass[b.tone]} aspect-[4/3]`} aria-hidden />
+                {b.image ? (
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img src={b.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+                  </div>
+                ) : null}
                 <div className="p-8 lg:p-10 flex-1 flex flex-col">
                   <span className="text-[11px] font-sans font-medium uppercase tracking-[0.2em] text-muted-foreground">
                     {b.label}
