@@ -381,3 +381,86 @@ function OriginSection({ isNL }: { isNL: boolean }) {
 }
 
 export default About;
+
+function FounderProfileSection({ isNL }: { isNL: boolean }) {
+  const { ref, isInView, variants } = useScrollReveal();
+
+  return (
+    <section className="py-24 lg:py-32 border-t border-foreground/10" ref={ref}>
+      <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+        <motion.div
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <div className="flex items-center gap-6 mb-10 lg:mb-12">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">
+              {isNL ? 'Over de oprichter' : 'About the founder'}
+            </span>
+            <Hairline className="flex-1" />
+          </div>
+
+          <h2 className="font-serif text-display-sm text-foreground leading-tight mb-3">
+            {isNL ? 'Wie staat er achter Sera Norr' : 'Who stands behind Sera Norr'}
+          </h2>
+          <h3 className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-foreground mb-2 mt-10">
+            Laurens Soedito
+          </h3>
+          <p className="font-sans text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
+            {isNL
+              ? 'Oprichter Sera Norr · Managing Director Ls Capital'
+              : 'Founder Sera Norr · Managing Director Ls Capital'}
+          </p>
+          <p className="font-sans text-base text-foreground/80 leading-relaxed mb-5">
+            {isNL
+              ? 'Via Ls Capital heb ik de afgelopen jaren tientallen high-end interieurbouw-projecten begeleid in Nederland. Ik ken de markt, de leveranciers, en de standaard die premium kopers verwachten. Sera Norr is het logische vervolg: hetzelfde niveau, maar in natuursteen.'
+              : 'Through Ls Capital I have guided dozens of high-end interior construction projects in the Netherlands over the past years. I know the market, the suppliers, and the standard that premium buyers expect. Sera Norr is the logical next step: the same level, but in natural stone.'}
+          </p>
+          <p className="font-sans text-base text-foreground/80 leading-relaxed">
+            {isNL
+              ? 'Dat betekent dat u niet met een webshop te maken heeft, maar met iemand die uw investering begrijpt en persoonlijk verantwoordelijk is voor het eindresultaat.'
+              : 'That means you are not dealing with a webshop, but with someone who understands your investment and is personally responsible for the end result.'}
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function PersonalGuaranteeSection({ isNL }: { isNL: boolean }) {
+  const { ref, isInView, variants } = useScrollReveal();
+
+  return (
+    <section className="bg-foreground text-background py-24 lg:py-32" ref={ref}>
+      <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+        <motion.div
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          className="border border-background/20 p-10 md:p-14"
+        >
+          <p className="font-sans text-[11px] uppercase tracking-[0.3em] text-background/50 mb-6">
+            {isNL ? 'Garantie' : 'Guarantee'}
+          </p>
+          <h2 className="font-serif text-3xl md:text-4xl tracking-[-0.01em] text-background mb-8 leading-tight">
+            {isNL ? 'Mijn persoonlijke garantie' : 'My personal guarantee'}
+          </h2>
+          <p className="font-sans text-base md:text-lg text-background/80 leading-relaxed mb-10">
+            {isNL
+              ? 'Ik sta met mijn naam voor elk stuk dat wij leveren. Niet tevreden binnen 30 dagen na levering? Volledig terugbetaald, ophalen op mijn kosten. Geen procedure, geen discussie.'
+              : 'I stand with my name behind every piece we deliver. Not satisfied within 30 days of delivery? Full refund, picked up at my cost. No procedure, no discussion.'}
+          </p>
+          <div className="pt-8 border-t border-background/15">
+            <p className="font-serif italic text-xl text-background mb-2">
+              Laurens Soedito
+            </p>
+            <p className="font-sans text-xs uppercase tracking-[0.25em] text-background/50">
+              {isNL ? 'Oprichter Sera Norr en Ls Capital' : 'Founder Sera Norr and Ls Capital'}
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
