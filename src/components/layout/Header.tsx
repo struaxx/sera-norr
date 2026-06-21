@@ -5,8 +5,6 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
-import { FoundersBanner } from "@/components/FoundersBanner";
-
 export function Header() {
   const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -53,7 +51,6 @@ export function Header() {
             : "bg-transparent"
         )}
       >
-        <FoundersBanner />
         {isLightText && (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[var(--banner-h,0px)] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
         )}
