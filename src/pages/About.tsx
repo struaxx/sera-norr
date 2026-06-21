@@ -409,18 +409,18 @@ function FounderProfileSection({ isNL }: { isNL: boolean }) {
           </h3>
           <p className="font-sans text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
             {isNL
-              ? 'Oprichter Sera Norr · Managing Director Ls Capital'
-              : 'Founder Sera Norr · Managing Director Ls Capital'}
+              ? 'Oprichter Sera Norr · Managing Director LS Capital'
+              : 'Founder Sera Norr · Managing Director LS Capital'}
           </p>
           <p className="font-sans text-base text-foreground/80 leading-relaxed mb-5">
             {isNL
-              ? 'Via Ls Capital heb ik de afgelopen jaren tientallen high-end interieurbouw-projecten begeleid in Nederland. Ik ken de markt, de leveranciers, en de standaard die premium kopers verwachten. Sera Norr is het logische vervolg: hetzelfde niveau, maar in natuursteen.'
-              : 'Through Ls Capital I have guided dozens of high-end interior construction projects in the Netherlands over the past years. I know the market, the suppliers, and the standard that premium buyers expect. Sera Norr is the logical next step: the same level, but in natural stone.'}
+              ? 'Via LS Capital begeleid ik al jaren high-end interieurbouw in Nederland. Ik ken de leveranciers, de groeven en de standaard die premium kopers verwachten. Sera Norr is daar het logische vervolg op: hetzelfde niveau, nu in natuursteen.'
+              : 'Through LS Capital I have guided high-end interior construction in the Netherlands for years. I know the suppliers, the quarries and the standard premium buyers expect. Sera Norr is the logical next step: the same level, now in natural stone.'}
           </p>
           <p className="font-sans text-base text-foreground/80 leading-relaxed">
             {isNL
-              ? 'Dat betekent dat u niet met een webshop te maken heeft, maar met iemand die uw investering begrijpt en persoonlijk verantwoordelijk is voor het eindresultaat.'
-              : 'That means you are not dealing with a webshop, but with someone who understands your investment and is personally responsible for the end result.'}
+              ? 'U heeft dus niet met een webshop te maken, maar met één persoon die uw project van eerste tekening tot oplevering bewaakt en er met zijn naam aan verbonden is.'
+              : 'So you are not dealing with a webshop, but with one person who guards your project from first drawing through to delivery and stands behind it with his name.'}
           </p>
         </motion.div>
       </div>
@@ -448,8 +448,14 @@ function PersonalGuaranteeSection({ isNL }: { isNL: boolean }) {
           </h2>
           <p className="font-sans text-base md:text-lg text-background/80 leading-relaxed mb-10">
             {isNL
-              ? 'Ik sta met mijn naam voor elk stuk dat wij leveren. Niet tevreden binnen 30 dagen na levering? Volledig terugbetaald, ophalen op mijn kosten. Geen procedure, geen discussie.'
-              : 'I stand with my name behind every piece we deliver. Not satisfied within 30 days of delivery? Full refund, picked up at my cost. No procedure, no discussion.'}
+              ? 'Ik kies per project de steen, leg de specificaties vast en bewaak de kwaliteit tot het stuk bij u staat. Eén aanspreekpunt, van eerste tekening tot oplevering. Klopt er iets niet, dan los ik het op.'
+              : 'For every project I select the stone, lock in the specifications and guard the quality until the piece stands with you. One point of contact, from first drawing through to delivery. If something is not right, I resolve it.'}
+          </p>
+          <p
+            className="text-background/70 text-3xl md:text-4xl mb-10 leading-none"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
+            Laurens Soedito
           </p>
           <div className="pt-8 border-t border-background/15">
             <p className="font-serif italic text-xl text-background mb-2">
