@@ -409,13 +409,13 @@ function FounderProfileSection({ isNL }: { isNL: boolean }) {
           </h3>
           <p className="font-sans text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
             {isNL
-              ? 'Oprichter Sera Norr · Managing Director LS Capital'
-              : 'Founder Sera Norr · Managing Director LS Capital'}
+              ? 'Oprichter Sera Norr · Managing Director Ls Capital'
+              : 'Oprichter Sera Norr · Managing Director Ls Capital'}
           </p>
           <p className="font-sans text-base text-foreground/80 leading-relaxed mb-5">
             {isNL
-              ? 'Via LS Capital begeleid ik al jaren high-end interieurbouw in Nederland. Ik ken de leveranciers, de groeven en de standaard die premium kopers verwachten. Sera Norr is daar het logische vervolg op: hetzelfde niveau, nu in natuursteen.'
-              : 'Through LS Capital I have guided high-end interior construction in the Netherlands for years. I know the suppliers, the quarries and the standard premium buyers expect. Sera Norr is the logical next step: the same level, now in natural stone.'}
+              ? 'Via Ls Capital begeleid ik al jaren high-end interieurbouw in Nederland. Ik ken de leveranciers, de groeven en de standaard die premium kopers verwachten. Sera Norr is daar het logische vervolg op: hetzelfde niveau, nu in natuursteen.'
+              : 'Through Ls Capital I have guided high-end interior construction in the Netherlands for years. I know the suppliers, the quarries and the standard premium buyers expect. Sera Norr is the logical next step: the same level, now in natural stone.'}
           </p>
           <p className="font-sans text-base text-foreground/80 leading-relaxed">
             {isNL
@@ -458,11 +458,10 @@ function PersonalGuaranteeSection({ isNL }: { isNL: boolean }) {
             Laurens Soedito
           </p>
           <div className="pt-8 border-t border-background/15">
-            <p className="font-serif italic text-xl text-background mb-2">
-              Laurens Soedito
-            </p>
             <p className="font-sans text-xs uppercase tracking-[0.25em] text-background/50">
-              {isNL ? 'Oprichter Sera Norr en Ls Capital' : 'Founder Sera Norr and Ls Capital'}
+              {isNL
+                ? 'Oprichter Sera Norr · Managing Director Ls Capital'
+                : 'Oprichter Sera Norr · Managing Director Ls Capital'}
             </p>
           </div>
         </motion.div>
