@@ -167,7 +167,22 @@ const handler = async (req: Request): Promise<Response> => {
           'samenwerking': 'Samenwerking',
         };
         const subjectLabel = body.subject ? (subjectMap[body.subject] || body.subject) : 'Contact';
-        
+
+        const formTypeLabels: Record<string, string> = {
+          contact: 'Contactformulier',
+          voorstel: 'Voorstel-aanvraag (configurator)',
+          lookbook: 'Lookbook-aanvraag',
+          bespoke: 'Maatwerk-aanvraag',
+        };
+        const formTypeLabel = formTypeLabels[body.form_type] || body.form_type;
+
+        const metadataRows = body.metadata && typeof body.metadata === 'object'
+          ? Object.entries(body.metadata)
+              .filter(([, v]) => v !== null && v !== undefined && v !== '')
+              .map(([k, v]) => `<tr><th>${k}</th><td>${String(v).replace(/[<>]/g, '')}</td></tr>`)
+              .join('')
+          : '';
+
         const adminHtml = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a1a;padding:20px}
@@ -176,16 +191,17 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #ddd}
 th{background:#f5f5f5;font-weight:500;width:120px}
 .msg{background:#f9f9f9;padding:20px;margin:15px 0;white-space:pre-wrap}
 </style></head><body>
-<h1>📩 Nieuw contactformulier</h1>
+<h1>📩 Nieuw ${formTypeLabel}</h1>
 <table>
-<tr><th>Naam</th><td>${sanitizeString(body.name) || '-'}</td></tr>
+<tr><th>Naam</th><td>${sanitizeString(body.name) || '— (niet opgegeven)'}</td></tr>
 <tr><th>Email</th><td><a href="mailto:${body.email}">${body.email}</a></td></tr>
 ${body.phone ? `<tr><th>Telefoon</th><td>${sanitizeString(body.phone)}</td></tr>` : ''}
 <tr><th>Onderwerp</th><td>${subjectLabel}</td></tr>
 <tr><th>Type</th><td>${body.form_type}</td></tr>
 </table>
-<h2>Bericht</h2>
-<div class="msg">${sanitizeString(body.message) || '-'}</div>
+${metadataRows ? `<h2>Configuratie</h2><table>${metadataRows}</table>` : ''}
+<h2>Bericht / notities</h2>
+<div class="msg">${sanitizeString(body.message) || '— (geen notities toegevoegd door klant)'}</div>
 <p style="color:#999;font-size:11px">Verzonden op ${new Date().toLocaleString('nl-NL', { timeZone: 'Europe/Amsterdam' })}</p>
 </body></html>`;
 
@@ -195,7 +211,7 @@ ${body.phone ? `<tr><th>Telefoon</th><td>${sanitizeString(body.phone)}</td></tr>
           body: JSON.stringify({
             from: "SERA NORR <onboarding@resend.dev>",
             to: ["info@sera-norr.com"],
-            subject: `📩 ${subjectLabel} — ${sanitizeString(body.name) || 'Onbekend'}`,
+            subject: `📩 ${formTypeLabel} — ${sanitizeString(body.name) || body.email}`,
             html: adminHtml,
           }),
         });
