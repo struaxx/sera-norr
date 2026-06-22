@@ -166,7 +166,15 @@ const handler = async (req: Request): Promise<Response> => {
           'maatwerk': 'Maatwerk',
           'samenwerking': 'Samenwerking',
         };
-        const subjectLabel = body.subject ? (subjectMap[body.subject] || body.subject) : 'Contact';
+        const subjectLabel = body.subject
+          ? (subjectMap[body.subject] || body.subject)
+          : (body.form_type === 'voorstel'
+              ? 'Voorstel-aanvraag via configurator'
+              : body.form_type === 'lookbook'
+                ? 'Lookbook-aanvraag'
+                : body.form_type === 'bespoke'
+                  ? 'Maatwerk-aanvraag'
+                  : 'Algemene vraag');
 
         const formTypeLabels: Record<string, string> = {
           contact: 'Contactformulier',
@@ -197,7 +205,6 @@ th{background:#f5f5f5;font-weight:500;width:120px}
 <tr><th>Email</th><td><a href="mailto:${body.email}">${body.email}</a></td></tr>
 ${body.phone ? `<tr><th>Telefoon</th><td>${sanitizeString(body.phone)}</td></tr>` : ''}
 <tr><th>Onderwerp</th><td>${subjectLabel}</td></tr>
-<tr><th>Type</th><td>${body.form_type}</td></tr>
 </table>
 ${metadataRows ? `<h2>Configuratie</h2><table>${metadataRows}</table>` : ''}
 <h2>Bericht / notities</h2>
