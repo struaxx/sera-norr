@@ -34,7 +34,7 @@ export function ActInvitation({ isNL }: { isNL: boolean }) {
           variants={riseStagger(0.1)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.1 }}
         >
           <motion.p
             variants={rise}
@@ -98,7 +98,7 @@ export function ActInvitation({ isNL }: { isNL: boolean }) {
           className="mt-24 max-w-3xl mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <HairlineDraw />
