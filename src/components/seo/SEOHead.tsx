@@ -146,7 +146,8 @@ export const organizationSchema = {
   },
   contactPoint: {
     '@type': 'ContactPoint',
-     email: 'info@sera-norr.com',
+  email: 'info@sera-norr.com',
+  telephone: '+31 6 83 99 11 58',
     contactType: 'customer service',
     availableLanguage: ['Dutch', 'English'],
   },
@@ -248,6 +249,7 @@ export const localBusinessSchema = {
   image: 'https://sera-norr.com/og-image.jpg',
   url: 'https://sera-norr.com',
   email: 'info@sera-norr.com',
+  telephone: '+31 6 83 99 11 58',
   description: 'Online atelier voor maatwerk meubels in natuursteen. Travertin, marmer en geselecteerde steensoorten. Ontworpen in Nederland.',
   areaServed: {
     '@type': 'Country',

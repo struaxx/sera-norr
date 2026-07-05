@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Instagram, Mail } from "lucide-react";
+import { Instagram, Mail, Phone } from "lucide-react";
 import { CookiePreferencesButton } from "@/components/CookieBanner";
 
 export function Footer() {
@@ -24,6 +24,10 @@ export function Footer() {
               <a href="mailto:info@sera-norr.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
                 <Mail className="h-4 w-4" />
                 info@sera-norr.com
+              </a>
+              <a href="tel:+31683991158" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Phone className="h-4 w-4" />
+                +31 6 83 99 11 58
               </a>
             </div>
 
