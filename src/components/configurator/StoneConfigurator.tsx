@@ -81,9 +81,9 @@ export default function StoneConfigurator() {
   return (
     <div className="bg-sera-bg text-sera-text">
       {/* 1. Heading */}
-      <h2 className="font-serif text-3xl md:text-5xl text-sera-text leading-tight mb-4">
+      <h1 className="font-serif text-3xl md:text-5xl text-sera-text leading-tight mb-4">
         Configureer uw natuurstenen tafel op maat
-      </h2>
+      </h1>
 
       {/* 2. Subtitle */}
       <p className="text-base md:text-lg text-sera-text-soft leading-relaxed mb-8 max-w-3xl">

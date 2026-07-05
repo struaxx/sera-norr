@@ -14,9 +14,10 @@ function HelpSidebar({ isNL }: { isNL: boolean }) {
     <div className="fixed bottom-6 right-6 z-40">
       <Link
         to="/contact?subject=advies"
+        aria-label={isNL ? "Plan kort advies" : "Schedule quick advice"}
         className="flex items-center gap-2 px-4 py-2.5 bg-background border border-foreground/10 text-sm text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors shadow-sm"
       >
-        <Phone className="w-4 h-4" />
+        <Phone className="w-4 h-4" aria-hidden="true" />
         <span className="hidden sm:inline">{isNL ? "Plan kort advies" : "Schedule quick advice"}</span>
       </Link>
     </div>
