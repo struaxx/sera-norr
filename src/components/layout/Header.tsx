@@ -18,12 +18,14 @@ export function Header() {
   const desktopNavLinks = [
     { name: t('nav.collections'), path: "/collections" },
     { name: t('nav.about', 'Over'), path: "/over" },
+    { name: t('nav.contact'), path: "/contact" },
   ];
 
   const mobileNavLinks = [
     { name: t('nav.collections'), path: "/collections" },
     { name: t('nav.atelier', 'Atelier'), path: "/atelier" },
     { name: t('nav.about', 'Over'), path: "/over" },
+    { name: t('nav.contact'), path: "/contact" },
   ];
 
   useEffect(() => {
