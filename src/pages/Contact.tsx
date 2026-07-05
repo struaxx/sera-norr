@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, ArrowRight, CheckCircle } from "lucide-react";
+import { Mail, ArrowRight, CheckCircle, Phone } from "lucide-react";
 import { SEOHead, localBusinessSchema, generateBreadcrumbSchema } from "@/components/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { trackLeadSubmit } from "@/lib/analytics";
@@ -146,14 +146,23 @@ const Contact = () => {
                 : 'Share your question or idea. We help you find the right direction.'}
             </p>
             
-            {/* Email contact */}
-            <a 
-              href="mailto:info@sera-norr.com" 
-              className="inline-flex items-center gap-3 text-body-md text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Mail className="w-4 h-4" strokeWidth={1.5} />
-              info@sera-norr.com
-            </a>
+            {/* Contact links */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+              <a 
+                href="mailto:info@sera-norr.com" 
+                className="inline-flex items-center gap-3 text-body-md text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Mail className="w-4 h-4" strokeWidth={1.5} />
+                info@sera-norr.com
+              </a>
+              <a 
+                href="tel:+31683991158" 
+                className="inline-flex items-center gap-3 text-body-md text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Phone className="w-4 h-4" strokeWidth={1.5} />
+                +31 6 83 99 11 58
+              </a>
+            </div>
           </div>
         </div>
       </section>
