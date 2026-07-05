@@ -1,6 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { STONE_LIBRARY } from "@/lib/configurator/stone-library";
+import { STONE_LIBRARY } from "../../configurator/stone-library";
 
 export default defineTool({
   name: "list_stones",
