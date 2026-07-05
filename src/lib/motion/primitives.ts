@@ -6,8 +6,8 @@
 
 import { useReducedMotion, type Variants, type Transition } from 'framer-motion';
 
-const easeOutQuart: Transition['ease'] = [0.16, 1, 0.3, 1];
-const easeOutCubic: Transition['ease'] = [0.33, 1, 0.68, 1];
+const easeOutQuart = [0.16, 1, 0.3, 1] as const;
+const easeOutCubic = [0.33, 1, 0.68, 1] as const;
 
 /**
  * RISE — reveal on section entry.
