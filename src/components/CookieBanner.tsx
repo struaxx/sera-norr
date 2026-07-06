@@ -38,6 +38,16 @@ export function CookieBanner() {
       initMarketingScripts();
     }
   }, []);
+
+  useEffect(() => {
+    const handleOpen = () => {
+      setConsentState(getConsent());
+      setShowPreferences(true);
+      setIsVisible(true);
+    };
+    window.addEventListener('open-cookie-preferences', handleOpen);
+    return () => window.removeEventListener('open-cookie-preferences', handleOpen);
+  }, []);
   
   const handleAcceptAll = () => {
     const newConsent = acceptAll();
