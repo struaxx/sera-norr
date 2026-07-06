@@ -75,6 +75,7 @@ const About = () => {
         </div>
         <div className="relative z-10 w-full pb-16 lg:pb-24">
           <div className="container mx-auto px-6 lg:px-12">
+            <Breadcrumbs className="mb-6 opacity-50 text-[10px] text-background/60" />
             <div className="max-w-2xl">
               <p className="text-[10px] font-sans font-medium uppercase tracking-[0.25em] text-background/50 mb-4">
                 {isNL ? 'Over het atelier' : 'About the atelier'}
