@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -45,88 +45,11 @@ const Index = () => {
         structuredData={baseSchema} />
 
       {/* ============================================
-           HERO - Dual CTA: Ontwerp uw tafel + Collecties
+           CINEMATIC HERO — pinned scroll reveal
+           (Hero + Intro info in één beweging)
            ============================================ */}
-      <section className="relative h-screen flex items-end overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
-          <img
-            src={heroImage}
-            alt={isNL ? "SERA NORR - Luxe stenen meubels op maat" : "SERA NORR - Luxury bespoke stone furniture"}
-            className="w-full h-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
-          
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-foreground/42" />
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/98 via-foreground/90 to-foreground/68" />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/76 via-foreground/38 to-foreground/62" />
-          <div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_88%_at_center,hsl(var(--foreground)/0.56)_0%,hsl(var(--foreground)/0.40)_42%,transparent_78%)]" />
-        </div>
-        
-        {/* Content - centered */}
-        <div className="relative z-10 w-full pb-20 lg:pb-24">
-          <div className="container mx-auto px-6 lg:px-12">
-            <div className="max-w-3xl mx-auto text-center [text-shadow:0_8px_32px_hsl(var(--foreground)/0.72)]">
-              {/* Micro-label */}
-              <p className="inline-block text-[10px] font-sans uppercase tracking-[0.25em] text-background mb-4 font-extrabold">
-                {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
-              </p>
-              
-              {/* H1 */}
-              <h1 className="font-serif font-semibold text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-background mb-4 leading-[1.05] tracking-[-0.02em]">
-                {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
-              </h1>
-              
-              {/* Subcopy */}
-              <p className="font-sans text-base lg:text-lg font-medium text-background max-w-2xl mx-auto mb-8">
-                {isNL ?
-                "Maatwerk in marmer, vanaf €1.950." :
-                "Bespoke in marble, from €1,950."}
-              </p>
-              
-              {/* Dual CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8 shadow-[0_10px_30px_hsl(var(--foreground)/0.28)]">
-                  <Link to="/atelier">
-                    {isNL ? "Ontwerp uw tafel" : "Design your table"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost" size="default" className="text-background hover:text-background hover:bg-background/12 h-12 px-6">
-                  <Link to="/collections">
-                    {isNL ? "Bekijk lookbook" : "View lookbook"}
-                  </Link>
-                </Button>
-              </div>
-              
-              {/* Trust rail */}
-              <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background">
-                <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
-                <span className="hidden sm:inline text-background/70">·</span>
-                <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
-                <span className="hidden sm:inline text-background/70">·</span>
-                <span>{isNL ? '12–16 weken' : '12–16 weeks'}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <CinematicHero isNL={isNL} scrollLabel={t('home.scroll')} />
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background">
-          <span className="text-[10px] uppercase tracking-[0.2em]">{t('home.scroll')}</span>
-          <div className="w-px h-8 bg-background/60" />
-        </div>
-      </section>
-
-      {/* ============================================
-           INTRO - Short, scannable
-           ============================================ */}
-      <IntroSection isNL={isNL} />
-      
       {/* Sticky mobile CTA */}
       <StickyMobileCTA isNL={isNL} />
 
@@ -157,6 +80,140 @@ const Index = () => {
     </Layout>);
 
 };
+
+// ============================================
+// CINEMATIC HERO — pinned scroll reveal
+// Combines hero + intro info in one continuous
+// scroll-driven motion. Same info retained.
+// ============================================
+function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: string }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Image: subtle zoom + slow parallax rise
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.18]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
+
+  // Extra dark veil intensifies as intro takes over
+  const veilOpacity = useTransform(scrollYProgress, [0.25, 0.75], [0, 0.55]);
+
+  // Hero content fades out first
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.28, 0.42], [1, 1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.42], ["0%", "-6%"]);
+
+  // Intro info fades in as hero fades out
+  const introOpacity = useTransform(scrollYProgress, [0.45, 0.7], [0, 1]);
+  const introY = useTransform(scrollYProgress, [0.45, 0.85], ["4%", "0%"]);
+
+  // Scroll indicator fades away quickly
+  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+
+  return (
+    <div ref={wrapperRef} className="relative h-[260vh]">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-end">
+        {/* Background image (scaled + parallax) */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ scale: imageScale, y: imageY }}
+        >
+          <img
+            src={heroImage}
+            alt={isNL ? "SERA NORR - Luxe stenen meubels op maat" : "SERA NORR - Luxury bespoke stone furniture"}
+            className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </motion.div>
+
+        {/* Base gradient overlays (unchanged look) */}
+        <div className="absolute inset-0 bg-foreground/42 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-foreground/98 via-foreground/90 to-foreground/68 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/76 via-foreground/38 to-foreground/62 pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_88%_at_center,hsl(var(--foreground)/0.56)_0%,hsl(var(--foreground)/0.40)_42%,transparent_78%)] pointer-events-none" />
+
+        {/* Scroll-driven darkening veil */}
+        <motion.div
+          className="absolute inset-0 bg-foreground pointer-events-none"
+          style={{ opacity: veilOpacity }}
+        />
+
+        {/* HERO CONTENT LAYER */}
+        <motion.div
+          className="absolute inset-0 z-10 flex items-end"
+          style={{ opacity: heroOpacity, y: heroY }}
+        >
+          <div className="w-full pb-20 lg:pb-24">
+            <div className="container mx-auto px-6 lg:px-12">
+              <div className="max-w-3xl mx-auto text-center [text-shadow:0_8px_32px_hsl(var(--foreground)/0.72)]">
+                <p className="inline-block text-[10px] font-sans uppercase tracking-[0.25em] text-background mb-4 font-extrabold">
+                  {isNL ? 'Online atelier voor natuursteen' : 'Online atelier for natural stone'}
+                </p>
+
+                <h1 className="font-serif font-semibold text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] text-background mb-4 leading-[1.05] tracking-[-0.02em]">
+                  {isNL ? "Sculpturale vormen in natuursteen." : "Sculptural forms in natural stone."}
+                </h1>
+
+                <p className="font-sans text-base lg:text-lg font-medium text-background max-w-2xl mx-auto mb-8">
+                  {isNL ?
+                    "Maatwerk in marmer, vanaf €1.950." :
+                    "Bespoke in marble, from €1,950."}
+                </p>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8 shadow-[0_10px_30px_hsl(var(--foreground)/0.28)]">
+                    <Link to="/atelier">
+                      {isNL ? "Ontwerp uw tafel" : "Design your table"}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="ghost" size="default" className="text-background hover:text-background hover:bg-background/12 h-12 px-6">
+                    <Link to="/collections">
+                      {isNL ? "Bekijk lookbook" : "View lookbook"}
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="mt-10 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.12em] text-background">
+                  <span>{isNL ? 'Ontworpen in NL' : 'Designed in NL'}</span>
+                  <span className="hidden sm:inline text-background/70">·</span>
+                  <span>{isNL ? '2 jaar garantie' : '2 year warranty'}</span>
+                  <span className="hidden sm:inline text-background/70">·</span>
+                  <span>{isNL ? '12–16 weken' : '12–16 weeks'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* INTRO CONTENT LAYER (same info as former IntroSection) */}
+        <motion.div
+          className="absolute inset-0 z-10 flex items-center justify-center px-6 lg:px-12"
+          style={{ opacity: introOpacity, y: introY }}
+        >
+          <p className="font-serif text-2xl lg:text-4xl text-background text-center max-w-3xl leading-[1.35] [text-shadow:0_8px_32px_hsl(var(--foreground)/0.9)]">
+            {isNL ?
+              "Wij ontwerpen en vervaardigen meubels in natuursteen. Elk stuk is uniek, op maat gemaakt en geleverd met white-glove service." :
+              "We design and craft furniture in natural stone. Each piece is unique, made to measure and delivered with white-glove service."}
+          </p>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-background z-20"
+          style={{ opacity: indicatorOpacity }}
+        >
+          <span className="text-[10px] uppercase tracking-[0.2em]">{scrollLabel}</span>
+          <div className="w-px h-8 bg-background/60" />
+        </motion.div>
+      </div>
+    </div>
+  );
+}
 
 // ============================================
 // INTRO SECTION
