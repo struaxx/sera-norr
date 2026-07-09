@@ -192,7 +192,7 @@ function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: stri
 
         {/* INTRO CONTENT LAYER (same info as former IntroSection) */}
         <motion.div
-          className="absolute inset-0 z-10 flex items-center justify-center px-6 lg:px-12"
+          className="absolute inset-0 z-10 flex items-center justify-center px-6 lg:px-12 pointer-events-none"
           style={{ opacity: introOpacity, y: introY }}
         >
           <p className="font-serif text-2xl lg:text-4xl text-background text-center max-w-3xl leading-[1.35] [text-shadow:0_8px_32px_hsl(var(--foreground)/0.9)]">
