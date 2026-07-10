@@ -1,0 +1,12 @@
+{
+  // Cloudflare deployment config for a static single-page application.
+  // The built site in ./dist is served directly as static assets — there is
+  // no server-side Worker code. `not_found_handling` makes client-side routes
+  // (e.g. /atelier) resolve to index.html instead of returning 404.
+  "name": "sera-norr",
+  "compatibility_date": "2024-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
