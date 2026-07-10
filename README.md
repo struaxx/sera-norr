@@ -1,73 +1,109 @@
-# Welcome to your Lovable project
+# SERA NORR
 
-## Project info
+Website for SERA NORR — a digital bespoke atelier for sculptural natural stone
+furniture (travertine, Calacatta Viola and other rare stones). Custom dining
+tables, coffee tables and consoles designed in the Netherlands.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+This is a standalone Vite single-page application. It was originally created in
+Lovable and has been decoupled so it can be built, run and hosted anywhere.
 
-## How can I edit this code?
+## Tech stack
 
-There are several ways of editing your application.
+- **Vite** + **React 18** + **TypeScript**
+- **Tailwind CSS** + **shadcn/ui** (Radix primitives)
+- **React Router** for routing
+- **Three.js / react-three-fiber** for the 3D product configurator
+- **Supabase** as the backend (forms, configurator API, analytics, email)
+- **i18next** for NL/EN translations
 
-**Use Lovable**
+## Requirements
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- [Node.js](https://nodejs.org/) 18+ and npm
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Getting started
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# 1. Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2. Configure environment variables
+cp .env.example .env
+# (the .env.example already contains the public Supabase keys, so the
+#  site works out of the box; replace them with your own if you fork the backend)
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 3. Start the dev server (http://localhost:8080)
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Available scripts
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| Command             | Description                                    |
+| ------------------- | ---------------------------------------------- |
+| `npm run dev`       | Start the Vite dev server on port 8080         |
+| `npm run build`     | Production build into `dist/`                  |
+| `npm run build:dev` | Development-mode build                         |
+| `npm run preview`   | Preview the production build locally           |
+| `npm run lint`      | Run ESLint                                     |
 
-**Use GitHub Codespaces**
+## Environment variables
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+All variables are prefixed with `VITE_` and are read at build time. See
+[`.env.example`](./.env.example):
 
-## What technologies are used for this project?
+| Variable                         | Description                          |
+| -------------------------------- | ------------------------------------ |
+| `VITE_SUPABASE_URL`              | Supabase project URL                 |
+| `VITE_SUPABASE_PUBLISHABLE_KEY`  | Supabase anon/publishable key        |
+| `VITE_SUPABASE_PROJECT_ID`       | Supabase project id                  |
 
-This project is built with:
+The Supabase publishable key is a public browser key and is safe to ship in the
+client bundle.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Deployment
 
-## How can I deploy this project?
+`npm run build` outputs a static site to `dist/`. Upload it to any static host
+(Netlify, Vercel, Cloudflare Pages, GitHub Pages, S3 + CloudFront, nginx, …).
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Because this is a client-side–routed SPA, the host **must** rewrite unknown
+paths to `index.html` (otherwise deep links like `/atelier` return 404). Config
+is already included for the common hosts:
 
-## Can I connect a custom domain to my Lovable project?
+- **Netlify / Cloudflare Pages** — [`public/_redirects`](./public/_redirects)
+  (build command `npm run build`, publish directory `dist`)
+- **Vercel** — [`vercel.json`](./vercel.json)
+- **nginx** — add an SPA fallback:
 
-Yes, you can!
+  ```nginx
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+  ```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **Apache** — add a `.htaccess` with `FallbackResource /index.html`
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Remember to set the `VITE_*` environment variables in your host's build
+settings before building.
+
+## Backend (Supabase)
+
+The `supabase/` directory contains the database migrations and edge functions
+that power the contact forms, the configurator API, analytics and confirmation
+emails. The frontend talks to the hosted Supabase project referenced in
+`.env`. If you want to run your own backend, deploy these with the
+[Supabase CLI](https://supabase.com/docs/guides/cli) and point the `VITE_*`
+variables at your project.
+
+## Project structure
+
+```
+src/
+  components/     UI + feature components (configurator, atelier, layout, seo, ui)
+  pages/          Route pages
+  lib/            Utilities, configurator engine, analytics, tracking
+  integrations/   Supabase client + generated types
+  i18n/           Translations (NL/EN)
+  hooks/          React hooks
+  stores/         Zustand stores
+public/           Static assets
+supabase/         Database migrations + edge functions
+```
