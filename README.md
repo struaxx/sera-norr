@@ -68,9 +68,10 @@ Because this is a client-side–routed SPA, the host **must** rewrite unknown
 paths to `index.html` (otherwise deep links like `/atelier` return 404). Config
 is already included for the common hosts:
 
-- **Netlify / Cloudflare Pages** — [`public/_redirects`](./public/_redirects)
-  (build command `npm run build`, publish directory `dist`)
+- **Cloudflare (Workers / Pages)** — [`wrangler.jsonc`](./wrangler.jsonc)
+  serves `dist/` as static assets with SPA not-found handling
 - **Vercel** — [`vercel.json`](./vercel.json)
+- **Netlify** — add a `public/_redirects` file containing `/*  /index.html  200`
 - **nginx** — add an SPA fallback:
 
   ```nginx
