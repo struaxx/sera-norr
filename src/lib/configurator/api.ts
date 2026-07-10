@@ -3,6 +3,7 @@
 // ============================================
 
 import { supabase } from '@/integrations/supabase/client';
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/config';
 import type { ConfiguratorState, PriceEstimate } from './types';
 
 const getSessionId = (): string => {
@@ -68,13 +69,13 @@ export async function loadConfiguration(buildCode: string): Promise<LoadConfigRe
 
     // Need to use query params for load action
     const response = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/configurator-api?action=load&buildCode=${encodeURIComponent(buildCode)}`,
+      `${SUPABASE_URL}/functions/v1/configurator-api?action=load&buildCode=${encodeURIComponent(buildCode)}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-session-id': getSessionId(),
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
         },
       }
     );
@@ -92,12 +93,12 @@ export async function loadConfiguration(buildCode: string): Promise<LoadConfigRe
 export async function calculatePriceServer(config: ConfiguratorState): Promise<PriceEstimate | null> {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/configurator-api?action=calculate`,
+      `${SUPABASE_URL}/functions/v1/configurator-api?action=calculate`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ configuration: config }),
       }
