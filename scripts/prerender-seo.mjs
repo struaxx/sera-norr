@@ -109,6 +109,54 @@ function setLink(html, rel, href, extra = '') {
   return html.replace('</head>', `    ${tag}\n</head>`);
 }
 
+// Organization + WebSite JSON-LD, baked statically so crawlers that skip JS
+// still see it. The client-side SEOHead injects the same @ids, so consumers
+// that run JS dedupe on @id.
+const BASE_JSONLD = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}/#organization`,
+      name: 'SERA NORR',
+      url: SITE,
+      logo: { '@type': 'ImageObject', url: `${SITE}/logo.png`, caption: 'SERA NORR logo' },
+      image: OG_IMAGE,
+      description:
+        'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Ontworpen in Nederland.',
+      areaServed: { '@type': 'Country', name: 'Netherlands' },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: 'info@sera-norr.com',
+        telephone: '+31 6 83 99 11 58',
+        contactType: 'customer service',
+        availableLanguage: ['Dutch', 'English'],
+      },
+      sameAs: ['https://www.instagram.com/seranorr/', 'https://www.pinterest.com/seranorr/'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}/#website`,
+      name: 'SERA NORR',
+      url: SITE,
+      publisher: { '@id': `${SITE}/#organization` },
+      inLanguage: ['nl', 'en'],
+    },
+  ],
+});
+
+// Replace the static hreflang block with per-route alternates.
+function setHreflang(html, url) {
+  html = html.replace(/[ \t]*<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*>\s*\n?/gi, '');
+  const sep = url.includes('?') ? '&' : '?';
+  const block = [
+    `    <link rel="alternate" hreflang="nl" href="${url}" />`,
+    `    <link rel="alternate" hreflang="en" href="${url}${sep}lang=en" />`,
+    `    <link rel="alternate" hreflang="x-default" href="${url}" />`,
+  ].join('\n');
+  return html.replace('</head>', `${block}\n</head>`);
+}
+
 function render(template, route, meta) {
   const title = brand(meta.title);
   const url = `${SITE}${route}`;
@@ -118,14 +166,36 @@ function render(template, route, meta) {
   html = setMeta(html, 'name', 'description', meta.description);
   html = setMeta(html, 'property', 'og:title', title);
   html = setMeta(html, 'property', 'og:description', meta.description);
+  html = setMeta(html, 'property', 'og:type', meta.type || 'website');
   html = setMeta(html, 'property', 'og:url', url);
   html = setMeta(html, 'property', 'og:image', OG_IMAGE);
+  html = setMeta(html, 'property', 'og:image:width', '1200');
+  html = setMeta(html, 'property', 'og:image:height', '630');
+  html = setMeta(html, 'property', 'og:site_name', 'SERA NORR');
   html = setMeta(html, 'name', 'twitter:title', title);
   html = setMeta(html, 'name', 'twitter:description', meta.description);
   html = setMeta(html, 'name', 'twitter:image', OG_IMAGE);
   html = setLink(html, 'canonical', url);
+  html = setHreflang(html, url);
   if (meta.noindex) html = setMeta(html, 'name', 'robots', 'noindex,nofollow');
+  html = html.replace(
+    '</head>',
+    `    <script type="application/ld+json">${BASE_JSONLD}</script>\n</head>`
+  );
   return html;
+}
+
+// Sitemap: only canonical, indexable routes — generated from the same ROUTES
+// map so it can never drift from what is actually prerendered.
+function buildSitemap() {
+  const urls = Object.entries(ROUTES)
+    .filter(([, meta]) => !meta.noindex)
+    .map(([route]) => {
+      const priority = route === '/' ? '1.0' : route.split('/').length > 2 ? '0.7' : '0.8';
+      return `  <url><loc>${SITE}${route}</loc><priority>${priority}</priority></url>`;
+    })
+    .join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
 const template = await readFile(path.join(DIST, 'index.html'), 'utf8');
@@ -140,4 +210,5 @@ for (const [route, meta] of Object.entries(ROUTES)) {
   await writeFile(outPath, html);
   count++;
 }
-console.log(`Prerendered SEO for ${count} routes.`);
+await writeFile(path.join(DIST, 'sitemap.xml'), buildSitemap());
+console.log(`Prerendered SEO for ${count} routes + sitemap.xml.`);

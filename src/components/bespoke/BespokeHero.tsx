@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, useInView, useReducedMotion } from "fr
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { ArrowRight } from "lucide-react";
-import bespokeHeroImage from "@/assets/bespoke-hero.png";
+import bespokeHeroImage from "@/assets/bespoke-hero.webp";
 import terraImage from "@/assets/terra-collection.jpg";
 import vantaImage from "@/assets/vanta-collection.jpg";
 
