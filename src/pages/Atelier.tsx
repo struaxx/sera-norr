@@ -37,8 +37,8 @@ export default function Atelier() {
         ]}
       />
       <SEOHead
-        title={isNL ? "Configureer Uw Tafel | Sera Norr Atelier" : "Configure Your Table | Sera Norr Atelier"}
-        description={isNL ? "Steensoort, formaat, onderstel. Directe prijsindicatie. Geen verplichtingen." : "Stone, size, base. Instant price indication. No obligations."}
+        title={isNL ? "Natuurstenen Tafel op Maat Samenstellen | Sera Norr Atelier" : "Design Your Natural Stone Table | Sera Norr Atelier"}
+        description={isNL ? "Stel uw natuurstenen tafel op maat samen: steensoort, formaat, onderstel. Directe prijsindicatie. Geen verplichtingen." : "Design your bespoke natural stone table: stone, size, base. Instant price indication. No obligations."}
       />
 
       <main className="min-h-screen bg-sera-bg">

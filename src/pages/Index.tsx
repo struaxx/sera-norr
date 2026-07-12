@@ -23,16 +23,16 @@ const Index = () => {
   usePageTracking();
 
   const seoTitle = isNL ?
-  "SERA NORR | Stenen Meubels op Maat" :
-  "SERA NORR | Bespoke Stone Furniture";
+  "SERA NORR | Natuurstenen Tafels op Maat" :
+  "SERA NORR | Bespoke Natural Stone Tables";
 
   const seoDescription = isNL ?
-  "Handgemaakte eettafels en salontafels in Calacatta Viola, Travertijn en Statuario. Op maat, white-glove geleverd." :
-  "Handcrafted dining and coffee tables in Calacatta Viola, Travertine and Statuario. Bespoke, white-glove delivery.";
+  "Natuurstenen tafels op maat: handgemaakte eettafels en salontafels in travertijn, Calacatta Viola en Statuario. White-glove geleverd." :
+  "Bespoke natural stone tables: handcrafted dining and coffee tables in travertine, Calacatta Viola and Statuario. White-glove delivery.";
 
   const seoKeywords = isNL ?
-  "SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel" :
-  "SERA NORR, online atelier, bespoke natural stone furniture, travertine table, custom marble table, Calacatta Viola, stone dining table";
+  "natuurstenen tafel, natuurstenen eettafel, tafel van natuursteen, SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, travertijn eettafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel" :
+  "natural stone table, natural stone dining table, SERA NORR, online atelier, bespoke natural stone furniture, travertine table, custom marble table, Calacatta Viola, stone dining table";
 
   return (
     <Layout>
@@ -160,8 +160,8 @@ function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: stri
 
                 <p className="font-sans text-base lg:text-lg font-medium text-background max-w-2xl mx-auto mb-8">
                   {isNL ?
-                    "Maatwerk in marmer, vanaf €1.950." :
-                    "Bespoke in marble, from €1,950."}
+                    "Natuurstenen tafels op maat, vanaf €1.950." :
+                    "Bespoke natural stone tables, from €1,950."}
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
