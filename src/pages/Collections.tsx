@@ -10,11 +10,11 @@ const Collections = () => {
   const isNL = (i18n.resolvedLanguage ?? i18n.language ?? "nl").toLowerCase().startsWith("nl");
 
   const seoTitle = isNL
-    ? "Lookbook | Sera Norr"
-    : "Lookbook | Sera Norr";
+    ? "Lookbook Natuurstenen Tafels | Sera Norr"
+    : "Natural Stone Table Lookbook | Sera Norr";
   const seoDescription = isNL
-    ? "Lookbook ter inspiratie: ingerichte interieurs als startpunt voor uw eigen ontwerp in natuursteen."
-    : "Lookbook for inspiration: curated interiors as a starting point for your own bespoke stone design.";
+    ? "Lookbook ter inspiratie: interieurs met natuurstenen tafels als startpunt voor uw eigen ontwerp in travertijn of marmer."
+    : "Lookbook for inspiration: interiors with natural stone tables as a starting point for your own design in travertine or marble.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },

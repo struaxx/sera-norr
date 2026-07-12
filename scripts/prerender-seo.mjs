@@ -20,18 +20,19 @@ const OG_IMAGE = `${SITE}/og-image.jpg`;
 // path -> { title, description, noindex? }
 const ROUTES = {
   '/': {
-    title: 'SERA NORR | Stenen Meubels op Maat',
+    title: 'SERA NORR | Natuurstenen Tafels op Maat',
     description:
-      'Handgemaakte eettafels en salontafels in Calacatta Viola, Travertijn en Statuario. Op maat, white-glove geleverd.',
+      'Natuurstenen tafels op maat: handgemaakte eettafels en salontafels in travertijn, Calacatta Viola en Statuario. White-glove geleverd.',
   },
   '/collections': {
-    title: 'Lookbook | Sera Norr',
+    title: 'Lookbook Natuurstenen Tafels | Sera Norr',
     description:
-      'Lookbook ter inspiratie: ingerichte interieurs als startpunt voor uw eigen ontwerp in natuursteen.',
+      'Lookbook ter inspiratie: interieurs met natuurstenen tafels als startpunt voor uw eigen ontwerp in travertijn of marmer.',
   },
   '/atelier': {
-    title: 'Configureer Uw Tafel | Sera Norr Atelier',
-    description: 'Steensoort, formaat, onderstel. Directe prijsindicatie. Geen verplichtingen.',
+    title: 'Natuurstenen Tafel op Maat Samenstellen | Sera Norr Atelier',
+    description:
+      'Stel uw natuurstenen tafel op maat samen: steensoort, formaat, onderstel. Directe prijsindicatie. Geen verplichtingen.',
   },
   '/over': {
     title: 'Over Sera Norr | Atelier voor natuursteen meubels op maat',
