@@ -28,7 +28,9 @@ const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:b
 
 export default function StoneConfigurator() {
   const navigate = useNavigate();
-  const [stoneId, setStoneId]     = useState<string>('calacatta-viola');
+  // Start met de instap-steen zodat de eerste prijsindicatie het laagste
+  // eerlijke bedrag toont; premium stenen verhogen de prijs zichtbaar bij keuze.
+  const [stoneId, setStoneId]     = useState<string>('classic-cloudy');
   const [shape, setShape]         = useState<RuleShape>('corner');
   const [lengthMm, setLengthMm]   = useState<number>(2000);
   const [widthMm, setWidthMm]     = useState<number>(900);
@@ -262,10 +264,15 @@ export default function StoneConfigurator() {
         <div className="font-serif text-3xl text-sera-text">
           €{range.low.toLocaleString('nl-NL')} – €{range.high.toLocaleString('nl-NL')}
         </div>
-        <p className="text-sm text-sera-text-soft mt-5 max-w-md">
-          Maatwerk in natuursteen. Uw exacte prijs ontvangt u in een persoonlijk
-          voorstel, afgestemd op de gekozen slab, afwerking en levering.
-          Inclusief BTW · Transport inbegrepen.
+        <p className="text-sm text-sera-text mt-3 font-medium">
+          Alles inbegrepen: BTW, transport &amp; plaatsing.
+        </p>
+        <p className="text-sm text-sera-text-soft mt-2 max-w-md">
+          Vrijblijvend. Uw exacte prijs ontvangt u in een persoonlijk voorstel,
+          afgestemd op de gekozen slab, afwerking en levering.
+        </p>
+        <p className="text-xs text-sera-text-soft mt-4">
+          Salontafels vanaf €1.950 · Eettafels vanaf €2.950
         </p>
       </div>
 
