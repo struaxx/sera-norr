@@ -167,7 +167,7 @@ function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: stri
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8 shadow-[0_10px_30px_hsl(var(--foreground)/0.28)]">
                     <Link to="/atelier">
-                      {isNL ? "Ontwerp uw tafel" : "Design your table"}
+                      {isNL ? "Configureer uw tafel" : "Configure your table"}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -416,7 +416,7 @@ function FinalCTASection({ isNL }: {isNL: boolean;}) {
           </p>
           <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
             <Link to="/atelier">
-              {isNL ? "Ontwerp uw tafel" : "Design your table"}
+              {isNL ? "Configureer uw tafel" : "Configure your table"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -458,7 +458,7 @@ function StickyMobileCTA({ isNL }: {isNL: boolean;}) {
       
       <Button asChild variant="sera-primary" size="lg" className="w-full">
         <Link to="/atelier">
-          {isNL ? 'Ontwerp uw tafel' : 'Design your table'}
+          {isNL ? 'Configureer uw tafel' : 'Configure your table'}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </Button>
