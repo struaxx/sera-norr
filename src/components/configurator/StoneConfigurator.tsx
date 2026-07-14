@@ -21,6 +21,71 @@ const FINISHES = [
   { id: 'gezoet'    as const, label: 'Gezoet',    extra: '' },
 ];
 
+// --- Deep-links voor campagnes -----------------------------------------
+// Marketinglinks kunnen een configuratie voorselecteren, bijv. vanuit een
+// Instagram-video die een specifieke tafel toont:
+//   /atelier?steen=viola&vorm=rond&lengte=1300
+// Nederlandse aliassen en canonieke ids werken allebei; ongeldige waarden
+// vallen terug op de standaard zodat een kapotte link de pagina nooit breekt.
+const STONE_ALIASES: Record<string, string> = {
+  'travertijn': 'classic-cloudy',
+  'classic-cloudy': 'classic-cloudy',
+  'tiramisu': 'tiramisu',
+  'light-emperador': 'light-emprador',
+  'light-emprador': 'light-emprador',
+  'dark-emperador': 'dark-emperador',
+  'viola': 'calacatta-viola',
+  'calacatta-viola': 'calacatta-viola',
+};
+
+const SHAPE_ALIASES: Record<string, RuleShape> = {
+  'rond': 'round', 'round': 'round',
+  'ovaal': 'ovale', 'ovale': 'ovale',
+  'ellips': 'ellips',
+  'rechthoek': 'corner', 'corner': 'corner',
+};
+
+function readInitialConfig() {
+  const p = new URLSearchParams(window.location.search);
+  const get = (...keys: string[]) => {
+    for (const k of keys) {
+      const v = p.get(k);
+      if (v) return v.toLowerCase();
+    }
+    return null;
+  };
+
+  const stoneId = STONE_ALIASES[get('steen', 'stoneId') ?? ''] ?? 'classic-cloudy';
+  const shape: RuleShape = SHAPE_ALIASES[get('vorm', 'shape') ?? ''] ?? 'corner';
+
+  const range = getSizeRange(shape);
+  const def = getDefaultSize(shape);
+  const num = (raw: string | null, fallback: number, min: number, max: number) => {
+    const n = raw ? parseInt(raw, 10) : NaN;
+    return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback;
+  };
+  const lengthMm = num(get('lengte', 'lengthMm'), def.lengthMm, range.length.min, range.length.max);
+  const widthMm = range.diameterOnly
+    ? lengthMm
+    : num(get('breedte', 'widthMm'), def.widthMm, range.width.min, range.width.max);
+
+  const validCounts = getValidLegCounts(shape);
+  const countParsed = parseInt(get('poten', 'legCount') ?? '', 10);
+  const legCount: LegCount = (validCounts as number[]).includes(countParsed)
+    ? (countParsed as LegCount)
+    : validCounts.includes(2) ? 2 : validCounts[0];
+
+  const styleRaw = get('pootstijl', 'legStyle') ?? '';
+  const validStyles = getValidLegStyles(shape, legCount).map((o) => o.id as string);
+  const legStyle: RuleLegStyle = validStyles.includes(styleRaw)
+    ? (styleRaw as RuleLegStyle)
+    : 'cylindrical';
+
+  const finish = get('afwerking', 'finish') === 'gezoet' ? ('gezoet' as const) : ('gepolijst' as const);
+
+  return { stoneId, shape, lengthMm, widthMm, legCount, legStyle, finish };
+}
+
 const sectionLabel = 'block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-3';
 const pillBase = 'px-4 py-2.5 text-xs uppercase tracking-[0.1em] border rounded-sm transition-colors';
 const pillSelected = 'bg-sera-surface text-sera-inverted border-sera-surface';
@@ -28,15 +93,17 @@ const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:b
 
 export default function StoneConfigurator() {
   const navigate = useNavigate();
-  // Start met de instap-steen zodat de eerste prijsindicatie het laagste
-  // eerlijke bedrag toont; premium stenen verhogen de prijs zichtbaar bij keuze.
-  const [stoneId, setStoneId]     = useState<string>('classic-cloudy');
-  const [shape, setShape]         = useState<RuleShape>('corner');
-  const [lengthMm, setLengthMm]   = useState<number>(2000);
-  const [widthMm, setWidthMm]     = useState<number>(900);
-  const [legCount, setLegCount]   = useState<LegCount>(2);
-  const [legStyle, setLegStyle]   = useState<RuleLegStyle>('cylindrical');
-  const [finish, setFinish]       = useState<'gepolijst' | 'gezoet'>('gepolijst');
+  // Zonder URL-parameters start dit op de instap-steen (classic-cloudy) zodat
+  // de eerste prijsindicatie het laagste eerlijke bedrag toont; campagnelinks
+  // kunnen via readInitialConfig een specifieke tafel voorselecteren.
+  const [initial]                 = useState(readInitialConfig);
+  const [stoneId, setStoneId]     = useState<string>(initial.stoneId);
+  const [shape, setShape]         = useState<RuleShape>(initial.shape);
+  const [lengthMm, setLengthMm]   = useState<number>(initial.lengthMm);
+  const [widthMm, setWidthMm]     = useState<number>(initial.widthMm);
+  const [legCount, setLegCount]   = useState<LegCount>(initial.legCount);
+  const [legStyle, setLegStyle]   = useState<RuleLegStyle>(initial.legStyle);
+  const [finish, setFinish]       = useState<'gepolijst' | 'gezoet'>(initial.finish);
 
   useEffect(() => {
     const valid = getValidLegCounts(shape);
