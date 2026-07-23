@@ -53,8 +53,10 @@ const loadMetaPixel = (): void => {
     return;
   }
   
-  const pixelId = import.meta.env.VITE_META_PIXEL_ID;
-  
+  // Pixel-ID is publiek (zichtbaar in elke site-HTML); fallback in code zodat
+  // er geen build-omgevingsvariabele nodig is. Override kan via VITE_META_PIXEL_ID.
+  const pixelId = import.meta.env.VITE_META_PIXEL_ID ?? '1575391400852614';
+
   if (!pixelId) {
     console.warn('[Marketing] Meta Pixel ID not configured');
     return;
@@ -85,6 +87,7 @@ const loadMetaPixel = (): void => {
   })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
   
   window.fbq('init', pixelId);
+  window.fbq('track', 'PageView');
 };
 
 /**

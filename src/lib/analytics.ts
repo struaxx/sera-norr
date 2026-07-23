@@ -165,6 +165,16 @@ export const trackLeadSubmit = (
     interest?: string;
   }
 ) => {
+  // Meta Pixel: het Lead-event waarop advertentiecampagnes optimaliseren.
+  // Los van de gtag-guard — de pixel laadt onafhankelijk van GA (na consent).
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'Lead', {
+      content_category: formType,
+      currency: 'EUR',
+      value: details?.estimatedValue || 0,
+    });
+  }
+
   if (!isGtagAvailable()) return;
 
   window.gtag('event', 'generate_lead', {
