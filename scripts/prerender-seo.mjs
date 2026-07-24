@@ -64,9 +64,9 @@ const ROUTES = {
     description: 'Bekijk uw configuratie en vraag vrijblijvend een persoonlijk voorstel aan.',
   },
   '/journal/travertijn-of-marmer-eettafel': {
-    title: 'Travertijn of marmer: welke natuursteen past bij jouw eettafel?',
+    title: 'Travertijn of marmer voor uw natuurstenen tafel',
     description:
-      'Travertijn of marmer voor je natuurstenen tafel? Een objectieve vergelijking van uiterlijk, onderhoud en prijs, zodat je een onderbouwde keuze maakt.',
+      'Twijfelt u tussen travertijn en marmer voor een natuurstenen tafel? Lees hoe ze verschillen in uiterlijk en onderhoud, en wat de prijs bepaalt.',
   },
   '/collections/herenhuis-amsterdam': {
     title: 'Herenhuis Amsterdam | Sera Norr',
