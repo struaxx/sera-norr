@@ -63,6 +63,11 @@ const ROUTES = {
     title: 'Uw voorstel | Sera Norr',
     description: 'Bekijk uw configuratie en vraag vrijblijvend een persoonlijk voorstel aan.',
   },
+  '/journal/travertijn-of-marmer-eettafel': {
+    title: 'Travertijn of marmer: welke natuursteen past bij jouw eettafel?',
+    description:
+      'Travertijn of marmer voor je natuurstenen tafel? Een objectieve vergelijking van uiterlijk, onderhoud en prijs, zodat je een onderbouwde keuze maakt.',
+  },
   '/collections/herenhuis-amsterdam': {
     title: 'Herenhuis Amsterdam | Sera Norr',
     description: 'Klassieke grandeur, hedendaagse rust.',
