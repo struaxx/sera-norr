@@ -4,13 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { SEOHead, baseSchema, WebSiteJsonLd, BreadcrumbSchema } from "@/components/seo";
 import { Hairline } from "@/components/ui/hairline";
 
 import { ValuePillars, AtelierSteps } from "@/components/homepage";
 import { RoomReveal } from "@/components/RoomReveal";
 import { usePageTracking } from "@/hooks/use-tracking";
+import { trackDesignAppointmentClick } from "@/lib/analytics";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
 import heroImage from "@/assets/hero-restaurant-marble.jpeg";
@@ -411,19 +412,29 @@ function FinalCTASection({ isNL }: {isNL: boolean;}) {
           </h2>
           <p className="text-background/70 text-body-md mb-8">
             {isNL ?
-            "Plan een vrijblijvend gesprek. Wij reageren snel." :
-            "Schedule a no-obligation conversation. We respond quickly."}
+            "Stel zelf uw tafel samen, of laat ons met u meedenken in een persoonlijke design-afspraak." :
+            "Design your table yourself, or let us guide you in a personal design consultation."}
           </p>
-          <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
-            <Link to="/atelier">
-              {isNL ? "Configureer uw tafel" : "Configure your table"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-          <p className="mt-4">
-            <Link to="/contact" className="text-background/60 hover:text-background text-sm underline underline-offset-4 transition-colors">
-              {isNL ? "Of neem contact op" : "Or get in touch"}
-            </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button asChild variant="sera-primary" size="default" className="bg-background text-foreground hover:bg-background/95 h-12 px-8">
+              <Link to="/atelier">
+                {isNL ? "Configureer uw tafel" : "Configure your table"}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <a
+              href={`https://wa.me/31683991158?text=${encodeURIComponent(isNL ? "Hallo, ik wil graag een gratis design-afspraak plannen voor een tafel op maat." : "Hello, I would like to schedule a free design consultation for a bespoke table.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackDesignAppointmentClick("homepage", "whatsapp")}
+              className="inline-flex items-center justify-center gap-2 h-12 px-8 border border-background/30 text-background hover:bg-background/10 text-sm transition-colors rounded-sm"
+            >
+              <MessageCircle className="h-4 w-4" />
+              {isNL ? "Plan een design-afspraak" : "Book a design consultation"}
+            </a>
+          </div>
+          <p className="mt-6 text-background/50 text-xs">
+            {isNL ? "20 minuten · video of telefoon · vrijblijvend" : "20 minutes · video or phone · no obligations"}
           </p>
         </motion.div>
       </div>

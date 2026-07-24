@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,7 @@ const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,6 +27,14 @@ const Contact = () => {
     message: "",
     honeypot: "",
   });
+
+  // Vul onderwerp voor vanuit ?subject=... (bijv. het design-afspraak-blok).
+  useEffect(() => {
+    const s = searchParams.get("subject");
+    if (s === "design-afspraak" || s === "advies") {
+      setFormData((prev) => ({ ...prev, subject: "design-afspraak" }));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -253,6 +262,14 @@ const Contact = () => {
                         <SelectValue placeholder={isNL ? 'Selecteer onderwerp' : 'Select subject'} />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="design-afspraak">
+                          <div className="flex flex-col items-start">
+                            <span>{isNL ? 'Design-afspraak' : 'Design consultation'}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {isNL ? 'Gratis gesprek van 20 min over uw tafel op maat' : 'Free 20-min conversation about your bespoke table'}
+                            </span>
+                          </div>
+                        </SelectItem>
                         <SelectItem value="algemeen">
                           <div className="flex flex-col items-start">
                             <span>{isNL ? 'Algemene vraag' : 'General inquiry'}</span>

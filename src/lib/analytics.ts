@@ -185,6 +185,20 @@ export const trackLeadSubmit = (
   });
 };
 
+// Design-afspraak: klik op "plan een design-afspraak" (WhatsApp of formulier).
+// Meta krijgt het standaard 'Contact'-event; 'Lead' blijft voorbehouden aan
+// daadwerkelijke formulierverzendingen zodat campagnes op echte leads sturen.
+export const trackDesignAppointmentClick = (source: string, channel: 'whatsapp' | 'form') => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'Contact', { content_category: 'design_appointment' });
+  }
+  if (!isGtagAvailable()) return;
+  window.gtag('event', 'design_appointment_click', {
+    source,
+    channel,
+  });
+};
+
 // Custom: View collection
 export const trackViewCollection = (collectionName: string) => {
   if (!isGtagAvailable()) return;
