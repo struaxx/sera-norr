@@ -67,6 +67,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li><Link to="/trade" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">Trade Program</Link></li>
               <li><Link to="/care" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.materialsCare')}</Link></li>
+              <li><Link to="/journal" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('journal.title')}</Link></li>
               <li><Link to="/over" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.about')}</Link></li>
               <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('nav.contact')}</Link></li>
             </ul>
@@ -78,7 +79,7 @@ export function Footer() {
               {t('footer.service')}
             </h4>
             <ul className="space-y-3">
-              <li><Link to="/atelier" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Ontwerp uw tafel' : 'Design your table'}</Link></li>
+              <li><Link to="/atelier" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Configureer uw tafel' : 'Configure your table'}</Link></li>
               <li><Link to="/shipping" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{i18n.language === 'nl' ? 'Verzending & levering' : 'Shipping & delivery'}</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.privacy')}</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline">{t('footer.terms')}</Link></li>
