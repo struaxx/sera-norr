@@ -12,6 +12,7 @@ import {
 } from './options';
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
+import { DesignAppointmentBlock } from '@/components/DesignAppointment';
 import { stateToViewerProps } from './stateMapping';
 import { computeRange } from './pricing';
 import { Slider } from '@/components/ui/slider';
@@ -362,6 +363,8 @@ export default function StoneConfigurator() {
       >
         Start uw aanvraag →
       </button>
+
+      <DesignAppointmentBlock isNL={true} source="configurator" className="mt-10" />
         </div>
       </div>
     </div>
