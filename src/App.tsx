@@ -17,6 +17,7 @@ const Atelier = lazy(() => import("./pages/Atelier"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Journal = lazy(() => import("./pages/Journal"));
+const JournalArticle = lazy(() => import("./pages/JournalArticle"));
 
 
 const Care = lazy(() => import("./pages/Care"));
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/about" element={<Navigate to="/over" replace />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/journal" element={<Journal />} />
+            <Route path="/journal/:slug" element={<JournalArticle />} />
             
             <Route path="/lookbook" element={<Collections />} />
             <Route path="/care" element={<Care />} />
