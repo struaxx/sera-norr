@@ -322,32 +322,6 @@
       "interiors": "Interiors",
       "craftsmanship": "Craftsmanship"
     },
-    "articles": {
-      "travertine-origins": {
-        "title": "The origins of travertine",
-        "excerpt": "Travertine forms from thermal springs over thousands of years. An exploration of this ancient material and its use in contemporary design."
-      },
-      "stone-care-guide": {
-        "title": "Natural stone care guide",
-        "excerpt": "Practical tips for maintaining your stone furniture. From daily cleaning to annual treatment."
-      },
-      "calacatta-viola-rare": {
-        "title": "Calacatta Viola: rare marble",
-        "excerpt": "One of the rarest marbles in the world, quarried from the Apuan Alps. Why this material is so special."
-      },
-      "amsterdam-residence": {
-        "title": "Project: Amsterdam canal house",
-        "excerpt": "A look at the creation of a bespoke dining table for a monumental canal house in Amsterdam."
-      },
-      "european-craftsmanship": {
-        "title": "Craftsmanship and design",
-        "excerpt": "How traditional stone-working techniques meet modern Dutch design in our studio."
-      },
-      "choosing-stone-dining": {
-        "title": "Choosing stone for your dining table",
-        "excerpt": "Travertine or marble? Considerations when selecting the perfect material for your dining table."
-      }
-    },
     "cta": {
       "title": "Compose your piece",
       "description": "Get inspired and start your own bespoke project.",
