@@ -24,27 +24,30 @@ const audience = [
   },
 ];
 
+// Trade-tarieven staan bewust niet op de publieke pagina: ze worden na
+// goedkeuring persoonlijk gedeeld. Zo blijven de consumentenprijzen in de
+// configurator het enige zichtbare prijspunt, en houdt het atelier ruimte om
+// per project af te stemmen.
 const tiers = [
-  { label: "Omzet per jaar", preferred: "1–3 stuks", partner: "4–8 stuks", premier: "9+ stuks" },
-  { label: "Korting", preferred: "20%", partner: "25–30%", premier: "30–35%" },
-  { label: "Levertijd", preferred: "Standaard 12–16 wk", partner: "Prioriteit 10–14 wk", premier: "Expedite optie 8 wk" },
+  { label: "Aantal per jaar", preferred: "1–3 stuks", partner: "4–8 stuks", premier: "9+ stuks" },
+  { label: "Trade-tarief", preferred: "Basisstaffel", partner: "Oplopend met volume", premier: "Hoogste staffel" },
+  { label: "Levertijd", preferred: "Standaard 12–16 wk", partner: "Voorrang in de planning", premier: "Voorrang, spoed in overleg" },
   { label: "Slab selectie", preferred: "Standaard", partner: "Pre-selectie", premier: "Uitgebreide pre-selectie" },
-  { label: "Dedicated contact", preferred: "Nee", partner: "Ja", premier: "Ja, directe lijn" },
+  { label: "Vast aanspreekpunt", preferred: "Nee", partner: "Ja", premier: "Ja, directe lijn" },
 ];
 
 const included = [
-  "PDF materiaalstaten per steensoort (voor bestek en specificaties)",
-  "Projectprijzen op aanvraag voor orders 4+ stuks",
-  "NDA beschikbaar voor confidentieel ontwerpwerk",
+  "Materiaalspecificaties per steensoort, op aanvraag, voor bestek en documentatie",
+  "Projectprijzen op aanvraag voor orders vanaf 4 stuks",
+  "NDA beschikbaar voor vertrouwelijk ontwerpwerk",
 ];
 
 export default function Trade() {
   return (
     <Layout>
       <SEOHead
-        title="Trade Program | Sera Norr"
-        description="Voor interieurontwerpers, architecten en projectontwikkelaars. Trade-tarieven, prioriteit en uitgebreide slab-pre-selectie."
-        noindex
+        title="Trade Program voor ontwerpers & architecten | Sera Norr"
+        description="Natuurstenen tafels op maat voor interieurontwerpers, architecten en projectontwikkelaars. Trade-tarieven, voorrang in de planning en pre-selectie van slabs."
       />
 
       {/* HERO */}
@@ -65,7 +68,7 @@ export default function Trade() {
                 variant="outline"
                 className="border-background/40 text-background hover:bg-background hover:text-foreground group"
               >
-                <Link to="/contact">
+                <Link to="/contact?subject=trade">
                   Trade toegang aanvragen
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
@@ -126,6 +129,15 @@ export default function Trade() {
               </tbody>
             </table>
           </div>
+
+          <div className="mt-10 max-w-2xl border-l border-border pl-6">
+            <p className="text-muted-foreground leading-relaxed">
+              Trade-tarieven delen wij persoonlijk na goedkeuring van uw aanvraag; ze lopen op met
+              het jaarvolume. Het tarief staat tegenover het werk dat u als ontwerper op zich neemt:
+              advisering, specificatie en de begeleiding van uw klant. De prijzen in onze
+              configurator blijven de reguliere prijzen voor particuliere opdrachtgevers.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -155,8 +167,9 @@ export default function Trade() {
             Hoe u aansluit
           </h2>
           <p className="mt-8 font-serif text-xl text-background/70 leading-relaxed">
-            Stuur een korte introductie via het aanvraagformulier. Selecteer{" "}
-            <span className="italic">B2B / Project</span> als ruimtetype.
+            Stuur een korte introductie via het contactformulier, met uw studio en het type
+            projecten waaraan u werkt. Het onderwerp <span className="italic">Samenwerking</span>{" "}
+            staat voor u klaar.
           </p>
           <div className="mt-12">
             <Button
