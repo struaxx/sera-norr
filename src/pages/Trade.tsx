@@ -37,7 +37,7 @@ const tiers = [
 ];
 
 const included = [
-  "Materiaalspecificaties per steensoort, op aanvraag, voor bestek en documentatie",
+  "Materiaalinformatie per steensoort: herkomst, hardheid, porositeit en afwerkingen. Aanvullende specificaties voor bestek op aanvraag",
   "Projectprijzen op aanvraag voor orders vanaf 4 stuks",
   "NDA beschikbaar voor vertrouwelijk ontwerpwerk",
 ];
