@@ -33,6 +33,8 @@ const Contact = () => {
     const s = searchParams.get("subject");
     if (s === "design-afspraak" || s === "advies") {
       setFormData((prev) => ({ ...prev, subject: "design-afspraak" }));
+    } else if (s === "trade" || s === "samenwerking") {
+      setFormData((prev) => ({ ...prev, subject: "samenwerking" }));
     }
   }, [searchParams]);
 

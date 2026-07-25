@@ -77,10 +77,9 @@ const ROUTES = {
     description: 'Historisch karakter, ingetogen luxe.',
   },
   '/trade': {
-    title: 'Trade Program | Sera Norr',
+    title: 'Trade Program voor ontwerpers & architecten | Sera Norr',
     description:
-      'Voor interieurontwerpers, architecten en projectontwikkelaars. Trade-tarieven, prioriteit en uitgebreide slab-pre-selectie.',
-    noindex: true,
+      'Natuurstenen tafels op maat voor interieurontwerpers, architecten en projectontwikkelaars. Trade-tarieven, voorrang in de planning en pre-selectie van slabs.',
   },
   '/privacy': {
     title: 'Privacybeleid | SERA NORR',
