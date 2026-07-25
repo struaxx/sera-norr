@@ -107,7 +107,7 @@ export default function Materials() {
                 {t("materials.types.travertine.name")}
               </h2>
               <p className="text-body-md text-muted-foreground leading-relaxed mb-6 max-w-md">
-                {t("materials.types.travertine.shortDescription")}
+                {t("materials.types.travertine.intro")}
               </p>
               <p className="text-body-sm text-muted-foreground leading-relaxed mb-10 max-w-md">
                 {isNL 
@@ -122,8 +122,8 @@ export default function Materials() {
                   </Link>
                 </Button>
                 <Button asChild variant="sera-secondary" size="lg">
-                  <Link to="/collections/terra">
-                    {isNL ? "Bekijk TERRA" : "View TERRA"}
+                  <Link to="/atelier?steen=travertijn">
+                    {isNL ? "Configureer in travertijn" : "Configure in travertine"}
                   </Link>
                 </Button>
               </div>
@@ -152,7 +152,7 @@ export default function Materials() {
                 Calacatta Viola
               </h2>
               <p className="text-body-md text-muted-foreground leading-relaxed mb-6 max-w-md">
-                {t("materials.types.calacatta-viola.shortDescription")}
+                {t("materials.types.calacatta-viola.intro")}
               </p>
               <p className="text-body-sm text-muted-foreground leading-relaxed mb-10 max-w-md">
                 {isNL 
@@ -167,8 +167,8 @@ export default function Materials() {
                   </Link>
                 </Button>
                 <Button asChild variant="sera-secondary" size="lg">
-                  <Link to="/collections/vanta">
-                    {isNL ? "Bekijk VANTA" : "View VANTA"}
+                  <Link to="/atelier?steen=viola">
+                    {isNL ? "Configureer in Calacatta Viola" : "Configure in Calacatta Viola"}
                   </Link>
                 </Button>
               </div>

@@ -18,6 +18,8 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Journal = lazy(() => import("./pages/Journal"));
 const JournalArticle = lazy(() => import("./pages/JournalArticle"));
+const Materials = lazy(() => import("./pages/Materials"));
+const MaterialDetail = lazy(() => import("./pages/MaterialDetail"));
 
 
 const Care = lazy(() => import("./pages/Care"));
@@ -51,6 +53,8 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/journal/:slug" element={<JournalArticle />} />
+            <Route path="/materials" element={<Materials />} />
+            <Route path="/materials/:materialId" element={<MaterialDetail />} />
             
             <Route path="/lookbook" element={<Collections />} />
             <Route path="/care" element={<Care />} />

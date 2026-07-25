@@ -63,6 +63,21 @@ const ROUTES = {
     title: 'Uw voorstel | Sera Norr',
     description: 'Bekijk uw configuratie en vraag vrijblijvend een persoonlijk voorstel aan.',
   },
+  '/materials': {
+    title: 'Materialen, Travertijn & Marmer | SERA NORR',
+    description:
+      'Ontdek onze geselecteerde natuurstenen: Italiaans travertijn en Calacatta Viola marmer. Herkomst, eigenschappen en onderhoud.',
+  },
+  '/materials/travertine': {
+    title: 'Travertijn: Italiaans natuursteen voor tafels op maat',
+    description:
+      'Italiaans travertijn uit Tivoli: herkomst, hardheid, porositeit, afwerkingen en onderhoud. Zo kiest u travertijn voor een natuurstenen tafel.',
+  },
+  '/materials/calacatta-viola': {
+    title: 'Calacatta Viola: zeldzaam Italiaans marmer voor tafels',
+    description:
+      'Calacatta Viola uit de Apuaanse Alpen: paarse adering, eigenschappen, afwerkingen en onderhoud van dit zeldzame marmer.',
+  },
   '/journal/travertijn-of-marmer-eettafel': {
     title: 'Travertijn of marmer voor uw natuurstenen tafel',
     description:
