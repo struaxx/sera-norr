@@ -189,10 +189,11 @@ export default function StoneConfigurator() {
   const filledNotes = (Object.entries(notes) as [NoteKey, string][]).filter(
     ([, v]) => v.trim().length > 0
   );
-  // Zonder bekende steen valt er geen bedrag te berekenen; dan tonen we geen
-  // getal in plaats van een misleidend bedrag voor een steen die de klant
-  // juist niet wil.
+  // Bij een afwijkende steenwens blijft de indicatie staan; hij hoort dan wel
+  // gelezen te worden als "op basis van de geselecteerde steen", zodat het
+  // bedrag niet als prijs voor de gevraagde steen wordt opgevat.
   const stoneIsCustom = (notes.steen ?? '').trim().length > 0;
+  const selectedStoneLabel = STONE_OPTIONS.find((s) => s.id === stoneId)?.label ?? 'de gekozen steen';
 
   useEffect(() => {
     const valid = getValidLegCounts(shape);
@@ -428,18 +429,21 @@ export default function StoneConfigurator() {
           Indicatie
         </span>
         <div className="font-serif text-3xl text-sera-text">
-          {stoneIsCustom
-            ? 'Prijs op aanvraag'
-            : `€${range.low.toLocaleString('nl-NL')} – €${range.high.toLocaleString('nl-NL')}`}
+          €{range.low.toLocaleString('nl-NL')} – €{range.high.toLocaleString('nl-NL')}
         </div>
         <p className="text-sm text-sera-text mt-3 font-medium">
           Alles inbegrepen: BTW, transport &amp; plaatsing.
         </p>
         <p className="text-sm text-sera-text-soft mt-2 max-w-md">
-          {stoneIsCustom
-            ? 'Voor de door u gevraagde steen stellen wij een prijs op maat op. U ontvangt die vrijblijvend in uw persoonlijke voorstel.'
-            : 'Vrijblijvend. Uw exacte prijs ontvangt u in een persoonlijk voorstel, afgestemd op de gekozen slab, afwerking en levering.'}
+          Vrijblijvend. Uw exacte prijs ontvangt u in een persoonlijk voorstel,
+          afgestemd op de gekozen slab, afwerking en levering.
         </p>
+        {stoneIsCustom && (
+          <p className="text-sm text-sera-text-soft mt-2 max-w-md">
+            Deze indicatie is berekend op {selectedStoneLabel}. Voor de door u gevraagde steen
+            ontvangt u de prijs in uw voorstel.
+          </p>
+        )}
         {!stoneIsCustom && filledNotes.length > 0 && (
           <p className="text-sm text-sera-text-soft mt-2 max-w-md">
             Uw aanvullende wensen zijn nog niet in dit bedrag verwerkt; wij rekenen ze mee in

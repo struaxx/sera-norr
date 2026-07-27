@@ -164,9 +164,13 @@ const Voorstel = () => {
         onderstel,
         finish,
         finishLabel,
-        indicatieLow: stoneIsCustom ? null : range.low,
-        indicatieHigh: stoneIsCustom ? null : range.high,
-        prijsOpAanvraag: stoneIsCustom ? "JA — steen niet uit standaardaanbod" : null,
+        indicatieLow: range.low,
+        indicatieHigh: range.high,
+        // Maak expliciet waarop de indicatie is berekend, zodat het bedrag in
+        // de aanvraag niet als prijs voor de gevraagde steen wordt gelezen.
+        indicatieToelichting: stoneIsCustom
+          ? `Berekend op ${stoneLabel}; klant vraagt een afwijkende steen`
+          : null,
         // Afwijkende wensen als platte sleutel/waarde-paren. De
         // notificatiemail rendert metadata met String(v); een array met
         // objecten zou daar als "[object Object]" aankomen en de wens
@@ -315,21 +319,20 @@ const Voorstel = () => {
                 {isNL ? "Indicatie" : "Indication"}
               </span>
               <div className="font-serif text-2xl text-foreground">
-                {stoneIsCustom
-                  ? isNL
-                    ? "Prijs op aanvraag"
-                    : "Price on request"
-                  : `€${range.low.toLocaleString("nl-NL")} – €${range.high.toLocaleString("nl-NL")}`}
+                €{range.low.toLocaleString("nl-NL")} – €{range.high.toLocaleString("nl-NL")}
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                {stoneIsCustom
-                  ? isNL
-                    ? "Voor de door u gevraagde steen stellen wij een prijs op maat op."
-                    : "We will price the stone you requested individually."
-                  : isNL
-                    ? "Inclusief BTW · Transport inbegrepen · Exacte prijs in uw voorstel."
-                    : "Incl. VAT · Transport included · Exact price in your proposal."}
+                {isNL
+                  ? "Inclusief BTW · Transport inbegrepen · Exacte prijs in uw voorstel."
+                  : "Incl. VAT · Transport included · Exact price in your proposal."}
               </p>
+              {stoneIsCustom && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  {isNL
+                    ? `Berekend op ${stoneLabel}. Voor de door u gevraagde steen ontvangt u de prijs in uw voorstel.`
+                    : `Calculated on ${stoneLabel}. We will price your requested stone in the proposal.`}
+                </p>
+              )}
             </div>
           </div>
 
