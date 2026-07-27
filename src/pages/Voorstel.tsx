@@ -119,6 +119,23 @@ const Voorstel = () => {
     { label: "Onderstel", value: onderstel },
   ];
 
+  // Afwijkende wensen uit de configurator ("Anders" per optiegroep).
+  const WENS_LABELS: Record<string, string> = {
+    steen: "Steensoort",
+    vorm: "Vorm",
+    formaat: "Formaat",
+    poten: "Aantal poten",
+    pootstijl: "Onderstel",
+    afwerking: "Afwerking",
+  };
+  const wensen = Object.entries(WENS_LABELS)
+    .map(([key, label]) => ({ key, label, value: (searchParams.get(`wens_${key}`) ?? "").trim() }))
+    .filter((w) => w.value.length > 0);
+
+  // Een gevraagde steen die niet in het aanbod staat, laat zich niet
+  // doorrekenen; dan tonen we geen indicatiebedrag.
+  const stoneIsCustom = wensen.some((w) => w.key === "steen");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -147,8 +164,14 @@ const Voorstel = () => {
         onderstel,
         finish,
         finishLabel,
-        indicatieLow: range.low,
-        indicatieHigh: range.high,
+        indicatieLow: stoneIsCustom ? null : range.low,
+        indicatieHigh: stoneIsCustom ? null : range.high,
+        prijsOpAanvraag: stoneIsCustom ? "JA — steen niet uit standaardaanbod" : null,
+        // Afwijkende wensen als platte sleutel/waarde-paren. De
+        // notificatiemail rendert metadata met String(v); een array met
+        // objecten zou daar als "[object Object]" aankomen en de wens
+        // ongemerkt verloren laten gaan.
+        ...Object.fromEntries(wensen.map((w) => [`Afwijkende wens · ${w.label}`, w.value])),
         postcode: formData.postcode,
       };
 
@@ -268,17 +291,44 @@ const Voorstel = () => {
                 </div>
               ))}
             </dl>
+
+            {wensen.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-border/40">
+                <span className="block text-[11px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                  {isNL ? "Afwijkende wensen" : "Custom requests"}
+                </span>
+                <dl className="space-y-3">
+                  {wensen.map((w) => (
+                    <div key={w.key} className="text-sm">
+                      <dt className="text-muted-foreground uppercase tracking-[0.1em] text-xs mb-1">
+                        {w.label}
+                      </dt>
+                      <dd className="text-foreground whitespace-pre-wrap">{w.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            )}
+
             <div className="mt-6 pt-4 border-t border-border/40">
               <span className="block text-[11px] uppercase tracking-[0.15em] text-muted-foreground mb-1">
                 {isNL ? "Indicatie" : "Indication"}
               </span>
               <div className="font-serif text-2xl text-foreground">
-                €{range.low.toLocaleString("nl-NL")} – €{range.high.toLocaleString("nl-NL")}
+                {stoneIsCustom
+                  ? isNL
+                    ? "Prijs op aanvraag"
+                    : "Price on request"
+                  : `€${range.low.toLocaleString("nl-NL")} – €${range.high.toLocaleString("nl-NL")}`}
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                {isNL
-                  ? "Inclusief BTW · Transport inbegrepen · Exacte prijs in uw voorstel."
-                  : "Incl. VAT · Transport included · Exact price in your proposal."}
+                {stoneIsCustom
+                  ? isNL
+                    ? "Voor de door u gevraagde steen stellen wij een prijs op maat op."
+                    : "We will price the stone you requested individually."
+                  : isNL
+                    ? "Inclusief BTW · Transport inbegrepen · Exacte prijs in uw voorstel."
+                    : "Incl. VAT · Transport included · Exact price in your proposal."}
               </p>
             </div>
           </div>

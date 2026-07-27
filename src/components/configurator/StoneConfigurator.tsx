@@ -92,6 +92,76 @@ const pillBase = 'px-4 py-2.5 text-xs uppercase tracking-[0.1em] border rounded-
 const pillSelected = 'bg-sera-surface text-sera-inverted border-sera-surface';
 const pillIdle = 'bg-transparent text-sera-text border-sera-text-soft/30 hover:border-sera-surface';
 
+// --- "Anders" per optiegroep -------------------------------------------
+// Het aanbod in de configurator is een selectie, niet de hele catalogus.
+// Bij elke groep kan de klant "Anders" kiezen en een wens achterlaten; die
+// notitie reist mee naar het aanvraagdossier. De reguliere keuze blijft
+// staan, zodat de 3D-weergave en de prijsindicatie blijven werken.
+export const NOTE_KEYS = ['steen', 'vorm', 'formaat', 'poten', 'pootstijl', 'afwerking'] as const;
+export type NoteKey = (typeof NOTE_KEYS)[number];
+type Notes = Partial<Record<NoteKey, string>>;
+
+const NOTE_PLACEHOLDER: Record<NoteKey, string> = {
+  steen: 'Bijv. Statuario, Nero Marquina, of een steen die u elders zag',
+  vorm: 'Beschrijf de gewenste vorm',
+  formaat: 'Bijv. 300 × 120 cm, of een afwijkende hoogte',
+  poten: 'Beschrijf het gewenste aantal of de plaatsing',
+  pootstijl: 'Beschrijf het gewenste onderstel',
+  afwerking: 'Bijv. geborsteld, of een specifieke randafwerking',
+};
+
+const NOTE_MAX = 300;
+
+function OtherOption({
+  groupKey,
+  value,
+  onChange,
+}: {
+  groupKey: NoteKey;
+  value: string | undefined;
+  onChange: (key: NoteKey, text: string | undefined) => void;
+}) {
+  const isOpen = value !== undefined;
+  return (
+    <>
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        onClick={() => onChange(groupKey, isOpen ? undefined : '')}
+        className={`${pillBase} ${isOpen ? pillSelected : pillIdle}`}
+      >
+        Anders
+      </button>
+
+      {isOpen && (
+        <div className="w-full mt-4">
+          <label htmlFor={`note-${groupKey}`} className="sr-only">
+            Uw wens voor {groupKey}
+          </label>
+          <textarea
+            id={`note-${groupKey}`}
+            autoFocus
+            rows={3}
+            maxLength={NOTE_MAX}
+            value={value}
+            onChange={(e) => onChange(groupKey, e.target.value.slice(0, NOTE_MAX))}
+            placeholder={NOTE_PLACEHOLDER[groupKey]}
+            className="w-full max-w-md bg-transparent border border-sera-text-soft/30 focus:border-sera-surface rounded-sm p-3 text-sm text-sera-text placeholder:text-sera-text-soft/60 outline-none resize-none"
+          />
+          <div className="flex justify-between max-w-md mt-1">
+            <span className="text-[11px] text-sera-text-soft">
+              Wij nemen dit mee in uw persoonlijke voorstel.
+            </span>
+            <span className="text-[11px] text-sera-text-soft tabular-nums">
+              {(value ?? '').length}/{NOTE_MAX}
+            </span>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function StoneConfigurator() {
   const navigate = useNavigate();
   // Zonder URL-parameters start dit op de instap-steen (classic-cloudy) zodat
@@ -105,6 +175,24 @@ export default function StoneConfigurator() {
   const [legCount, setLegCount]   = useState<LegCount>(initial.legCount);
   const [legStyle, setLegStyle]   = useState<RuleLegStyle>(initial.legStyle);
   const [finish, setFinish]       = useState<'gepolijst' | 'gezoet'>(initial.finish);
+  const [notes, setNotes]         = useState<Notes>({});
+
+  const setNote = (key: NoteKey, text: string | undefined) =>
+    setNotes((prev) => {
+      const next = { ...prev };
+      if (text === undefined) delete next[key];
+      else next[key] = text;
+      return next;
+    });
+
+  // Een ingevulde notitie telt pas mee als er ook echt tekst staat.
+  const filledNotes = (Object.entries(notes) as [NoteKey, string][]).filter(
+    ([, v]) => v.trim().length > 0
+  );
+  // Zonder bekende steen valt er geen bedrag te berekenen; dan tonen we geen
+  // getal in plaats van een misleidend bedrag voor een steen die de klant
+  // juist niet wil.
+  const stoneIsCustom = (notes.steen ?? '').trim().length > 0;
 
   useEffect(() => {
     const valid = getValidLegCounts(shape);
@@ -201,6 +289,9 @@ export default function StoneConfigurator() {
             );
           })}
         </div>
+        <div className="flex flex-wrap gap-2 mt-4">
+          <OtherOption groupKey="steen" value={notes.steen} onChange={setNote} />
+        </div>
       </div>
 
       {/* 8. VORM */}
@@ -217,6 +308,7 @@ export default function StoneConfigurator() {
               {s.label}
             </button>
           ))}
+          <OtherOption groupKey="vorm" value={notes.vorm} onChange={setNote} />
         </div>
       </div>
 
@@ -268,6 +360,9 @@ export default function StoneConfigurator() {
               </div>
             </>
           )}
+          <div className="flex flex-wrap gap-2 pt-2">
+            <OtherOption groupKey="formaat" value={notes.formaat} onChange={setNote} />
+          </div>
         </div>
       </div>
 
@@ -286,6 +381,7 @@ export default function StoneConfigurator() {
                 {c}
               </button>
             ))}
+            <OtherOption groupKey="poten" value={notes.poten} onChange={setNote} />
           </div>
         </div>
       )}
@@ -304,6 +400,7 @@ export default function StoneConfigurator() {
               {o.label}
             </button>
           ))}
+          <OtherOption groupKey="pootstijl" value={notes.pootstijl} onChange={setNote} />
         </div>
       </div>
 
@@ -322,6 +419,7 @@ export default function StoneConfigurator() {
               {f.extra && <span className="ml-2 opacity-70 normal-case tracking-normal">{f.extra}</span>}
             </button>
           ))}
+          <OtherOption groupKey="afwerking" value={notes.afwerking} onChange={setNote} />
         </div>
       </div>
 
@@ -330,15 +428,24 @@ export default function StoneConfigurator() {
           Indicatie
         </span>
         <div className="font-serif text-3xl text-sera-text">
-          €{range.low.toLocaleString('nl-NL')} – €{range.high.toLocaleString('nl-NL')}
+          {stoneIsCustom
+            ? 'Prijs op aanvraag'
+            : `€${range.low.toLocaleString('nl-NL')} – €${range.high.toLocaleString('nl-NL')}`}
         </div>
         <p className="text-sm text-sera-text mt-3 font-medium">
           Alles inbegrepen: BTW, transport &amp; plaatsing.
         </p>
         <p className="text-sm text-sera-text-soft mt-2 max-w-md">
-          Vrijblijvend. Uw exacte prijs ontvangt u in een persoonlijk voorstel,
-          afgestemd op de gekozen slab, afwerking en levering.
+          {stoneIsCustom
+            ? 'Voor de door u gevraagde steen stellen wij een prijs op maat op. U ontvangt die vrijblijvend in uw persoonlijke voorstel.'
+            : 'Vrijblijvend. Uw exacte prijs ontvangt u in een persoonlijk voorstel, afgestemd op de gekozen slab, afwerking en levering.'}
         </p>
+        {!stoneIsCustom && filledNotes.length > 0 && (
+          <p className="text-sm text-sera-text-soft mt-2 max-w-md">
+            Uw aanvullende wensen zijn nog niet in dit bedrag verwerkt; wij rekenen ze mee in
+            het voorstel.
+          </p>
+        )}
         <p className="text-xs text-sera-text-soft mt-4">
           Salontafels vanaf €1.950 · Eettafels vanaf €2.950
         </p>
@@ -357,6 +464,11 @@ export default function StoneConfigurator() {
             legStyle,
             finish,
           });
+          // Afwijkende wensen als losse parameters, zodat het voorstel ze
+          // per optiegroep kan tonen en meesturen in het dossier.
+          for (const [key, text] of filledNotes) {
+            params.set(`wens_${key}`, text.trim());
+          }
           navigate(`/voorstel?${params.toString()}`);
         }}
         className="w-full md:w-auto md:px-12 py-4 mt-6 bg-sera-surface text-sera-inverted hover:bg-sera-text text-xs uppercase tracking-[0.15em] rounded-sm transition-colors"
