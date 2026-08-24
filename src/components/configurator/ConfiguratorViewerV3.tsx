@@ -7,7 +7,7 @@
 // - Clay material, simple lighting
 // - FOV 35-45
 
-import { Suspense, useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { Suspense, useState, useCallback, useMemo, useRef, useEffect, Component, type ReactNode } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import {
   OrbitControls,
@@ -28,6 +28,26 @@ import { mmToM } from '@/lib/configurator/units';
 // ============================================
 // TYPES
 // ============================================
+
+/**
+ * De omgevingsbelichting (drei <Environment>) haalt een HDR van een externe
+ * CDN. Lukt dat niet — trage verbinding, blokkade, CDN-storing — dan gooit de
+ * loader binnen Suspense, en bleef de hele configurator op "Laden..." staan.
+ * De basisverlichting hieronder is voldoende om de tafel te tonen, dus een
+ * mislukte HDR mag alleen de reflectie kosten, niet het product.
+ */
+class QuietFailure extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch(error: unknown) {
+    if (import.meta.env.DEV) console.warn('[configurator] omgevingsbelichting overgeslagen:', error);
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 export interface ConfiguratorViewerV3Props {
   shape: RuleShape;
@@ -195,7 +215,26 @@ export function ConfiguratorViewerV3({
     onConfigResolved?.(resolved);
   }, [resolved, onConfigResolved]);
 
-  const currentCamera = CAMERA_PRESETS[cameraMode];
+  // De presets zijn afgestemd op een eettafel van circa 2 meter. Een
+  // salontafel-sokkel is veel kleiner en lager; zonder meeschalen staat die
+  // klein en te laag in beeld. De factor is 1.0 bij 2 meter, zodat de
+  // eettafelweergave ongewijzigd blijft.
+  const currentCamera = useMemo(() => {
+    const preset = CAMERA_PRESETS[cameraMode];
+    const spanM = Math.max(lengthMm, widthMm, heightMm) / 1000;
+    const factor = Math.min(1.6, Math.max(0.5, spanM / 2));
+    if (cameraMode === 'top') {
+      return {
+        ...preset,
+        position: preset.position.map((c) => c * factor) as [number, number, number],
+      };
+    }
+    return {
+      ...preset,
+      position: preset.position.map((c) => c * factor) as [number, number, number],
+      target: [0, heightMm / 2000, 0] as [number, number, number],
+    };
+  }, [cameraMode, lengthMm, widthMm, heightMm]);
 
   const resetView = useCallback(() => {
     setCameraMode('default');
@@ -255,8 +294,13 @@ export function ConfiguratorViewerV3({
             blur={2}
             far={4}
           />
-          <Environment preset="apartment" />
         </Suspense>
+
+        <QuietFailure>
+          <Suspense fallback={null}>
+            <Environment preset="apartment" />
+          </Suspense>
+        </QuietFailure>
 
         <OrbitControls
           enablePan={false}
