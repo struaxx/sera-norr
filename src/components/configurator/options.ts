@@ -15,6 +15,51 @@ export const STONE_OPTIONS: StoneOption[] = [
   { id: 'calacatta-viola', label: 'Calacatta Viola', family: 'marmer',     texture: '/textures/stones/calacatta-viola-seamless.jpg' },
 ];
 
+// ============================================
+// PRODUCTSOORT
+// Een salontafel is bij SERA NORR een massieve sokkel (plinth): het blok
+// zelf is de tafel. Dat is een ander product dan een blad op een onderstel,
+// dus het krijgt eigen maten, hoogte en prijsbasis.
+// ============================================
+
+export type ProductType = 'eettafel' | 'salontafel';
+
+export interface ProductTypeOption {
+  id: ProductType;
+  label: string;
+  /** Bouwwijze: blad op onderstel, of massieve sokkel. */
+  base: 'legs' | 'plinth';
+  /** Standaard tafelhoogte in mm. */
+  heightMm: number;
+}
+
+export const PRODUCT_TYPE_OPTIONS: ProductTypeOption[] = [
+  { id: 'eettafel',   label: 'Eettafel',   base: 'legs',   heightMm: 750 },
+  { id: 'salontafel', label: 'Salontafel', base: 'plinth', heightMm: 350 },
+];
+
+export const getProductType = (id: ProductType): ProductTypeOption =>
+  PRODUCT_TYPE_OPTIONS.find((p) => p.id === id) ?? PRODUCT_TYPE_OPTIONS[0];
+
+// Salontafel-sokkel: eigen maatbereik. Een sokkel is laag en gedrongen,
+// dus andere verhoudingen dan een eettafelblad.
+export const PLINTH_SIZE_RANGES: Record<'corner' | 'round', SizeRange> = {
+  corner: {
+    length: { min: 800, max: 1800, default: 1200 },
+    width:  { min: 500, max: 1000, default: 700 },
+    step: 100,
+  },
+  round: {
+    length: { min: 600, max: 1200, default: 900 },
+    width:  { min: 600, max: 1200, default: 900 },
+    step: 100,
+    diameterOnly: true,
+  },
+};
+
+/** Vormen die als sokkel leverbaar zijn. */
+export const PLINTH_SHAPES: RuleShape[] = ['corner', 'round'];
+
 export interface ShapeOption {
   id: RuleShape;
   label: string;
@@ -114,6 +159,46 @@ export const SIZE_RANGES: Record<RuleShape, SizeRange> = {
 };
 
 export const getSizeRange = (shape: RuleShape): SizeRange => SIZE_RANGES[shape];
+
+/**
+ * Maatbereik afhankelijk van productsoort. Een salontafel-sokkel heeft een
+ * eigen, kleiner bereik dan een eettafelblad.
+ */
+export const getSizeRangeFor = (productType: ProductType, shape: RuleShape): SizeRange => {
+  if (productType === 'salontafel') {
+    return PLINTH_SIZE_RANGES[shape === 'round' ? 'round' : 'corner'];
+  }
+  return SIZE_RANGES[shape];
+};
+
+/**
+ * Clamp tegen het bereik van de gekozen productsoort. Een sokkel is kleiner
+ * dan een eettafelblad; klemmen tegen het eettafelbereik zou een geldige
+ * salontafelmaat ten onrechte terugzetten.
+ */
+export const clampSizeFor = (
+  productType: ProductType,
+  shape: RuleShape,
+  lengthMm: number,
+  widthMm: number
+): { lengthMm: number; widthMm: number } => {
+  const r = getSizeRangeFor(productType, shape);
+  const def = { lengthMm: r.length.default, widthMm: r.width.default };
+
+  const lengthOk = Number.isFinite(lengthMm) && lengthMm >= r.length.min && lengthMm <= r.length.max;
+  const widthOk = Number.isFinite(widthMm) && widthMm >= r.width.min && widthMm <= r.width.max;
+  if (!lengthOk || !widthOk) return def;
+  if (r.diameterOnly) return { lengthMm, widthMm: lengthMm };
+  return { lengthMm, widthMm };
+};
+
+export const getDefaultSizeFor = (
+  productType: ProductType,
+  shape: RuleShape
+): { lengthMm: number; widthMm: number } => {
+  const r = getSizeRangeFor(productType, shape);
+  return { lengthMm: r.length.default, widthMm: r.width.default };
+};
 
 export const getDefaultSize = (shape: RuleShape): { lengthMm: number; widthMm: number } => {
   const r = SIZE_RANGES[shape];

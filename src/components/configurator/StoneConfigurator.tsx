@@ -8,7 +8,13 @@ import {
   getValidLegStyles,
   getSizeRange,
   getDefaultSize,
+  getSizeRangeFor,
+  getDefaultSizeFor,
+  PRODUCT_TYPE_OPTIONS,
+  PLINTH_SHAPES,
+  getProductType,
   type LegCount,
+  type ProductType,
 } from './options';
 import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRules';
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
@@ -39,6 +45,11 @@ const STONE_ALIASES: Record<string, string> = {
   'calacatta-viola': 'calacatta-viola',
 };
 
+const PRODUCT_ALIASES: Record<string, ProductType> = {
+  'eettafel': 'eettafel', 'dining': 'eettafel',
+  'salontafel': 'salontafel', 'coffee': 'salontafel', 'sokkel': 'salontafel',
+};
+
 const SHAPE_ALIASES: Record<string, RuleShape> = {
   'rond': 'round', 'round': 'round',
   'ovaal': 'ovale', 'ovale': 'ovale',
@@ -57,10 +68,14 @@ function readInitialConfig() {
   };
 
   const stoneId = STONE_ALIASES[get('steen', 'stoneId') ?? ''] ?? 'classic-cloudy';
-  const shape: RuleShape = SHAPE_ALIASES[get('vorm', 'shape') ?? ''] ?? 'corner';
+  const productType: ProductType =
+    PRODUCT_ALIASES[get('type', 'productType') ?? ''] ?? 'eettafel';
+  let shape: RuleShape = SHAPE_ALIASES[get('vorm', 'shape') ?? ''] ?? 'corner';
+  // Een sokkel is alleen rechthoekig of rond leverbaar.
+  if (productType === 'salontafel' && !PLINTH_SHAPES.includes(shape)) shape = 'corner';
 
-  const range = getSizeRange(shape);
-  const def = getDefaultSize(shape);
+  const range = getSizeRangeFor(productType, shape);
+  const def = getDefaultSizeFor(productType, shape);
   const num = (raw: string | null, fallback: number, min: number, max: number) => {
     const n = raw ? parseInt(raw, 10) : NaN;
     return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback;
@@ -84,7 +99,7 @@ function readInitialConfig() {
 
   const finish = get('afwerking', 'finish') === 'gezoet' ? ('gezoet' as const) : ('gepolijst' as const);
 
-  return { stoneId, shape, lengthMm, widthMm, legCount, legStyle, finish };
+  return { productType, stoneId, shape, lengthMm, widthMm, legCount, legStyle, finish };
 }
 
 const sectionLabel = 'block text-[11px] uppercase tracking-[0.15em] text-sera-text-soft mb-3';
@@ -168,6 +183,7 @@ export default function StoneConfigurator() {
   // de eerste prijsindicatie het laagste eerlijke bedrag toont; campagnelinks
   // kunnen via readInitialConfig een specifieke tafel voorselecteren.
   const [initial]                 = useState(readInitialConfig);
+  const [productType, setProductType] = useState<ProductType>(initial.productType);
   const [stoneId, setStoneId]     = useState<string>(initial.stoneId);
   const [shape, setShape]         = useState<RuleShape>(initial.shape);
   const [lengthMm, setLengthMm]   = useState<number>(initial.lengthMm);
@@ -218,24 +234,45 @@ export default function StoneConfigurator() {
   // range valt. Geldige waarden (bijv. 2000×1000 dat past in zowel
   // Rechthoek als Ovaal) blijven behouden. Analoog aan de legStyle-logica.
   useEffect(() => {
-    const r = getSizeRange(shape);
+    const r = getSizeRangeFor(productType, shape);
     const lengthOk = lengthMm >= r.length.min && lengthMm <= r.length.max;
     const widthOk  = widthMm  >= r.width.min  && widthMm  <= r.width.max;
     if (!lengthOk || !widthOk) {
-      const def = getDefaultSize(shape);
+      const def = getDefaultSizeFor(productType, shape);
       setLengthMm(def.lengthMm);
       setWidthMm(def.widthMm);
     } else if (r.diameterOnly && widthMm !== lengthMm) {
       // Rond: width altijd gelijk aan diameter (=length)
       setWidthMm(lengthMm);
     }
-  }, [shape]);
+  }, [shape, productType]);
 
+  const product = getProductType(productType);
+  const isPlinth = product.base === 'plinth';
   const validLegCounts = getValidLegCounts(shape);
   const validLegStyles = getValidLegStyles(shape, legCount);
-  const sizeRange = getSizeRange(shape);
+  const sizeRange = getSizeRangeFor(productType, shape);
+  // Een sokkel is alleen rechthoekig of rond leverbaar.
+  const shapeChoices = isPlinth
+    ? SHAPE_OPTIONS.filter((o) => PLINTH_SHAPES.includes(o.id))
+    : SHAPE_OPTIONS;
 
-  const range = computeRange({ stoneId, lengthMm, widthMm, legCount, finish });
+  // Wisselen van productsoort: vorm en maat naar iets geldigs brengen.
+  useEffect(() => {
+    if (isPlinth && !PLINTH_SHAPES.includes(shape)) {
+      setShape('corner');
+      return;
+    }
+    const r = getSizeRangeFor(productType, shape);
+    if (lengthMm < r.length.min || lengthMm > r.length.max ||
+        widthMm < r.width.min || widthMm > r.width.max) {
+      const def = getDefaultSizeFor(productType, shape);
+      setLengthMm(def.lengthMm);
+      setWidthMm(def.widthMm);
+    }
+  }, [productType]);
+
+  const range = computeRange({ productType, stoneId, lengthMm, widthMm, legCount, finish });
 
   return (
     <div className="bg-sera-bg text-sera-text">
@@ -253,13 +290,36 @@ export default function StoneConfigurator() {
         {/* 5. 3D viewer, sticky on desktop */}
         <div className="mb-12 lg:mb-0 lg:sticky lg:top-32 lg:self-start">
           <ConfiguratorViewerV3
-            {...stateToViewerProps({ stoneId, shape, lengthMm, widthMm, legStyle })}
+            {...stateToViewerProps({ stoneId, shape, lengthMm, widthMm, legStyle, heightMm: product.heightMm })}
+            base={product.base}
             className="w-full aspect-[4/3] max-h-[calc(100vh-10rem)] bg-sera-bg-deep rounded-sm"
           />
         </div>
 
         {/* Controls column */}
         <div>
+      {/* 5b. PRODUCTSOORT */}
+      <div className="mb-12">
+        <span className={sectionLabel}>Type tafel</span>
+        <div className="flex flex-wrap gap-2">
+          {PRODUCT_TYPE_OPTIONS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setProductType(p.id)}
+              className={`${pillBase} ${productType === p.id ? pillSelected : pillIdle}`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+        {isPlinth && (
+          <p className="text-xs text-sera-text-soft mt-3 max-w-md">
+            Onze salontafel is een massieve sokkel: het blok zelf is de tafel, zonder onderstel.
+          </p>
+        )}
+      </div>
+
       {/* 6. STEEN */}
       <div className="mb-12">
         <span className={sectionLabel}>Steen</span>
@@ -299,7 +359,7 @@ export default function StoneConfigurator() {
       <div className="mb-12">
         <span className={sectionLabel}>Vorm</span>
         <div className="flex flex-wrap gap-2">
-          {SHAPE_OPTIONS.map((s) => (
+          {shapeChoices.map((s) => (
             <button
               key={s.id}
               type="button"
@@ -367,8 +427,8 @@ export default function StoneConfigurator() {
         </div>
       </div>
 
-      {/* 10. AANTAL POTEN, hide when only one option */}
-      {validLegCounts.length > 1 && (
+      {/* 10. AANTAL POTEN, hide when only one option or when plinth */}
+      {!isPlinth && validLegCounts.length > 1 && (
         <div className="mb-12">
           <span className={sectionLabel}>Aantal poten</span>
           <div className="flex flex-wrap gap-2">
@@ -387,7 +447,8 @@ export default function StoneConfigurator() {
         </div>
       )}
 
-      {/* 11. POOTSTIJL */}
+      {/* 11. POOTSTIJL, niet van toepassing op een sokkel */}
+      {!isPlinth && (
       <div className="mb-12">
         <span className={sectionLabel}>Pootstijl</span>
         <div className="flex flex-wrap gap-2">
@@ -404,6 +465,7 @@ export default function StoneConfigurator() {
           <OtherOption groupKey="pootstijl" value={notes.pootstijl} onChange={setNote} />
         </div>
       </div>
+      )}
 
       {/* 12. AFWERKING */}
       <div className="mb-12">
@@ -460,6 +522,7 @@ export default function StoneConfigurator() {
         type="button"
         onClick={() => {
           const params = new URLSearchParams({
+            productType,
             stoneId,
             shape,
             lengthMm: String(lengthMm),

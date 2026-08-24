@@ -10,6 +10,8 @@ export interface ConfiguratorState {
   lengthMm: number;
   widthMm: number;
   legStyle: RuleLegStyle;
+  /** Tafelhoogte in mm; laat leeg voor de standaard eettafelhoogte. */
+  heightMm?: number;
 }
 
 export const stateToViewerProps = (
@@ -21,7 +23,7 @@ export const stateToViewerProps = (
   shape:       state.shape,
   lengthMm:    state.lengthMm,
   widthMm:     state.widthMm,
-  heightMm:    DEFAULT_HEIGHT_MM,
+  heightMm:    state.heightMm ?? DEFAULT_HEIGHT_MM,
   thicknessMm: DEFAULT_THICKNESS_MM,
   legStyle:    state.legStyle,
   isNL:        true,

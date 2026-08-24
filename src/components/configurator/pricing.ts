@@ -32,6 +32,27 @@ export const FINISH_SURCHARGE: Record<string, number> = {
   geborsteld: 150,
 };
 
+// ============================================
+// SALONTAFEL (massieve sokkel / plinth)
+// Een sokkel is een ander product dan een blad op een onderstel: kleiner
+// oppervlak, maar veel meer steen per m2 en verstek gezaagde hoeken.
+// Daarom een eigen basisprijs in plaats van de eettafelprijs schalen.
+//
+// LET OP: placeholders, net als de eettafelprijzen hierboven. Zet hier de
+// werkelijke inkoopprijs x 3 (ex BTW) neer zodra die bekend is.
+// Referentie: basisprijs geldt voor het standaardformaat 120 x 70 cm.
+// ============================================
+export const PLINTH_BASE_PRICE: Record<string, number> = {
+  'classic-cloudy':  1950,   // VUL_IN, travertijn, instap
+  'tiramisu':        1950,   // VUL_IN, travertijn
+  'light-emprador':  2500,   // VUL_IN, marmer
+  'dark-emperador':  2500,   // VUL_IN, marmer
+  'calacatta-viola': 3100,   // VUL_IN, premium marmer
+};
+
+/** Referentie-oppervlak voor de sokkelprijs: 1,20 x 0,70 m. */
+export const PLINTH_BASE_SURFACE_M2 = 0.84;
+
 // Range width: the indicative range is shown as [low, high] around
 // the computed midpoint. E.g. 0.12 = ±12%.
 export const RANGE_SPREAD = 0.12;            // VUL_IN, ±12%
@@ -41,6 +62,8 @@ export const RANGE_SPREAD = 0.12;            // VUL_IN, ±12%
 // ============================================================
 
 export interface PriceInput {
+  /** 'salontafel' rekent met de sokkel-basisprijs. */
+  productType?: 'eettafel' | 'salontafel';
   stoneId: string;
   lengthMm: number;
   widthMm: number;
@@ -57,13 +80,20 @@ export interface PriceRange {
 const roundTo = (n: number, step = 50) => Math.round(n / step) * step;
 
 export const computeRange = (input: PriceInput): PriceRange => {
-  const base = STONE_BASE_PRICE[input.stoneId] ?? STONE_BASE_PRICE['classic-cloudy'];
+  const isPlinth = input.productType === 'salontafel';
+
+  const base = isPlinth
+    ? PLINTH_BASE_PRICE[input.stoneId] ?? PLINTH_BASE_PRICE['classic-cloudy']
+    : STONE_BASE_PRICE[input.stoneId] ?? STONE_BASE_PRICE['classic-cloudy'];
+
+  const referenceSurface = isPlinth ? PLINTH_BASE_SURFACE_M2 : BASE_SURFACE_M2;
 
   // surface in m² (mm → m)
   const surfaceM2 = (input.lengthMm / 1000) * (input.widthMm / 1000);
-  const surfaceFactor = 1 + ((surfaceM2 - BASE_SURFACE_M2) / BASE_SURFACE_M2) * SURFACE_SCALING;
+  const surfaceFactor = 1 + ((surfaceM2 - referenceSurface) / referenceSurface) * SURFACE_SCALING;
 
-  const legCost = Math.max(0, input.legCount - 1) * EXTRA_LEG_SURCHARGE;
+  // Een sokkel heeft geen poten; alleen een eettafel kent een pootentoeslag.
+  const legCost = isPlinth ? 0 : Math.max(0, input.legCount - 1) * EXTRA_LEG_SURCHARGE;
   const finishCost = FINISH_SURCHARGE[input.finish] ?? 0;
 
   const mid = base * Math.max(0.5, surfaceFactor) + legCost + finishCost;
