@@ -512,9 +512,6 @@ export default function StoneConfigurator() {
             het voorstel.
           </p>
         )}
-        <p className="text-xs text-sera-text-soft mt-4">
-          Salontafels vanaf €1.950 · Eettafels vanaf €2.950
-        </p>
       </div>
 
       {/* 15. CTA */}

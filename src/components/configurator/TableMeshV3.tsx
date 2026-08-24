@@ -45,12 +45,16 @@ const HOURGLASS_WAIST_RATIO = 0.4;
 // STONE MATERIAL
 // ============================================
 
-function StoneMaterial({ stoneId, repeatX = 2, repeatY = 2 }: { stoneId: string; repeatX?: number; repeatY?: number }) {
+function StoneMaterial({ stoneId, repeatX = 2, repeatY = 2, mirrorX = false }: { stoneId: string; repeatX?: number; repeatY?: number; mirrorX?: boolean }) {
   const texturePath = get3DTexture(stoneId);
   const texture = useTexture(texturePath);
 
   useMemo(() => {
-    texture.wrapS = THREE.RepeatWrapping;
+    // Rond de mantel van een cilinder sluit een gewone herhaling niet op
+    // zichzelf aan: de linker- en rechterrand van de foto ontmoeten elkaar en
+    // dat geeft een zichtbare naad. Spiegelend wikkelen over een even aantal
+    // herhalingen loopt wel rond, en oogt als bookmatched steen.
+    texture.wrapS = mirrorX ? THREE.MirroredRepeatWrapping : THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(repeatX, repeatY);
     texture.colorSpace = THREE.SRGBColorSpace;
@@ -59,7 +63,7 @@ function StoneMaterial({ stoneId, repeatX = 2, repeatY = 2 }: { stoneId: string;
     texture.anisotropy = 16;
     texture.generateMipmaps = true;
     texture.needsUpdate = true;
-  }, [texture, repeatX, repeatY]);
+  }, [texture, repeatX, repeatY, mirrorX]);
 
   return (
     <meshStandardMaterial
@@ -81,9 +85,9 @@ function ClayMaterial() {
   );
 }
 
-function MonolithMaterial({ stoneId, repeatX, repeatY }: { stoneId?: string; repeatX?: number; repeatY?: number }) {
+function MonolithMaterial({ stoneId, repeatX, repeatY, mirrorX }: { stoneId?: string; repeatX?: number; repeatY?: number; mirrorX?: boolean }) {
   if (stoneId) {
-    return <StoneMaterial stoneId={stoneId} repeatX={repeatX} repeatY={repeatY} />;
+    return <StoneMaterial stoneId={stoneId} repeatX={repeatX} repeatY={repeatY} mirrorX={mirrorX} />;
   }
   return <ClayMaterial />;
 }
@@ -124,6 +128,116 @@ function applyPlanarUVForLathe(geometry: THREE.BufferGeometry, radiusM: number) 
     }
   }
   uv.needsUpdate = true;
+}
+
+// ============================================
+// SOKKEL (PLINTH) GEOMETRIE
+// ============================================
+// Een massieve sokkel is geen dun blad: alle zes de vlakken zijn zichtbaar en
+// even belangrijk. De blad-geometrie kan hier niet voor gebruikt worden, om
+// twee redenen:
+//  1. applyPlanarUV mapt UV's uit X/Y. Bij loodrechte zijvlakken levert dat
+//     over de hoogte een constante UV op, waardoor de steen tot verticale
+//     strepen uitrekt.
+//  2. Het bladprofiel rondt hoeken af (12% radius); een sokkel is haaks.
+// Daarom een eigen box met per vlak UV's op wereldschaal, zodat de nerf op
+// elk vlak even groot is en nergens uitgerekt wordt.
+
+function createPlinthGeometry(
+  lengthM: number,
+  widthM: number,
+  heightM: number,
+  textureScaleM: number
+): THREE.BufferGeometry {
+  const geo = new THREE.BoxGeometry(lengthM, heightM, widthM);
+  const uv = geo.attributes.uv;
+  const pos = geo.attributes.position;
+  const nrm = geo.attributes.normal;
+  if (!uv || !pos || !nrm) return geo;
+
+  // Doorlopende nerf over de hoeken, zoals bij een verstek gezaagde sokkel.
+  // De vlakken worden "uitgevouwen" op één doorlopend texturvlak: langs elke
+  // gedeelde ribbe sluiten de UV's op elkaar aan, zodat de adering over de
+  // hoek doorloopt in plaats van opnieuw te beginnen.
+  const hl = lengthM / 2;
+  const hw = widthM / 2;
+  const hh = heightM / 2;
+  const k = 1 / Math.max(0.05, textureScaleM);
+
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const z = pos.getZ(i);
+    const nx = nrm.getX(i);
+    const ny = nrm.getY(i);
+    const nz = nrm.getZ(i);
+
+    let u: number;
+    let v: number;
+
+    if (ny > 0.5) {
+      // Bovenblad: het referentievlak waar de andere vlakken op aansluiten.
+      u = x + hl;
+      v = z + hw;
+    } else if (ny < -0.5) {
+      // Onderkant: nauwelijks zichtbaar, spiegelt het bovenblad.
+      u = x + hl;
+      v = z + hw;
+    } else if (nz > 0.5) {
+      // Voorkant: sluit aan op de voorste ribbe van het blad en loopt omlaag.
+      u = x + hl;
+      v = widthM + (hh - y);
+    } else if (nz < -0.5) {
+      // Achterkant: sluit aan op de achterste ribbe, loopt de andere kant op.
+      u = x + hl;
+      v = y - hh;
+    } else if (nx > 0.5) {
+      // Rechterzijde: sluit aan op de rechterribbe.
+      u = lengthM + (hh - y);
+      v = z + hw;
+    } else {
+      // Linkerzijde.
+      u = y - hh;
+      v = z + hw;
+    }
+
+    uv.setXY(i, u * k, v * k);
+  }
+  uv.needsUpdate = true;
+  return geo;
+}
+
+function createRoundPlinthGeometry(
+  diameterM: number,
+  heightM: number,
+  textureScaleM: number
+): THREE.BufferGeometry {
+  const r = diameterM / 2;
+  const geo = new THREE.CylinderGeometry(r, r, heightM, 96);
+  const uv = geo.attributes.uv;
+  const pos = geo.attributes.position;
+  if (!uv || !pos) return geo;
+
+  // Mantel: omtrek x hoogte op wereldschaal. Deksel/bodem: planair, zodat de
+  // nerf daar dezelfde grootte houdt als op de zijkant.
+  const circumference = Math.PI * diameterM;
+  // Even aantal herhalingen: samen met spiegelend wikkelen (mirrorX) sluit het
+  // patroon dan exact op zichzelf aan en verdwijnt de verticale naad.
+  const su = Math.max(2, 2 * Math.round(circumference / textureScaleM / 2));
+  const sv = Math.max(0.4, heightM / textureScaleM);
+  const capScale = Math.max(0.4, diameterM / textureScaleM);
+
+  for (let i = 0; i < pos.count; i++) {
+    const ny = geo.attributes.normal?.getY(i) ?? 0;
+    if (Math.abs(ny) > 0.5) {
+      // Deksel of bodem: planair uit X/Z.
+      uv.setXY(i, (pos.getX(i) / diameterM + 0.5) * capScale, (pos.getZ(i) / diameterM + 0.5) * capScale);
+    } else {
+      uv.setXY(i, uv.getX(i) * su, uv.getY(i) * sv);
+    }
+  }
+  uv.needsUpdate = true;
+  return geo;
 }
 
 // ============================================
@@ -742,12 +856,22 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const bodyThicknessM = isPlinth ? mmToM(heightMm) : thicknessM;
 
   const topGeometry = useMemo(
-    () => createTabletopGeometry(shape, lengthM, widthM, bodyThicknessM, edgeProfile),
-    [shape, lengthM, widthM, bodyThicknessM, edgeProfile]
+    () => {
+      if (isPlinth) {
+        return shape === 'round'
+          ? createRoundPlinthGeometry(lengthM, bodyThicknessM, textureScale)
+          : createPlinthGeometry(lengthM, widthM, bodyThicknessM, textureScale);
+      }
+      return createTabletopGeometry(shape, lengthM, widthM, bodyThicknessM, edgeProfile);
+    },
+    [isPlinth, shape, lengthM, widthM, bodyThicknessM, edgeProfile, textureScale]
   );
 
+  // Box- en CylinderGeometry staan om hun eigen midden; de sokkel rust op de
+  // vloer, dus midden op halve hoogte en geen rotatie.
   const topTransform = isPlinth
-    ? getTabletopTransform(shape, 0, bodyThicknessM)
+    ? { position: [0, bodyThicknessM / 2, 0] as [number, number, number],
+        rotation: [0, 0, 0] as [number, number, number] }
     : getTabletopTransform(shape, legHeightM, thicknessM);
 
   return (
@@ -771,7 +895,12 @@ export function TableMeshV3(props: TableMeshV3Props) {
         castShadow
         receiveShadow
       >
-        <MonolithMaterial stoneId={stoneId} repeatX={topRepeatX} repeatY={topRepeatY} />
+        <MonolithMaterial
+          stoneId={stoneId}
+          repeatX={isPlinth ? 1 : topRepeatX}
+          repeatY={isPlinth ? 1 : topRepeatY}
+          mirrorX={isPlinth && shape === 'round'}
+        />
       </mesh>
     </group>
   );
