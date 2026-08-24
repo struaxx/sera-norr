@@ -27,6 +27,12 @@ export interface TableMeshV3Props {
   legStyle?: RuleLegStyle;
   stoneId?: string;
   edgeProfile?: EdgeProfileType;
+  /**
+   * 'legs'   = blad op een onderstel (eettafel)
+   * 'plinth' = massieve sokkel: het blok zelf is de tafel, geen poten.
+   *            Bewust buiten de poten-regelengine gehouden.
+   */
+  base?: 'legs' | 'plinth';
 }
 
 // ============================================
@@ -706,7 +712,8 @@ function GroundPlane() {
 // ============================================
 
 export function TableMeshV3(props: TableMeshV3Props) {
-  const { shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle, stoneId, edgeProfile = 'straight' } = props;
+  const { shape, lengthMm, widthMm, heightMm, thicknessMm, legStyle, stoneId, edgeProfile = 'straight', base = 'legs' } = props;
+  const isPlinth = base === 'plinth';
 
   const resolved = useMemo(() =>
     resolveConfiguration({
@@ -730,17 +737,23 @@ export function TableMeshV3(props: TableMeshV3Props) {
   const topRepeatX = Math.max(1, Math.min(2, lengthM / textureScale));
   const topRepeatY = Math.max(1, Math.min(2, widthM / textureScale));
 
+  // Bij een sokkel is het blok zelf de tafel: de "dikte" beslaat de volle
+  // hoogte en het rust direct op de grond.
+  const bodyThicknessM = isPlinth ? mmToM(heightMm) : thicknessM;
+
   const topGeometry = useMemo(
-    () => createTabletopGeometry(shape, lengthM, widthM, thicknessM, edgeProfile),
-    [shape, lengthM, widthM, thicknessM, edgeProfile]
+    () => createTabletopGeometry(shape, lengthM, widthM, bodyThicknessM, edgeProfile),
+    [shape, lengthM, widthM, bodyThicknessM, edgeProfile]
   );
 
-  const topTransform = getTabletopTransform(shape, legHeightM, thicknessM);
+  const topTransform = isPlinth
+    ? getTabletopTransform(shape, 0, bodyThicknessM)
+    : getTabletopTransform(shape, legHeightM, thicknessM);
 
   return (
     <group>
       <GroundPlane />
-      {isHourglass ? (
+      {isPlinth ? null : isHourglass ? (
         <>
           {resolved.legPlacements.map((p, i) => (
             <group key={i} position={[mmToM(p.x), 0, mmToM(p.z)]}>

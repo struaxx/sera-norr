@@ -15,7 +15,7 @@ import {
   STONE_OPTIONS,
   SHAPE_OPTIONS,
   LEG_STYLE_OPTIONS,
-  clampSize,
+  clampSizeFor,
 } from "@/components/configurator/options";
 import { computeRange } from "@/components/configurator/pricing";
 import type { RuleShape } from "@/lib/configurator/rules/productRules";
@@ -64,6 +64,8 @@ const Voorstel = () => {
   });
 
   // Read configuration from URL
+  const productType = searchParams.get("productType") === "salontafel" ? "salontafel" : "eettafel";
+  const isPlinth = productType === "salontafel";
   const stoneId = searchParams.get("stoneId") ?? "calacatta-viola";
   const rawShape = searchParams.get("shape") ?? "corner";
   // Defensive: unknown shape strings fall back to 'corner'.
@@ -73,7 +75,8 @@ const Voorstel = () => {
   // Defensive: NaN, missing, or out-of-range mm values (e.g. legacy URLs
   // with sizes from the old preset system) clamp back to the default
   // for the current shape. Geen NaN in pricing of dossierCode.
-  const { lengthMm, widthMm } = clampSize(
+  const { lengthMm, widthMm } = clampSizeFor(
+    productType,
     shape,
     Number(searchParams.get("lengthMm")),
     Number(searchParams.get("widthMm")),
@@ -105,18 +108,21 @@ const Voorstel = () => {
   const onderstel = `${legCount} × ${legStyleLabel}`;
 
   const range = useMemo(
-    () => computeRange({ stoneId, lengthMm, widthMm, legCount, finish: finish as any }),
-    [stoneId, lengthMm, widthMm, legCount, finish]
+    () => computeRange({ productType, stoneId, lengthMm, widthMm, legCount, finish: finish as any }),
+    [productType, stoneId, lengthMm, widthMm, legCount, finish]
   );
 
   const dossierCode = `SN-${shapeCode(shape)}-${stoneCode(stoneId)}-${(lengthMm / 10).toFixed(0)}x${(widthMm / 10).toFixed(0)}`;
 
   const dossier = [
+    { label: "Type", value: isPlinth ? "Salontafel (sokkel)" : "Eettafel" },
     { label: "Vorm", value: shapeLabel },
     { label: "Afmetingen", value: dimensions },
     { label: "Steensoort", value: stoneLabel },
     { label: "Afwerking", value: finishLabel },
-    { label: "Onderstel", value: onderstel },
+    // Een sokkel heeft geen onderstel; die regel weglaten in plaats van
+    // een betekenisloze waarde tonen.
+    ...(isPlinth ? [] : [{ label: "Onderstel", value: onderstel }]),
   ];
 
   // Afwijkende wensen uit de configurator ("Anders" per optiegroep).
@@ -152,6 +158,7 @@ const Voorstel = () => {
     try {
       const metadata = {
         dossierCode,
+        productType: isPlinth ? "Salontafel (massieve sokkel)" : "Eettafel",
         stoneId,
         stone: stoneLabel,
         shape,

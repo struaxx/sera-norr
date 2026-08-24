@@ -36,6 +36,8 @@ export interface ConfiguratorViewerV3Props {
   heightMm: number;
   thicknessMm: number;
   legStyle?: RuleLegStyle;
+  /** 'plinth' rendert een massieve sokkel zonder poten (salontafel). */
+  base?: 'legs' | 'plinth';
   stoneId?: string;
   edgeProfile?: string;
   onConfigResolved?: (resolved: ResolvedConfiguration) => void;
@@ -164,6 +166,7 @@ export function ConfiguratorViewerV3({
   heightMm,
   thicknessMm,
   legStyle,
+  base = 'legs',
   stoneId,
   edgeProfile,
   onConfigResolved,
@@ -243,6 +246,7 @@ export function ConfiguratorViewerV3({
             legStyle={resolved.legStyle}
             stoneId={stoneId}
             edgeProfile={edgeProfile as any}
+            base={base}
           />
           <ContactShadows
             position={[0, 0.001, 0]}
