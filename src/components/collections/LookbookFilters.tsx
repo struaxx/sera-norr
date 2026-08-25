@@ -23,7 +23,7 @@ export function LookbookFilters({ isNL, onFilterChange }: LookbookFiltersProps) 
   });
 
   const stoneOptions = isNL
-    ? ["Calacatta Viola", "Travertin", "Overig"]
+    ? ["Calacatta Viola", "Travertijn", "Overig"]
     : ["Calacatta Viola", "Travertine", "Other"];
 
   const typeOptions = isNL

@@ -512,7 +512,7 @@ export default function StoneConfigurator() {
         </p>
         <p className="text-sm text-sera-text-soft mt-2 max-w-md">
           Vrijblijvend. Uw exacte prijs ontvangt u in een persoonlijk voorstel,
-          afgestemd op de gekozen slab, afwerking en levering.
+          afgestemd op de gekozen steenplaat, afwerking en levering.
         </p>
         {stoneIsCustom && (
           <p className="text-sm text-sera-text-soft mt-2 max-w-md">

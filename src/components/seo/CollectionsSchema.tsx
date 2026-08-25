@@ -5,12 +5,12 @@ const collectionsItemList = {
   "@type": "ItemList",
   name: "SERA NORR Collecties",
   description:
-    "Maatwerk meubels in natuursteen: travertin, Calacatta Viola en geselecteerde steensoorten.",
+    "Maatwerk meubels in natuursteen: travertijn, Calacatta Viola en geselecteerde steensoorten.",
   itemListElement: [
     {
       "@type": "ListItem",
       position: 1,
-      name: "Travertin eettafel op maat",
+      name: "Travertijn eettafel op maat",
       url: "https://sera-norr.com/collections",
     },
     {

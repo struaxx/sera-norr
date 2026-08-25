@@ -42,12 +42,12 @@ const ROUTES = {
   '/contact': {
     title: 'Contact | SERA NORR Atelier',
     description:
-      'Neem contact op met SERA NORR. Deel uw vraag of idee voor maatwerk stenen meubels in travertin of marmer.',
+      'Neem contact op met SERA NORR. Deel uw vraag of idee voor maatwerk stenen meubels in travertijn of marmer.',
   },
   '/journal': {
     title: 'Journal, Inzichten over Stenen Meubels | SERA NORR',
     description:
-      'Artikelen over natuursteen, onderhoud, interieurs en Europees vakmanschap. Verdiep u in travertin, Calacatta Viola en het maakproces.',
+      'Artikelen over natuursteen, onderhoud, interieurs en Europees vakmanschap. Verdiep u in travertijn, Calacatta Viola en het maakproces.',
   },
   '/care': {
     title: 'Onderhoud & verzorging | SERA NORR',
@@ -143,7 +143,7 @@ const BASE_JSONLD = JSON.stringify({
       logo: { '@type': 'ImageObject', url: `${SITE}/logo.png`, caption: 'SERA NORR logo' },
       image: OG_IMAGE,
       description:
-        'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Ontworpen in Nederland.',
+        'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertijn, marmer en geselecteerde steensoorten). Ontworpen in Nederland.',
       areaServed: { '@type': 'Country', name: 'Netherlands' },
       contactPoint: {
         '@type': 'ContactPoint',

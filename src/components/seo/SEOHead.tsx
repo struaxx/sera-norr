@@ -134,7 +134,7 @@ export const organizationSchema = {
     caption: 'SERA NORR logo',
   },
   image: 'https://sera-norr.com/og-image.jpg',
-  description: 'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertin, marmer en geselecteerde steensoorten). Ontworpen in Nederland.',
+  description: 'SERA NORR is een online atelier voor maatwerk meubels in natuursteen (travertijn, marmer en geselecteerde steensoorten). Ontworpen in Nederland.',
   slogan: 'Online atelier voor maatwerk natuursteenmeubels',
   foundingLocation: {
     '@type': 'Place',
@@ -172,7 +172,7 @@ export const websiteSchema = {
   name: 'SERA NORR',
   alternateName: 'SERA NORR Online Atelier',
   url: 'https://sera-norr.com',
-  description: 'Online atelier voor maatwerk meubels in natuursteen. Travertin, marmer en geselecteerde steensoorten.',
+  description: 'Online atelier voor maatwerk meubels in natuursteen. Travertijn, marmer en geselecteerde steensoorten.',
   publisher: {
     '@id': 'https://sera-norr.com/#organization',
   },
@@ -250,7 +250,7 @@ export const localBusinessSchema = {
   url: 'https://sera-norr.com',
   email: 'info@sera-norr.com',
   telephone: '+31 6 83 99 11 58',
-  description: 'Online atelier voor maatwerk meubels in natuursteen. Travertin, marmer en geselecteerde steensoorten. Ontworpen in Nederland.',
+  description: 'Online atelier voor maatwerk meubels in natuursteen. Travertijn, marmer en geselecteerde steensoorten. Ontworpen in Nederland.',
   areaServed: {
     '@type': 'Country',
     name: 'Netherlands',

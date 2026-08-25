@@ -11,7 +11,7 @@
   "home": {
     "hero": {
       "title": "Luxe stenen meubels: op maat gemaakt in ons atelier.",
-      "subtitle": "Travertin, marmer en andere steensoorten. Voor interieurs die rust en karakter vragen.",
+      "subtitle": "Travertijn, marmer en andere steensoorten. Voor interieurs die rust en karakter vragen.",
       "ctaPrimary": "Vraag voorstel aan",
       "ctaSecondary": "Bekijk lookbook",
       "trust": {
@@ -38,7 +38,7 @@
     "collections": {
       "title": "Lookbook",
       "description": "Ons werk is materiaalgedreven en vormt de basis voor maatwerk.",
-      "terra_material": "Travertin",
+      "terra_material": "Travertijn",
       "terra_description": "Warme tinten en natuurlijke gelaagdheid. Tijdloos en rustig.",
       "vanta_material": "Calacatta Viola",
       "vanta_description": "Rijke aders en uitgesproken contrast. Sculpturaal en krachtig.",
@@ -100,11 +100,11 @@
     },
     "terra": {
       "name": "TERRA",
-      "subtitle": "Travertin",
-      "description": "Travertin met rustige tinten en natuurlijke gelaagdheid. Ontwerpen met zachte kracht, duidelijke lijnen en een kalme aanwezigheid.",
-      "editorialCopy": "Italiaans travertin met warme, honingkleurige tinten en karakteristieke textuur. Elk stuk wordt op maat gemaakt naar uw afmetingen en vormwensen.",
+      "subtitle": "Travertijn",
+      "description": "Travertijn met rustige tinten en natuurlijke gelaagdheid. Ontwerpen met zachte kracht, duidelijke lijnen en een kalme aanwezigheid.",
+      "editorialCopy": "Italiaans travertijn met warme, honingkleurige tinten en karakteristieke textuur. Elk stuk wordt op maat gemaakt naar uw afmetingen en vormwensen.",
       "cta": "Bekijk TERRA",
-      "longDescription": "De TERRA collectie put uit de oeroude warmte van Italiaans travertin, steen gevormd over millennia uit minerale bronnen, met in zich de herinnering aan water. Elk stuk onthult de karakteristieke putjes en honingkleurige tinten die travertin tot een van de meest expressieve materialen van de natuur maken."
+      "longDescription": "De TERRA collectie put uit de oeroude warmte van Italiaans travertijn, steen gevormd over millennia uit minerale bronnen, met in zich de herinnering aan water. Elk stuk onthult de karakteristieke putjes en honingkleurige tinten die travertijn tot een van de meest expressieve materialen van de natuur maken."
     },
     "vanta": {
       "name": "VANTA",
@@ -178,9 +178,9 @@
     "step5Description": "White-glove levering en professionele installatie. Uw stuk vindt zijn thuis.",
     "materialsSubtitle": "Materiaalpalet",
     "materialsTitle": "Zeldzaam & Verfijnd",
-    "materialsDescription": "Ons atelier werkt met een steeds evoluerende bibliotheek van uitzonderlijke natuurstenen. Van zeldzame marmers gewonnen in beperkte hoeveelheden tot klassiek travertin, we zoeken materialen die uw stuk boven het gewone verheffen.",
+    "materialsDescription": "Ons atelier werkt met een steeds evoluerende bibliotheek van uitzonderlijke natuurstenen. Van zeldzame marmers gewonnen in beperkte hoeveelheden tot klassiek travertijn, we zoeken materialen die uw stuk boven het gewone verheffen.",
     "naturalStone": "Natuursteen",
-    "naturalStoneList": "Travertin, Calacatta Viola, Verde Alpi, Nero Marquina",
+    "naturalStoneList": "Travertijn, Calacatta Viola, Verde Alpi, Nero Marquina",
     "metalAccents": "Metalen Accenten",
     "metalAccentsList": "Geborsteld messing, gezwart staal, bronzen patina",
     "craftsmanshipSubtitle": "Vakmanschap",
@@ -285,7 +285,7 @@
     "rotateHint": "Sleep om te roteren • Scroll om te zoomen",
     "requestQuote": "Vraag voorstel aan",
     "materials": {
-      "travertine": "Italiaans Travertin",
+      "travertine": "Italiaans Travertijn",
       "calacattaViola": "Calacatta Viola",
       "verdeAlpi": "Verde Alpi",
       "neroMarquina": "Nero Marquina"
@@ -309,7 +309,7 @@
   "journal": {
     "seo": {
       "title": "Journal, Inzichten over Stenen Meubels | SERA NORR",
-      "description": "Artikelen over natuursteen, onderhoud, interieurs en Europees vakmanschap. Verdiep u in travertin, Calacatta Viola en het maakproces."
+      "description": "Artikelen over natuursteen, onderhoud, interieurs en Europees vakmanschap. Verdiep u in travertijn, Calacatta Viola en het maakproces."
     },
     "title": "Journal",
     "subtitle": "Inzichten & Expertise",
@@ -330,8 +330,8 @@
   },
   "materials": {
     "seo": {
-      "title": "Materialen, Travertin & Marmer | SERA NORR",
-      "description": "Ontdek onze geselecteerde natuurstenen: Italiaans travertin en Calacatta Viola marmer. Herkomst, eigenschappen en onderhoud."
+      "title": "Materialen, Travertijn & Marmer | SERA NORR",
+      "description": "Ontdek onze geselecteerde natuurstenen: Italiaans travertijn en Calacatta Viola marmer. Herkomst, eigenschappen en onderhoud."
     },
     "title": "Materialen",
     "subtitle": "Natuursteen Selectie",
@@ -372,10 +372,10 @@
     },
     "types": {
       "travertine": {
-        "name": "Travertin",
-        "subtitle": "Italiaans Travertin",
-        "intro": "Travertin is een sedimentair gesteente dat ontstaat uit thermale bronnen. De karakteristieke putjes en warme tinten maken het een van de meest expressieve natuurstenen.",
-        "description": "Italiaans travertin wordt al millennia gebruikt in architectuur en design. Het materiaal heeft een natuurlijke warmte en textuur die perfect past bij hedendaagse interieurs.",
+        "name": "Travertijn",
+        "subtitle": "Italiaans Travertijn",
+        "intro": "Travertijn is een sedimentair gesteente dat ontstaat uit thermale bronnen. De karakteristieke putjes en warme tinten maken het een van de meest expressieve natuurstenen.",
+        "description": "Italiaans travertijn wordt al millennia gebruikt in architectuur en design. Het materiaal heeft een natuurlijke warmte en textuur die perfect past bij hedendaagse interieurs.",
         "specs": {
           "origin": "Tivoli, Italië",
           "hardness": "Medium (3-4 Mohs)",
@@ -384,16 +384,16 @@
         },
         "care": {
           "title": "Onderhoud",
-          "description": "Travertin vraagt om regelmatige verzegeling en voorzichtige reiniging. Vermijd zure producten en gebruik pH-neutrale reinigingsmiddelen."
+          "description": "Travertijn vraagt om regelmatige verzegeling en voorzichtige reiniging. Vermijd zure producten en gebruik pH-neutrale reinigingsmiddelen."
         },
         "faq": [
           {
-            "question": "Is travertin geschikt voor dagelijks gebruik?",
-            "answer": "Ja, mits goed verzegeld is travertin uitstekend geschikt voor dagelijks gebruik. De natuurlijke patina die ontstaat voegt karakter toe."
+            "question": "Is travertijn geschikt voor dagelijks gebruik?",
+            "answer": "Ja, mits goed verzegeld is travertijn uitstekend geschikt voor dagelijks gebruik. De natuurlijke patina die ontstaat voegt karakter toe."
           },
           {
-            "question": "Hoe onderhoud ik travertin?",
-            "answer": "Wekelijkse reiniging met pH-neutrale zeep en jaarlijkse verzegeling houden uw travertin in optimale conditie."
+            "question": "Hoe onderhoud ik travertijn?",
+            "answer": "Wekelijkse reiniging met pH-neutrale zeep en jaarlijkse verzegeling houden uw travertijn in optimale conditie."
           },
           {
             "question": "Kunnen vlekken worden verwijderd?",
@@ -405,7 +405,7 @@
         "name": "Calacatta Viola",
         "subtitle": "Zeldzaam Italiaans Marmer",
         "intro": "Calacatta Viola is een van de zeldzaamste en meest dramatische marmersoorten ter wereld, gewonnen uit de Apuaanse Alpen in Italië.",
-        "description": "De gedurfde violette aders tegen een lichtgevende witte achtergrond maken dit marmer tot een ware kunstwerk. Elk stuk is uniek door de natuurlijke variatie in adering.",
+        "description": "De gedurfde violette aders tegen een lichtgevende witte achtergrond maken dit marmer tot een waar kunstwerk. Elk stuk is uniek door de natuurlijke variatie in adering.",
         "specs": {
           "origin": "Apuaanse Alpen, Italië",
           "hardness": "Medium (3-4 Mohs)",

@@ -13,7 +13,7 @@ export function AtelierSteps({ isNL }: AtelierStepsProps) {
   const { ref, isInView, variants } = useScrollReveal();
 
   const steps = isNL ? [
-    { number: '01', title: 'Inspiratie kiezen', description: 'Blader door onze lookbook en selecteer een stijlrichting die bij u past.' },
+    { number: '01', title: 'Inspiratie kiezen', description: 'Blader door het lookbook en kies een stijlrichting die bij u past.' },
     { number: '02', title: 'Samenstellen in 3D', description: 'Kies materiaal, vorm en afmetingen in onze interactieve configurator.' },
     { number: '03', title: 'Dossier & aanvraag', description: 'Ontvang uw persoonlijke atelier-dossier met specificaties en voorstel.' },
   ] : [
@@ -50,8 +50,8 @@ export function AtelierSteps({ isNL }: AtelierStepsProps) {
           </h2>
           <p className="text-body-md text-background/70">
             {isNL 
-              ? "Van inspiratie tot op maat gemaakt. Ons digitale atelier begeleidt u." 
-              : "From inspiration to made-to-measure. Our digital atelier guides you."}
+              ? "Van eerste inspiratie tot een tafel op maat. Ons digitale atelier begeleidt u." 
+              : "From first inspiration to a table made to measure. Our digital atelier guides you."}
           </p>
         </motion.div>
 

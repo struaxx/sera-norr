@@ -33,7 +33,7 @@ const Index = () => {
   "Bespoke natural stone tables: handcrafted dining and coffee tables in travertine, Calacatta Viola and Statuario. White-glove delivery.";
 
   const seoKeywords = isNL ?
-  "natuurstenen tafel, natuurstenen eettafel, tafel van natuursteen, SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, travertijn eettafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel" :
+  "natuurstenen tafel, natuurstenen eettafel, tafel van natuursteen, SERA NORR, online atelier, maatwerk natuursteenmeubels, travertijn tafel, travertijn eettafel, marmeren tafel op maat, Calacatta Viola, stenen eettafel" :
   "natural stone table, natural stone dining table, SERA NORR, online atelier, bespoke natural stone furniture, travertine table, custom marble table, Calacatta Viola, stone dining table";
 
   return (
@@ -47,7 +47,7 @@ const Index = () => {
         structuredData={baseSchema} />
 
       {/* ============================================
-           CINEMATIC HERO — pinned scroll reveal
+           CINEMATIC HERO, pinned scroll reveal
            (Hero + Intro info in één beweging)
            ============================================ */}
       <CinematicHero isNL={isNL} scrollLabel={t('home.scroll')} />
@@ -84,7 +84,7 @@ const Index = () => {
 };
 
 // ============================================
-// CINEMATIC HERO — pinned scroll reveal
+// CINEMATIC HERO, pinned scroll reveal
 // Combines hero + intro info in one continuous
 // scroll-driven motion. Same info retained.
 // ============================================
@@ -100,21 +100,21 @@ function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: stri
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
 
   // Extra dark veil intensifies as intro takes over
-  const veilOpacity = useTransform(scrollYProgress, [0.25, 0.75], [0, 0.55]);
+  const veilOpacity = useTransform(scrollYProgress, [0.2, 0.7], [0, 0.55]);
 
   // Hero content fades out first
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.28, 0.42], [1, 1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 0.42], ["0%", "-6%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2, 0.4], [1, 1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-6%"]);
 
   // Intro info fades in as hero fades out
-  const introOpacity = useTransform(scrollYProgress, [0.45, 0.7], [0, 1]);
-  const introY = useTransform(scrollYProgress, [0.45, 0.85], ["4%", "0%"]);
+  const introOpacity = useTransform(scrollYProgress, [0.42, 0.72], [0, 1]);
+  const introY = useTransform(scrollYProgress, [0.42, 0.9], ["4%", "0%"]);
 
   // Scroll indicator fades away quickly
-  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
 
   return (
-    <div ref={wrapperRef} className="relative h-[260vh]">
+    <div ref={wrapperRef} className="relative h-[150vh]">
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-end">
         {/* Background image (scaled + parallax) */}
         <motion.div
@@ -272,7 +272,7 @@ function CollectiesSection({ isNL }: {isNL: boolean;}) {
           animate={isInView ? "visible" : "hidden"}>
 
           <h2 className="lg:col-span-7 font-serif text-display-sm lg:text-display-md text-foreground leading-[1.05]">
-            {isNL ? "Travertin & marmer" : "Travertine & marble"}
+            {isNL ? "Travertijn & marmer" : "Travertine & marble"}
           </h2>
           <p className="lg:col-span-5 text-body-md text-muted-foreground lg:pb-2">
             {isNL ?
@@ -343,7 +343,7 @@ function CollectiesSection({ isNL }: {isNL: boolean;}) {
                   </span>
                 </div>
                 <p className="mt-1.5 font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                  {project.location} · {project.material}
+                  {project.material}
                 </p>
               </div>
 

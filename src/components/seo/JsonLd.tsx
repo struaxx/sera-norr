@@ -8,7 +8,7 @@ export const organizationJsonLd = {
   url: "https://sera-norr.com",
   logo: "https://sera-norr.com/logo.png",
   description:
-    "Online atelier voor maatwerk stenen meubels in travertin en marmer. Ontworpen in Nederland.",
+    "Online atelier voor maatwerk stenen meubels in travertijn en marmer. Ontworpen in Nederland.",
   email: "info@sera-norr.com",
   telephone: "+31 6 83 99 11 58",
   areaServed: { "@type": "Country", name: "Netherlands" },
@@ -25,7 +25,7 @@ export const websiteJsonLd = {
   name: "SERA NORR",
   url: "https://sera-norr.com",
   description:
-    "Online atelier voor maatwerk stenen meubels in travertin en marmer.",
+    "Online atelier voor maatwerk stenen meubels in travertijn en marmer.",
   inLanguage: ["nl", "en"],
   publisher: { "@id": "https://sera-norr.com/#organization" },
 };

@@ -264,7 +264,7 @@ const BespokeHero = () => {
             >
               <img 
                 src={terraImage} 
-                alt={isNL ? "Travertin eettafel detail SERA NORR" : "Travertine table detail SERA NORR"} 
+                alt={isNL ? "Travertijn eettafel detail SERA NORR" : "Travertine table detail SERA NORR"} 
                 className="w-full h-full object-cover"
                 loading="lazy"
                 decoding="async"

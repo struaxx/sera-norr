@@ -34,7 +34,7 @@ export default function Materials() {
   const schemaItems = breadcrumbItems.map(item => ({ name: item.label, url: item.href }));
 
   const proofItems = isNL ? [
-    { title: 'Italiaanse oorsprong', description: 'Geselecteerd uit Europese groeves.' },
+    { title: 'Italiaanse oorsprong', description: 'Geselecteerd uit Europese groeven.' },
     { title: 'Uniek karakter', description: 'Elke plaat vertelt een eigen verhaal.' },
     { title: 'Duurzaam materiaal', description: 'Natuursteen gaat generaties mee.' },
   ] : [
@@ -89,12 +89,12 @@ export default function Materials() {
                 <div className="aspect-[3/4] bg-[#E8DFD5] overflow-hidden transition-transform duration-500 hover:scale-[1.02]">
                   {/* Placeholder - would be actual image */}
                   <div className="w-full h-full flex items-center justify-center">
-                    <span className="font-serif text-2xl text-foreground/30">Travertin</span>
+                    <span className="font-serif text-2xl text-foreground/30">Travertijn</span>
                   </div>
                 </div>
               </Link>
               <p className="editorial-caption mt-4">
-                {isNL ? 'Italiaans travertin: thermale oorsprong' : 'Italian travertine: thermal origin'}
+                {isNL ? 'Italiaans travertijn: thermale oorsprong' : 'Italian travertine: thermal origin'}
               </p>
             </div>
 

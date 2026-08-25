@@ -55,7 +55,7 @@ const About = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "over SERA NORR, online atelier, maatwerk natuursteenmeubels, ontworpen in Nederland, travertin, marmer" 
+          ? "over SERA NORR, online atelier, maatwerk natuursteenmeubels, ontworpen in Nederland, travertijn, marmer" 
           : "about SERA NORR, online atelier, bespoke natural stone furniture, designed in the Netherlands, travertine, marble"}
         structuredData={combinedSchema}
       />
@@ -175,7 +175,7 @@ function FounderStorySection({ isNL }: { isNL: boolean }) {
             <div className="space-y-6">
               <p className="text-body-md text-muted-foreground leading-relaxed">
                 {isNL
-                  ? 'Onze achtergrond ligt in maatwerk interieurs en keukens, een vak waarin natuursteen vaak een bijrol speelt. Met Sera Norr zetten we die rol om naar hoofdrol. Eén materiaal, volle aandacht, sculpturale meubels die generaties meegaan.'
+                  ? 'Onze achtergrond ligt in maatwerk interieurs en keukens, een vak waarin natuursteen vaak een bijrol speelt. Met Sera Norr maken we er de hoofdrol van. Eén materiaal, volle aandacht, sculpturale meubels die generaties meegaan.'
                   : 'Our background lies in bespoke interiors and kitchens, a craft in which natural stone often plays a supporting role. With Sera Norr we move that role to the centre. One material, full attention, sculptural furniture that lasts for generations.'}
               </p>
               <p className="text-body-md text-muted-foreground leading-relaxed">
@@ -218,7 +218,7 @@ function GuaranteeSection({ isNL }: { isNL: boolean }) {
 
           <div className="max-w-xl mx-auto text-center mb-16">
             <h2 className="font-serif text-display-sm text-foreground">
-              {isNL ? 'Twee beloftes, voor altijd' : 'Two promises, forever'}
+              {isNL ? 'Twee beloftes' : 'Two promises'}
             </h2>
           </div>
 
@@ -250,7 +250,7 @@ function InfoBlocksSection({ isNL }: { isNL: boolean }) {
     {
       label: 'Herkomst',
       title: 'Waar onze steen vandaan komt',
-      description: 'Onze steen komt uit de groeven die wereldwijd bekend staan om hun kwaliteit en karakter. Italiaans marmer uit Carrara en de Apuaanse Alpen, travertijn uit Italië en Turkije, kwartsiet uit Brazilië. Per project selecteren wij slabs op tekening, kleur en passend bij uw ontwerp. Geen voorraadsteen, geen toevalstreffer.',
+      description: 'Onze steen komt uit de groeven die wereldwijd bekend staan om hun kwaliteit en karakter. Italiaans marmer uit Carrara en de Apuaanse Alpen, travertijn uit Italië en Turkije, kwartsiet uit Brazilië. Per project selecteren wij de platen op tekening en kleur, passend bij uw ontwerp. Geen voorraadsteen, geen toevalstreffer.',
       image: undefined as string | undefined,
     },
     {
@@ -371,8 +371,8 @@ function OriginSection({ isNL }: { isNL: boolean }) {
           </h2>
           <p className="text-body-md text-muted-foreground leading-relaxed">
             {isNL
-              ? 'Sera Norr is gevestigd in Amersfoort en onderdeel van Ls Capital (KVK 89004213). Wij ontwerpen en coördineren vanuit Nederland en leveren in heel Europa.'
-              : 'Sera Norr is based in Amersfoort and part of Ls Capital, registered with the Dutch Chamber of Commerce (KVK 89004213). We design and coordinate from the Netherlands and deliver throughout Europe.'}
+              ? 'Sera Norr is gevestigd in Amersfoort en onderdeel van LS Capital (KvK 89004213). Wij ontwerpen en coördineren vanuit Nederland en leveren in heel Europa.'
+              : 'Sera Norr is based in Amersfoort and part of LS Capital, registered with the Dutch Chamber of Commerce (KvK 89004213). We design and coordinate from the Netherlands and deliver throughout Europe.'}
           </p>
         </motion.div>
       </div>
@@ -409,13 +409,13 @@ function FounderProfileSection({ isNL }: { isNL: boolean }) {
           </h3>
           <p className="font-sans text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
             {isNL
-              ? 'Oprichter Sera Norr · Managing Director Ls Capital'
-              : 'Oprichter Sera Norr · Managing Director Ls Capital'}
+              ? 'Oprichter Sera Norr · Managing Director LS Capital'
+              : 'Oprichter Sera Norr · Managing Director LS Capital'}
           </p>
           <p className="font-sans text-base text-foreground/80 leading-relaxed mb-5">
             {isNL
-              ? 'Via Ls Capital begeleid ik al jaren high-end interieurbouw in Nederland. Ik ken de leveranciers, de groeven en de standaard die premium kopers verwachten. Sera Norr is daar het logische vervolg op: hetzelfde niveau, nu in natuursteen.'
-              : 'Through Ls Capital I have guided high-end interior construction in the Netherlands for years. I know the suppliers, the quarries and the standard premium buyers expect. Sera Norr is the logical next step: the same level, now in natural stone.'}
+              ? 'Via LS Capital begeleid ik al jaren high-end interieurbouw in Nederland. Ik ken de leveranciers, de groeven en de standaard die premium kopers verwachten. Sera Norr is daar het logische vervolg op: hetzelfde niveau, nu in natuursteen.'
+              : 'Through LS Capital I have guided high-end interior construction in the Netherlands for years. I know the suppliers, the quarries and the standard premium buyers expect. Sera Norr is the logical next step: the same level, now in natural stone.'}
           </p>
           <p className="font-sans text-base text-foreground/80 leading-relaxed">
             {isNL
@@ -448,8 +448,8 @@ function PersonalGuaranteeSection({ isNL }: { isNL: boolean }) {
           </h2>
           <p className="font-sans text-base md:text-lg text-background/80 leading-relaxed mb-10">
             {isNL
-              ? 'Ik kies per project de steen, leg de specificaties vast en bewaak de kwaliteit tot het stuk bij u staat. Eén aanspreekpunt, van eerste tekening tot oplevering. Klopt er iets niet, dan los ik het op.'
-              : 'For every project I select the stone, lock in the specifications and guard the quality until the piece stands with you. One point of contact, from first drawing through to delivery. If something is not right, I resolve it.'}
+              ? 'Voor elk project kies ik de steen zelf uit, leg ik de specificaties vast en bewaak ik de kwaliteit tot het stuk bij u staat. U heeft één aanspreekpunt, van de eerste tekening tot de oplevering. Klopt er iets niet, dan los ik het op.'
+              : 'For every project I select the stone myself, lock in the specifications and guard the quality until the piece stands in your home. You have one point of contact, from the first drawing through to delivery. If something is not right, I resolve it.'}
           </p>
           <p
             className="text-background/70 text-3xl md:text-4xl mb-10 leading-none"
@@ -460,8 +460,8 @@ function PersonalGuaranteeSection({ isNL }: { isNL: boolean }) {
           <div className="pt-8 border-t border-background/15">
             <p className="font-sans text-xs uppercase tracking-[0.25em] text-background/50">
               {isNL
-                ? 'Oprichter Sera Norr · Managing Director Ls Capital'
-                : 'Oprichter Sera Norr · Managing Director Ls Capital'}
+                ? 'Oprichter Sera Norr · Managing Director LS Capital'
+                : 'Oprichter Sera Norr · Managing Director LS Capital'}
             </p>
           </div>
         </motion.div>

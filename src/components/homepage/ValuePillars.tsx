@@ -41,7 +41,7 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
     {
       icon: Gem,
       title: "Geselecteerde materialen",
-      description: "Travertin, marmer, natuursteen.",
+      description: "Travertijn, marmer, natuursteen.",
     },
   ] : [
     {
