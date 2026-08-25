@@ -60,6 +60,16 @@ export const PLINTH_BASE_PRICE: Record<string, number> = {
 /** Referentie-oppervlak voor de sokkelprijs: 1,20 x 0,70 m. */
 export const PLINTH_BASE_SURFACE_M2 = 0.84;
 
+// Ondergrens voor de sokkelprijs.
+// De prijs schaalt mee met het oppervlak, maar een deel van de kosten doet dat
+// niet: de white-glove levering is een vast bedrag, en verstek zagen en
+// afwerken kosten bij een klein blok bijna evenveel tijd als bij een groot.
+// Puur lineair schalen zou het instapmodel onder de kostprijs duwen.
+// AANPASBAAR: zet hier het laagste bedrag waarvoor een kleine sokkel nog uit
+// kan, inclusief BTW en inclusief levering. Dit is het laagste bedrag dat een
+// bezoeker te zien krijgt, niet het midden van de bandbreedte.
+export const PLINTH_MIN_PRICE = 895;
+
 // Range width: the indicative range is shown as [low, high] around
 // the computed midpoint. E.g. 0.12 = ±12%.
 export const RANGE_SPREAD = 0.12;            // VUL_IN, ±12%
@@ -103,11 +113,41 @@ export const computeRange = (input: PriceInput): PriceRange => {
   const legCost = isPlinth ? 0 : Math.max(0, input.legCount - 1) * EXTRA_LEG_SURCHARGE;
   const finishCost = FINISH_SURCHARGE[input.finish] ?? 0;
 
-  const mid = base * Math.max(0.5, surfaceFactor) + legCost + finishCost;
+  const scaled = base * Math.max(0.5, surfaceFactor) + legCost + finishCost;
+  // De ondergrens geldt voor de onderkant van de bandbreedte, zodat het
+  // laagste getoonde bedrag nooit onder het minimum zakt.
+  const midFloor = PLINTH_MIN_PRICE / (1 - RANGE_SPREAD);
+  const mid = isPlinth ? Math.max(midFloor, scaled) : scaled;
 
   return {
     low:  roundTo(mid * (1 - RANGE_SPREAD)),
     high: roundTo(mid * (1 + RANGE_SPREAD)),
     mid:  roundTo(mid),
   };
+};
+
+// ============================================
+// VANAF-PRIJS
+// ============================================
+// Berekend uit dezelfde prijsfunctie als de configurator zelf, zodat het
+// getoonde vanaf-bedrag niet los kan gaan lopen van de werkelijke prijzen.
+export const getEntryPrice = (
+  productType: 'eettafel' | 'salontafel',
+  smallest: { lengthMm: number; widthMm: number }
+): number => {
+  const stones = Object.keys(
+    productType === 'salontafel' ? PLINTH_BASE_PRICE : STONE_BASE_PRICE
+  );
+  const prices = stones.map(
+    (stoneId) =>
+      computeRange({
+        productType,
+        stoneId,
+        lengthMm: smallest.lengthMm,
+        widthMm: smallest.widthMm,
+        legCount: 1,
+        finish: 'gepolijst',
+      }).low
+  );
+  return Math.min(...prices);
 };
