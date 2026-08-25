@@ -247,10 +247,11 @@ className="absolute inset-0 w-full h-full object-cover"
       {/* 3. "Ontdek" hint, pulses gently when idle, fades on hover */}
       <div
         ref={hintRef}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="absolute inset-x-0 bottom-5 lg:bottom-7 flex justify-center pointer-events-none transition-opacity duration-500"
       >
-        <span className="micro-label text-foreground/60">
-          {isNL ? "Ontdek" : "Discover"}
+        <span className="inline-flex items-center gap-2 rounded-full bg-background/85 backdrop-blur-sm px-4 py-2 ring-1 ring-foreground/10 shadow-sm font-sans text-[10px] font-medium uppercase tracking-[0.25em] text-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-foreground/40" />
+          {isNL ? "Beweeg over het beeld" : "Move across the image"}
         </span>
       </div>
 

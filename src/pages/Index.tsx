@@ -10,6 +10,7 @@ import { Hairline } from "@/components/ui/hairline";
 
 import { ValuePillars, AtelierSteps } from "@/components/homepage";
 import { RoomReveal } from "@/components/RoomReveal";
+import { STYLE_COLLECTIONS } from "@/data/collections";
 import { usePageTracking } from "@/hooks/use-tracking";
 import { trackDesignAppointmentClick } from "@/lib/analytics";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
@@ -245,54 +246,110 @@ function IntroSection({ isNL }: {isNL: boolean;}) {
 // ============================================
 // COLLECTIES SECTION (static data)
 // ============================================
-function CollectiesSection({
-  isNL
-
-
-}: {isNL: boolean;}) {
+function CollectiesSection({ isNL }: {isNL: boolean;}) {
   const { ref, isInView, variants } = useScrollReveal();
 
   return (
     <section id="collecties" className="py-24 lg:py-32 bg-secondary/30" ref={ref}>
-      <div className="container mx-auto px-6 lg:px-12">
+      <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
         {/* Section header */}
         <motion.div
-          className="flex items-center gap-6 mb-16 lg:mb-20"
+          className="flex items-center gap-6 mb-14 lg:mb-20"
           variants={variants.fadeIn}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}>
-          
+
           <Hairline className="flex-1" />
           <span className="micro-label shrink-0">{isNL ? 'Lookbook' : 'Lookbook'}</span>
           <Hairline className="flex-1" />
         </motion.div>
 
+        {/* Kop in twee kolommen, zelfde ritme als de overige secties */}
         <motion.div
-          className="max-w-lg mb-16"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-end mb-10 lg:mb-14"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}>
-          
-          <h2 className="font-serif text-display-sm lg:text-display-md text-foreground mb-4">
+
+          <h2 className="lg:col-span-7 font-serif text-display-sm lg:text-display-md text-foreground leading-[1.05]">
             {isNL ? "Travertin & marmer" : "Travertine & marble"}
           </h2>
-          <p className="text-body-md text-muted-foreground">
+          <p className="lg:col-span-5 text-body-md text-muted-foreground lg:pb-2">
             {isNL ?
-            "Projecten, elk met eigen karakter." :
-            "Projects, each with its own character."}
+            "Twee interieurs waarin een blad van natuursteen de toon zet. Hieronder hetzelfde vertrek, met en zonder tafel." :
+            "Two interiors where a natural stone top sets the tone. Below, the same room, with and without a table."}
           </p>
         </motion.div>
 
-        {/* Room Fit Reveal, hover to see a table appear in the room */}
+        {/* Room Fit Reveal, ingekaderd met een bijschriftregel eronder */}
         <motion.div
-          className="mb-16"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}>
-          
+
           <Link to="/collections" className="block group" aria-label={isNL ? "Bekijk lookbook" : "View lookbook"}>
-            <RoomReveal isNL={isNL} />
+            <div className="relative overflow-hidden bg-muted">
+              <RoomReveal isNL={isNL} />
+              <div className="absolute inset-0 ring-1 ring-inset ring-foreground/10 pointer-events-none" />
+            </div>
+
+            {/* Bijschrift: links wat je ziet, rechts waar het heen gaat */}
+            <div className="mt-4 pt-4 border-t border-foreground/10 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 sm:gap-6">
+              <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                {isNL ? "Zonder tafel / met tafel" : "Without table / with table"}
+              </span>
+              <span className="inline-flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.25em] text-foreground">
+                {isNL ? "Bekijk lookbook" : "View lookbook"}
+                <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
+            </div>
           </Link>
+        </motion.div>
+
+        {/* Projectindex, dezelfde nummering als op de lookbookpagina */}
+        <motion.div
+          className="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 border-t border-foreground/10"
+          variants={variants.fadeUp}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}>
+
+          {STYLE_COLLECTIONS.map((project, i) => (
+            <Link
+              key={project.slug}
+              to={`/collections/${project.slug}`}
+              className={`group/item flex items-center gap-5 lg:gap-6 py-5 lg:py-6 border-b border-foreground/10 ${
+                i === 0 ? "md:pr-8 md:border-r md:border-foreground/10" : "md:pl-8"
+              }`}>
+
+              <div className="w-24 h-[4.5rem] lg:w-32 lg:h-24 shrink-0 overflow-hidden bg-muted relative">
+                {project.images[0] &&
+                <img
+                  src={project.images[0]}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover/item:scale-105" />
+                }
+                <div className="absolute inset-0 ring-1 ring-inset ring-foreground/10 pointer-events-none" />
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline gap-3 flex-wrap">
+                  <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-muted-foreground shrink-0">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="font-serif text-lg lg:text-xl text-foreground leading-tight">
+                    {project.name}
+                  </span>
+                </div>
+                <p className="mt-1.5 font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                  {project.location} · {project.material}
+                </p>
+              </div>
+
+              <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-all duration-300 group-hover/item:translate-x-1 group-hover/item:text-foreground" />
+            </Link>
+          ))}
         </motion.div>
       </div>
     </section>);
