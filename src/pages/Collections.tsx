@@ -1,9 +1,132 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ArrowRight } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { SEOHead, generateBreadcrumbSchema } from "@/components/seo";
 import { BlurImage } from "@/components/ui/blur-image";
-import { STYLE_COLLECTIONS } from "@/data/collections";
+import { Hairline } from "@/components/ui/hairline";
+import { STYLE_COLLECTIONS, type StyleCollection } from "@/data/collections";
+
+// Elk project krijgt een tweeluik: een staand hoofdbeeld en een liggend
+// tweede beeld, met de projectgegevens ertussen. De richting wisselt per
+// project, zodat de pagina leest als een spread en niet als een stapel
+// banners van gelijke hoogte.
+const ProjectSpread = ({
+  project,
+  index,
+  isNL,
+}: {
+  project: StyleCollection;
+  index: number;
+  isNL: boolean;
+}) => {
+  const flip = index % 2 === 1;
+  const [lead, second] = [project.images[0], project.images[1] ?? project.images[0]];
+  const tagline = isNL ? project.tagline : project.taglineEn;
+
+  return (
+    <article className="group">
+      {/* Projectregel: nummer, naam en herkomst op één hairline */}
+      <div className="flex items-baseline gap-4 lg:gap-6 pb-5">
+        <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-muted-foreground shrink-0">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <h2 className="font-serif text-2xl lg:text-4xl text-foreground shrink-0">
+          {project.name}
+        </h2>
+        <Hairline variant="dark" className="flex-1 translate-y-[-0.4em] hidden sm:block" />
+        <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground shrink-0 hidden sm:block">
+          {project.location} · {project.material}
+        </span>
+      </div>
+
+      {/*
+        Twee grid-rijen: het hoofdbeeld overspant ze allebei en bepaalt daarmee
+        de hoogte van het blok. Rij 1 is zo hoog als het bijschrift, rij 2 krijgt
+        precies de rest, zodat het tweede beeld exact met het hoofdbeeld
+        uitlijnt zonder gat of overschot.
+      */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] gap-6 lg:gap-x-10 lg:gap-y-6">
+        {/* Hoofdbeeld */}
+        <Link
+          to={`/collections/${project.slug}`}
+          className={`block relative overflow-hidden bg-muted lg:col-span-8 lg:row-start-1 lg:row-span-2 ${
+            flip ? "lg:col-start-5" : "lg:col-start-1"
+          }`}
+        >
+          <div className="aspect-[4/3] lg:aspect-[5/4]">
+            {lead && (
+              <BlurImage
+                src={lead}
+                alt={`${project.name} — ${tagline}`}
+                className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+              />
+            )}
+          </div>
+          <div className="absolute inset-0 ring-1 ring-inset ring-foreground/10 pointer-events-none" />
+        </Link>
+
+        {/* Bijschrift */}
+        <div
+          className={`lg:col-span-4 lg:row-start-1 ${
+            flip ? "lg:col-start-1" : "lg:col-start-9"
+          }`}
+        >
+          <p className="font-serif text-body-lg lg:text-xl text-foreground leading-snug">
+            {tagline}
+          </p>
+
+          <dl className="mt-6 lg:mt-8 border-t border-foreground/10">
+            {[
+              [isNL ? "Locatie" : "Location", project.location],
+              [isNL ? "Steensoort" : "Stone", project.material],
+              [isNL ? "Beelden" : "Images", String(project.images.length)],
+            ].map(([label, value]) => (
+              <div
+                key={label}
+                className="flex items-baseline justify-between py-2.5 border-b border-foreground/10"
+              >
+                <dt className="font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                  {label}
+                </dt>
+                <dd className="text-sm text-foreground">{value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <Link
+            to={`/collections/${project.slug}`}
+            className="inline-flex items-center gap-2 mt-6 font-sans text-[10px] uppercase tracking-[0.25em] text-foreground border-b border-foreground/30 pb-1 transition-colors hover:border-foreground"
+          >
+            {isNL ? "Bekijk project" : "View project"}
+            <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        {/* Tweede beeld, vult de resthoogte naast het hoofdbeeld */}
+        <Link
+          to={`/collections/${project.slug}`}
+          className={`relative block overflow-hidden bg-muted lg:col-span-4 lg:row-start-2 lg:min-h-[140px] ${
+            flip ? "lg:col-start-1" : "lg:col-start-9"
+          }`}
+          tabIndex={-1}
+          aria-hidden="true"
+        >
+          <div className="aspect-[4/3] lg:aspect-auto lg:absolute lg:inset-0">
+            {second && (
+              <BlurImage
+                src={second}
+                alt=""
+                className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+              />
+            )}
+          </div>
+          <div className="absolute inset-0 ring-1 ring-inset ring-foreground/10 pointer-events-none" />
+        </Link>
+      </div>
+    </article>
+  );
+};
 
 const Collections = () => {
   const { i18n } = useTranslation();
@@ -18,84 +141,75 @@ const Collections = () => {
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
-    { name: isNL ? "Lookbook" : "Lookbook", url: "/collections" },
+    { name: "Lookbook", url: "/collections" },
   ]);
 
   return (
     <Layout>
       <SEOHead title={seoTitle} description={seoDescription} structuredData={breadcrumbSchema} />
 
-      <section className="pt-28 lg:pt-36 pb-16 lg:pb-20 bg-background">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
-          <p className="font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-            {isNL ? "Inspiratie" : "Inspiration"}
-          </p>
-          <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
-            {isNL ? "Lookbook" : "Lookbook"}
-          </h1>
-          <p className="text-muted-foreground text-body-md max-w-2xl">
-            {isNL
-              ? "Een verzameling sferen die laten zien hoe natuursteen in uiteenlopende interieurs kan landen. Bedoeld ter inspiratie. Een startpunt voor uw eigen ontwerp."
-              : "A collection of moods that show how natural stone can land in different interiors. Intended as inspiration. A starting point for your own design."}
-          </p>
+      {/* ── Kop ─────────────────────────────────────────────── */}
+      <section className="pt-28 lg:pt-36 pb-10 lg:pb-14 bg-background">
+        <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+          <div className="flex items-center gap-6 mb-10 lg:mb-14">
+            <Hairline className="flex-1" />
+            <span className="micro-label shrink-0">{isNL ? "Inspiratie" : "Inspiration"}</span>
+            <Hairline className="flex-1" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-end">
+            <h1 className="lg:col-span-7 font-serif text-display-md lg:text-display-lg text-foreground leading-[1.05]">
+              {isNL ? "Lookbook" : "Lookbook"}
+            </h1>
+            <p className="lg:col-span-5 text-muted-foreground text-body-md lg:pb-2">
+              {isNL
+                ? "Een verzameling sferen die laat zien hoe natuursteen in uiteenlopende interieurs kan landen. Bedoeld ter inspiratie — een startpunt voor uw eigen ontwerp."
+                : "A collection of moods showing how natural stone can land in different interiors. Intended as inspiration — a starting point for your own design."}
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="pb-24 lg:pb-32 bg-background">
-        <div className="flex flex-col">
-          {STYLE_COLLECTIONS.map((c, i) => {
-            const Wrapper: any = c.comingSoon ? "div" : Link;
-            const wrapperProps = c.comingSoon
-              ? { "aria-disabled": true }
-              : { to: `/collections/${c.slug}` };
-            return (
-            <Wrapper
-              key={c.slug}
-              {...wrapperProps}
-              className={`group relative block w-full h-[45vh] lg:h-[60vh] overflow-hidden bg-muted border-b border-foreground/5 ${c.comingSoon ? "cursor-default" : ""}`}
-            >
-              {c.cover && (
-                <BlurImage
-                  src={c.cover}
-                  alt={c.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-              )}
+      {/* ── Projecten ───────────────────────────────────────── */}
+      <section className="pb-20 lg:pb-28 bg-background">
+        <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+          <div className="flex flex-col gap-20 lg:gap-32">
+            {STYLE_COLLECTIONS.map((project, i) => (
+              <ProjectSpread key={project.slug} project={project} index={i} isNL={isNL} />
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* Bottom gradient for legibility (always on) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-foreground/0 to-foreground/0 pointer-events-none" />
-
-              {/* Hover overlay (desktop hover only) */}
-              {!c.comingSoon && (
-                <div className="absolute inset-0 bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              )}
-
-              {/* Text block */}
-              <div className="absolute bottom-8 left-6 lg:bottom-12 lg:left-12 right-6 lg:right-12 text-background">
-                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-background/70 mb-3">
-                  {String(i + 1).padStart(2, "0")} {isNL ? "Project" : "Project"}
-                </p>
-                <h2 className="font-serif text-3xl lg:text-5xl text-background">
-                  {c.name}
-                </h2>
-                {c.comingSoon ? (
-                  <p className="mt-4 font-sans text-[10px] uppercase tracking-[0.25em] text-background/80">
-                    {isNL ? "Binnenkort beschikbaar" : "Coming soon"}
-                  </p>
-                ) : (
-                <div className="overflow-hidden">
-                  <p className="text-sm lg:text-base text-background/85 mt-3 max-w-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
-                    {c.tagline}
-                  </p>
-                  <span className="inline-block mt-4 text-[10px] uppercase tracking-[0.25em] text-background opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-75 ease-out">
-                    {isNL ? "Bekijk project" : "View project"}
-                  </span>
-                </div>
-                )}
-              </div>
-            </Wrapper>
-            );
-          })}
+      {/* ── Afsluiting ──────────────────────────────────────── */}
+      <section className="pb-24 lg:pb-36 bg-background">
+        <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
+          <div className="border-t border-foreground/10 pt-12 lg:pt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-end">
+            <div className="lg:col-span-7">
+              <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-5">
+                {isNL ? "Uw project" : "Your project"}
+              </p>
+              <p className="font-serif text-2xl lg:text-4xl text-foreground leading-snug max-w-xl">
+                {isNL
+                  ? "Elk blad wordt op maat gezaagd. Het volgende project is dat van u."
+                  : "Every top is cut to measure. The next project is yours."}
+              </p>
+            </div>
+            <div className="lg:col-span-5 lg:pb-2">
+              <p className="text-muted-foreground text-body-md mb-6">
+                {isNL
+                  ? "Stel uw tafel samen in de configurator, of leg uw idee voor en wij denken mee over formaat en steensoort."
+                  : "Configure your table, or share your idea and we will think along on size and stone."}
+              </p>
+              <Link
+                to="/configurator"
+                className="inline-flex items-center gap-3 font-sans text-[10px] uppercase tracking-[0.25em] text-foreground border-b border-foreground/30 pb-1 transition-colors hover:border-foreground"
+              >
+                {isNL ? "Ontwerp uw tafel" : "Design your table"}
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </Layout>
