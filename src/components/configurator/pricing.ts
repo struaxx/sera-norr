@@ -1,4 +1,13 @@
 // ============================================================
+// EENHEID VAN ALLE BEDRAGEN IN DIT BESTAND
+// ============================================================
+// Alle basisprijzen en ondergrenzen hieronder staan EX BTW, zoals het atelier
+// offreert. computeRange() telt de BTW er aan het eind bij op, omdat de
+// configurator consumentenprijzen toont en die inclusief BTW horen te zijn.
+// Voeg dus nooit zelf BTW toe aan een basisprijs.
+export const VAT_RATE = 0.21;
+
+// ============================================================
 // PRICING CONFIG, PLACEHOLDER VALUES
 // Replace the VUL_IN numbers with real figures from actual quotes.
 // These drive the INDICATIVE RANGE shown in the configurator.
@@ -8,12 +17,15 @@
 // Indicative starting price per stone, for the SMALLEST standard
 // configuration in that stone (smallest size, 1 leg, polished).
 // Source these from your real sent quotes later.
+// EX BTW. Nog niet bevestigd door het atelier: dit zijn de oorspronkelijke
+// placeholderbedragen, teruggerekend vanaf de prijs die de site al toonde,
+// zodat de weergegeven eettafelprijs onveranderd blijft.
 export const STONE_BASE_PRICE: Record<string, number> = {
-  'classic-cloudy':  2950,   // VUL_IN, travertijn, goedkoopst
-  'tiramisu':        2950,   // VUL_IN, travertijn
-  'light-emprador':  3800,   // VUL_IN, marmer
-  'dark-emperador':  3800,   // VUL_IN, marmer
-  'calacatta-viola': 4500,   // VUL_IN, premium marmer, duurst
+  'classic-cloudy':  2438,   // VUL_IN, travertijn, goedkoopst
+  'tiramisu':        2438,   // VUL_IN, travertijn
+  'light-emprador':  3140,   // VUL_IN, marmer
+  'dark-emperador':  3140,   // VUL_IN, marmer
+  'calacatta-viola': 3719,   // VUL_IN, premium marmer, duurst
 };
 
 // How much the indicative price scales with surface area.
@@ -23,13 +35,14 @@ export const BASE_SURFACE_M2 = 2.0;          // reference surface
 export const SURFACE_SCALING = 1.0;          // VUL_IN, 1.0 = linear with m²
 
 // Surcharge per extra leg beyond the first (indicative).
-export const EXTRA_LEG_SURCHARGE = 600;      // VUL_IN, per extra leg
+export const EXTRA_LEG_SURCHARGE = 496;      // VUL_IN, per extra leg, ex BTW
 
 // Finish surcharges (these you already know).
+// Ex BTW.
 export const FINISH_SURCHARGE: Record<string, number> = {
   gepolijst:  0,
-  gezoet:     200,
-  geborsteld: 150,
+  gezoet:     165,
+  geborsteld: 124,
 };
 
 // ============================================
@@ -42,14 +55,11 @@ export const FINISH_SURCHARGE: Record<string, number> = {
 // werkelijke inkoopprijs x 3 (ex BTW) neer zodra die bekend is.
 // Referentie: basisprijs geldt voor het standaardformaat 120 x 70 cm.
 // ============================================
-// Verkoopprijzen zoals opgegeven door het atelier, inclusief BTW, geldend
-// voor het referentieformaat 120 x 70 cm. Grotere maten schalen mee met het
-// oppervlak.
-//   travertijn en overige steensoorten: circa 1.500
-//   Calacatta Viola: 2.000 - 2.500 (schaars, hoge vraag)
-// Ter controle tegen de vaste opslagregel (inkoop x 3, daarna BTW):
-// Viola inkoop 700 -> 2.100 ex BTW -> 2.541 incl, wat binnen die range valt.
-// De basiswaarde 2.250 laat de configurator precies 2.000 - 2.500 tonen.
+// EX BTW, zoals opgegeven door het atelier, voor het referentieformaat
+// 120 x 70 cm. Grotere maten schalen mee met het oppervlak.
+//   travertijn en overige steensoorten: 1.500
+//   Calacatta Viola: 2.000 - 2.500; 2.250 is het midden van die range
+// Controle tegen de opslagregel: viola inkoop 700 x 3 = 2.100 ex BTW.
 export const PLINTH_BASE_PRICE: Record<string, number> = {
   'classic-cloudy':  1500,   // travertijn
   'tiramisu':        1500,   // travertijn
@@ -63,32 +73,29 @@ export const PLINTH_BASE_SURFACE_M2 = 0.84;
 // ============================================
 // BIJZETTAFEL (compact blok naast de bank)
 // ============================================
-// Een kubus van circa 45 x 45 x 45 gebruikt ruwweg de helft van het
-// plaatoppervlak van een salontafel van 120 x 70, vandaar de lagere basis.
-// AANPASBAAR: vervang door de werkelijke verkoopprijzen.
+// EX BTW, zoals opgegeven door het atelier, voor het referentieformaat
+// 45 x 45 cm.
 export const SIDE_TABLE_BASE_PRICE: Record<string, number> = {
-  'classic-cloudy':  600,
-  'tiramisu':        600,
-  'light-emprador':  600,
-  'dark-emperador':  600,
-  'calacatta-viola': 1000,
+  'classic-cloudy':  600,   // ex BTW
+  'tiramisu':        600,   // ex BTW
+  'light-emprador':  600,   // ex BTW
+  'dark-emperador':  600,   // ex BTW
+  'calacatta-viola': 1000,  // ex BTW
 };
 
 /** Referentieformaat voor de bijzettafel: 0,45 x 0,45 m. */
 export const SIDE_TABLE_BASE_SURFACE_M2 = 0.2025;
 
 /** Ondergrens voor de bijzettafel, om dezelfde reden als bij de sokkel. */
-export const SIDE_TABLE_MIN_PRICE = 450;
+export const SIDE_TABLE_MIN_PRICE = 370;
 
 // Ondergrens voor de sokkelprijs.
 // De prijs schaalt mee met het oppervlak, maar een deel van de kosten doet dat
 // niet: de white-glove levering is een vast bedrag, en verstek zagen en
 // afwerken kosten bij een klein blok bijna evenveel tijd als bij een groot.
 // Puur lineair schalen zou het instapmodel onder de kostprijs duwen.
-// AANPASBAAR: zet hier het laagste bedrag waarvoor een kleine sokkel nog uit
-// kan, inclusief BTW en inclusief levering. Dit is het laagste bedrag dat een
-// bezoeker te zien krijgt, niet het midden van de bandbreedte.
-export const PLINTH_MIN_PRICE = 895;
+// EX BTW. Dit is de onderkant van de bandbreedte, niet het midden.
+export const PLINTH_MIN_PRICE = 740;
 
 // Range width: the indicative range is shown as [low, high] around
 // the computed midpoint. E.g. 0.12 = ±12%.
@@ -148,10 +155,14 @@ export const computeRange = (input: PriceInput): PriceRange => {
   const midFloor = minPrice / (1 - RANGE_SPREAD);
   const mid = isPlinth ? Math.max(midFloor, scaled) : scaled;
 
+  // De basisprijzen staan ex BTW; de configurator toont consumentenprijzen,
+  // dus hier wordt de BTW toegevoegd.
+  const withVat = (n: number) => roundTo(n * (1 + VAT_RATE));
+
   return {
-    low:  roundTo(mid * (1 - RANGE_SPREAD)),
-    high: roundTo(mid * (1 + RANGE_SPREAD)),
-    mid:  roundTo(mid),
+    low:  withVat(mid * (1 - RANGE_SPREAD)),
+    high: withVat(mid * (1 + RANGE_SPREAD)),
+    mid:  withVat(mid),
   };
 };
 
