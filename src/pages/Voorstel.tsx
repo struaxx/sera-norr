@@ -64,8 +64,15 @@ const Voorstel = () => {
   });
 
   // Read configuration from URL
-  const productType = searchParams.get("productType") === "salontafel" ? "salontafel" : "eettafel";
-  const isPlinth = productType === "salontafel";
+  const rawProduct = searchParams.get("productType");
+  const productType: "eettafel" | "salontafel" | "bijzettafel" =
+    rawProduct === "salontafel" || rawProduct === "bijzettafel" ? rawProduct : "eettafel";
+  const isPlinth = productType !== "eettafel";
+  const PRODUCT_LABELS: Record<string, string> = {
+    eettafel: "Eettafel",
+    salontafel: "Salontafel (sokkel)",
+    bijzettafel: "Bijzettafel (blok)",
+  };
   const stoneId = searchParams.get("stoneId") ?? "calacatta-viola";
   const rawShape = searchParams.get("shape") ?? "corner";
   // Defensive: unknown shape strings fall back to 'corner'.
@@ -115,7 +122,7 @@ const Voorstel = () => {
   const dossierCode = `SN-${shapeCode(shape)}-${stoneCode(stoneId)}-${(lengthMm / 10).toFixed(0)}x${(widthMm / 10).toFixed(0)}`;
 
   const dossier = [
-    { label: "Type", value: isPlinth ? "Salontafel (sokkel)" : "Eettafel" },
+    { label: "Type", value: PRODUCT_LABELS[productType] },
     { label: "Vorm", value: shapeLabel },
     { label: "Afmetingen", value: dimensions },
     { label: "Steensoort", value: stoneLabel },
@@ -158,7 +165,7 @@ const Voorstel = () => {
     try {
       const metadata = {
         dossierCode,
-        productType: isPlinth ? "Salontafel (massieve sokkel)" : "Eettafel",
+        productType: PRODUCT_LABELS[productType],
         stoneId,
         stone: stoneLabel,
         shape,

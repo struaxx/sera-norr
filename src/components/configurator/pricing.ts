@@ -60,6 +60,26 @@ export const PLINTH_BASE_PRICE: Record<string, number> = {
 /** Referentie-oppervlak voor de sokkelprijs: 1,20 x 0,70 m. */
 export const PLINTH_BASE_SURFACE_M2 = 0.84;
 
+// ============================================
+// BIJZETTAFEL (compact blok naast de bank)
+// ============================================
+// Een kubus van circa 45 x 45 x 45 gebruikt ruwweg de helft van het
+// plaatoppervlak van een salontafel van 120 x 70, vandaar de lagere basis.
+// AANPASBAAR: vervang door de werkelijke verkoopprijzen.
+export const SIDE_TABLE_BASE_PRICE: Record<string, number> = {
+  'classic-cloudy':  895,
+  'tiramisu':        895,
+  'light-emprador':  895,
+  'dark-emperador':  895,
+  'calacatta-viola': 1345,   // zelfde verhouding als bij de salontafel
+};
+
+/** Referentieformaat voor de bijzettafel: 0,45 x 0,45 m. */
+export const SIDE_TABLE_BASE_SURFACE_M2 = 0.2025;
+
+/** Ondergrens voor de bijzettafel, om dezelfde reden als bij de sokkel. */
+export const SIDE_TABLE_MIN_PRICE = 750;
+
 // Ondergrens voor de sokkelprijs.
 // De prijs schaalt mee met het oppervlak, maar een deel van de kosten doet dat
 // niet: de white-glove levering is een vast bedrag, en verstek zagen en
@@ -79,8 +99,8 @@ export const RANGE_SPREAD = 0.12;            // VUL_IN, ±12%
 // ============================================================
 
 export interface PriceInput {
-  /** 'salontafel' rekent met de sokkel-basisprijs. */
-  productType?: 'eettafel' | 'salontafel';
+  /** Bepaalt welke basisprijs en welk referentieformaat gelden. */
+  productType?: 'eettafel' | 'salontafel' | 'bijzettafel';
   stoneId: string;
   lengthMm: number;
   widthMm: number;
@@ -97,13 +117,21 @@ export interface PriceRange {
 const roundTo = (n: number, step = 50) => Math.round(n / step) * step;
 
 export const computeRange = (input: PriceInput): PriceRange => {
-  const isPlinth = input.productType === 'salontafel';
+  const isSideTable = input.productType === 'bijzettafel';
+  const isPlinth = isSideTable || input.productType === 'salontafel';
 
-  const base = isPlinth
-    ? PLINTH_BASE_PRICE[input.stoneId] ?? PLINTH_BASE_PRICE['classic-cloudy']
-    : STONE_BASE_PRICE[input.stoneId] ?? STONE_BASE_PRICE['classic-cloudy'];
+  const table = isSideTable
+    ? SIDE_TABLE_BASE_PRICE
+    : input.productType === 'salontafel'
+      ? PLINTH_BASE_PRICE
+      : STONE_BASE_PRICE;
+  const base = table[input.stoneId] ?? table['classic-cloudy'];
 
-  const referenceSurface = isPlinth ? PLINTH_BASE_SURFACE_M2 : BASE_SURFACE_M2;
+  const referenceSurface = isSideTable
+    ? SIDE_TABLE_BASE_SURFACE_M2
+    : input.productType === 'salontafel'
+      ? PLINTH_BASE_SURFACE_M2
+      : BASE_SURFACE_M2;
 
   // surface in m² (mm → m)
   const surfaceM2 = (input.lengthMm / 1000) * (input.widthMm / 1000);
@@ -116,7 +144,8 @@ export const computeRange = (input: PriceInput): PriceRange => {
   const scaled = base * Math.max(0.5, surfaceFactor) + legCost + finishCost;
   // De ondergrens geldt voor de onderkant van de bandbreedte, zodat het
   // laagste getoonde bedrag nooit onder het minimum zakt.
-  const midFloor = PLINTH_MIN_PRICE / (1 - RANGE_SPREAD);
+  const minPrice = isSideTable ? SIDE_TABLE_MIN_PRICE : PLINTH_MIN_PRICE;
+  const midFloor = minPrice / (1 - RANGE_SPREAD);
   const mid = isPlinth ? Math.max(midFloor, scaled) : scaled;
 
   return {
@@ -132,11 +161,15 @@ export const computeRange = (input: PriceInput): PriceRange => {
 // Berekend uit dezelfde prijsfunctie als de configurator zelf, zodat het
 // getoonde vanaf-bedrag niet los kan gaan lopen van de werkelijke prijzen.
 export const getEntryPrice = (
-  productType: 'eettafel' | 'salontafel',
+  productType: 'eettafel' | 'salontafel' | 'bijzettafel',
   smallest: { lengthMm: number; widthMm: number }
 ): number => {
   const stones = Object.keys(
-    productType === 'salontafel' ? PLINTH_BASE_PRICE : STONE_BASE_PRICE
+    productType === 'bijzettafel'
+      ? SIDE_TABLE_BASE_PRICE
+      : productType === 'salontafel'
+        ? PLINTH_BASE_PRICE
+        : STONE_BASE_PRICE
   );
   const prices = stones.map(
     (stoneId) =>

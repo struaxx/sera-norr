@@ -48,6 +48,8 @@ const STONE_ALIASES: Record<string, string> = {
 const PRODUCT_ALIASES: Record<string, ProductType> = {
   'eettafel': 'eettafel', 'dining': 'eettafel',
   'salontafel': 'salontafel', 'coffee': 'salontafel', 'sokkel': 'salontafel',
+  'bijzettafel': 'bijzettafel', 'side': 'bijzettafel',
+  'kubus': 'bijzettafel', 'blok': 'bijzettafel',
 };
 
 const SHAPE_ALIASES: Record<string, RuleShape> = {
@@ -325,7 +327,9 @@ export default function StoneConfigurator() {
         </div>
         {isPlinth && (
           <p className="text-xs text-sera-text-soft mt-3 max-w-md">
-            Onze salontafel is een massieve sokkel: het blok zelf is de tafel, zonder onderstel.
+            {productType === 'bijzettafel'
+              ? 'Een compact blok naast de bank of stoel. Massief uitgevoerd, zonder onderstel.'
+              : 'Onze salontafel is een massieve sokkel: het blok zelf is de tafel, zonder onderstel.'}
           </p>
         )}
       </div>
@@ -518,7 +522,7 @@ export default function StoneConfigurator() {
         )}
         {range.low > entryPrice && (
           <p className="text-xs text-sera-text-soft mt-4">
-            {product.label} vanaf €{entryPrice.toLocaleString('nl-NL')} bij een kleiner formaat.
+            Al vanaf €{entryPrice.toLocaleString('nl-NL')} in een kleiner formaat.
           </p>
         )}
         {!stoneIsCustom && filledNotes.length > 0 && (
