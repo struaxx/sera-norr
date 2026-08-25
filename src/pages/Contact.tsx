@@ -105,7 +105,7 @@ const Contact = () => {
     : "Contact | SERA NORR Atelier";
 
   const seoDescription = isNL
-    ? "Neem contact op met SERA NORR. Deel uw vraag of idee voor maatwerk stenen meubels in travertin of marmer."
+    ? "Neem contact op met SERA NORR. Deel uw vraag of idee voor maatwerk stenen meubels in travertijn of marmer."
     : "Contact SERA NORR. Share your question or idea for bespoke stone furniture in travertine or marble.";
 
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -136,55 +136,88 @@ const Contact = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={isNL 
-          ? "contact SERA NORR, online atelier, maatwerk natuursteenmeubels, travertin tafel, marmeren meubels" 
+          ? "contact SERA NORR, online atelier, maatwerk natuursteenmeubels, travertijn tafel, marmeren meubels" 
           : "contact SERA NORR, online atelier, bespoke natural stone furniture, travertine table, marble furniture"}
         structuredData={combinedSchema}
       />
 
-      {/* Hero */}
-      <section className="pt-28 lg:pt-36 pb-16 lg:pb-20 bg-background">
-        <div className="container mx-auto px-6 lg:px-12">
+      {/*
+        Kop en formulier staan naast elkaar in plaats van onder elkaar: de
+        vorige opzet duwde het formulier ruim een scherm naar beneden, waardoor
+        bezoekers eerst door lege ruimte moesten scrollen voordat ze iets
+        konden invullen.
+      */}
+      <section className="pt-28 lg:pt-32 pb-20 lg:pb-28 bg-background">
+        <div className="container mx-auto px-6 lg:px-12 max-w-6xl">
           <Breadcrumbs className="mb-8 opacity-60 text-[10px]" />
-          
-          <div className="max-w-3xl">
-            <p className="micro-label mb-6">Contact</p>
-            <h1 className="font-serif text-display-md lg:text-display-lg text-foreground mb-6">
-              {isNL ? 'Vertel ons over uw ruimte' : 'Tell us about your space'}
-            </h1>
-            <p className="text-body-lg text-muted-foreground leading-relaxed max-w-2xl mb-8">
-              {isNL
-                ? 'Deel uw vraag of idee. Wij helpen u de juiste richting te vinden.'
-                : 'Share your question or idea. We help you find the right direction.'}
-            </p>
-            
-            {/* Contact links */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
-              <a 
-                href="mailto:info@sera-norr.com" 
-                className="inline-flex items-center gap-3 text-body-md text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Mail className="w-4 h-4" strokeWidth={1.5} />
-                info@sera-norr.com
-              </a>
-              <a 
-                href="tel:+31683991158" 
-                className="inline-flex items-center gap-3 text-body-md text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Phone className="w-4 h-4" strokeWidth={1.5} />
-                +31 6 83 99 11 58
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Contact Form Section */}
-      <section className="py-24 lg:py-32 bg-secondary/20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-2xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            {/* Linkerkolom: wie u spreekt en hoe u ons anders bereikt */}
+            <div className="lg:col-span-5">
+              <p className="micro-label mb-5">Contact</p>
+              <h1 className="font-serif text-display-sm lg:text-display-md text-foreground leading-[1.05] mb-5">
+                {isNL ? 'Vertel ons over uw ruimte' : 'Tell us about your space'}
+              </h1>
+              <p className="text-body-md text-muted-foreground leading-relaxed max-w-md">
+                {isNL
+                  ? 'Deel uw vraag of idee. Wij denken mee over steensoort, formaat en vorm, en u krijgt van ons een eerlijk beeld van de mogelijkheden.'
+                  : 'Share your question or idea. We think along on stone, size and shape, and give you an honest picture of what is possible.'}
+              </p>
+
+              {/* Direct contact */}
+              <div className="mt-8 border-t border-foreground/10">
+                <a
+                  href="mailto:info@sera-norr.com"
+                  className="group flex items-center gap-4 py-4 border-b border-foreground/10 transition-colors hover:text-foreground"
+                >
+                  <Mail className="w-4 h-4 shrink-0 text-muted-foreground" strokeWidth={1.5} />
+                  <span className="text-body-md text-foreground">info@sera-norr.com</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-auto shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+                <a
+                  href="tel:+31683991158"
+                  className="group flex items-center gap-4 py-4 border-b border-foreground/10 transition-colors hover:text-foreground"
+                >
+                  <Phone className="w-4 h-4 shrink-0 text-muted-foreground" strokeWidth={1.5} />
+                  <span className="text-body-md text-foreground">+31 6 83 99 11 58</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-auto shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </div>
+
+              {/* Wat u van ons kunt verwachten */}
+              <dl className="mt-8">
+                {[
+                  [isNL ? 'Reactie' : 'Response', isNL ? 'Binnen 48 uur' : 'Within 48 hours'],
+                  [isNL ? 'Levertijd' : 'Lead time', isNL ? '12–16 weken' : '12–16 weeks'],
+                  [isNL ? 'Levering' : 'Delivery', isNL ? 'White-glove, NL & BE' : 'White-glove, NL & BE'],
+                ].map(([label, value]) => (
+                  <div key={label} className="flex items-baseline justify-between py-2.5 border-b border-foreground/10">
+                    <dt className="font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                      {label}
+                    </dt>
+                    <dd className="text-sm text-foreground">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <p className="hidden lg:block mt-8 text-body-sm text-muted-foreground">
+                {isNL
+                  ? 'Liever meteen zelf samenstellen? '
+                  : 'Rather start configuring right away? '}
+                <Link
+                  to="/atelier"
+                  className="text-foreground underline underline-offset-4 hover:text-foreground/80 transition-colors"
+                >
+                  {isNL ? 'Ontwerp uw tafel' : 'Design your table'}
+                </Link>
+              </p>
+            </div>
+
+            {/* Rechterkolom: het formulier, direct in beeld */}
+            <div className="lg:col-span-7">
             {isSubmitted ? (
               /* Success State */
-              <div className="bg-background p-12 lg:p-16 border border-foreground/8 text-center">
+              <div className="bg-secondary/30 p-12 lg:p-16 border border-foreground/10 text-center">
                 <CheckCircle className="w-12 h-12 text-foreground/60 mx-auto mb-6" strokeWidth={1} />
                 <h2 className="font-serif text-display-sm text-foreground mb-4">
                   {isNL ? 'Dank u.' : 'Thank you.'}
@@ -203,7 +236,7 @@ const Contact = () => {
               </div>
             ) : (
               /* Form */
-              <div className="bg-background p-8 lg:p-12 border border-foreground/8">
+              <div className="bg-secondary/30 p-8 lg:p-10 border border-foreground/10">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Honeypot */}
                   <div className="absolute -left-[9999px]" aria-hidden="true">
@@ -334,14 +367,13 @@ const Contact = () => {
               </div>
             )}
 
-            {/* Subtle link to Maatwerk */}
-            <div className="mt-12 text-center">
-              <p className="text-body-sm text-muted-foreground">
-                {isNL 
-                  ? 'Wilt u direct een projectdossier samenstellen? ' 
-                  : 'Want to create a project dossier directly? '}
-                <Link 
-                  to="/atelier" 
+
+              <p className="lg:hidden mt-8 text-body-sm text-muted-foreground">
+                {isNL
+                  ? 'Liever meteen zelf samenstellen? '
+                  : 'Rather start configuring right away? '}
+                <Link
+                  to="/atelier"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80 transition-colors"
                 >
                   {isNL ? 'Ontwerp uw tafel' : 'Design your table'}
