@@ -19,10 +19,11 @@ export interface StyleCollection {
   name: string;
   tagline: string;
   taglineEn: string;
-  /** Stad of streek, getoond in de projectregel van het lookbook. */
-  location: string;
-  /** Steensoort die het project draagt, getoond naast de locatie. */
+  /** Steensoort die het project draagt, getoond in de projectregel. */
   material: string;
+  /** Waar de steen in dit project voor is toegepast. */
+  application: string;
+  applicationEn: string;
   cover: string | null;       // null → grey placeholder
   images: (string | null)[];  // null entries → grey placeholders
 }
@@ -33,8 +34,9 @@ export const STYLE_COLLECTIONS: StyleCollection[] = [
     name: 'Herenhuis Amsterdam',
     tagline: 'Klassieke grandeur, hedendaagse rust.',
     taglineEn: 'Classical grandeur, contemporary calm.',
-    location: 'Amsterdam',
-    material: 'Travertijn',
+    material: 'Dark Emperador marmer',
+    application: 'Eettafel',
+    applicationEn: 'Dining table',
     cover: ha1.url,
     images: [ha1.url, ha2.url, ha8.url, ha6.url, ha4.url, ha5.url, ha3.url, ha7.url],
   },
@@ -43,8 +45,9 @@ export const STYLE_COLLECTIONS: StyleCollection[] = [
     name: 'Grachtenpand Utrecht',
     tagline: 'Historisch karakter, ingetogen luxe.',
     taglineEn: 'Historic character, understated luxury.',
-    location: 'Utrecht',
-    material: 'Marmer',
+    material: 'Rosso Levanto marmer',
+    application: 'Eettafel',
+    applicationEn: 'Dining table',
     cover: gu1.url,
     images: [gu1.url, gu4.url, gu7.url, gu3.url, gu2.url, gu5.url, gu6.url],
   },

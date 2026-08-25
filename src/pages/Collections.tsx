@@ -36,7 +36,7 @@ const ProjectSpread = ({
         </h2>
         <Hairline variant="dark" className="flex-1 translate-y-[-0.4em] hidden sm:block" />
         <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-muted-foreground shrink-0 hidden sm:block">
-          {project.location} · {project.material}
+          {project.material}
         </span>
       </div>
 
@@ -58,7 +58,7 @@ const ProjectSpread = ({
             {lead && (
               <BlurImage
                 src={lead}
-                alt={`${project.name} — ${tagline}`}
+                alt={`${project.name}, ${tagline}`}
                 className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
               />
             )}
@@ -78,9 +78,11 @@ const ProjectSpread = ({
 
           <dl className="mt-6 lg:mt-8 border-t border-foreground/10">
             {[
-              [isNL ? "Locatie" : "Location", project.location],
               [isNL ? "Steensoort" : "Stone", project.material],
-              [isNL ? "Beelden" : "Images", String(project.images.length)],
+              [
+                isNL ? "Toepassing" : "Application",
+                isNL ? project.application : project.applicationEn,
+              ],
             ].map(([label, value]) => (
               <div
                 key={label}
@@ -163,8 +165,8 @@ const Collections = () => {
             </h1>
             <p className="lg:col-span-5 text-muted-foreground text-body-md lg:pb-2">
               {isNL
-                ? "Een verzameling sferen die laat zien hoe natuursteen in uiteenlopende interieurs kan landen. Bedoeld ter inspiratie — een startpunt voor uw eigen ontwerp."
-                : "A collection of moods showing how natural stone can land in different interiors. Intended as inspiration — a starting point for your own design."}
+                ? "Een verzameling sferen die laat zien hoe natuursteen in uiteenlopende interieurs kan landen. Bedoeld ter inspiratie, als startpunt voor uw eigen ontwerp."
+                : "A collection of moods showing how natural stone can land in different interiors. Intended as inspiration, as a starting point for your own design."}
             </p>
           </div>
         </div>
