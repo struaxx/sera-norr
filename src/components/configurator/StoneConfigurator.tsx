@@ -20,7 +20,7 @@ import type { RuleShape, RuleLegStyle } from '@/lib/configurator/rules/productRu
 import { ConfiguratorViewerV3 } from './ConfiguratorViewerV3';
 import { DesignAppointmentBlock } from '@/components/DesignAppointment';
 import { stateToViewerProps } from './stateMapping';
-import { computeRange } from './pricing';
+import { computeRange, getEntryPrice } from './pricing';
 import { Slider } from '@/components/ui/slider';
 
 const FINISHES = [
@@ -274,6 +274,16 @@ export default function StoneConfigurator() {
 
   const range = computeRange({ productType, stoneId, lengthMm, widthMm, legCount, finish });
 
+  // Instapprijs van deze productsoort, berekend uit dezelfde prijsfunctie.
+  // Zo ziet een bezoeker met een kleiner budget dat er een bereikbare optie
+  // is, zonder dat er ergens een los "vanaf"-bedrag hardcoded staat dat kan
+  // verouderen.
+  const smallestRange = getSizeRangeFor(productType, isPlinth ? 'corner' : shape);
+  const entryPrice = getEntryPrice(productType, {
+    lengthMm: smallestRange.length.min,
+    widthMm: smallestRange.width.min,
+  });
+
   return (
     <div className="bg-sera-bg text-sera-text">
       {/* 1. Heading */}
@@ -504,6 +514,11 @@ export default function StoneConfigurator() {
           <p className="text-sm text-sera-text-soft mt-2 max-w-md">
             Deze indicatie is berekend op {selectedStoneLabel}. Voor de door u gevraagde steen
             ontvangt u de prijs in uw voorstel.
+          </p>
+        )}
+        {range.low > entryPrice && (
+          <p className="text-xs text-sera-text-soft mt-4">
+            {product.label} vanaf €{entryPrice.toLocaleString('nl-NL')} bij een kleiner formaat.
           </p>
         )}
         {!stoneIsCustom && filledNotes.length > 0 && (
