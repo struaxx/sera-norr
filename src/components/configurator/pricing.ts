@@ -67,18 +67,18 @@ export const PLINTH_BASE_SURFACE_M2 = 0.84;
 // plaatoppervlak van een salontafel van 120 x 70, vandaar de lagere basis.
 // AANPASBAAR: vervang door de werkelijke verkoopprijzen.
 export const SIDE_TABLE_BASE_PRICE: Record<string, number> = {
-  'classic-cloudy':  895,
-  'tiramisu':        895,
-  'light-emprador':  895,
-  'dark-emperador':  895,
-  'calacatta-viola': 1345,   // zelfde verhouding als bij de salontafel
+  'classic-cloudy':  600,
+  'tiramisu':        600,
+  'light-emprador':  600,
+  'dark-emperador':  600,
+  'calacatta-viola': 1000,
 };
 
 /** Referentieformaat voor de bijzettafel: 0,45 x 0,45 m. */
 export const SIDE_TABLE_BASE_SURFACE_M2 = 0.2025;
 
 /** Ondergrens voor de bijzettafel, om dezelfde reden als bij de sokkel. */
-export const SIDE_TABLE_MIN_PRICE = 750;
+export const SIDE_TABLE_MIN_PRICE = 450;
 
 // Ondergrens voor de sokkelprijs.
 // De prijs schaalt mee met het oppervlak, maar een deel van de kosten doet dat
