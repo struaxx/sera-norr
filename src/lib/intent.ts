@@ -226,7 +226,7 @@ export const recordMaterialInterest = (material: string): void => {
   const tags = getInterestTags();
   
   // Check for travertine interest (2+ events)
-  if (normalizedMaterial.includes('travertin') && materialCounts[normalizedMaterial] >= 2) {
+  if (normalizedMaterial.includes('travertijn') && materialCounts[normalizedMaterial] >= 2) {
     tags.travertine = true;
   }
   

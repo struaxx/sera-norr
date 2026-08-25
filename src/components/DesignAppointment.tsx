@@ -36,8 +36,8 @@ export function DesignAppointmentBlock({ isNL, source, className = "" }: DesignA
       </h3>
       <p className="text-sm text-sera-text-soft leading-relaxed mb-5 max-w-md">
         {isNL
-          ? "20 minuten, via video of telefoon. Bespreek uw interieur, wensen en budget met ons atelier — wij denken mee over steen, vorm en formaat. Vrijblijvend."
-          : "20 minutes, by video or phone. Discuss your interior, wishes and budget with our atelier — we advise on stone, shape and size. No obligations."}
+          ? "20 minuten, via video of telefoon. Bespreek uw interieur, wensen en budget met ons atelier. Wij denken mee over steen, vorm en formaat. Vrijblijvend."
+          : "20 minutes, by video or phone. Discuss your interior, wishes and budget with our atelier. We advise on stone, shape and size. No obligations."}
       </p>
       <div className="flex flex-col sm:flex-row gap-3">
         <a

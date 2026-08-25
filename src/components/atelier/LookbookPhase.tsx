@@ -25,7 +25,7 @@ const COLLECTIONS = [
   { 
     id: 'terra' as const, 
     name: 'TERRA', 
-    subtitle: 'Italiaans Travertin',
+    subtitle: 'Italiaans Travertijn',
     description: 'Warme, aardse tinten met natuurlijke textuur',
     image: '/placeholder.svg',
   },

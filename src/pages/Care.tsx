@@ -24,7 +24,7 @@ const Care = () => {
     { question: 'Kan ik hete pannen op natuursteen zetten?', answer: 'Natuursteen is hittebestendig, maar wij raden altijd een onderzetter aan om thermische schokken te voorkomen en de afwerking te beschermen.' },
     { question: 'Hoe verwijder ik vlekken?', answer: 'De meeste vlekken kunnen met een vochtige doek worden verwijderd. Bij hardnekkige vlekken adviseren wij een pH-neutrale steenreiniger. Vermijd zure of schurende middelen.' },
     { question: 'Hoe vaak moet ik impregneren?', answer: 'Voor intensief gebruikte oppervlakken (eettafels) adviseren wij jaarlijks impregneren. Consoles en bijzettafels kunnen om de 2-3 jaar worden behandeld.' },
-    { question: 'Verandert travertin van kleur?', answer: 'Travertin kan licht patineren door gebruik, wat het karakter verdiept. Dit is een natuurlijk proces dat bijdraagt aan de unieke schoonheid van het materiaal.' },
+    { question: 'Verandert travertijn van kleur?', answer: 'Travertijn kan licht patineren door gebruik, wat het karakter verdiept. Dit is een natuurlijk proces dat bijdraagt aan de unieke schoonheid van het materiaal.' },
     { question: 'Is marmer gevoelig voor krassen?', answer: 'Marmer is zachter dan graniet en kan bij intensief gebruik lichte gebruikssporen krijgen. Dit is normaal en draagt bij aan het geleefde karakter.' },
   ] : [
     { question: 'Can I place hot pans on natural stone?', answer: 'Natural stone is heat resistant, but we always recommend a trivet to prevent thermal shock and protect the finish.' },

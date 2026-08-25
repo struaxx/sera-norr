@@ -35,7 +35,7 @@ export const journalArticles: JournalArticle[] = [
     blocks: [
       {
         type: "p",
-        text: "U twijfelt tussen travertijn en marmer voor een natuurstenen tafel. Beide hebben een natuurlijke uitstraling en beide vragen wat meer aandacht dan een blad van hout of kunststof. Waar ze in verschillen — uiterlijk, onderhoud en prijs — bepaalt welke bij u past.",
+        text: "U twijfelt tussen travertijn en marmer voor een natuurstenen tafel. Beide hebben een natuurlijke uitstraling en beide vragen wat meer aandacht dan een blad van hout of kunststof. Het verschil zit in uiterlijk, onderhoud en prijs. Dat bepaalt welke bij u past.",
       },
       { type: "h2", text: "Verwant, maar niet hetzelfde gesteente" },
       {
@@ -57,12 +57,12 @@ export const journalArticles: JournalArticle[] = [
       },
       {
         type: "p",
-        text: "Zoekt u rust, dan volstaat travertijn of een licht marmer. Wilt u een pronkstuk, dan is Calacatta Viola de keuze — zeldzaam, uit beperkte groeven, en daardoor fors duurder dan de gangbare soorten.",
+        text: "Zoekt u rust, dan volstaat travertijn of een licht marmer. Wilt u een pronkstuk, dan is Calacatta Viola de keuze: zeldzaam, uit beperkte groeven, en daardoor fors duurder dan de gangbare soorten.",
       },
       { type: "h2", text: "Waar u bij het gebruik op let" },
       {
         type: "p",
-        text: "In het gebruik lijken de twee sterk op elkaar; het is allebei kalksteenachtig materiaal. Twee dingen zijn belangrijk: de steen is relatief zacht en gevoelig voor zuur. De hardheid ligt rond 3 tot 4 op de schaal van Mohs — calciet zelf zit op 3. Dat is duidelijk zachter dan graniet of kwartscomposiet, dus zand, keramiek of staal kunnen krassen. Belangrijker nog is het etsen. Calciumcarbonaat reageert met zuur, waardoor doffe plekken ontstaan. Citroensap, azijn, wijn, cola, tomaat en ontkalker doen dat, soms al binnen enkele minuten.",
+        text: "In het gebruik lijken de twee sterk op elkaar; het is allebei kalksteenachtig materiaal. Twee dingen zijn belangrijk: de steen is relatief zacht en gevoelig voor zuur. De hardheid ligt rond 3 tot 4 op de schaal van Mohs; calciet zelf zit op 3. Dat is duidelijk zachter dan graniet of kwartscomposiet, dus zand, keramiek of staal kunnen krassen. Belangrijker nog is het etsen. Calciumcarbonaat reageert met zuur, waardoor doffe plekken ontstaan. Citroensap, azijn, wijn, cola, tomaat en ontkalker doen dat, soms al binnen enkele minuten.",
       },
       {
         type: "quote",
@@ -95,14 +95,14 @@ export const journalArticles: JournalArticle[] = [
         items: [
           "De plaat zelf. De steen is de grootste materiaalkost, en de prijs per vierkante meter verschilt enorm per soort. Zeldzame stenen uit beperkte groeven, zoals Calacatta Viola, kosten een veelvoud van de gangbare soorten.",
           "Verlies bij het zagen. Natuursteen wordt per hele plaat verkocht; vaak neemt u de volledige plaat af, ook als u maar een deel gebruikt. Bij rond of vormgezaagd werk, en bij het zagen rond scheuren en adering, blijft een aanzienlijk deel over als onbruikbare rest. Bookmatching, waarbij de adering over twee bladen spiegelt, verdubbelt de materiaalkost.",
-          "Gewicht. Marmer en travertijn wegen rond 2.700 kilo per kubieke meter. Een blad van 3 centimeter weegt zo'n 80 kilo per vierkante meter; een tafelblad van 2 bij 1 meter zit al snel rond 150 kilo. Dat vraagt een stevig — en dus prijzig — onderstel.",
+          "Gewicht. Marmer en travertijn wegen rond 2.700 kilo per kubieke meter. Een blad van 3 centimeter weegt zo'n 80 kilo per vierkante meter; een tafelblad van 2 bij 1 meter zit al snel rond 150 kilo. Dat vraagt een stevig en dus prijzig onderstel.",
           "Bewerking. Randprofielen, polijsten of zoeten, impregneren en het wegwerken van natuurlijke oneffenheden kosten tijd. Een verstek gezaagde rand die een dik blad suggereert vraagt extra materiaal en precisie om de naad onzichtbaar te maken.",
           "Transport en plaatsing. Het materiaal is zwaar en breekbaar; platen gaan rechtop in speciale frames, en een gescheurd blad is bijna altijd totaalverlies, want onzichtbaar herstel kan niet. Bezorgen als pakket of door één persoon is uitgesloten.",
         ],
       },
       {
         type: "p",
-        text: "Die laatste stap — bezorging tot in huis, uitpakken, plaatsen en verzekerd vervoer — kan een flink deel van de eindprijs uitmaken. Bij SERA NORR is dat, samen met transport en plaatsing, bij de prijs inbegrepen. Salontafels beginnen vanaf 1.950 euro en eettafels vanaf 2.950 euro; een zeldzame steen als Calacatta Viola ligt daar fors boven. De actuele prijs voor een specifieke steen en maat ziet u direct in de configurator.",
+        text: "Die laatste stap (bezorging tot in huis, uitpakken, plaatsen en verzekerd vervoer) kan een flink deel van de eindprijs uitmaken. Bij SERA NORR is dat, samen met transport en plaatsing, bij de prijs inbegrepen. Salontafels beginnen vanaf 1.950 euro en eettafels vanaf 2.950 euro; een zeldzame steen als Calacatta Viola ligt daar fors boven. De actuele prijs voor een specifieke steen en maat ziet u direct in de configurator.",
       },
     ],
   },

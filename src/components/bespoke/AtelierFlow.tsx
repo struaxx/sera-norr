@@ -27,7 +27,7 @@ export interface AtelierFlowData {
   };
   
   // Step 4: Stone & Finish
-  stone: 'calacatta-viola' | 'travertin' | 'other' | null;
+  stone: 'calacatta-viola' | 'travertijn' | 'other' | null;
   finish: 'honed' | 'polished' | 'mat' | null;
   edgeProfile: string | null;
   
@@ -190,7 +190,7 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[
                     { id: 'vanta' as const, label: 'VANTA', sub: 'Calacatta Viola', desc: isNL ? 'Sculpturaal marmer' : 'Sculptural marble' },
-                    { id: 'terra' as const, label: 'TERRA', sub: 'Travertin', desc: isNL ? 'Warme textuur' : 'Warm texture' },
+                    { id: 'terra' as const, label: 'TERRA', sub: 'Travertijn', desc: isNL ? 'Warme textuur' : 'Warm texture' },
                     { id: 'other' as const, label: isNL ? 'Anders' : 'Other', sub: isNL ? 'Eigen richting' : 'Own direction', desc: isNL ? 'Eigen visie' : 'Own vision' },
                   ].map((option) => (
                     <button
@@ -407,7 +407,7 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                     {[
                       { id: 'calacatta-viola' as const, label: 'Calacatta Viola', color: '#F5F0F5' },
-                      { id: 'travertin' as const, label: 'Travertin', color: '#E8DFD0' },
+                      { id: 'travertijn' as const, label: 'Travertijn', color: '#E8DFD0' },
                       { id: 'other' as const, label: isNL ? 'Overig' : 'Other', color: '#D4D4D4' },
                     ].map((option) => (
                       <button
