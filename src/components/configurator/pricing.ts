@@ -17,15 +17,19 @@ export const VAT_RATE = 0.21;
 // Indicative starting price per stone, for the SMALLEST standard
 // configuration in that stone (smallest size, 1 leg, polished).
 // Source these from your real sent quotes later.
-// EX BTW. Nog niet bevestigd door het atelier: dit zijn de oorspronkelijke
-// placeholderbedragen, teruggerekend vanaf de prijs die de site al toonde,
-// zodat de weergegeven eettafelprijs onveranderd blijft.
+// EX BTW, voor het referentie-oppervlak van 2,0 m2.
+// Afgeleid van de opgegeven vraagprijs: een travertijnen eettafel van
+// 200 x 90 met twee poten kost 2.500 - 3.500 ex BTW, dus midden 3.000.
+// Terugrekenen: (3.000 - 496 pootentoeslag) / 0,9 oppervlaktefactor = 2.782.
+// Overige steensoorten liggen volgens het atelier op hetzelfde niveau als
+// travertijn; Calacatta Viola is schaars en ligt hoger. Voor die verhouding
+// is 1,5x aangehouden, gelijk aan die bij de salontafel (1.500 -> 2.250).
 export const STONE_BASE_PRICE: Record<string, number> = {
-  'classic-cloudy':  2438,   // VUL_IN, travertijn, goedkoopst
-  'tiramisu':        2438,   // VUL_IN, travertijn
-  'light-emprador':  3140,   // VUL_IN, marmer
-  'dark-emperador':  3140,   // VUL_IN, marmer
-  'calacatta-viola': 3719,   // VUL_IN, premium marmer, duurst
+  'classic-cloudy':  2782,   // travertijn
+  'tiramisu':        2782,   // travertijn
+  'light-emprador':  2782,   // marmer, gelijk prijspeil
+  'dark-emperador':  2782,   // marmer, gelijk prijspeil
+  'calacatta-viola': 4173,   // schaars premium marmer, afgeleid 1,5x
 };
 
 // How much the indicative price scales with surface area.
@@ -97,9 +101,12 @@ export const SIDE_TABLE_MIN_PRICE = 370;
 // EX BTW. Dit is de onderkant van de bandbreedte, niet het midden.
 export const PLINTH_MIN_PRICE = 740;
 
-// Range width: the indicative range is shown as [low, high] around
-// the computed midpoint. E.g. 0.12 = ±12%.
-export const RANGE_SPREAD = 0.12;            // VUL_IN, ±12%
+// Breedte van de getoonde bandbreedte rond het berekende midden.
+// Een eettafel kent meer variabelen (onderstel, randprofiel, slabkeuze) en
+// krijgt daarom een ruimere band: 200 x 90 travertijn komt daarmee uit op de
+// opgegeven vraagprijs van 2.500 - 3.500 ex BTW.
+export const RANGE_SPREAD = 0.12;            // sokkel en bijzettafel, ±12%
+export const DINING_RANGE_SPREAD = 0.167;    // eettafel, ±16,7%
 
 // ============================================================
 // Calculation, do not edit below unless logic changes
@@ -158,10 +165,11 @@ export const computeRange = (input: PriceInput): PriceRange => {
   // De basisprijzen staan ex BTW; de configurator toont consumentenprijzen,
   // dus hier wordt de BTW toegevoegd.
   const withVat = (n: number) => roundTo(n * (1 + VAT_RATE));
+  const spread = isPlinth ? RANGE_SPREAD : DINING_RANGE_SPREAD;
 
   return {
-    low:  withVat(mid * (1 - RANGE_SPREAD)),
-    high: withVat(mid * (1 + RANGE_SPREAD)),
+    low:  withVat(mid * (1 - spread)),
+    high: withVat(mid * (1 + spread)),
     mid:  withVat(mid),
   };
 };
