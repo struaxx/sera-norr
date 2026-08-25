@@ -22,7 +22,7 @@ export const STONE_OPTIONS: StoneOption[] = [
 // dus het krijgt eigen maten, hoogte en prijsbasis.
 // ============================================
 
-export type ProductType = 'eettafel' | 'salontafel';
+export type ProductType = 'eettafel' | 'salontafel' | 'bijzettafel';
 
 export interface ProductTypeOption {
   id: ProductType;
@@ -34,8 +34,12 @@ export interface ProductTypeOption {
 }
 
 export const PRODUCT_TYPE_OPTIONS: ProductTypeOption[] = [
-  { id: 'eettafel',   label: 'Eettafel',   base: 'legs',   heightMm: 750 },
-  { id: 'salontafel', label: 'Salontafel', base: 'plinth', heightMm: 350 },
+  { id: 'eettafel',    label: 'Eettafel',    base: 'legs',   heightMm: 750 },
+  { id: 'salontafel',  label: 'Salontafel',  base: 'plinth', heightMm: 350 },
+  // Een compact blok naast de bank. Op dit formaat is het geen salontafel
+  // meer, dus het krijgt een eigen naam in plaats van als goedkoopste
+  // salontafel te worden aangeboden.
+  { id: 'bijzettafel', label: 'Bijzettafel', base: 'plinth', heightMm: 450 },
 ];
 
 export const getProductType = (id: ProductType): ProductTypeOption =>
@@ -45,14 +49,33 @@ export const getProductType = (id: ProductType): ProductTypeOption =>
 // dus andere verhoudingen dan een eettafelblad.
 export const PLINTH_SIZE_RANGES: Record<'corner' | 'round', SizeRange> = {
   corner: {
-    length: { min: 800, max: 1800, default: 1200 },
-    width:  { min: 500, max: 1000, default: 700 },
+    // Ondergrens op 100 x 60: kleiner dan dat is het geen salontafel meer
+    // maar een bijzettafel, en die staat als eigen product in het aanbod.
+    length: { min: 1000, max: 1800, default: 1200 },
+    width:  { min: 600,  max: 1000, default: 700 },
     step: 100,
   },
   round: {
-    length: { min: 600, max: 1200, default: 900 },
-    width:  { min: 600, max: 1200, default: 900 },
+    length: { min: 700, max: 1200, default: 900 },
+    width:  { min: 700, max: 1200, default: 900 },
     step: 100,
+    diameterOnly: true,
+  },
+};
+
+// Bijzettafel: een compact blok, ongeveer kubusvormig, naast de bank.
+export const SIDE_TABLE_SIZE_RANGES: Record<'corner' | 'round', SizeRange> = {
+  corner: {
+    // Bovengrens op 50 cm: daarboven is het geen bijzettafel meer en zou de
+    // prijs bovendien boven een kleine salontafel uitkomen.
+    length: { min: 350, max: 500, default: 450 },
+    width:  { min: 350, max: 500, default: 450 },
+    step: 50,
+  },
+  round: {
+    length: { min: 350, max: 500, default: 450 },
+    width:  { min: 350, max: 500, default: 450 },
+    step: 50,
     diameterOnly: true,
   },
 };
@@ -165,9 +188,9 @@ export const getSizeRange = (shape: RuleShape): SizeRange => SIZE_RANGES[shape];
  * eigen, kleiner bereik dan een eettafelblad.
  */
 export const getSizeRangeFor = (productType: ProductType, shape: RuleShape): SizeRange => {
-  if (productType === 'salontafel') {
-    return PLINTH_SIZE_RANGES[shape === 'round' ? 'round' : 'corner'];
-  }
+  const key = shape === 'round' ? 'round' : 'corner';
+  if (productType === 'bijzettafel') return SIDE_TABLE_SIZE_RANGES[key];
+  if (productType === 'salontafel') return PLINTH_SIZE_RANGES[key];
   return SIZE_RANGES[shape];
 };
 
