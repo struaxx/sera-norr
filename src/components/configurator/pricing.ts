@@ -42,19 +42,21 @@ export const FINISH_SURCHARGE: Record<string, number> = {
 // werkelijke inkoopprijs x 3 (ex BTW) neer zodra die bekend is.
 // Referentie: basisprijs geldt voor het standaardformaat 120 x 70 cm.
 // ============================================
-// Afgeleid van de opgegeven inkoopprijzen volgens de vaste opslagregel:
-// inkoop x 3 = verkoopprijs ex BTW, daarna + 21% BTW.
-//   travertijn en overige steensoorten: inkoop 1.500 -> 1500*3*1,21 = 5.445
-//   Calacatta Viola:                    inkoop 2.000 -> 2000*3*1,21 = 7.260
-// Bedragen zijn inclusief BTW, net als alle prijzen op de site.
+// Verkoopprijzen zoals opgegeven door het atelier, inclusief BTW, geldend
+// voor het referentieformaat 120 x 70 cm. Grotere maten schalen mee met het
+// oppervlak.
+//   travertijn en overige steensoorten: circa 1.500
+//   Calacatta Viola: 2.000 - 2.500 (schaars, hoge vraag)
+// Ter controle tegen de vaste opslagregel (inkoop x 3, daarna BTW):
+// Viola inkoop 700 -> 2.100 ex BTW -> 2.541 incl, wat binnen die range valt.
+// De basiswaarde 2.250 laat de configurator precies 2.000 - 2.500 tonen.
 export const PLINTH_BASE_PRICE: Record<string, number> = {
-  'classic-cloudy':  5445,   // travertijn
-  'tiramisu':        5445,   // travertijn
-  'light-emprador':  5445,   // marmer, overige soorten
-  'dark-emperador':  5445,   // marmer, overige soorten
-  'calacatta-viola': 7260,   // premium marmer
+  'classic-cloudy':  1500,   // travertijn
+  'tiramisu':        1500,   // travertijn
+  'light-emprador':  1500,   // marmer, prijspeil gelijk aan travertijn
+  'dark-emperador':  1500,   // marmer, prijspeil gelijk aan travertijn
+  'calacatta-viola': 2250,   // schaars premium marmer
 };
-
 /** Referentie-oppervlak voor de sokkelprijs: 1,20 x 0,70 m. */
 export const PLINTH_BASE_SURFACE_M2 = 0.84;
 
