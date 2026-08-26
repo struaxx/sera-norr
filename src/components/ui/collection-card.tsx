@@ -175,7 +175,7 @@ export function CollectionCard({
           
           {/* Price tag + CTA */}
           <div className="pt-3 flex items-center gap-4">
-            <span className="inline-flex items-center px-2.5 py-1 border border-foreground/12 text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
+            <span className="inline-flex items-center px-2.5 py-1 border border-foreground/10 text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
               {priceLabel}
             </span>
             <motion.span 

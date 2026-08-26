@@ -16,7 +16,7 @@ export function ProofGrid({ items, className }: ProofGridProps) {
   return (
     <div className={cn('relative', className)}>
       {/* Top hairline */}
-      <div className="h-px bg-foreground/8 mb-0" />
+      <div className="h-px bg-foreground/10 mb-0" />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {items.map((item, index) => (
@@ -32,12 +32,12 @@ export function ProofGrid({ items, className }: ProofGridProps) {
           >
             {/* Vertical hairline between items (desktop) */}
             {index > 0 && (
-              <div className="hidden lg:block absolute left-0 top-6 bottom-6 w-px bg-foreground/8" />
+              <div className="hidden lg:block absolute left-0 top-6 bottom-6 w-px bg-foreground/10" />
             )}
             
             {/* Horizontal hairline between items (mobile/tablet) */}
             {index > 0 && (
-              <div className="lg:hidden absolute top-0 left-0 right-0 h-px bg-foreground/8" />
+              <div className="lg:hidden absolute top-0 left-0 right-0 h-px bg-foreground/10" />
             )}
             
             <div className="space-y-3">
@@ -58,7 +58,7 @@ export function ProofGrid({ items, className }: ProofGridProps) {
       </div>
       
       {/* Bottom hairline */}
-      <div className="h-px bg-foreground/8 mt-0" />
+      <div className="h-px bg-foreground/10 mt-0" />
     </div>
   );
 }

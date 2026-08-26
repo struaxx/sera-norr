@@ -88,7 +88,7 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
 
         {/* Pillars grid - unified block */}
         <motion.div 
-          className="border border-foreground/8"
+          className="border border-foreground/10"
           variants={variants.fadeUp}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
@@ -102,13 +102,13 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
                   className={cn(
                     "p-6 lg:p-8 flex flex-col",
                     // Vertical dividers on desktop
-                    index > 0 && "lg:border-l lg:border-foreground/8",
+                    index > 0 && "lg:border-l lg:border-foreground/10",
                     // Horizontal dividers on tablet
-                    index > 0 && index < 2 && "md:border-l md:border-foreground/8",
-                    index >= 2 && "md:border-t md:border-foreground/8",
+                    index > 0 && index < 2 && "md:border-l md:border-foreground/10",
+                    index >= 2 && "md:border-t md:border-foreground/10",
                     index >= 2 && index % 2 === 1 && "md:border-l",
                     // Mobile: all have top border except first
-                    index > 0 && "border-t border-foreground/8 lg:border-t-0",
+                    index > 0 && "border-t border-foreground/10 lg:border-t-0",
                     // Reset tablet borders for 5-column desktop
                     "lg:border-t-0"
                   )}
