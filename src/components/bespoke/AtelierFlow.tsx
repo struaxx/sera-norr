@@ -143,9 +143,9 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
   ];
 
   return (
-    <div className="bg-background border border-foreground/8">
+    <div className="bg-background border border-foreground/10">
       {/* Progress header */}
-      <div className="border-b border-foreground/8 p-6 lg:p-8">
+      <div className="border-b border-foreground/10 p-6 lg:p-8">
         <div className="flex items-center justify-between mb-6">
           <div>
             <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 block mb-1">
@@ -216,7 +216,7 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
                 </div>
                 
                 {/* Inspiration items (placeholder) */}
-                <div className="pt-4 border-t border-foreground/8">
+                <div className="pt-4 border-t border-foreground/10">
                   <p className="text-xs text-muted-foreground mb-3">
                     {isNL 
                       ? "Optioneel: selecteer items uit het lookbook voor extra inspiratie" 
@@ -603,7 +603,7 @@ export function AtelierFlow({ isNL, onDataChange, data }: AtelierFlowProps) {
       </div>
 
       {/* Navigation */}
-      <div className="border-t border-foreground/8 p-6 lg:p-8 flex items-center justify-between">
+      <div className="border-t border-foreground/10 p-6 lg:p-8 flex items-center justify-between">
         <Button
           variant="ghost"
           onClick={prevStep}

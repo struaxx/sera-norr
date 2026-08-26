@@ -8,7 +8,7 @@ interface HairlineProps {
 
 export function Hairline({ className, variant = 'default' }: HairlineProps) {
   const variantStyles = {
-    default: 'bg-foreground/8',
+    default: 'bg-foreground/10',
     dark: 'bg-foreground/15',
     accent: 'bg-brass/30',
   };

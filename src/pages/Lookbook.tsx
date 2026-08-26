@@ -199,7 +199,7 @@ const Lookbook = () => {
         <section className="pb-16">
           <div className="container mx-auto px-6 lg:px-12">
             <div className="max-w-md mx-auto">
-              <form onSubmit={handleSubmit} className="p-8 lg:p-10 border border-foreground/8 bg-background">
+              <form onSubmit={handleSubmit} className="p-8 lg:p-10 border border-foreground/10 bg-background">
                 {/* Honeypot field - hidden from users */}
                 <div className="absolute -left-[9999px]" aria-hidden="true">
                   <label htmlFor="website-lookbook">Website</label>

@@ -131,12 +131,15 @@ function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: stri
           />
         </motion.div>
 
-        {/* Base gradient overlays (unchanged look) */}
-        <div className="absolute inset-0 bg-foreground/42 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/98 via-foreground/90 to-foreground/68 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-foreground/76 via-foreground/38 to-foreground/62 pointer-events-none" />
-        <div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_88%_at_center,hsl(var(--foreground)/0.56)_0%,hsl(var(--foreground)/0.40)_42%,transparent_78%)] pointer-events-none" />
+        {/*
+          Twee lagen in plaats van vijf. De oude stapel was geschreven met
+          opacitywaarden die Tailwind niet kent (42, 98, 76, 78), waardoor het
+          merendeel ervan nooit is gerenderd; met geldige waarden liepen ze
+          samen zo goed als dicht. Dit is hetzelfde effect, bewust opgebouwd:
+          donker waar de tekst staat, beeld zichtbaar aan de bovenkant.
+        */}
+        <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/55 to-foreground/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_88%_at_center,hsl(var(--foreground)/0.30)_0%,hsl(var(--foreground)/0.18)_45%,transparent_80%)] pointer-events-none" />
 
         {/* Scroll-driven darkening veil */}
         <motion.div
@@ -173,7 +176,7 @@ function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: stri
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild variant="ghost" size="default" className="text-background hover:text-background hover:bg-background/12 h-12 px-6">
+                  <Button asChild variant="ghost" size="default" className="text-background hover:text-background hover:bg-background/10 h-12 px-6">
                     <Link to="/collections">
                       {isNL ? "Bekijk lookbook" : "View lookbook"}
                     </Link>
@@ -404,9 +407,9 @@ function CareSection({ isNL }: {isNL: boolean;}) {
             </p>
             
             {/* Care tips - 3 bullets */}
-            <div className="space-y-0 border-t border-foreground/8 mb-8">
+            <div className="space-y-0 border-t border-foreground/10 mb-8">
               {careTips.map((tip) =>
-              <div key={tip.number} className="py-4 border-b border-foreground/8 flex items-center gap-4">
+              <div key={tip.number} className="py-4 border-b border-foreground/10 flex items-center gap-4">
                   <span className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50 w-5">
                     {tip.number}
                   </span>

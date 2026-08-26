@@ -236,7 +236,7 @@ const Care = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
             {materials.map((m, index) => (
-              <div key={m.name} className="p-8 lg:p-10 border border-foreground/8 bg-background flex flex-col">
+              <div key={m.name} className="p-8 lg:p-10 border border-foreground/10 bg-background flex flex-col">
                 <p className="editorial-caption-label mb-3">{String(index + 1).padStart(2, '0')}</p>
                 <h3 className="font-serif text-xl lg:text-2xl text-foreground mb-3">
                   {m.name}
@@ -306,7 +306,7 @@ const Care = () => {
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
               {faqItems.map((item, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="border-foreground/8">
+                <AccordionItem key={index} value={`item-${index}`} className="border-foreground/10">
                   <AccordionTrigger 
                     className="text-left text-body-md font-medium text-foreground hover:no-underline py-6"
                     onClick={() => trackFAQ('care')}

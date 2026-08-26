@@ -11,8 +11,11 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  // Check if on homepage (transparent header with hero)
-  const isHomePage = location.pathname === "/";
+  // Pagina's die openen met een beeld over de volle breedte. Daar staat de
+  // header op het beeld en moet de tekst licht zijn, niet alleen op de
+  // homepage: op /over stond donkere navigatie op een licht atelierbeeld.
+  const IMAGE_HERO_ROUTES = ["/", "/over"];
+  const hasImageHero = IMAGE_HERO_ROUTES.includes(location.pathname);
 
   // Simplified navigation: Collecties · Over · [Ontwerp uw tafel CTA]
   const desktopNavLinks = [
@@ -40,8 +43,8 @@ export function Header() {
     setIsMobileMenuOpen(false);
   }, []);
 
-  // Determine text color: white on homepage hero (not scrolled), dark otherwise
-  const isLightText = isHomePage && !isScrolled;
+  // Lichte tekst zolang de header nog op het herobeeld staat.
+  const isLightText = hasImageHero && !isScrolled;
 
   return (
     <>
@@ -54,7 +57,7 @@ export function Header() {
         )}
       >
         {isLightText && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[var(--banner-h,0px)] bg-gradient-to-b from-foreground/78 via-foreground/42 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[var(--banner-h,0px)] bg-gradient-to-b from-foreground/80 via-foreground/40 to-transparent" />
         )}
 
         <nav className={cn(

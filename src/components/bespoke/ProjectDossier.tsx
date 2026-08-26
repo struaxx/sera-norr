@@ -65,9 +65,9 @@ export function ProjectDossier({ isNL, data, contactData, className }: ProjectDo
   const isComplete = data.direction && data.productType && data.shape && data.stone;
 
   return (
-    <div className={cn("border border-foreground/8 bg-background", className)}>
+    <div className={cn("border border-foreground/10 bg-background", className)}>
       {/* Header */}
-      <div className="border-b border-foreground/8 p-6 lg:p-8">
+      <div className="border-b border-foreground/10 p-6 lg:p-8">
         <div className="flex items-center gap-3 mb-2">
           <FileText className="w-5 h-5 text-foreground/40" />
           <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -80,7 +80,7 @@ export function ProjectDossier({ isNL, data, contactData, className }: ProjectDo
       </div>
 
       {/* Dossier cards */}
-      <div className="divide-y divide-foreground/8">
+      <div className="divide-y divide-foreground/10">
         {/* Card 1: Direction */}
         <div className="p-6 lg:p-8">
           <div className="flex items-start gap-4">
@@ -254,7 +254,7 @@ export function ProjectDossier({ isNL, data, contactData, className }: ProjectDo
 
       {/* Completion status */}
       {!isComplete && (
-        <div className="border-t border-foreground/8 p-6 lg:p-8 bg-secondary/20">
+        <div className="border-t border-foreground/10 p-6 lg:p-8 bg-secondary/20">
           <p className="text-sm text-muted-foreground text-center">
             {isNL 
               ? "Vul alle stappen in om uw dossier compleet te maken" 

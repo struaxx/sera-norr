@@ -31,7 +31,7 @@ export function BespokeTimeline({
               className={cn(
                 'relative py-12 px-10',
                 // Vertical hairlines between steps
-                index > 0 && 'border-l border-foreground/8',
+                index > 0 && 'border-l border-foreground/10',
               )}
             >
               {/* Large ghost number (watermark) */}
@@ -80,7 +80,7 @@ export function BespokeTimeline({
             key={index} 
             className={cn(
               'relative py-10 px-6',
-              index > 0 && 'border-t border-foreground/8',
+              index > 0 && 'border-t border-foreground/10',
             )}
           >
             {/* Ghost number */}

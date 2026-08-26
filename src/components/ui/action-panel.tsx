@@ -23,7 +23,7 @@ export function ActionPanel({
 }: ActionPanelProps) {
   return (
     <div className={cn(
-      'group relative p-8 lg:p-10 border border-foreground/8',
+      'group relative p-8 lg:p-10 border border-foreground/10',
       'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
       'hover:border-foreground/15 hover:bg-foreground/[0.01]',
       className
@@ -61,7 +61,7 @@ interface ActionPanelGroupProps {
 
 export function ActionPanelGroup({ children, className }: ActionPanelGroupProps) {
   return (
-    <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-px bg-foreground/8', className)}>
+    <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-px bg-foreground/10', className)}>
       {children}
     </div>
   );
