@@ -115,7 +115,7 @@ const BespokeHero = () => {
 
   const chips = [
     isNL ? 'Prijs op aanvraag' : 'Price on request',
-    isNL ? 'Doorlooptijd 12–16 weken' : 'Lead time 12–16 weeks',
+    isNL ? 'In 12–16 weken op maat gemaakt' : 'Made to measure in 12–16 weeks',
     isNL ? '2 jaar garantie' : '2 year warranty'
   ];
 

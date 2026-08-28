@@ -203,3 +203,20 @@ export const getEntryPrice = (
   );
   return Math.min(...prices);
 };
+
+/**
+ * Het laagste bedrag waarvoor het atelier iets levert: de kleinste
+ * bijzettafel in de goedkoopste steen.
+ *
+ * Overal op de site waar "al vanaf" staat hoort dit getal te staan. Voorheen
+ * noemden de startpagina (1.950), een journalartikel (1.950 en 2.950) en de
+ * configurator elk een ander bedrag; wie op de hoogste klikte en de laagste
+ * zag, of andersom, kreeg terecht het gevoel dat er iets niet klopte.
+ */
+export const SITE_ENTRY_PRICE = getEntryPrice('bijzettafel', {
+  lengthMm: 350,
+  widthMm: 350,
+});
+
+/** Als tekst, in Nederlandse notatie: "450". */
+export const formatEuro = (n: number) => n.toLocaleString('nl-NL');

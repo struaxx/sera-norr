@@ -70,8 +70,12 @@ function readInitialConfig() {
   };
 
   const stoneId = STONE_ALIASES[get('steen', 'stoneId') ?? ''] ?? 'classic-cloudy';
+  // De configurator opent op de salontafel in plaats van de eettafel: dat is
+  // het product met de bekendste prijzen en een instapbedrag dat niet meteen
+  // afschrikt. De bijzettafel staat er als goedkoopste naast, de eettafel
+  // erachter. Campagnelinks kunnen met ?type=eettafel alsnog voorselecteren.
   const productType: ProductType =
-    PRODUCT_ALIASES[get('type', 'productType') ?? ''] ?? 'eettafel';
+    PRODUCT_ALIASES[get('type', 'productType') ?? ''] ?? 'salontafel';
   let shape: RuleShape = SHAPE_ALIASES[get('vorm', 'shape') ?? ''] ?? 'corner';
   // Een sokkel is alleen rechthoekig of rond leverbaar.
   if (productType === 'salontafel' && !PLINTH_SHAPES.includes(shape)) shape = 'corner';

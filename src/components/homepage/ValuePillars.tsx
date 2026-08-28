@@ -30,8 +30,8 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
     },
     {
       icon: Clock,
-      title: "12–16 weken levertijd",
-      description: "Bij uitloop informeren wij u tijdig.",
+      title: "In 12–16 weken voor u gemaakt",
+      description: "U krijgt een planning met vaste momenten.",
     },
     {
       icon: Shield,
@@ -56,7 +56,7 @@ export function ValuePillars({ isNL }: ValuePillarsProps) {
     },
     {
       icon: Clock,
-      title: "12–16 weeks lead time",
+      title: "Made for you in 12–16 weeks",
       description: "We inform you promptly of any delays.",
     },
     {

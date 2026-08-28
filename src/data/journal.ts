@@ -102,7 +102,7 @@ export const journalArticles: JournalArticle[] = [
       },
       {
         type: "p",
-        text: "Die laatste stap (bezorging tot in huis, uitpakken, plaatsen en verzekerd vervoer) kan een flink deel van de eindprijs uitmaken. Bij SERA NORR is dat, samen met transport en plaatsing, bij de prijs inbegrepen. Salontafels beginnen vanaf 1.950 euro en eettafels vanaf 2.950 euro; een zeldzame steen als Calacatta Viola ligt daar fors boven. De actuele prijs voor een specifieke steen en maat ziet u direct in de configurator.",
+        text: "Die laatste stap (bezorging tot in huis, uitpakken, plaatsen en verzekerd vervoer) kan een flink deel van de eindprijs uitmaken. Bij SERA NORR is dat, samen met transport en plaatsing, bij de prijs inbegrepen. Bij SERA NORR begint een bijzettafel rond 450 euro, een salontafel rond 1.150 euro en een eettafel rond 2.300 euro; een zeldzame steen als Calacatta Viola ligt daar fors boven. De actuele prijs voor een specifieke steen en maat ziet u direct in de configurator.",
       },
     ],
   },

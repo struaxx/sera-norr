@@ -16,6 +16,7 @@ import { trackDesignAppointmentClick } from "@/lib/analytics";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useIsMobile } from "@/hooks/use-mobile";
 import heroImage from "@/assets/hero-restaurant-marble.jpeg";
+import { SITE_ENTRY_PRICE, formatEuro } from "@/components/configurator/pricing";
 
 
 const Index = () => {
@@ -165,8 +166,8 @@ function CinematicHero({ isNL, scrollLabel }: { isNL: boolean; scrollLabel: stri
 
                 <p className="font-sans text-base lg:text-lg font-medium text-background max-w-2xl mx-auto mb-8">
                   {isNL ?
-                    "Natuurstenen tafels op maat, vanaf €1.950." :
-                    "Bespoke natural stone tables, from €1,950."}
+                    `Natuurstenen tafels op maat, al vanaf €${formatEuro(SITE_ENTRY_PRICE)}.` :
+                    `Bespoke natural stone tables, from €${formatEuro(SITE_ENTRY_PRICE)}.`}
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

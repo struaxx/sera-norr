@@ -40,8 +40,8 @@ export function TrustBadges({ variant = 'horizontal', showAll = false, className
     },
     {
       icon: Clock,
-      title: isNL ? '12–16 Weken Doorlooptijd' : '12–16 Weeks Lead Time',
-      description: isNL ? 'Afhankelijk van steenkeuze en locatie' : 'Depending on stone choice and location',
+      title: isNL ? 'In 12–16 weken gemaakt' : 'Made in 12–16 weeks',
+      description: isNL ? 'Op maat gezaagd, niet uit voorraad' : 'Cut to measure, not from stock',
     },
   ];
 
