@@ -278,7 +278,7 @@ export default function StoneConfigurator() {
     }
   }, [productType]);
 
-  const range = computeRange({ productType, stoneId, lengthMm, widthMm, legCount, finish });
+  const range = computeRange({ productType, stoneId, lengthMm, widthMm, legCount, finish, legStyle });
 
   // Instapprijs van deze productsoort, berekend uit dezelfde prijsfunctie.
   // Zo ziet een bezoeker met een kleiner budget dat er een bereikbare optie
@@ -517,6 +517,13 @@ export default function StoneConfigurator() {
         <p className="text-sm text-sera-text-soft mt-2 max-w-md">
           Vrijblijvend. Uw exacte prijs ontvangt u in een persoonlijk voorstel,
           afgestemd op de gekozen steenplaat, afwerking en levering.
+        </p>
+        {/* De twijfel bij maatwerk zit niet in de prijs maar in wat er gebeurt
+            als het stuk niet is wat je verwachtte. Dat hoort hier te staan,
+            niet alleen in de voorwaarden. */}
+        <p className="text-sm text-sera-text-soft mt-2 max-w-md">
+          Wij denken met u mee, ook na de bestelling. Voldoet uw stuk niet aan
+          wat is afgesproken, dan lossen wij dat op.
         </p>
         {stoneIsCustom && (
           <p className="text-sm text-sera-text-soft mt-2 max-w-md">
