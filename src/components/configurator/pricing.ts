@@ -31,9 +31,11 @@ export const STONE_BASE_PRICE: Record<string, number> = {
   'classic-cloudy':  3435,   // travertijn, zelfde prijspeil als tiramisu
   'dark-emperador':  3135,   // marmer, uit opgegeven inkoop 1.100
   'light-emprador':  2685,   // marmer, uit opgegeven inkoop 950
-  // NOG TE BEVESTIGEN: voor Calacatta Viola is geen eettafelprijs opgegeven.
-  // Hier staat 1,5x tiramisu, dezelfde verhouding als bij de salontafel
-  // (1.500 -> 2.250). Vervang zodra de werkelijke inkoop bekend is.
+  // Calacatta Viola: 1,5x tiramisu. Deze verhouding kwam eerst van de
+  // salontafel (travertijn 1.500 -> calacatta 2.250) en wordt bevestigd door
+  // een tweede, onafhankelijke opgave: een calacatta tafel van 2200 x 900 met
+  // zandloperpoten kost 7.650 ex BTW, en dat bedrag valt precies uiteen in
+  // 1,5x tiramisu plus de zandlopertoeslag hieronder.
   'calacatta-viola': 5153,
 };
 
@@ -49,23 +51,27 @@ export const REFERENCE_LEG_COUNT = 2;
 // ============================================================
 // POOTSTIJL
 // ============================================================
-// Een opgegeven tafel van 2200 x 900 (1,98 m2, dus praktisch hetzelfde
-// oppervlak als de referentie) met twee ZANDLOPERPOTEN kwam op 2.550 inkoop,
-// oftewel 7.650 verkoop. Dat is ruim tweemaal de prijs van dezelfde maat met
-// cilindrische poten. Bij gelijk oppervlak kan dat verschil niet uit de maat
-// komen; het zit in de pootstijl, de steensoort, of allebei. Welke steen het
-// betrof is niet opgegeven, dus het is nog niet toe te rekenen.
+// Uitgedrukt als deel van de basisprijs van de steen, niet als vast bedrag: een
+// poot is een massief stuk steen, dus dezelfde vorm kost in Calacatta Viola
+// meer dan in travertijn.
 //
-// De structuur staat er alvast. Zolang de bedragen op nul staan rekent de
-// configurator elke pootstijl als cilindrisch, wat voor de duurdere stijlen
-// een te lage indicatie geeft.
-export const LEG_STYLE_SURCHARGE: Record<string, number> = {
-  cilindrisch:  0,   // referentiestijl
-  gecanneleerd: 0,   // NOG IN TE VULLEN
-  conisch:      0,   // NOG IN TE VULLEN
-  zandloper:    0,   // NOG IN TE VULLEN, ligt fors hoger
-  'v-poten':    0,   // NOG IN TE VULLEN
-  'd-poten':    0,   // NOG IN TE VULLEN
+// Afgeleid uit de opgave voor een Calacatta Viola tafel van 2200 x 900
+// (1,98 m2), gezoet, met twee zandloperpoten: 2.550 inkoop, 7.650 verkoop.
+// Daarvan gaat 165 naar de zoetafwerking en 5.101 naar het blad
+// (5.153 basis x 0,99 oppervlaktefactor). Wat overblijft is 2.384 voor de
+// poten, oftewel 46,3% van de basisprijs.
+//
+// LET OP: dit rust op een enkele meting, en alleen voor de zandloper. Voor de
+// overige stijlen is geen prijs bekend. Die staan daarom op nul en worden nu
+// als cilindrisch gerekend, wat voor de bewerkelijker stijlen een te lage
+// indicatie geeft.
+export const LEG_STYLE_SURCHARGE_PCT: Record<string, number> = {
+  cilindrisch:  0,      // referentiestijl
+  zandloper:    0.463,  // uit de opgave hierboven
+  gecanneleerd: 0,      // NOG IN TE VULLEN
+  conisch:      0,      // NOG IN TE VULLEN
+  'v-poten':    0,      // NOG IN TE VULLEN
+  'd-poten':    0,      // NOG IN TE VULLEN
 };
 
 // Finish surcharges (these you already know).
@@ -185,7 +191,9 @@ export const computeRange = (input: PriceInput): PriceRange => {
   const legCost = isPlinth
     ? 0
     : (input.legCount - REFERENCE_LEG_COUNT) * EXTRA_LEG_SURCHARGE;
-  const legStyleCost = isPlinth ? 0 : (LEG_STYLE_SURCHARGE[input.legStyle ?? ''] ?? 0);
+  const legStyleCost = isPlinth
+    ? 0
+    : base * (LEG_STYLE_SURCHARGE_PCT[input.legStyle ?? ''] ?? 0);
   const finishCost = FINISH_SURCHARGE[input.finish] ?? 0;
 
   const scaled = base * Math.max(0.5, surfaceFactor) + legCost + legStyleCost + finishCost;
