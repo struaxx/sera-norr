@@ -115,8 +115,8 @@ export default function Terms() {
               </h2>
               <p>
                 {isNL
-                  ? 'Betaling geschiedt conform de afspraken in de offerte. In de regel wordt een aanbetaling van 50% gevraagd bij bevestiging, en het resterende bedrag vóór levering. Bij niet-tijdige betaling is SERA NORR gerechtigd de levering op te schorten.'
-                  : 'Payment is made according to the terms in the quotation. Typically, a 50% deposit is required upon confirmation, with the remaining balance due before delivery. In case of late payment, SERA NORR is entitled to suspend delivery.'}
+                  ? 'Betaling geschiedt conform de afspraken in de offerte. Het volledige bedrag wordt voldaan bij bevestiging van de opdracht; de productie start na ontvangst van de betaling. Bij niet-tijdige betaling is SERA NORR gerechtigd de opdracht op te schorten.'
+                  : 'Payment is made according to the terms in the quotation. The full amount is settled upon confirmation of the order; production starts once payment has been received. In case of late payment, SERA NORR is entitled to suspend the order.'}
               </p>
             </section>
 

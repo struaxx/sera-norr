@@ -33,13 +33,17 @@ export interface ProductTypeOption {
   heightMm: number;
 }
 
+// Oplopend in prijs. De configurator opent op het eerste type, dus de eerste
+// prijs die een bezoeker ziet is de instapprijs; wie een grotere tafel kiest
+// ziet het bedrag meelopen in plaats van meteen op het hoogste bedrag te
+// beginnen.
 export const PRODUCT_TYPE_OPTIONS: ProductTypeOption[] = [
-  { id: 'eettafel',    label: 'Eettafel',    base: 'legs',   heightMm: 750 },
-  { id: 'salontafel',  label: 'Salontafel',  base: 'plinth', heightMm: 350 },
   // Een compact blok naast de bank. Op dit formaat is het geen salontafel
   // meer, dus het krijgt een eigen naam in plaats van als goedkoopste
   // salontafel te worden aangeboden.
   { id: 'bijzettafel', label: 'Bijzettafel', base: 'plinth', heightMm: 450 },
+  { id: 'salontafel',  label: 'Salontafel',  base: 'plinth', heightMm: 350 },
+  { id: 'eettafel',    label: 'Eettafel',    base: 'legs',   heightMm: 750 },
 ];
 
 export const getProductType = (id: ProductType): ProductTypeOption =>
