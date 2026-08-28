@@ -8,38 +8,65 @@
 export const VAT_RATE = 0.21;
 
 // ============================================================
-// PRICING CONFIG, PLACEHOLDER VALUES
-// Replace the VUL_IN numbers with real figures from actual quotes.
-// These drive the INDICATIVE RANGE shown in the configurator.
-// The exact price is always determined per order via supplier quote.
+// EETTAFEL, BASISPRIJZEN PER STEENSOORT
 // ============================================================
-
-// Indicative starting price per stone, for the SMALLEST standard
-// configuration in that stone (smallest size, 1 leg, polished).
-// Source these from your real sent quotes later.
-// EX BTW, voor het referentie-oppervlak van 2,0 m2.
-// Afgeleid van de opgegeven vraagprijs: een travertijnen eettafel van
-// 200 x 90 met twee poten kost 2.500 - 3.500 ex BTW, dus midden 3.000.
-// Terugrekenen: (3.000 - 496 pootentoeslag) / 0,9 oppervlaktefactor = 2.782.
-// Overige steensoorten liggen volgens het atelier op hetzelfde niveau als
-// travertijn; Calacatta Viola is schaars en ligt hoger. Voor die verhouding
-// is 1,5x aangehouden, gelijk aan die bij de salontafel (1.500 -> 2.250).
+// Deze bedragen komen uit werkelijke inkoopprijzen van het atelier, maal drie,
+// ex BTW. De referentieconfiguratie waarop ze gelden:
+//
+//     2,0 m2 blad (bijv. 2000 x 1000), 36 mm dik
+//     twee cilindrische poten
+//     gepolijst
+//
+// Opgegeven inkoop voor die maat, gezoet en geimpregneerd:
+//     tiramisu travertijn  1.200  ->  3.600 verkoop  ->  3.435 zonder zoettoeslag
+//     dark emperador       1.100  ->  3.300 verkoop  ->  3.135
+//     light emperador        950  ->  2.850 verkoop  ->  2.685
+//
+// De steensoorten liggen dus NIET op hetzelfde niveau; tussen light emperador
+// en tiramisu zit 750 euro. Eerder stonden ze hier alle vier op een en hetzelfde
+// bedrag, waardoor de configurator voor drie verschillende stenen dezelfde prijs
+// gaf.
 export const STONE_BASE_PRICE: Record<string, number> = {
-  'classic-cloudy':  2782,   // travertijn
-  'tiramisu':        2782,   // travertijn
-  'light-emprador':  2782,   // marmer, gelijk prijspeil
-  'dark-emperador':  2782,   // marmer, gelijk prijspeil
-  'calacatta-viola': 4173,   // schaars premium marmer, afgeleid 1,5x
+  'tiramisu':        3435,   // travertijn, uit opgegeven inkoop 1.200
+  'classic-cloudy':  3435,   // travertijn, zelfde prijspeil als tiramisu
+  'dark-emperador':  3135,   // marmer, uit opgegeven inkoop 1.100
+  'light-emprador':  2685,   // marmer, uit opgegeven inkoop 950
+  // NOG TE BEVESTIGEN: voor Calacatta Viola is geen eettafelprijs opgegeven.
+  // Hier staat 1,5x tiramisu, dezelfde verhouding als bij de salontafel
+  // (1.500 -> 2.250). Vervang zodra de werkelijke inkoop bekend is.
+  'calacatta-viola': 5153,
 };
 
-// How much the indicative price scales with surface area.
-// Base size reference = 2.0 m² (e.g. 200x100cm).
-// Larger tables scale up proportionally to surface area.
-export const BASE_SURFACE_M2 = 2.0;          // reference surface
-export const SURFACE_SCALING = 1.0;          // VUL_IN, 1.0 = linear with m²
+/** Referentie-oppervlak waarop STONE_BASE_PRICE geldt. */
+export const BASE_SURFACE_M2 = 2.0;
+export const SURFACE_SCALING = 1.0;          // 1.0 = lineair met m2
 
-// Surcharge per extra leg beyond the first (indicative).
-export const EXTRA_LEG_SURCHARGE = 496;      // VUL_IN, per extra leg, ex BTW
+// De basisprijs geldt voor twee poten, want zo worden deze tafels geoffreerd.
+// Een derde poot bij lange bladen kost extra, een enkele poot scheelt evenveel.
+export const EXTRA_LEG_SURCHARGE = 496;      // per poot boven of onder de twee
+export const REFERENCE_LEG_COUNT = 2;
+
+// ============================================================
+// POOTSTIJL
+// ============================================================
+// Een opgegeven tafel van 2200 x 900 (1,98 m2, dus praktisch hetzelfde
+// oppervlak als de referentie) met twee ZANDLOPERPOTEN kwam op 2.550 inkoop,
+// oftewel 7.650 verkoop. Dat is ruim tweemaal de prijs van dezelfde maat met
+// cilindrische poten. Bij gelijk oppervlak kan dat verschil niet uit de maat
+// komen; het zit in de pootstijl, de steensoort, of allebei. Welke steen het
+// betrof is niet opgegeven, dus het is nog niet toe te rekenen.
+//
+// De structuur staat er alvast. Zolang de bedragen op nul staan rekent de
+// configurator elke pootstijl als cilindrisch, wat voor de duurdere stijlen
+// een te lage indicatie geeft.
+export const LEG_STYLE_SURCHARGE: Record<string, number> = {
+  cilindrisch:  0,   // referentiestijl
+  gecanneleerd: 0,   // NOG IN TE VULLEN
+  conisch:      0,   // NOG IN TE VULLEN
+  zandloper:    0,   // NOG IN TE VULLEN, ligt fors hoger
+  'v-poten':    0,   // NOG IN TE VULLEN
+  'd-poten':    0,   // NOG IN TE VULLEN
+};
 
 // Finish surcharges (these you already know).
 // Ex BTW.
@@ -120,6 +147,8 @@ export interface PriceInput {
   widthMm: number;
   legCount: number;
   finish: string;
+  /** Pootstijl; bepaalt de toeslag uit LEG_STYLE_SURCHARGE. */
+  legStyle?: string;
 }
 
 export interface PriceRange {
@@ -152,10 +181,14 @@ export const computeRange = (input: PriceInput): PriceRange => {
   const surfaceFactor = 1 + ((surfaceM2 - referenceSurface) / referenceSurface) * SURFACE_SCALING;
 
   // Een sokkel heeft geen poten; alleen een eettafel kent een pootentoeslag.
-  const legCost = isPlinth ? 0 : Math.max(0, input.legCount - 1) * EXTRA_LEG_SURCHARGE;
+  // De basisprijs geldt voor twee poten; afwijken kost of scheelt per poot.
+  const legCost = isPlinth
+    ? 0
+    : (input.legCount - REFERENCE_LEG_COUNT) * EXTRA_LEG_SURCHARGE;
+  const legStyleCost = isPlinth ? 0 : (LEG_STYLE_SURCHARGE[input.legStyle ?? ''] ?? 0);
   const finishCost = FINISH_SURCHARGE[input.finish] ?? 0;
 
-  const scaled = base * Math.max(0.5, surfaceFactor) + legCost + finishCost;
+  const scaled = base * Math.max(0.5, surfaceFactor) + legCost + legStyleCost + finishCost;
   // De ondergrens geldt voor de onderkant van de bandbreedte, zodat het
   // laagste getoonde bedrag nooit onder het minimum zakt.
   const minPrice = isSideTable ? SIDE_TABLE_MIN_PRICE : PLINTH_MIN_PRICE;
@@ -197,7 +230,7 @@ export const getEntryPrice = (
         stoneId,
         lengthMm: smallest.lengthMm,
         widthMm: smallest.widthMm,
-        legCount: 1,
+        legCount: productType === 'eettafel' ? 2 : 1,
         finish: 'gepolijst',
       }).low
   );
