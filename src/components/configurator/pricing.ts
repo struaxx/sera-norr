@@ -5,6 +5,8 @@
 // offreert. computeRange() telt de BTW er aan het eind bij op, omdat de
 // configurator consumentenprijzen toont en die inclusief BTW horen te zijn.
 // Voeg dus nooit zelf BTW toe aan een basisprijs.
+import type { RuleLegStyle } from '@/lib/configurator/rules/productRules';
+
 export const VAT_RATE = 0.21;
 
 // ============================================================
@@ -51,29 +53,43 @@ export const REFERENCE_LEG_COUNT = 2;
 // ============================================================
 // POOTSTIJL
 // ============================================================
-// Uitgedrukt als deel van de basisprijs van de steen, niet als vast bedrag: een
-// poot is een massief stuk steen, dus dezelfde vorm kost in Calacatta Viola
-// meer dan in travertijn.
+// Uitgedrukt als deel van de basisprijs van de steen PER POOT. Twee dingen
+// zitten daarin verwerkt:
 //
-// Afgeleid uit de opgave voor een Calacatta Viola tafel van 2200 x 900
-// (1,98 m2), gezoet, met twee zandloperpoten: 2.550 inkoop, 7.650 verkoop.
-// Daarvan gaat 165 naar de zoetafwerking en 5.101 naar het blad
-// (5.153 basis x 0,99 oppervlaktefactor). Wat overblijft is 2.384 voor de
-// poten, oftewel 46,3% van de basisprijs.
+//   - Een poot is een massief stuk steen, dus dezelfde vorm kost in Calacatta
+//     Viola meer dan in travertijn. Vandaar een percentage en geen vast bedrag.
+//   - Twee gedraaide poten kosten tweemaal het draaiwerk van een. Vandaar per
+//     poot en niet per tafel.
 //
-// LET OP: dit rust op een enkele meting, en alleen voor de zandloper. Voor de
-// overige stijlen is geen prijs bekend. Die staan daarom op nul en worden nu
-// als cilindrisch gerekend, wat voor de bewerkelijker stijlen een te lage
-// indicatie geeft.
-export const LEG_STYLE_SURCHARGE_PCT: Record<string, number> = {
-  cilindrisch:  0,      // referentiestijl
-  zandloper:    0.463,  // uit de opgave hierboven
-  gecanneleerd: 0,      // NOG IN TE VULLEN
-  conisch:      0,      // NOG IN TE VULLEN
-  'v-poten':    0,      // NOG IN TE VULLEN
-  'd-poten':    0,      // NOG IN TE VULLEN
-};
+// GEMETEN, de enige harde waarde: een Calacatta Viola tafel van 2200 x 900
+// (1,98 m2), gezoet, met twee zandloperpoten kost 2.550 inkoop, 7.650 verkoop
+// ex BTW. Daarvan gaat 165 naar de zoetafwerking en 5.101 naar het blad
+// (5.153 basis x 0,99 oppervlaktefactor). De 2.384 die overblijft is 46,3% van
+// de basisprijs voor twee poten, dus 23,15% per poot.
+//
+// GESCHAT, de overige stijlen. Het atelier gaf hiervoor geen bedragen, wel de
+// volgorde van bewerkelijkheid: conisch is redelijk eenvoudig, gecanneleerd en
+// de V- en D-poten liggen daarboven, de zandloper is het bewerkelijkst. Die
+// rangorde is aangehouden met de gemeten zandloper als bovengrens: conisch op
+// een kwart daarvan, de middengroep op de helft. Vervang deze zodra er echte
+// inkoopprijzen zijn; de zandloper is de enige die vaststaat.
+// De sleutels zijn de id's uit LEG_STYLE_OPTIONS, niet de Nederlandse labels.
+// Het type dwingt dat af: een verkeerd gespelde of ontbrekende stijl is een
+// compilefout in plaats van een toeslag die stil op nul uitkomt.
+export const LEG_STYLE_SURCHARGE_PCT_PER_LEG: Record<RuleLegStyle, number> = {
+  cylindrical:        0,        // referentiestijl, in de basisprijs inbegrepen
+  conical:            0.058,    // GESCHAT, kwart van de zandloper
+  cylindrical_fluted: 0.116,    // GESCHAT, helft van de zandloper
+  v_legs:             0.116,    // GESCHAT, helft van de zandloper
+  d_legs:             0.116,    // GESCHAT, helft van de zandloper
+  hourglass:          0.2315,   // GEMETEN, zie hierboven
 
+  // Deze twee staan in het type en in de 3D-weergave, maar niet in
+  // LEG_STYLE_OPTIONS, dus een bezoeker kan ze niet kiezen. Ze staan hier
+  // alleen omdat het type alle stijlen verlangt.
+  rounded_legs:       0.116,    // GESCHAT, afgeronde poot, middengroep
+  quartet_legs:       0.058,    // GESCHAT, centrale base, dicht bij cilindrisch
+};
 // Finish surcharges (these you already know).
 // Ex BTW.
 export const FINISH_SURCHARGE: Record<string, number> = {
@@ -153,8 +169,8 @@ export interface PriceInput {
   widthMm: number;
   legCount: number;
   finish: string;
-  /** Pootstijl; bepaalt de toeslag uit LEG_STYLE_SURCHARGE. */
-  legStyle?: string;
+  /** Pootstijl; bepaalt de toeslag uit LEG_STYLE_SURCHARGE_PCT_PER_LEG. */
+  legStyle?: RuleLegStyle;
 }
 
 export interface PriceRange {
@@ -191,9 +207,11 @@ export const computeRange = (input: PriceInput): PriceRange => {
   const legCost = isPlinth
     ? 0
     : (input.legCount - REFERENCE_LEG_COUNT) * EXTRA_LEG_SURCHARGE;
+  // De vormtoeslag geldt per poot: twee gedraaide poten kosten tweemaal het
+  // draaiwerk van een.
   const legStyleCost = isPlinth
     ? 0
-    : base * (LEG_STYLE_SURCHARGE_PCT[input.legStyle ?? ''] ?? 0);
+    : base * (input.legStyle ? LEG_STYLE_SURCHARGE_PCT_PER_LEG[input.legStyle] ?? 0 : 0) * input.legCount;
   const finishCost = FINISH_SURCHARGE[input.finish] ?? 0;
 
   const scaled = base * Math.max(0.5, surfaceFactor) + legCost + legStyleCost + finishCost;
